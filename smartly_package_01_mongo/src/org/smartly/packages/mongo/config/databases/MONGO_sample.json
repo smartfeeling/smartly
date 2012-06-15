@@ -1,0 +1,10 @@
+{
+    "_id":"MONGO_sample",
+    "enabled":false,
+    "host":"localhost",
+    "port":27017,
+    "username":"beeing",
+    "password":"beeing",
+    "type":"MONGO",
+    "dbname":"test"
+}

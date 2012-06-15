@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Class-Path: junit-4.9.jar hamcrest-core-1.1.jar velocity-1.7.jar commo
+ ns-collections-3.2.1.jar commons-lang-2.4.jar jdom-1.0.jar commons-lo
+ gging-1.1.jar logkit-2.0.jar log4j-1.2.12.jar servlet-api-2.3.jar ant
+ -1.6.jar werken-xpath-0.9.4.jar
+Main-Class: org.smartly.packages.velocity.launcher.Main
+

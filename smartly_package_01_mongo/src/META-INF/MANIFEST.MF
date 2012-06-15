@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Class-Path: mongo-java-driver-2.7.3.jar junit-4.9.jar hamcrest-core-1.
+ 1.jar
+Main-Class: org.smartly.packages.mongo.launcher.Main
+

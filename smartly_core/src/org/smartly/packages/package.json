@@ -1,0 +1,52 @@
+{
+    "name": "<name>",
+    "main": "<main>",
+    "version": "<version>",
+    "description": "<description>",
+    "keywords": [
+        "package"
+    ],
+    "maintainers": [
+        {
+            "name": "<maintainer_name>",
+            "email": "<maintainer_mail>",
+            "web": "<maintainer_url>"
+        }
+    ],
+    "contributors": [
+
+    ],
+    "bugs": {
+        "mail": "",
+        "web": ""
+    },
+    "licenses": [
+        {
+            "type": "GPLv2",
+            "url": "http://www.gnu.org/licenses/gpl-2.0.html"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "git",
+            "url": ""
+        }
+    ],
+    "dependencies": {
+    },
+    "implements": [],
+    "os": ["linux", "macos", "win"],
+    "cpu": ["x86", "ppc", "x86_64"],
+    "engines": [],
+    "scripts": {
+        "install": "",
+        "uninstall": "",
+        "build": "",
+        "test": ""
+    },
+    "directories": {
+        "lib": "lib",
+        "bin": "lib",
+        "jars": "lib"
+    }
+}

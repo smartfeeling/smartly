@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact name="smartly_package_01_velocity:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/smartly_package_01_velocity_jar</output-path>
+    <root id="root">
+      <element id="archive" name="smartly_package_01_velocity.jar">
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/../smartly_package_01_velocity/src/META-INF/MANIFEST.MF" />
+        </element>
+        <element id="module-output" name="smartly_package_01_velocity" />
+        <element id="module-output" name="smartly_core" />
+      </element>
+    </root>
+  </artifact>
+</component>

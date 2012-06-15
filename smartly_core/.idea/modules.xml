@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/smartly_core.iml" filepath="$PROJECT_DIR$/smartly_core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../smartly_package_01_htmldeployer/smartly_package_01_htmldeployer.iml" filepath="$PROJECT_DIR$/../smartly_package_01_htmldeployer/smartly_package_01_htmldeployer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../smartly_package_01_mail/smartly_package_01_mail.iml" filepath="$PROJECT_DIR$/../smartly_package_01_mail/smartly_package_01_mail.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../smartly_package_01_mongo/smartly_package_01_mongo.iml" filepath="$PROJECT_DIR$/../smartly_package_01_mongo/smartly_package_01_mongo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../smartly_package_01_remoting/smartly_package_01_remoting.iml" filepath="$PROJECT_DIR$/../smartly_package_01_remoting/smartly_package_01_remoting.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../smartly_package_01_velocity/smartly_package_01_velocity.iml" filepath="$PROJECT_DIR$/../smartly_package_01_velocity/smartly_package_01_velocity.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../smartly_package_02_http/smartly_package_02_http.iml" filepath="$PROJECT_DIR$/../smartly_package_02_http/smartly_package_02_http.iml" />
+    </modules>
+  </component>
+</project>
+

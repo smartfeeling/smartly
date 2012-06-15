@@ -1,0 +1,9 @@
+{
+    "debug":false,
+    "host":"smtp.gmail.com",
+    "port":587,
+    "TLS":true,
+    "username":"account@gmail.com",
+    "password":"password",
+    "reply_to":"My Name [account@gmail.com]"
+}

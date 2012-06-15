@@ -1,0 +1,52 @@
+{
+    "enabled":true,
+    "debug":false,
+    "root":"./jetty",
+    "domain":"192.168.1.6",
+    "shutdown_token":"smartly",
+    "connectors":{
+        "http":{
+            "enabled":true,
+            "port":80,
+            "max_idle":30000,
+            "header_buffer":8192
+        },
+        "ssl":{
+            "enabled":false,
+            "port":8443,
+            "key_password":"OBF:1vny1zlo1x8e1vnw1vn61x8g1zlu1vn4",
+            "key_manager_password":"OBF:1u2u1wml1z7s1z7a1wnl1u2g"
+        }
+    },
+    "handlers":{
+        "chain":{
+            "enabled":true,
+            "data":[
+                {
+                    "class":"org.smartly.packages.http.impl.handlers.SmartlyResourceHandler",
+                    "welcome":["index.html", "index.html", "index.vhtml"]
+                }
+            ]
+        },
+        "endpoints":{
+            "enabled":true,
+            "data":[
+                {
+                    "endpoint":"/rest",
+                    "class":"org.smartly.packages.http.impl.handlers.SmartlyRemotingHandler"
+                }
+            ],
+            "servlets":{
+                "enabled":true,
+                "endpoint":"/servlet",
+                "data":[
+                    {
+                        "endpoint":"/*",
+                        "class":"org.smartly.packages.http.impl.handlers.servlets.HelloSmartlyServlet",
+                        "params":"'here you can pass a simple string, JSONObject or JSONArray'"
+                    }
+                ]
+            }
+        }
+    }
+}
