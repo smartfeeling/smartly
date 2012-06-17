@@ -481,7 +481,7 @@ public class MongoUser extends MongoObject {
 
     public static String getFirstname(final DBObject item) {
         final String result = getAtLeastUsername(item);
-        final String[] tokens = CollectionUtils.split(result, " ");
+        final String[] tokens = StringUtils.split(result, " ");
         if (tokens.length > 0) {
             if (tokens.length > 2) {
                 return tokens[0] + " " + tokens[1];
@@ -571,7 +571,7 @@ public class MongoUser extends MongoObject {
     }
 
     public static void setRoles(final DBObject item, final String commasepRoles) {
-        final String[] roles = CollectionUtils.split(commasepRoles, ",");
+        final String[] roles = StringUtils.split(commasepRoles, ",");
         setRoles(item, roles);
     }
 

@@ -97,7 +97,7 @@ public class MongoTranslationManager {
                 item.setValue(value);
                 //-- add keywords --//
                 if (value instanceof String && value.toString().length() < 255) {
-                    final String[] keywords = CollectionUtils.split((String) value,
+                    final String[] keywords = StringUtils.split((String) value,
                             new String[]{" ", "&nbsp;", "&#32;"},
                             true, true, 3);
                     item.setKeywords(StringUtils.toString(keywords, " ", "", 100));

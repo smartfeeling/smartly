@@ -17,6 +17,7 @@ import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.util.*;
 import org.smartly.packages.http.impl.handlers.SmartlyShutdownHandler;
+import org.smartly.packages.http.impl.util.vtool.App;
 import org.smartly.packages.velocity.impl.VLCManager;
 
 import javax.servlet.Servlet;
@@ -33,7 +34,7 @@ public class WebServer extends AbstractHttpServer {
     @Override
     public void start() throws Exception {
         try {
-            final String jettyHome = super.getRoot();
+            final String jettyHome = super.getRoot(); // absolute path
             final JSONObject configuration = super.getConfiguration();
 
 
@@ -47,6 +48,9 @@ public class WebServer extends AbstractHttpServer {
             if (null != handler) {
                 super.getJetty().setHandler(handler);
             }
+
+            // init velocity engine
+            initVelocity(jettyHome);
 
             //-- start jetty --//
             super.getJetty().start();
@@ -62,6 +66,10 @@ public class WebServer extends AbstractHttpServer {
 
     private static void initVelocity(final String absoluteDocRoot) {
         VLCManager.getInstance().getEngine().setFileResourceLoaderPath(absoluteDocRoot);
+
+        //-- APPLICATION TOOL (override) --//
+        VLCManager.getInstance().getToolbox().replace(
+                App.NAME, App.class, null, true);
     }
 
     private static Logger staticLogger() {

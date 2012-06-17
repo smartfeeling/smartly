@@ -6,7 +6,10 @@ import org.smartly.commons.lang.CharEncoding;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
-import org.smartly.commons.util.*;
+import org.smartly.commons.util.FileUtils;
+import org.smartly.commons.util.JsonWrapper;
+import org.smartly.commons.util.PathUtils;
+import org.smartly.commons.util.StringUtils;
 
 import java.io.File;
 import java.util.*;
@@ -86,7 +89,7 @@ public class JsonRepository {
     private void load(final File file) {
         if (null != file) {
             final String path = PathUtils.subtract(_root, PathUtils.validateFolderSeparator(file.getAbsolutePath()));
-            final String[] tokens = CollectionUtils.split(path, "/");
+            final String[] tokens = StringUtils.split(path, "/");
             JSONObject parent = _indexes;
             for (final String token : tokens) {
                 parent = this.load(parent, token, file);
@@ -177,7 +180,7 @@ public class JsonRepository {
             return this.loadItemFromIndex(index);
         } else {
             for (int i = dotcount; i > 0; i--) {
-                final String[] tokens = CollectionUtils.splitAt(i, path, ".");
+                final String[] tokens = StringUtils.splitAt(i, path, ".");
                 if (tokens.length == 2) {
                     final JSONObject index = this.getIndex(tokens[0]);
                     if (null != index) {

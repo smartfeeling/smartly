@@ -198,7 +198,7 @@ public abstract class CollectionUtils {
             if (charsToDelete != null) {
                 element = StringUtils.deleteAny(array[i], charsToDelete);
             }
-            String[] splittedElement = splitFirst(element, delimiter);
+            String[] splittedElement = StringUtils.splitFirst(element, delimiter);
             if (splittedElement == null) {
                 continue;
             }
@@ -225,7 +225,7 @@ public abstract class CollectionUtils {
             if (charsToDelete != null) {
                 element = StringUtils.deleteAny(array[i], charsToDelete);
             }
-            String[] splittedElement = splitFirst(element, delimiter);
+            String[] splittedElement = StringUtils.splitFirst(element, delimiter);
             if (splittedElement == null) {
                 continue;
             }
@@ -235,307 +235,15 @@ public abstract class CollectionUtils {
     }
 
     /**
-     * Tokenize the given String into a String array via a StringTokenizer.
-     * Trims tokens and omits empty tokens. <p>The given delimiters string is
-     * supposed to consist of any number of delimiter characters. Each of those
-     * characters can be used to separate tokens. A delimiter is always a single
-     * character; for multi-character delimiters, consider using
-     * <code>delimitedListToStringArray</code>
-     *
-     * @param str        the String to tokenize
-     * @param delimiters the delimiter characters, assembled as String (each of
-     *                   those characters is individually considered as delimiter).
-     * @return an array of the tokens
-     * @see java.util.StringTokenizer
-     * @see String#trim
-     */
-    public static String[] tokenizeToStringArray(String str, String delimiters) {
-        return tokenizeToStringArray(str, delimiters, true, true);
-    }
-
-    /**
-     * @param str
-     * @param delimiters Array of valid delimiters. i.e. {". ", "; "} (both
-     *                   delimiters are valid)
-     * @return
-     */
-    public static String[] tokenizeToStringArray(final String str,
-                                                 final String[] delimiters) {
-        List<String> result = new LinkedList<String>();
-        if (null != delimiters && delimiters.length > 0) {
-            for (final String delimiter : delimiters) {
-                String[] tokens = split(str, delimiter);
-                if (null != tokens && tokens.length > 0) {
-                    for (final String token : tokens) {
-                        result.add(token);
-                    }
-                }
-            }
-        }
-
-        return result.toArray(new String[result.size()]);
-    }
-
-    /**
-     * Tokenize the given String into a String array via a StringTokenizer.
-     * <p>The given delimiters string is supposed to consist of any number of
-     * delimiter characters. Each of those characters can be used to separate
-     * tokens. A delimiter is always a single character; for multi-character
-     * delimiters, consider using
-     * <code>delimitedListToStringArray</code>
-     *
-     * @param str               the String to tokenize
-     * @param delimiters        the delimiter characters, assembled as String (each of
-     *                          those characters is individually considered as delimiter)
-     * @param trimTokens        trim the tokens via String's
-     *                          <code>trim</code>
-     * @param ignoreEmptyTokens omit empty tokens from the result array (only
-     *                          applies to tokens that are empty after trimming; StringTokenizer will not
-     *                          consider subsequent delimiters as token in the first place).
-     * @return an array of the tokens
-     * @see java.util.StringTokenizer
-     * @see String#trim
-     */
-    public static String[] tokenizeToStringArray(
-            String str, String delimiters, boolean trimTokens,
-            boolean ignoreEmptyTokens) {
-
-        final StringTokenizer st = new StringTokenizer(str, delimiters);
-        List<String> tokens = new ArrayList<String>();
-        while (st.hasMoreTokens()) {
-            String token = st.nextToken();
-            if (trimTokens) {
-                token = token.trim();
-            }
-            if (!ignoreEmptyTokens || token.length() > 0) {
-                tokens.add(token);
-            }
-        }
-        return tokens.toArray(new String[tokens.size()]);
-    }
-
-    /**
-     * Take a String which is a delimited list and convert it to a String array.
-     * <p>A single delimiter can consists of more than one character: It will
-     * still be considered as single delimiter string, rather than as bunch of
-     * potential delimiter characters - in contrast to
-     * <code>tokenizeToStringArray</code>.
-     *
-     * @param str       the input String
-     * @param delimiter the delimiter between elements (this is a single
-     *                  delimiter, rather than a bunch individual delimiter characters)
-     * @return an array of the tokens in the list
-     * @see #tokenizeToStringArray
-     */
-    public static String[] split(final String str, final String delimiter) {
-        return split(str, delimiter, true);
-    }
-
-    /**
-     * Take a String which is a delimited list and convert it to a String array.
-     * <p>A single delimiter can consists of more than one character: It will
-     * still be considered as single delimiter string, rather than as bunch of
-     * potential delimiter characters - in contrast to
-     * <code>tokenizeToStringArray</code>.
-     *
-     * @param str       the input String
-     * @param delimiter the delimiter between elements (this is a single
-     *                  delimiter, rather than a bunch individual delimiter characters)
-     * @param trim      If true, values are trimmed.
-     * @return an array of the tokens in the list
-     * @see #tokenizeToStringArray
-     */
-    public static String[] split(final String str,
-                                 final String delimiter, final boolean trim) {
-        return split(str, delimiter, trim, false, 1);
-    }
-
-    /**
-     * Take a String which is a delimited list and convert it to a String array.
-     * <p>A single delimiter can consists of more than one character: It will
-     * still be considered as single delimiter string, rather than as bunch of
-     * potential delimiter characters - in contrast to
-     * <code>tokenizeToStringArray</code>.
-     *
-     * @param str   the input String
-     * @param delim the delimiters between elements (this is a single delimiter,
-     *              rather than a bunch individual delimiter characters)
-     * @param trim  If true, values are trimmed. @minLenght minimum lenght of
-     *              token (useful if you need tokens of min lenght)
-     * @return an array of the tokens in the list
-     * @see #tokenizeToStringArray
-     */
-    public static String[] split(final String str,
-                                 final String delim, final boolean trim,
-                                 final boolean removeDuplicates,
-                                 final int minLenght) {
-        return split(str, new String[]{delim},
-                trim, removeDuplicates, minLenght);
-    }
-
-    public static String[] split(final String text,
-                                 final String[] delims, final boolean trim,
-                                 final boolean removeDuplicates,
-                                 final int minLenght) {
-        return split(text, delims, trim, removeDuplicates, minLenght, null);
-    }
-
-    /**
-     * Take a String which is a delimited list and convert it to a String array.
-     * <p>A single delimiter can consists of more than one character: It will
-     * still be considered as single delimiter string, rather than as bunch of
-     * potential delimiter characters - in contrast to
-     * <code>tokenizeToStringArray</code>.
-     *
-     * @param text
-     * @param delims           Array of delimiters between elements.
-     * @param trim             If true, values are trimmed.
-     * @param removeDuplicates Boolean. True if you want only unique values.
-     * @param excludes         Optional (default = null). Array of keywords to exclude
-     * @return an array of the tokens in the list
-     * @minLenght minimum lenght of token (useful if you need tokens of min
-     * lenght)
-     * @see #tokenizeToStringArray
-     */
-    public static String[] split(final String text,
-                                 final String[] delims, final boolean trim,
-                                 final boolean removeDuplicates,
-                                 final int minLenght,
-                                 final String[] excludes) {
-        if (text == null) {
-            return new String[0];
-        }
-        if (delims == null || delims.length == 0) {
-            return new String[]{trim ? text.trim() : text};
-        }
-
-        final List<String> result = new ArrayList<String>();
-        // loop for each delimiter in array.
-        final int count = delims.length;
-        for (int j = 0; j < count; j++) {
-            final String delim = delims[j];
-            final String str = count > 1 ? StringUtils.replace(text, delims, delim) : text;
-            if ("".equals(delim)) {
-                for (int i = 0; i < str.length(); i++) {
-                    final String value = str.substring(i, i + 1);
-                    // ADD
-                    add(result, value, minLenght, trim, !removeDuplicates, excludes);
-                }
-            } else {
-                int pos = 0;
-                int delPos = 0;
-                while ((delPos = str.indexOf(delim, pos)) != -1) {
-                    final String value = str.substring(pos, delPos);
-                    // ADD
-                    add(result, value, minLenght, trim, !removeDuplicates, excludes);
-                    pos = delPos + delim.length();
-                }
-                if (str.length() > 0 && pos <= str.length()) {
-                    // Add rest of String, but not in case of empty input.
-                    final String value = str.substring(pos);
-                    // ADD
-                    add(result, value, minLenght, trim, !removeDuplicates, excludes);
-                }
-            }
-        }
-
-        return result.toArray(new String[result.size()]);
-    }
-
-    /**
-     * @param str       String to split
-     * @param delimiter
-     * @param trim
-     * @param minLenght
-     * @param maxSize   Maximum length for return Array.
-     * @return
-     */
-    public static String[] split(final String str,
-                                 final String delimiter, final boolean trim,
-                                 final boolean removeDuplicates,
-                                 final int minLenght, final int maxSize) {
-        final String[] tokens = split(str, delimiter,
-                trim, removeDuplicates, minLenght);
-        if (maxSize > 0 && tokens.length > maxSize) {
-            return resizeArray(tokens, maxSize);
-        }
-        return tokens;
-    }
-
-    /**
-     * Split a String at the first occurrence of the delimiter. Does not include
-     * the delimiter in the result.<br> i.e. : "hello.world.wide" ('.' is
-     * delimiter) -> {"hello", "world.wide"}
-     *
-     * @param toSplit   the string to split
-     * @param delimiter to split the string up with
-     * @return a two element array with index 0 being before the delimiter, and
-     *         index 1 being after the delimiter (neither element includes the
-     *         delimiter); or
-     *         <code>null</code> if the delimiter wasn't found in the given input String
-     */
-    public static String[] splitFirst(final String toSplit,
-                                      final String delimiter) {
-        final String[] result = _splitLastOrFirst(toSplit, delimiter, false);
-        return null != result ? result : new String[]{toSplit};
-    }
-
-    public static String[] splitLast(final String toSplit,
-                                     final String delimiter) {
-        final String[] result = _splitLastOrFirst(toSplit, delimiter, true);
-        return null != result ? result : new String[]{toSplit};
-    }
-
-    /**
-     * Split a String at the "count" occurrence of the delimiter. Does not
-     * include the delimiter in the result.<br> i.e. : "hello.world.wide" ('.'
-     * is delimiter) -> {"hello", "world.wide"}
-     *
-     * @param toSplit   the string to split
-     * @param delimiter to split the string up with
-     * @return a two element array with index 0 being before the delimiter, and
-     *         index 1 being after the delimiter (neither element includes the
-     *         delimiter); or
-     *         <code>null</code> if the delimiter wasn't found in the given input String
-     */
-    public static String[] splitAt(final int count, final String toSplit,
-                                   final String delimiter) {
-        if (!StringUtils.hasLength(toSplit) || !StringUtils.hasLength(delimiter)) {
-            return null;
-        }
-        int offset = -1;
-        for (int i = 0; i < count; i++) {
-            offset = toSplit.indexOf(delimiter, offset + 1);
-        }
-        if (offset < 0) {
-            return null;
-        }
-
-        final String beforeDelimiter = toSplit.substring(0, offset);
-        final String afterDelimiter = toSplit.substring(offset + delimiter.length());
-        return new String[]{beforeDelimiter, afterDelimiter};
-    }
-
-    /**
-     * Convert a CSV list into an array of Strings.
-     *
-     * @param str CSV list
-     * @return an array of Strings, or the empty array if s is null
-     */
-    public static String[] commaDelimitedListToStringArray(String str) {
-        return split(str, ",");
-    }
-
-    /**
      * Convenience method to convert a CSV string list to a set. Note that this
      * will suppress duplicates.
      *
      * @param str CSV String
      * @return a Set of String entries in the list
      */
-    public static Set<String> commaDelimitedListToSet(String str) {
+    public static Set<String> commaDelimitedListToSet(final String str) {
         final Set set = new TreeSet();
-        final String[] tokens = commaDelimitedListToStringArray(str);
+        final String[] tokens = StringUtils.split(str, ",");
         for (final String token : tokens) {
             set.add(token);
         }
@@ -1392,8 +1100,10 @@ public abstract class CollectionUtils {
      *         s=='b'
      */
     public static String getToken(final String delimitedString,
-                                  final String separator, final int index, final String defaultValue) {
-        final String[] array = split(delimitedString,
+                                  final String separator,
+                                  final int index,
+                                  final String defaultValue) {
+        final String[] array = StringUtils.split(delimitedString,
                 separator,
                 true);
         final String result = get(array, index);
@@ -1464,7 +1174,7 @@ public abstract class CollectionUtils {
     }
 
     public static String getLast(final String delimitedText, final String delimiter) {
-        final String[] tokens = split(delimitedText, delimiter);
+        final String[] tokens = StringUtils.split(delimitedText, delimiter);
         if (!isEmpty(tokens)) {
             return getLast(tokens);
         }
@@ -1538,22 +1248,6 @@ public abstract class CollectionUtils {
         } catch (Exception e) {
         }
         return null;
-    }
-
-    private static String[] _splitLastOrFirst(final String toSplit,
-                                              final String delimiter, final boolean last) {
-        if (!StringUtils.hasLength(toSplit) || !StringUtils.hasLength(delimiter)) {
-            return null;
-        }
-        int offset = last
-                ? toSplit.lastIndexOf(delimiter)
-                : toSplit.indexOf(delimiter);
-        if (offset < 0) {
-            return null;
-        }
-        final String beforeDelimiter = toSplit.substring(0, offset);
-        final String afterDelimiter = toSplit.substring(offset + delimiter.length());
-        return new String[]{beforeDelimiter, afterDelimiter};
     }
 
     private static <T extends Object> Set<List<T>> _cartesianProduct(int index,

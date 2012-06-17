@@ -90,9 +90,9 @@ public final class MailUtils {
     private static String[] parseAddresses(final String addresses) {
         if (StringUtils.hasText(addresses)) {
             if (addresses.contains(";")) {
-                return CollectionUtils.tokenizeToStringArray(addresses, ";", true, true);
+                return StringUtils.split(addresses, ";", true, true);
             } else if (addresses.contains(",")) {
-                return CollectionUtils.tokenizeToStringArray(addresses, ",", true, true);
+                return StringUtils.split(addresses, ",", true, true);
             } else {
                 return new String[]{addresses};
             }

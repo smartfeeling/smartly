@@ -2,7 +2,7 @@
  * IVLCTool.java
  *
  */
-package org.smartly.packages.velocity.impl.tools;
+package org.smartly.packages.velocity.impl.vtools;
 
 /**
  *

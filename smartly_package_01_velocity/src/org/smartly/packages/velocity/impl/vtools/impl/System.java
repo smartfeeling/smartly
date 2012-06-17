@@ -3,7 +3,7 @@
  *
  *
  */
-package org.smartly.packages.velocity.impl.tools.impl;
+package org.smartly.packages.velocity.impl.vtools.impl;
 
 
 import org.smartly.commons.logging.Level;
@@ -12,15 +12,15 @@ import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.network.URLUtils;
 import org.smartly.commons.util.*;
 import org.smartly.packages.velocity.impl.util.URLEncodeUtils;
-import org.smartly.packages.velocity.impl.tools.IVLCTool;
-import org.smartly.packages.velocity.impl.tools.VLCObject;
+import org.smartly.packages.velocity.impl.vtools.IVLCTool;
+import org.smartly.packages.velocity.impl.vtools.VLCObject;
 
 import java.util.*;
 
 /**
  *
  */
-public class VLCSystem
+public class System
         implements IVLCTool {
 
     // ------------------------------------------------------------------------
@@ -32,7 +32,7 @@ public class VLCSystem
     // ------------------------------------------------------------------------
     //                      Constructor
     // ------------------------------------------------------------------------
-    public VLCSystem() {
+    public System() {
     }
 
     @Override
@@ -52,10 +52,10 @@ public class VLCSystem
      */
     public String getSystemProperty(String property) {
         try {
-            return System.getProperty(property);
+            return java.lang.System.getProperty(property);
         } catch (SecurityException ex) {
             // we are not allowed to look at this property
-            System.err.println(
+            java.lang.System.err.println(
                     "Caught a SecurityException reading the system property '" + property
                             + "'; the SystemUtils property value will default to null.");
             return "";
@@ -432,7 +432,7 @@ public class VLCSystem
     }
 
     public String[] split(final String string, final String delim) {
-        return CollectionUtils.split(string, delim);
+        return StringUtils.split(string, delim);
     }
 
     public String getImage(final String path) {
@@ -526,10 +526,10 @@ public class VLCSystem
     // ------------------------------------------------------------------------
     public class Counter {
 
-        private final VLCSystem _sys;
+        private final System _sys;
         private int _count = 0;
 
-        public Counter(final VLCSystem sys, final int start) {
+        public Counter(final System sys, final int start) {
             _sys = sys;
             _count = start;
         }

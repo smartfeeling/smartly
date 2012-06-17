@@ -428,8 +428,8 @@ public abstract class FileUtils {
         } else {
             ewc = excludeWildChars;
         }
-        final String[] iwcTokens = CollectionUtils.commaDelimitedListToStringArray(iwc);
-        final String[] ewcTokens = CollectionUtils.commaDelimitedListToStringArray(ewc);
+        final String[] iwcTokens = StringUtils.split(iwc, ",");
+        final String[] ewcTokens = StringUtils.split(ewc, ",");
         listAllFiles(fileList,
                 startDir, // starting dir
                 iwcTokens, // include tokens

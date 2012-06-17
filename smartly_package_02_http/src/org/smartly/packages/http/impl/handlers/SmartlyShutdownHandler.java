@@ -115,8 +115,10 @@ public class SmartlyShutdownHandler extends ContextHandler {
             }
         }.start();
     }
-    
 
+    // ------------------------------------------------------------------------
+    //                      p r i v a t e
+    // ------------------------------------------------------------------------
 
     private boolean requestFromLocalhost(final HttpServletRequest request) {
         return "127.0.0.1".equals(getRemoteAddr(request));

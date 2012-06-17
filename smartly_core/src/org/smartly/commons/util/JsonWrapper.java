@@ -827,7 +827,7 @@ public class JsonWrapper {
         try {
             if (field.indexOf(".") > 0) {
                 final int len = StringUtils.countOccurrencesOf(field, ".");
-                final String[] tokens = CollectionUtils.splitAt(len, field, ".");
+                final String[] tokens = StringUtils.splitAt(len, field, ".");
                 final Object obj = getValueIfAny(item, tokens[0]);
                 if (obj instanceof JSONObject) {
                     JsonWrapper.put((JSONObject) obj, tokens[1], value);

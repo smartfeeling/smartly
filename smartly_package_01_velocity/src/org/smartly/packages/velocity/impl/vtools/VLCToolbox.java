@@ -1,14 +1,15 @@
 /*
  * 
  */
-package org.smartly.packages.velocity.impl.tools;
+package org.smartly.packages.velocity.impl.vtools;
 
 import org.apache.velocity.VelocityContext;
 import org.smartly.commons.util.ExceptionUtils;
 import org.smartly.commons.util.StringUtils;
-import org.smartly.packages.velocity.impl.tools.impl.VLCFormatter;
-import org.smartly.packages.velocity.impl.tools.impl.VLCMath;
-import org.smartly.packages.velocity.impl.tools.impl.VLCSystem;
+import org.smartly.packages.velocity.impl.vtools.impl.App;
+import org.smartly.packages.velocity.impl.vtools.impl.Formatter;
+import org.smartly.packages.velocity.impl.vtools.impl.Math;
+import org.smartly.packages.velocity.impl.vtools.impl.System;
 
 import java.util.*;
 
@@ -173,13 +174,16 @@ public class VLCToolbox {
     // ------------------------------------------------------------------------
     private void initTools() {
         // add Formatter for date and number
-        add(VLCFormatter.NAME, VLCFormatter.class, null, true);
+        add(Formatter.NAME, org.smartly.packages.velocity.impl.vtools.impl.Formatter.class, null, true);
 
         // add Math helper.
-        add(VLCMath.NAME, VLCMath.class, null, true);
+        add(Math.NAME, Math.class, null, true);
 
         // add System helper
-        add(VLCSystem.NAME, VLCSystem.class, null, true);
+        add(System.NAME, System.class, null, true);
+
+        // add App helper
+        add(App.NAME, App.class, null, true);
 
         // more vtools can be added using add command
     }

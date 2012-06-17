@@ -4,7 +4,7 @@
 package org.smartly.packages.velocity.impl.engine;
 
 import org.apache.velocity.VelocityContext;
-import org.smartly.packages.velocity.impl.tools.VLCToolbox;
+import org.smartly.packages.velocity.impl.vtools.VLCToolbox;
 
 import java.util.Map;
 

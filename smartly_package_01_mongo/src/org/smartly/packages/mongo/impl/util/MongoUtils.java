@@ -81,7 +81,7 @@ public class MongoUtils implements IMongoConstants {
     }
 
     public static String[] splitId(final String id) {
-        return CollectionUtils.split(id, SEP);
+        return StringUtils.split(id, SEP);
     }
 
     public static DBObject parseObject(final String jsontext) {

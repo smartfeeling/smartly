@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * User: angelo.geminiani
+ *
  */
 public class ServletUtils {
 

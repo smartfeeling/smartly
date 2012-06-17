@@ -8,7 +8,6 @@ import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.util.BeanUtils;
-import org.smartly.commons.util.CollectionUtils;
 import org.smartly.commons.util.StringUtils;
 
 /**
@@ -117,17 +116,17 @@ public final class IPLocation {
      */
     private void parse(final String response) {
         if (StringUtils.hasText(response)) {
-            final String[] tokens = CollectionUtils.split(
+            final String[] tokens = StringUtils.split(
                     response, "\n", true, false, 1);
             for (final String token : tokens) {
-                final String[] keypair = CollectionUtils.split(
+                final String[] keypair = StringUtils.split(
                         token, ":");
                 if (keypair.length > 1) {
                     final String name = keypair[0].toLowerCase();
                     final String value = keypair[1];
                     try {
                         if (COUNTRY.equalsIgnoreCase(name)) {
-                            final String[] temp = CollectionUtils.split(
+                            final String[] temp = StringUtils.split(
                                     value.replace("(", "|").replace(")", ""),
                                     "|", true, false, 1);
                             if (temp.length == 2) {

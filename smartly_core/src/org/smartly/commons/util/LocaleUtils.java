@@ -7,28 +7,30 @@ public class LocaleUtils {
 
     public static final Locale DEFAULT = new Locale("en", "US");
     private final static InheritableThreadLocal _thdLocale = new InheritableThreadLocal();
-    /** Locales that are found so far. */
+    /**
+     * Locales that are found so far.
+     */
     private static final Map<Locale, Locale> _founds = Collections.synchronizedMap(
             new LinkedHashMap<Locale, Locale>(18));
 
     static {
         final Locale[] ls = new Locale[]{
-            Locale.UK, Locale.ENGLISH,
-            Locale.US,
-            Locale.JAPAN, Locale.JAPANESE,
-            Locale.KOREA, Locale.KOREAN,
-            Locale.FRANCE, Locale.FRENCH,
-            Locale.GERMANY, Locale.GERMAN,
-            Locale.ITALY, Locale.ITALIAN,
-            Locale.TRADITIONAL_CHINESE, Locale.SIMPLIFIED_CHINESE,
-            Locale.CHINA, Locale.CHINESE
+                Locale.UK, Locale.ENGLISH,
+                Locale.US,
+                Locale.JAPAN, Locale.JAPANESE,
+                Locale.KOREA, Locale.KOREAN,
+                Locale.FRANCE, Locale.FRENCH,
+                Locale.GERMANY, Locale.GERMAN,
+                Locale.ITALY, Locale.ITALIAN,
+                Locale.TRADITIONAL_CHINESE, Locale.SIMPLIFIED_CHINESE,
+                Locale.CHINA, Locale.CHINESE
         };
         for (int j = 0; j < ls.length; ++j) {
             _founds.put(ls[j], ls[j]);
         }
     }
 
-    /** 
+    /**
      * Returns the current locale; never null.
      * This is the locale that every other objects shall use,
      * unless they have special consideration.
@@ -49,12 +51,13 @@ public class LocaleUtils {
         }
     }
 
-    /** 
+    /**
      * Returns whether the current locale ({@link #getCurrent}) belongs
      * to the specified language and/or country.
-     * @param lang the language code, e.g., en and zh. Ignored if null.
+     *
+     * @param lang    the language code, e.g., en and zh. Ignored if null.
      * @param country the country code, e.g., US. Ignored if null.
-     * If empty, it means no country code at all.
+     *                If empty, it means no country code at all.
      */
     public static boolean testCurrent(String lang, String country) {
         final Locale l = getCurrent();
@@ -63,19 +66,19 @@ public class LocaleUtils {
 
     /**
      * Sets the locale for the current thread only.
-     *
+     * <p/>
      * <p>Each thread could have an independent locale, called
      * the thread locale.
-     *
+     * <p/>
      * <p>When Invoking this method under a thread that serves requests,
      * remember to clean up the setting upon completing each request.
-     *
+     * <p/>
      * <pre><code>Locale old = Locales.setThreadLocal(newValue);
-     *try {
+     * try {
      *  ...
-     *} finally {
+     * } finally {
      *  Locales.setThreadLocal(old);
-     *}</code></pre>
+     * }</code></pre>
      *
      * @param locale the thread locale; null to denote no thread locale
      * @return the previous thread locale
@@ -87,11 +90,12 @@ public class LocaleUtils {
         return old;
     }
 
-    /** Converts a Locale to one of them being used before.
+    /**
+     * Converts a Locale to one of them being used before.
      * To save memory (since locale is used frequently), it is suggested
      * to pass thru this method after creating a new instance of Locale.<br>
      * Example, getLocale(new Locale(...)).
-     *
+     * <p/>
      * <p>This method first look for any locale
      */
     public static Locale getLocale(final Locale locale) {
@@ -105,10 +109,10 @@ public class LocaleUtils {
             return locale;
         }
     }
-    
+
     public static Locale getLocale(final String lang, final String country) {
-        if(StringUtils.hasText(lang)){
-            if(StringUtils.hasText(country)){
+        if (StringUtils.hasText(lang)) {
+            if (StringUtils.hasText(country)) {
                 return getLocale(new Locale(lang, country));
             } else {
                 return getLocaleByLang(lang);
@@ -116,33 +120,33 @@ public class LocaleUtils {
         }
         return DEFAULT;
     }
-    
+
     public static Locale getLocaleByLang(final String lang) {
-        if(StringUtils.hasText(lang)){
+        if (StringUtils.hasText(lang)) {
             final Set<Locale> keys = _founds.keySet();
-            for(final Locale locale:keys){
-                if(locale.getLanguage().equalsIgnoreCase(lang)){
+            for (final Locale locale : keys) {
+                if (locale.getLanguage().equalsIgnoreCase(lang)) {
                     return _founds.get(locale);
                 }
             }
         }
         return DEFAULT;
     }
-    
+
     public static Locale getLocaleByCountry(final String country) {
-        if(StringUtils.hasText(country)){
+        if (StringUtils.hasText(country)) {
             final Set<Locale> keys = _founds.keySet();
-            for(final Locale locale:keys){
-                if(locale.getCountry().equalsIgnoreCase(country)){
+            for (final Locale locale : keys) {
+                if (locale.getCountry().equalsIgnoreCase(country)) {
                     return _founds.get(locale);
                 }
             }
         }
         return DEFAULT;
     }
-    
+
     public static String getLanguage(final String slocale) {
-        final String[] tokens = CollectionUtils.split(slocale, "_");
+        final String[] tokens = StringUtils.split(slocale, "_");
         if (tokens.length > 0) {
             return tokens[0];
         } else {
@@ -153,7 +157,7 @@ public class LocaleUtils {
 
     /**
      * Return Country from locale even if passed locale has not a country declared.
-     * 
+     *
      * @param locale Locale can have only Language. i.e. "it"
      * @return Country for passed locale. i.e. getCountry(new Locale("it")) returns "IT"
      */
@@ -187,6 +191,7 @@ public class LocaleUtils {
      * Create a new Locale from passed string.<br>
      * Allow a string with language-country-variant, ex: "it-IT", "en", "en-US", "th_TH_TH"
      * If passed locale is not available, return Default Locale
+     *
      * @param localeString A string like "it-IT", "en", "en-US", "th_TH_TH"
      * @return Locale from String
      */
@@ -203,14 +208,15 @@ public class LocaleUtils {
     /**
      * Parse the given locale string into a <code>java.util.Locale</code>.
      * This is the inverse operation of Locale's <code>toString</code>.
+     *
      * @param localeString the locale string, following
-     * <code>java.util.Locale</code>'s toString format ("en", "en_UK", etc).
-     * Also accepts spaces ' ' as separators, as alternative to underscores '_', or ':' or '-'.
+     *                     <code>java.util.Locale</code>'s toString format ("en", "en_UK", etc).
+     *                     Also accepts spaces ' ' as separators, as alternative to underscores '_', or ':' or '-'.
      * @return a corresponding Locale instance
      */
     public static Locale parseLocaleString(final String localeString) {
         if (StringUtils.hasText(localeString)) {
-            final String[] parts = CollectionUtils.tokenizeToStringArray(localeString, "_ -:", false, false);
+            final String[] parts = StringUtils.split(localeString, "_ -:", false, false);
             final String language = (parts.length > 0 ? parts[0] : "");
             final String country = (parts.length > 1 ? parts[1] : "");
             final String variant = (parts.length > 2 ? parts[2] : "");
@@ -224,12 +230,13 @@ public class LocaleUtils {
      * Create a new Locale from passed string.<br>
      * Allow a string with language-country-variant, ex: "it-IT", "en", "en-US", "th_TH_TH"
      * If passed locale is not available, return 'defaultValue' parameter
-     * @param sLocale A string like "it-IT", "en", "en-US", "th_TH_TH"
+     *
+     * @param sLocale      A string like "it-IT", "en", "en-US", "th_TH_TH"
      * @param defaultValue A default Locale to return if passed string produce an invalid locale
      * @return Locale from String
      */
     public static Locale getLocaleFromString(final String sLocale,
-            final Locale defaultValue) {
+                                             final Locale defaultValue) {
         Locale result = null;
         if (sLocale.indexOf("-") > -1) {
             result = getLocaleFromString(sLocale, "-", defaultValue);
@@ -252,7 +259,8 @@ public class LocaleUtils {
      * Create a new Locale from passed string.<br>
      * Allow a string with language-country-variant, ex: "it-IT", "en", "en-US", "th_TH_TH"
      * If passed locale is not available, return US (english)
-     * @param sLocale A string like "it-IT", "en", "en-US", "th_TH_TH"
+     *
+     * @param sLocale   A string like "it-IT", "en", "en-US", "th_TH_TH"
      * @param delimiter Separator of passed char ex: '-', ':', etc..
      * @return Locale from String
      */
@@ -266,13 +274,14 @@ public class LocaleUtils {
      * Allow a string with language-country-variant, ex: "it-IT", "en", "en-US", "th_TH_TH".<br>
      * The sLocale parameter string can use a custom 'delimiter'.
      * If passed locale is not available, return 'defaultValue' parameter
-     * @param sLocale A string like "it-IT", "en", "en-US", "th_TH_TH"
-     * @param delimiter Separator of passed string ex: "-", ":", etc..
+     *
+     * @param sLocale      A string like "it-IT", "en", "en-US", "th_TH_TH"
+     * @param delimiter    Separator of passed string ex: "-", ":", etc..
      * @param defaultValue A default Locale to return if passed string produce an invalid locale
      * @return Locale from String
      */
-    public static Locale getLocaleFromString(final String sLocale, 
-            final String delimiter, Locale defaultValue) {
+    public static Locale getLocaleFromString(final String sLocale,
+                                             final String delimiter, Locale defaultValue) {
         Locale result = null;
         String[] arr = sLocale.split(delimiter);
         if (arr.length == 1) {
@@ -295,12 +304,13 @@ public class LocaleUtils {
 
     /**
      * Return Loacale from Object instance (Locale or String).
+     *
      * @param locale
      * @param defaultValue
      * @return
      */
     public static Locale getLocaleFromObject(final Object locale,
-            final Locale defaultValue) {
+                                             final Locale defaultValue) {
         if (null != locale) {
             if (locale instanceof Locale) {
                 return getLocale((Locale) locale);
@@ -314,6 +324,7 @@ public class LocaleUtils {
 
     /**
      * Check locale compatibility.
+     *
      * @param locale1 First locale
      * @param locale2 Second locale
      * @return true if locales are near or equals.
@@ -324,12 +335,13 @@ public class LocaleUtils {
 
     /**
      * Check locale compatibility.
+     *
      * @param value1 First locale
      * @param value2 Second locale
      * @return true if locales are near or equals.
      */
     public static boolean like(final String value1,
-            final String value2) {
+                               final String value2) {
         if (!StringUtils.hasText(value1) && !StringUtils.hasText(value2)) {
             return true;
         }
@@ -374,18 +386,18 @@ public class LocaleUtils {
         }
         return false;
     }
-    
-    public static DecimalFormatSymbols getDecimalFormatSymbols(){
+
+    public static DecimalFormatSymbols getDecimalFormatSymbols() {
         final Locale locale = LocaleUtils.getCurrent();
         return getDecimalFormatSymbols(locale);
     }
-    
-    public static DecimalFormatSymbols getDecimalFormatSymbols(final Locale locale){
+
+    public static DecimalFormatSymbols getDecimalFormatSymbols(final Locale locale) {
         final Locale loc = LocaleUtils.getLocale(locale);
         final DecimalFormatSymbols result = new DecimalFormatSymbols(loc);
         return result;
     }
-    
+
     public static Currency getCurrency() {
         final Locale locale = LocaleUtils.getCurrent();
         return LocaleUtils.getCurrency(locale);
@@ -399,15 +411,15 @@ public class LocaleUtils {
      * European Monetary Union, the method returns the old national currencies
      * until December 31, 2001, and the Euro from January 1, 2002, local time
      * of the respective countries.
-     * <p>
+     * <p/>
      * The method returns <code>null</code> for territories that don't
      * have a currency, such as Antarctica or if the given locale
      * is not a supported ISO 3166 country code.
      *
      * @param locale the locale for whose country a <code>Currency</code>
-     * instance is needed
+     *               instance is needed
      * @return the <code>Currency</code> instance for the country of the given
-     * locale, or null
+     *         locale, or null
      */
     public static Currency getCurrency(final Locale locale) {
         try {
@@ -420,8 +432,9 @@ public class LocaleUtils {
     }
 
     /**
-     * Return currency code and currency symbol in unique formatted string. 
+     * Return currency code and currency symbol in unique formatted string.
      * i.e. "€(EUR)"
+     *
      * @return
      */
     public static String getCurrencyAsString() {
@@ -432,6 +445,7 @@ public class LocaleUtils {
     /**
      * Return currency code and currency symbol in unique formatted string.
      * i.e. "€(EUR)"
+     *
      * @param locale
      * @return
      */
@@ -505,14 +519,14 @@ public class LocaleUtils {
     }
 
     public static String getTimeZoneDisplay(final String ID,
-            final String langCode) {
+                                            final String langCode) {
         final TimeZone tz = TimeZone.getTimeZone(ID);
         final Locale locale = LocaleUtils.getLocaleFromString(langCode);
         return LocaleUtils.getTimeZoneDisplay(tz, locale);
     }
 
     public static String getTimeZoneDisplay(final TimeZone tz,
-            final Locale locale) {
+                                            final Locale locale) {
         final Locale loc = null != locale
                 ? locale
                 : LocaleUtils.getCurrent();

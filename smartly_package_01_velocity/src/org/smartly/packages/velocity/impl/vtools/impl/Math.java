@@ -3,11 +3,11 @@
  *
  *
  */
-package org.smartly.packages.velocity.impl.tools.impl;
+package org.smartly.packages.velocity.impl.vtools.impl;
 
 import org.smartly.commons.util.MathUtils;
 import org.smartly.commons.util.RandomUtils;
-import org.smartly.packages.velocity.impl.tools.IVLCTool;
+import org.smartly.packages.velocity.impl.vtools.IVLCTool;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Tool utility for basic arithmetic operations.
  */
-public class VLCMath
+public class Math
         implements IVLCTool {
 
     public static final String NAME = "math";
@@ -23,7 +23,7 @@ public class VLCMath
     /**
      * Creates a new instance of VLCMath
      */
-    public VLCMath() {
+    public Math() {
 
     }
 

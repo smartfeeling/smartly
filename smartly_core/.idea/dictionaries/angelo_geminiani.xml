@@ -7,6 +7,9 @@
       <w>gmail</w>
       <w>hashbang</w>
       <w>htmldeployer</w>
+      <w>htmlparser</w>
+      <w>httprequest</w>
+      <w>httpresponse</w>
       <w>mkdirs</w>
       <w>mongodb</w>
       <w>remoting</w>

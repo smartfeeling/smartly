@@ -3,10 +3,10 @@
  *
  *
  */
-package org.smartly.packages.velocity.impl.tools.impl;
+package org.smartly.packages.velocity.impl.vtools.impl;
 
 import org.smartly.commons.util.*;
-import org.smartly.packages.velocity.impl.tools.IVLCTool;
+import org.smartly.packages.velocity.impl.vtools.IVLCTool;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormatSymbols;
@@ -16,7 +16,7 @@ import java.util.Locale;
 /**
  *
  */
-public final class VLCFormatter
+public final class Formatter
         implements IVLCTool {
 
     public static final String NAME = "fmt";
@@ -24,7 +24,7 @@ public final class VLCFormatter
     private static final Locale DEFAULT_LOCALE = Locale.US;
     private static final String DEFAULT_PATTERN = "#,##0.0###;(#,##0.0###)";
 
-    public VLCFormatter() {
+    public Formatter() {
     }
 
     @Override
