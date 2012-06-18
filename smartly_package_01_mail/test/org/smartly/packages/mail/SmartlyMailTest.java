@@ -15,8 +15,8 @@ public class SmartlyMailTest {
 
     @Test
     public void testReady() throws Exception {
-        MailUtils.sendMailTo("I'll be back [smartly@gmail.com]",
-                "angelo.geminiani@gmail.com",
+        MailUtils.sendMailTo(new String[]{"I'll be back [smartly@gmail.com]",
+                "angelo.geminiani@gmail.com"},
                 "TEST",
                 "This is a test").join();
     }

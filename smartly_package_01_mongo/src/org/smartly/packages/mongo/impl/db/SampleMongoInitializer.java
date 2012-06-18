@@ -1,7 +1,7 @@
 /*
  * 
  */
-package org.smartly.packages.mongo.impl.impl;
+package org.smartly.packages.mongo.impl.db;
 
 import com.mongodb.DB;
 import org.smartly.packages.mongo.impl.MongoDB;

@@ -15,7 +15,7 @@ import org.smartly.commons.util.StringUtils;
 import org.smartly.packages.mongo.impl.AbstractMongoService;
 import org.smartly.packages.mongo.impl.IMongoConstants;
 import org.smartly.packages.mongo.impl.StandardCodedException;
-import org.smartly.packages.mongo.impl.impl.GenericMongoService;
+import org.smartly.packages.mongo.impl.db.GenericMongoService;
 import org.smartly.packages.mongo.impl.util.MongoUtils;
 
 import java.util.*;

@@ -1,14 +1,14 @@
 /*
  * 
  */
-package org.smartly.packages.mongo.impl.impl.entity;
+package org.smartly.packages.mongo.impl.db.entity;
 
 import com.mongodb.DBObject;
 import org.smartly.IConstants;
 import org.smartly.commons.util.CollectionUtils;
 import org.smartly.commons.util.StringUtils;
 import org.smartly.packages.mongo.impl.MongoObject;
-import org.smartly.packages.mongo.impl.impl.entity.item.MongoAddress;
+import org.smartly.packages.mongo.impl.db.entity.item.MongoAddress;
 import org.smartly.packages.mongo.impl.util.MongoUtils;
 
 import java.util.List;

@@ -40,4 +40,17 @@ public class SmartlyRemoting extends AbstractPackage
     private void init() {
 
     }
+
+    // --------------------------------------------------------------------
+    //               S T A T I C
+    // --------------------------------------------------------------------
+
+    public static final String getAppToken() {
+        try {
+            return (String) Smartly.getConfiguration().get("remoting.app_securetoken");
+        } catch (Throwable ignored) {
+        }
+        return "";
+    }
+
 }

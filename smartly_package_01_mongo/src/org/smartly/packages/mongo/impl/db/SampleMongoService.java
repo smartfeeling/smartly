@@ -2,7 +2,7 @@
  * 
  */
 
-package org.smartly.packages.mongo.impl.impl;
+package org.smartly.packages.mongo.impl.db;
 
 import org.smartly.packages.mongo.impl.AbstractMongoService;
 import org.smartly.packages.mongo.impl.StandardCodedException;

@@ -1,7 +1,7 @@
 /*
  * 
  */
-package org.smartly.packages.mongo.impl.impl.service;
+package org.smartly.packages.mongo.impl.db.service;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
@@ -12,7 +12,7 @@ import org.smartly.commons.logging.Level;
 import org.smartly.commons.util.*;
 import org.smartly.packages.mongo.impl.AbstractMongoService;
 import org.smartly.packages.mongo.impl.StandardCodedException;
-import org.smartly.packages.mongo.impl.impl.entity.MongoUser;
+import org.smartly.packages.mongo.impl.db.entity.MongoUser;
 import org.smartly.packages.mongo.impl.util.MongoUtils;
 
 import java.util.Collection;

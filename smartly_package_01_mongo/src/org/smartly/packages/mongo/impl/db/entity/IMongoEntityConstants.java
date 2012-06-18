@@ -1,7 +1,7 @@
 /*
  * 
  */
-package org.smartly.packages.mongo.impl.impl.entity;
+package org.smartly.packages.mongo.impl.db.entity;
 
 import org.smartly.packages.mongo.impl.IMongoConstants;
 

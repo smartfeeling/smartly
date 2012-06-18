@@ -8,8 +8,8 @@ import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.util.FormatUtils;
-import org.smartly.packages.mongo.impl.impl.entity.MongoUser;
-import org.smartly.packages.mongo.impl.impl.service.MongoUserService;
+import org.smartly.packages.mongo.impl.db.entity.MongoUser;
+import org.smartly.packages.mongo.impl.db.service.MongoUserService;
 
 /**
  * Sample Mongo Collections initializer.

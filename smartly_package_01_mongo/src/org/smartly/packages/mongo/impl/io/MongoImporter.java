@@ -9,7 +9,7 @@ import com.mongodb.DBObject;
 import org.smartly.commons.csv.CSVFileReader;
 import org.smartly.commons.csv.CSVReader;
 import org.smartly.packages.mongo.impl.StandardCodedException;
-import org.smartly.packages.mongo.impl.impl.GenericMongoService;
+import org.smartly.packages.mongo.impl.db.GenericMongoService;
 
 import java.io.StringReader;
 import java.util.ArrayList;

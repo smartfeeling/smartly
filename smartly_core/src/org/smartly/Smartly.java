@@ -108,6 +108,10 @@ public class Smartly {
         return PathUtils.getAbsolutePath(relativePath);
     }
 
+    public static String getLangCode() {
+        return "en";
+    }
+
     public static String[] getLanguages() {
         if (null == __langCodes) {
             final Set<String> langs = new HashSet<String>();
@@ -123,6 +127,7 @@ public class Smartly {
     public static void register(final FileDeployer deployer) {
         FileDeployer.register(deployer);
     }
+
 
 
 }

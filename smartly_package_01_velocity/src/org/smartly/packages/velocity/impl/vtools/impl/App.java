@@ -18,5 +18,9 @@ public class App implements IVLCTool {
         return Smartly.getConfiguration();
     }
 
+    public String[] getLangArray() {
+        return Smartly.getLanguages();
+    }
+
 
 }

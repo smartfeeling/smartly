@@ -1,15 +1,13 @@
 package org.smartly.commons.jsonrepository;
 
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.smartly.commons.lang.CharEncoding;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
-import org.smartly.commons.util.FileUtils;
-import org.smartly.commons.util.JsonWrapper;
-import org.smartly.commons.util.PathUtils;
-import org.smartly.commons.util.StringUtils;
+import org.smartly.commons.util.*;
 
 import java.io.File;
 import java.util.*;
@@ -54,6 +52,49 @@ public class JsonRepository {
             }
         }
         return result;
+    }
+
+    //-- utils --//
+
+    public String getString(final String path) {
+        return this.getString(path, "");
+    }
+
+    public String getString(final String path, final String def) {
+        final Object value = this.get(path);
+        return null != value ? (String) value : "";
+    }
+
+    public String[] getStringArray(final String path) {
+        final Object value = this.get(path);
+        return (value instanceof JSONArray)?JsonWrapper.toArrayOfString((JSONArray)value):new String[0];
+    }
+
+    public boolean getBoolean(final String path) {
+        return this.getBoolean(path, false);
+    }
+
+    public boolean getBoolean(final String path, final boolean def) {
+        final Object value = this.get(path);
+        return ConversionUtils.toBoolean(value, def);
+    }
+
+    public int getInt(final String path) {
+        return this.getInt(path, 0);
+    }
+
+    public int getInt(final String path, final int def) {
+        final Object value = this.get(path);
+        return ConversionUtils.toInteger(value, def);
+    }
+
+    public double getDouble(final String path) {
+        return this.getDouble(path, 0.0);
+    }
+
+    public double getDouble(final String path, final double def) {
+        final Object value = this.get(path);
+        return ConversionUtils.toDouble(value, -1, def);
     }
 
     // ------------------------------------------------------------------------

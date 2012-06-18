@@ -1,7 +1,7 @@
 /*
  * 
  */
-package org.smartly.packages.mongo.impl.impl.service;
+package org.smartly.packages.mongo.impl.db.service;
 
 import com.mongodb.DB;
 import com.mongodb.DBObject;
@@ -18,9 +18,9 @@ import org.smartly.commons.util.StringUtils;
 import org.smartly.packages.mongo.impl.AbstractMongoService;
 import org.smartly.packages.mongo.impl.MongoDBConnectionFactory;
 import org.smartly.packages.mongo.impl.StandardCodedException;
-import org.smartly.packages.mongo.impl.impl.entity.MongoAnalytics;
-import org.smartly.packages.mongo.impl.impl.entity.MongoCountry;
-import org.smartly.packages.mongo.impl.impl.service.tasks.analytics.AnalyticsData;
+import org.smartly.packages.mongo.impl.db.entity.MongoAnalytics;
+import org.smartly.packages.mongo.impl.db.entity.MongoCountry;
+import org.smartly.packages.mongo.impl.db.service.tasks.analytics.AnalyticsData;
 
 
 /**
@@ -41,7 +41,7 @@ public class MongoAnalyticsService extends AbstractMongoService {
     //                      Constructor
     // ------------------------------------------------------------------------
     public MongoAnalyticsService() throws StandardCodedException {
-        super(MongoDBConnectionFactory.getConnection(DB_NAME),
+        super(MongoDBConnectionFactory.getDB(DB_NAME),
                 collection(),
                 MongoDBConnectionFactory.getLanguages());
     }

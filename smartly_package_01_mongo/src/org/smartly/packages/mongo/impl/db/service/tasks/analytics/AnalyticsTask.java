@@ -1,9 +1,9 @@
-package org.smartly.packages.mongo.impl.impl.service.tasks.analytics;
+package org.smartly.packages.mongo.impl.db.service.tasks.analytics;
 
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
-import org.smartly.packages.mongo.impl.impl.service.MongoAnalyticsService;
+import org.smartly.packages.mongo.impl.db.service.MongoAnalyticsService;
 
 /**
  * User: angelo.geminiani

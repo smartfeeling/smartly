@@ -1,11 +1,11 @@
 /*
  * 
  */
-package org.smartly.packages.mongo.impl.impl.service;
+package org.smartly.packages.mongo.impl.db.service;
 
 import com.mongodb.DB;
 import org.smartly.packages.mongo.impl.AbstractMongoService;
-import org.smartly.packages.mongo.impl.impl.entity.MongoRole;
+import org.smartly.packages.mongo.impl.db.entity.MongoRole;
 
 /**
  * @author angelo.geminiani

@@ -1,4 +1,4 @@
-package org.smartly.packages.mongo.impl.impl.service.tasks.analytics;
+package org.smartly.packages.mongo.impl.db.service.tasks.analytics;
 
 import org.json.JSONObject;
 import org.smartly.commons.util.JsonWrapper;

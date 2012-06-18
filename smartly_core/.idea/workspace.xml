@@ -99,10 +99,8 @@
       <file leaf-file-name="Req.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../smartly_package_02_http/src/org/smartly/packages/http/impl/util/vtool/Req.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="291" column="9" selection-start="8972" selection-end="8972" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state line="202" column="9" selection-start="6080" selection-end="6080" vertical-scroll-proportion="0.0">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -168,6 +166,16 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="PackagesPane">
         <subPane>
           <PATH>
@@ -606,16 +614,6 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="impl" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -1157,7 +1155,6 @@
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20512821" sideWeight="0.43598235" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26068377" sideWeight="0.6589404" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1165,15 +1162,16 @@
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32905984" sideWeight="0.397351" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18696581" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26048565" sideWeight="0.18162394" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2593819" sideWeight="0.41239315" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26048565" sideWeight="0.6057692" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2593819" sideWeight="0.375" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.20512821" sideWeight="0.43598235" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32905984" sideWeight="0.397351" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
@@ -1239,119 +1237,77 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/org/smartly/commons/network/iplocation/IPLocation.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="124" column="65" selection-start="3413" selection-end="3413" vertical-scroll-proportion="0.22056384">
-          <folding />
-        </state>
+        <state line="124" column="65" selection-start="3413" selection-end="3413" vertical-scroll-proportion="0.22056384" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/test/org/smartly/commons/logging/LoggerTest.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="8" selection-start="208" selection-end="208" vertical-scroll-proportion="0.2819237">
-          <folding />
-        </state>
+        <state line="11" column="8" selection-start="208" selection-end="208" vertical-scroll-proportion="0.2819237" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/smartly/commons/util/LocaleUtils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="218" column="46" selection-start="7840" selection-end="7840" vertical-scroll-proportion="0.33333334">
-          <folding />
-        </state>
+        <state line="218" column="46" selection-start="7840" selection-end="7840" vertical-scroll-proportion="0.33333334" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/smartly/commons/util/CollectionUtils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1256" column="29" selection-start="42790" selection-end="42790" vertical-scroll-proportion="0.33665007">
-          <folding>
-            <element signature="e#24158#24188#0" expanded="true" />
-            <element signature="e#29956#30013#0" expanded="true" />
-            <element signature="e#30445#30475#0" expanded="true" />
-          </folding>
-        </state>
+        <state line="1256" column="29" selection-start="42790" selection-end="42790" vertical-scroll-proportion="0.33665007" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../smartly_package_01_velocity/src/org/smartly/packages/velocity/impl/util/URLEncodeUtils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="13" selection-start="429" selection-end="429" vertical-scroll-proportion="0.366485">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
+        <state line="16" column="13" selection-start="429" selection-end="429" vertical-scroll-proportion="0.366485" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../smartly_package_01_velocity/src/org/smartly/packages/velocity/impl/vtools/impl/Formatter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="32" column="5" selection-start="615" selection-end="681" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="32" column="5" selection-start="615" selection-end="681" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../smartly_package_01_velocity/src/org/smartly/packages/velocity/impl/vtools/VLCToolbox.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="184" column="18" selection-start="5887" selection-end="5887" vertical-scroll-proportion="0.3973384">
-          <folding />
-        </state>
+        <state line="184" column="18" selection-start="5887" selection-end="5887" vertical-scroll-proportion="0.3973384" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/smartly/commons/jsonrepository/JsonRepository.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="13" selection-start="491" selection-end="491" vertical-scroll-proportion="-0.12927757">
-          <folding />
-        </state>
+        <state line="16" column="13" selection-start="491" selection-end="491" vertical-scroll-proportion="-0.12927757" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/smartly/Smartly.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="94" column="25" selection-start="2975" selection-end="2975" vertical-scroll-proportion="0.33269963">
-          <folding />
-        </state>
+        <state line="94" column="25" selection-start="2975" selection-end="2975" vertical-scroll-proportion="0.33269963" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../smartly_package_01_mail/src/org/smartly/packages/mail/SmartlyMail.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="44" column="9" selection-start="1018" selection-end="1320" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="44" column="9" selection-start="1018" selection-end="1320" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../smartly_package_01_htmlparser/src/org/smartly/packages/htmlparser/impl/HtmlParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="126" column="62" selection-start="3858" selection-end="3858" vertical-scroll-proportion="2.6717663">
-          <folding />
-        </state>
+        <state line="126" column="62" selection-start="3858" selection-end="3858" vertical-scroll-proportion="2.6717663" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../smartly_package_01_htmlparser/src/org/smartly/packages/htmlparser/SmartlyHtmlParser.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="50" selection-start="743" selection-end="743" vertical-scroll-proportion="0.472879">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
+        <state line="21" column="50" selection-start="743" selection-end="743" vertical-scroll-proportion="0.472879" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../smartly_package_01_velocity/src/org/smartly/packages/velocity/impl/vtools/impl/App.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="42" selection-start="404" selection-end="404" vertical-scroll-proportion="0.3783032">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../smartly_package_02_http/src/org/smartly/packages/http/impl/util/vtool/Req.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="291" column="9" selection-start="8972" selection-end="8972" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
+        <state line="16" column="42" selection-start="404" selection-end="404" vertical-scroll-proportion="0.3783032" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../smartly_package_02_http/src/org/smartly/packages/http/impl/handlers/SmartlyResourceHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="456" column="50" selection-start="15605" selection-end="15613" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="456" column="50" selection-start="15605" selection-end="15613" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../smartly_package_02_http/src/org/smartly/packages/http/impl/util/vtool/Req.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="202" column="9" selection-start="6080" selection-end="6080" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../smartly_package_02_http/src/org/smartly/packages/http/impl/util/ServletUtils.java">

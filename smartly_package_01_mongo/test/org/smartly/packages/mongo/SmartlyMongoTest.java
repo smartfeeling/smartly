@@ -6,8 +6,8 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.smartly.packages.mongo.impl.MongoDBConnectionFactory;
-import org.smartly.packages.mongo.impl.impl.entity.MongoUser;
-import org.smartly.packages.mongo.impl.impl.service.MongoUserService;
+import org.smartly.packages.mongo.impl.db.entity.MongoUser;
+import org.smartly.packages.mongo.impl.db.service.MongoUserService;
 import org.smartly.packages.mongo.impl.schema.MongoSchema;
 import org.smartly.packages.mongo.launcher.Main;
 
@@ -30,7 +30,7 @@ public class SmartlyMongoTest {
     @Test
     public void testMain() throws Exception {
 
-        DB db = MongoDBConnectionFactory.getConnection("MONGO_sample");
+        DB db = MongoDBConnectionFactory.getDB("MONGO_sample");
         MongoSchema schema = new MongoSchema(db);
 
         schema.initialize();

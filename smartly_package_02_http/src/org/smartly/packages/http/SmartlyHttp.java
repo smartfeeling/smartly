@@ -4,8 +4,7 @@ package org.smartly.packages.http;
 import org.json.JSONObject;
 import org.smartly.Smartly;
 import org.smartly.commons.logging.Level;
-import org.smartly.commons.util.FileUtils;
-import org.smartly.commons.util.JsonWrapper;
+import org.smartly.commons.util.*;
 import org.smartly.packages.AbstractPackage;
 import org.smartly.packages.ISmartlyModalPackage;
 import org.smartly.packages.ISmartlySystemPackage;
@@ -75,6 +74,32 @@ public class SmartlyHttp
         } catch (Throwable t) {
             super.getLogger().log(Level.SEVERE, null, t);
         }
+    }
+
+    // --------------------------------------------------------------------
+    //               S T A T I C
+    // --------------------------------------------------------------------
+
+    public static String getHTTPUrl( final String path ) {
+        final StringBuilder result = new StringBuilder();
+        final String protocol = "http://";
+        final String domain = (String)Smartly.getConfiguration().get("webserver.domain"); //getDomain(item);
+        final int port = ConversionUtils.toInteger(Smartly.getConfiguration().get("webserver.domain.connectors.http.port"), 80); //getPort(item);
+
+        result.append(protocol);
+        result.append(domain);
+        if (port != 80) {
+            result.append(port);
+        }
+
+        final String url;
+        if (StringUtils.hasText(path)) {
+            url = PathUtils.concat(result.toString(), path);
+        } else {
+            url = result.toString().concat("/");
+        }
+
+        return url;
     }
 
 }

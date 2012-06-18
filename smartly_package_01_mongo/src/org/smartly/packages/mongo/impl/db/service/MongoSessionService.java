@@ -1,13 +1,13 @@
 /*
  * 
  */
-package org.smartly.packages.mongo.impl.impl.service;
+package org.smartly.packages.mongo.impl.db.service;
 
 import com.mongodb.DB;
 import com.mongodb.DBObject;
 import org.smartly.packages.mongo.impl.AbstractMongoService;
 import org.smartly.packages.mongo.impl.StandardCodedException;
-import org.smartly.packages.mongo.impl.impl.entity.MongoSession;
+import org.smartly.packages.mongo.impl.db.entity.MongoSession;
 
 /**
  * @author angelo.geminiani

@@ -18,21 +18,26 @@ public class MongoDBConnectionFactory {
 
     public static boolean hasDBConnection(final String name){
         try{
-           return null!=getConnection(name);
+           return null!= getDB(name);
         }catch(Throwable ignored){}
         return false;
     }
 
-    public static DB getConnection( final String dbName ) throws StandardCodedException {
+    public static MongoDBConnection getConnection( final String dbName ) throws StandardCodedException {
         final Object config = Smartly.getConfiguration().get("databases." + dbName);
         if(config instanceof JSONObject){
-             return new MongoDBConnection((JSONObject)config).getDB();
+            return new MongoDBConnection((JSONObject)config);
         } else {
             throw new StandardCodedException(
                     FormatUtils.format(
                             "DATABASE NOT FOUND IN CONFIGURATION FOLDER: '{0}'",
                             dbName));
         }
+    }
+
+    public static DB getDB(final String dbName) throws StandardCodedException {
+        final MongoDBConnection connection = getConnection(dbName);
+        return null!=connection?connection.getDB():null;
     }
 
 

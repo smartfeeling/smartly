@@ -12,7 +12,7 @@ import org.smartly.commons.util.FileUtils;
 import org.smartly.commons.util.PathUtils;
 import org.smartly.commons.util.StringUtils;
 import org.smartly.packages.mongo.impl.StandardCodedException;
-import org.smartly.packages.mongo.impl.impl.GenericMongoService;
+import org.smartly.packages.mongo.impl.db.GenericMongoService;
 
 import java.io.IOException;
 import java.io.StringWriter;

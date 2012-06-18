@@ -1,11 +1,11 @@
 /*
  * 
  */
-package org.smartly.packages.mongo.impl.impl.entity.item;
+package org.smartly.packages.mongo.impl.db.entity.item;
 
 import com.mongodb.DBObject;
 import org.smartly.packages.mongo.impl.MongoObject;
-import org.smartly.packages.mongo.impl.impl.entity.IMongoEntityConstants;
+import org.smartly.packages.mongo.impl.db.entity.IMongoEntityConstants;
 import org.smartly.packages.mongo.impl.util.MongoUtils;
 
 /**

@@ -7,7 +7,6 @@ package org.smartly.packages.mail.impl;
 
 import org.smartly.Smartly;
 import org.smartly.commons.jsonrepository.JsonRepository;
-import org.smartly.commons.util.CollectionUtils;
 import org.smartly.commons.util.MimeTypeUtils;
 import org.smartly.commons.util.StringUtils;
 
@@ -17,14 +16,14 @@ public final class MailUtils {
     private MailUtils() {
     }
 
-    public static Thread sendMailTo(final String to,
+    public static Thread sendMailTo(final String[] to,
                                     final String subject,
                                     final String body) throws Exception {
         final String from = getFrom();
         return sendMailTo(from, to, subject, body);
     }
 
-    public static Thread sendMailHTMLTo(final String to,
+    public static Thread sendMailHTMLTo(final String[] to,
                                         final String subject,
                                         final String body) throws Exception {
         final String from = getFrom();
@@ -32,21 +31,19 @@ public final class MailUtils {
     }
 
     public static Thread sendMailHTMLTo(final String from,
-                                        final String to,
+                                        final String[] to,
                                         final String subject,
                                         final String body) throws Exception {
-        final String[] addresses = parseAddresses(to);
         final String mimeType = MimeTypeUtils.MIME_HTML;
-        return sendMailTo(from, addresses, subject, body, mimeType);
+        return sendMailTo(from, to, subject, body, mimeType);
     }
 
     public static Thread sendMailTo(final String from,
-                                    final String to,
+                                    final String[] to,
                                     final String subject,
                                     final String body) throws Exception {
-        final String[] addresses = parseAddresses(to);
         final String mimeType = MimeTypeUtils.MIME_PLAINTEXT;
-        return sendMailTo(from, addresses, subject, body, mimeType);
+        return sendMailTo(from, to, subject, body, mimeType);
     }
 
     public static Thread sendMailTo(final String from,
