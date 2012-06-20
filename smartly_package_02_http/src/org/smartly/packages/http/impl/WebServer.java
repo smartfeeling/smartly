@@ -67,9 +67,8 @@ public class WebServer extends AbstractHttpServer {
     private static void initVelocity(final String absoluteDocRoot) {
         VLCManager.getInstance().getEngine().setFileResourceLoaderPath(absoluteDocRoot);
 
-        //-- APPLICATION TOOL (override) --//
-        VLCManager.getInstance().getToolbox().replace(
-                App.NAME, App.class, null, true);
+        //-- APPLICATION TOOL (DON'T override) --//
+        VLCManager.getInstance().getToolbox().add(App.NAME, App.class, null, true);
     }
 
     private static Logger staticLogger() {

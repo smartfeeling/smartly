@@ -51,14 +51,18 @@ public class Req implements IVLCTool {
      * @param name Name of parameter into POST or GET request
      * @return Object or empty String. Never null.
      */
-    public Object getParam(final String name) {
+    public String getParam(final String name) {
         return this.getParam(name, "");
     }
 
-    public Object getParam(final String name, final Object def) {
-        if (null != _request) {
-            final Object result = _request.getParameterMap().get(name);
-            return null != result ? result : def;
+    public String getParam(final String name, final String def) {
+        final Object param = this.getRawParam(name);
+        if (null != param) {
+            if (param.getClass().isArray()) {
+                final Object[] array = (Object[]) param;
+                return array[0].toString();
+            }
+            return param.toString();
         }
         return def;
     }
@@ -115,12 +119,7 @@ public class Req implements IVLCTool {
         if (StringUtils.hasText(_langCode)) {
             return _langCode;
         } else {
-            final String value = _request.getHeader(HEADER_ACCEPT_LANGUAGE);
-            final String[] tokens = StringUtils.split(value, ",");
-            if (tokens.length > 0) {
-                final Locale locale = LocaleUtils.getLocaleFromString(tokens[0]);
-                _langCode = locale.getLanguage();
-            }
+            _langCode = getLang(_request);
         }
         return StringUtils.hasText(_langCode)
                 ? _langCode
@@ -198,5 +197,24 @@ public class Req implements IVLCTool {
     //                      p r i v a t e
     // ------------------------------------------------------------------------
 
+    private Object getRawParam(final String name) {
+        if (null != _request) {
+            return _request.getParameterMap().get(name);
+        }
+        return null;
+    }
 
+    // --------------------------------------------------------------------
+    //               S T A T I C
+    // --------------------------------------------------------------------
+
+    public static String getLang(final HttpServletRequest request) {
+        final String value = request.getHeader(HEADER_ACCEPT_LANGUAGE);
+        final String[] tokens = StringUtils.split(value, ",");
+        if (tokens.length > 0) {
+            final Locale locale = LocaleUtils.getLocaleFromString(tokens[0]);
+            return locale.getLanguage();
+        }
+        return LocaleUtils.getCurrent().getLanguage();
+    }
 }

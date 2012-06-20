@@ -12,8 +12,8 @@ import org.smartly.commons.util.RegExUtils;
 import org.smartly.packages.velocity.impl.engine.VLCContextFactory;
 import org.smartly.packages.velocity.impl.engine.VLCEngine;
 import org.smartly.packages.velocity.impl.events.OnBeforeEvaluate;
-import org.smartly.packages.velocity.impl.vtools.VLCToolbox;
-import org.smartly.packages.velocity.impl.vtools.VLCToolboxItem;
+import org.smartly.packages.velocity.impl.vtools.util.VLCToolbox;
+import org.smartly.packages.velocity.impl.vtools.util.VLCToolboxItem;
 
 import java.io.StringWriter;
 import java.util.Map;

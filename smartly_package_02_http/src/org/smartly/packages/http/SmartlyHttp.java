@@ -4,7 +4,10 @@ package org.smartly.packages.http;
 import org.json.JSONObject;
 import org.smartly.Smartly;
 import org.smartly.commons.logging.Level;
-import org.smartly.commons.util.*;
+import org.smartly.commons.util.FileUtils;
+import org.smartly.commons.util.JsonWrapper;
+import org.smartly.commons.util.PathUtils;
+import org.smartly.commons.util.StringUtils;
 import org.smartly.packages.AbstractPackage;
 import org.smartly.packages.ISmartlyModalPackage;
 import org.smartly.packages.ISmartlySystemPackage;
@@ -52,9 +55,9 @@ public class SmartlyHttp
 
     private void init() {
         //-- web server settings --//
-        final boolean enabled = (Boolean) Smartly.getConfiguration().get("http.webserver.enabled");
+        final boolean enabled = Smartly.getConfiguration().getBoolean("http.webserver.enabled");
         if (enabled) {
-            final JSONObject configuration = (JSONObject) Smartly.getConfiguration().get("http.webserver");
+            final JSONObject configuration = Smartly.getConfiguration().getJSONObject("http.webserver");
             final String docRoot = JsonWrapper.getString(configuration, "root");
             final String absoluteDocRoot = Smartly.getAbsolutePath(docRoot);
 
@@ -80,11 +83,11 @@ public class SmartlyHttp
     //               S T A T I C
     // --------------------------------------------------------------------
 
-    public static String getHTTPUrl( final String path ) {
+    public static String getHTTPUrl(final String path) {
         final StringBuilder result = new StringBuilder();
         final String protocol = "http://";
-        final String domain = (String)Smartly.getConfiguration().get("webserver.domain"); //getDomain(item);
-        final int port = ConversionUtils.toInteger(Smartly.getConfiguration().get("webserver.domain.connectors.http.port"), 80); //getPort(item);
+        final String domain = Smartly.getConfiguration().getString("http.webserver.domain"); //getDomain(item);
+        final int port = Smartly.getConfiguration().getInt("http.webserver.domain.connectors.http.port", 80); //getPort(item);
 
         result.append(protocol);
         result.append(domain);

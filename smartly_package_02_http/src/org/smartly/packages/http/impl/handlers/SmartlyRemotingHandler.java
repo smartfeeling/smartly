@@ -38,9 +38,9 @@ public class SmartlyRemotingHandler extends ContextHandler {
 
     private static final String REQ_PARAM_SEP = "&";
 
-    private static final String MIMETYPE_JSON = "application/json";
+    private static final String MIMETYPE_JSON = "application/json;charset=UTF-8";
     private static final String MIMETYPE_PNG = "image/png";
-    private static final String MIMETYPE_TEXT = "text/plain";
+    private static final String MIMETYPE_TEXT = "text/plain;charset=UTF-8";
     private static final String MIMETYPE_ZIP = "application/zip";
 
     private static final String FORMAT_JSON = "json";
@@ -192,23 +192,25 @@ public class SmartlyRemotingHandler extends ContextHandler {
         try {
             if (FORMAT_JSON.equalsIgnoreCase(format)) {
                 final String serialized = JsonSerializer.serialize(data);
-                ServletUtils.doResponseHeaders(response, null, serialized.length(), MIMETYPE_JSON);
-                ServletUtils.writeResponse(response, DateUtils.now().getTime(), serialized);
+                final byte[] bytes = serialized.getBytes(Smartly.getCharset());
+                ServletUtils.doResponseHeaders(response, null, bytes.length, MIMETYPE_JSON);
+                ServletUtils.writeResponse(response, DateUtils.now().getTime(), bytes);
             } else if (FORMAT_XML.equalsIgnoreCase(format)) {
                 // not supported yet
             } else if (FORMAT_BIN.equalsIgnoreCase(format)) {
-                if(data instanceof BinaryData){
+                if (data instanceof BinaryData) {
                     final BinaryData bin_data = (BinaryData) data;
-                    ServletUtils.doResponseHeaders(response, null, bin_data.getBytes().length, bin_data.getMimetype());
-                    ServletUtils.writeResponse(response, DateUtils.now().getTime(), bin_data.getBytes());
+                    final byte[] bytes = bin_data.getBytes();
+                    ServletUtils.doResponseHeaders(response, null, bytes.length, bin_data.getMimetype());
+                    ServletUtils.writeResponse(response, DateUtils.now().getTime(), bytes);
                 } else if (ByteUtils.isByteArray(data)) {
                     final byte[] bytes = (byte[]) data;
                     ServletUtils.doResponseHeaders(response, null, bytes.length, MIMETYPE_PNG);
                     ServletUtils.writeResponse(response, DateUtils.now().getTime(), bytes);
                 } else if (data instanceof String) {
-                    final String text = (String) data;
-                    ServletUtils.doResponseHeaders(response, null, text.length(), MIMETYPE_TEXT);
-                    ServletUtils.writeResponse(response, DateUtils.now().getTime(), text);
+                    final byte[] bytes = ((String) data).getBytes(Smartly.getCharset());
+                    ServletUtils.doResponseHeaders(response, null, bytes.length, MIMETYPE_TEXT);
+                    ServletUtils.writeResponse(response, DateUtils.now().getTime(), bytes);
                 } else if (data instanceof InputStream) {
                     final byte[] bytes = ByteUtils.getBytes((InputStream) data);
                     ServletUtils.doResponseHeaders(response, null, bytes.length, MIMETYPE_ZIP);
@@ -225,6 +227,11 @@ public class SmartlyRemotingHandler extends ContextHandler {
                     FormatUtils.format("ERROR WRITING RESPONSE: {0}", t), t);
         }
     }
+
+    // --------------------------------------------------------------------
+    //               p r i v a t e
+    // --------------------------------------------------------------------
+
 
     // ------------------------------------------------------------------------
     //                      c l a s s  -  p r i v a t e

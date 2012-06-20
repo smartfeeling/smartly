@@ -8,10 +8,11 @@ import org.eclipse.jetty.io.WriterOutputStream;
 import org.eclipse.jetty.server.AbstractHttpConnection;
 import org.eclipse.jetty.server.Response;
 import org.eclipse.jetty.util.resource.Resource;
+import org.smartly.Smartly;
+import org.smartly.commons.util.FileUtils;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 
 /**
  *
@@ -26,21 +27,19 @@ public class ServletUtils {
                                      final Long lastModified,
                                      final String content) throws IOException {
 
-        final Buffer buff = new ByteArrayBuffer(content.getBytes());
-        writeResponse(response, lastModified, buff);
+        writeResponse(response, lastModified, content.getBytes(Smartly.getCharset()));
     }
 
     public static void writeResponse(final HttpServletResponse response,
                                      final Long lastModified,
                                      final byte[] content) throws IOException {
-
-        final Buffer buff = new ByteArrayBuffer(content);
-        writeResponse(response, lastModified, buff);
+        final InputStream is = new ByteArrayInputStream(content);
+        writeResponse(response, lastModified, is);
     }
 
     public static void writeResponse(final HttpServletResponse response,
                                      final Long lastModified,
-                                     final Buffer content) throws IOException {
+                                     final Object content) throws IOException {
         if (null != lastModified) {
             response.setDateHeader(HttpHeaders.LAST_MODIFIED, lastModified);
         }
@@ -56,9 +55,9 @@ public class ServletUtils {
         // See if a short direct method can be used?
         if (out instanceof AbstractHttpConnection.Output) {
             ((AbstractHttpConnection.Output) out).sendContent(content);
-        } else {
+        } else if(out instanceof WriterOutputStream){
             // Write content normally
-
+            FileUtils.copy((InputStream)content, out);
         }
     }
 

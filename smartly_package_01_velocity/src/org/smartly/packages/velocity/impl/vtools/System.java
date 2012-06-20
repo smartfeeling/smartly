@@ -3,7 +3,7 @@
  *
  *
  */
-package org.smartly.packages.velocity.impl.vtools.impl;
+package org.smartly.packages.velocity.impl.vtools;
 
 
 import org.smartly.commons.logging.Level;
@@ -12,8 +12,7 @@ import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.network.URLUtils;
 import org.smartly.commons.util.*;
 import org.smartly.packages.velocity.impl.util.URLEncodeUtils;
-import org.smartly.packages.velocity.impl.vtools.IVLCTool;
-import org.smartly.packages.velocity.impl.vtools.VLCObject;
+import org.smartly.packages.velocity.impl.vtools.util.VLCObject;
 
 import java.util.*;
 

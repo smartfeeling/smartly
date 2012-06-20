@@ -5,6 +5,8 @@
  */
 package org.smartly.commons.util;
 
+import org.smartly.commons.lang.CharEncoding;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,15 +16,17 @@ import java.util.Map;
  */
 public class MimeTypeUtils {
 
-    public static final String MIME_JSON = MimeTypeUtils.getMimeType(".json");
-    public static final String MIME_PLAINTEXT = MimeTypeUtils.getMimeType(".txt");
+    private static final String CHARSET = ";charset=" + CharEncoding.getDefault();
+
+    public static final String MIME_JSON = MimeTypeUtils.getMimeType(".json") + CHARSET;
+    public static final String MIME_PLAINTEXT = MimeTypeUtils.getMimeType(".txt")+ CHARSET;
     public static final String MIME_AUDIOBASIC = MimeTypeUtils.getMimeType(".wav");
     public static final String MIME_IMAGEBMP = MimeTypeUtils.getMimeType(".bmp");
     public static final String MIME_IMAGEJPG = MimeTypeUtils.getMimeType(".jpg");
     public static final String MIME_IMAGEPNG = MimeTypeUtils.getMimeType(".png");
-    public static final String MIME_HTML = MimeTypeUtils.getMimeType(".html");
-    public static final String MIME_XML = MimeTypeUtils.getMimeType(".xml");
-    public static final String MIME_XMLRSS = MimeTypeUtils.getMimeType(".rss");
+    public static final String MIME_HTML = MimeTypeUtils.getMimeType(".html")+ CHARSET;
+    public static final String MIME_XML = MimeTypeUtils.getMimeType(".xml")+ CHARSET;
+    public static final String MIME_XMLRSS = MimeTypeUtils.getMimeType(".rss")+ CHARSET;
     private final Map<String, String> _filetypemap;
 
     private MimeTypeUtils() {

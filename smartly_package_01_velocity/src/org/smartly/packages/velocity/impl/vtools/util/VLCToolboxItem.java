@@ -1,10 +1,11 @@
 /*
  * 
  */
-package org.smartly.packages.velocity.impl.vtools;
+package org.smartly.packages.velocity.impl.vtools.util;
 
 import org.smartly.commons.util.ClassLoaderUtils;
 import org.smartly.commons.util.CollectionUtils;
+import org.smartly.packages.velocity.impl.vtools.IVLCTool;
 
 import java.util.LinkedList;
 import java.util.List;

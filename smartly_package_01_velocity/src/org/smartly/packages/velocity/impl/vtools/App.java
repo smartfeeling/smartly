@@ -1,4 +1,4 @@
-package org.smartly.packages.velocity.impl.vtools.impl;
+package org.smartly.packages.velocity.impl.vtools;
 
 
 import org.smartly.Smartly;

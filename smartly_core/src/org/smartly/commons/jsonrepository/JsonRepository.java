@@ -56,6 +56,22 @@ public class JsonRepository {
 
     //-- utils --//
 
+    public JSONObject getJSONObject(final String path) {
+        final Object result =  this.get(path);
+        if(result instanceof JSONObject){
+           return (JSONObject)result;
+        }
+        return null;
+    }
+
+    public JSONArray getJSONArray(final String path) {
+        final Object result =  this.get(path);
+        if(result instanceof JSONArray){
+            return (JSONArray)result;
+        }
+        return null;
+    }
+
     public String getString(final String path) {
         return this.getString(path, "");
     }

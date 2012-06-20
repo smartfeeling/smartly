@@ -6,7 +6,6 @@ package org.smartly.packages.remoting.impl;
 import org.smartly.Smartly;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
-import org.smartly.commons.util.JsonWrapper;
 import org.smartly.commons.util.StringUtils;
 
 import java.io.UnsupportedEncodingException;
@@ -64,9 +63,10 @@ public abstract class RemoteService {
     //                      p r i v a t e
     // ------------------------------------------------------------------------
 
+    //
     private boolean validateToken(final String token) {
         if (StringUtils.hasText(token)) {
-            final String smartlyToken = JsonWrapper.getString(Smartly.getConfiguration(), "remoting.app_securetoken");
+            final String smartlyToken = getAppToken();
             if (token.equalsIgnoreCase(smartlyToken)) {
                 return true;
             } else {
@@ -100,6 +100,19 @@ public abstract class RemoteService {
         } catch (UnsupportedEncodingException ignored) {
         }
         return result;
+    }
+
+    // --------------------------------------------------------------------
+    //               S T A T I C
+    // --------------------------------------------------------------------
+
+    private static String __APP_TOKEN = null;
+
+    private static String getAppToken() {
+        if (null == __APP_TOKEN) {
+            __APP_TOKEN = Smartly.getConfiguration().getString("remoting.app_securetoken");
+        }
+        return null != __APP_TOKEN ? __APP_TOKEN : "";
     }
 
 }

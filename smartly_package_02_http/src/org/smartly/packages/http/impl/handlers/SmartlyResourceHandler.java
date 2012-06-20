@@ -42,7 +42,7 @@ import java.util.Set;
  */
 public class SmartlyResourceHandler extends HandlerWrapper {
 
-    private static final String MIME_HTML = "text/html";
+    private static final String MIME_HTML = "text/html"; // + ";charset=" + Smartly.getCharset();
     private static final Set<String> _velocityExtensions = new HashSet<String>(Arrays.asList(".vhtml"));
 
     ContextHandler _context;
@@ -312,7 +312,7 @@ public class SmartlyResourceHandler extends HandlerWrapper {
 
         boolean skipContentBody = false;
 
-        if (!HttpMethods.GET.equals(request.getMethod())) {
+        if (!HttpMethods.GET.equals(request.getMethod()) && !HttpMethods.POST.equals(request.getMethod())) {
             if (!HttpMethods.HEAD.equals(request.getMethod())) {
                 //try another handler
                 super.handle(target, baseRequest, request, response);
@@ -362,11 +362,13 @@ public class SmartlyResourceHandler extends HandlerWrapper {
             }
         }
 
-        final boolean isvelocity = this.isVelocity(resource.getName());
+        final boolean is_velocity = this.isVelocity(resource.getName());
+        //-- if velocity, merge resource with template --//
+        final Resource outResource = is_velocity ? this.merge(resource, request, response) : resource;
 
         // set some headers
-        final long last_modified = isvelocity ? DateUtils.now().getTime() : resource.lastModified();
-        if (!isvelocity && last_modified > 0) {
+        final long last_modified = is_velocity ? DateUtils.now().getTime() : outResource.lastModified();
+        if (!is_velocity && last_modified > 0) {
             long if_modified = request.getDateHeader(HttpHeaders.IF_MODIFIED_SINCE);
             if (if_modified > 0 && last_modified / 1000 <= if_modified / 1000) {
                 response.setStatus(HttpStatus.NOT_MODIFIED_304);
@@ -374,10 +376,10 @@ public class SmartlyResourceHandler extends HandlerWrapper {
             }
         }
 
-        final String mimeType = isvelocity ? MIME_HTML : this.getMimeType(resource, request);
+        final String mimeType = is_velocity ? MIME_HTML : this.getMimeType(outResource, request);
 
         // set the headers
-        this.doResponseHeaders(response, resource, mimeType != null ? mimeType : null);
+        this.doResponseHeaders(response, outResource, mimeType != null ? mimeType : null);
 
         response.setDateHeader(HttpHeaders.LAST_MODIFIED, last_modified);
 
@@ -392,15 +394,12 @@ public class SmartlyResourceHandler extends HandlerWrapper {
             out = new WriterOutputStream(response.getWriter());
         }
 
-        //-- if velocity, merge resource with template --//
-        final Resource outResource = isvelocity ? this.merge(resource, request, response) :resource;
-
         // See if a short direct method can be used?
         if (out instanceof AbstractHttpConnection.Output) {
             ((AbstractHttpConnection.Output) out).sendContent(outResource.getInputStream());
         } else {
             // Write content normally
-            resource.writeTo(out, 0, outResource.length());
+            outResource.writeTo(out, 0, outResource.length());
         }
     }
 
@@ -438,7 +437,7 @@ public class SmartlyResourceHandler extends HandlerWrapper {
         return LoggingUtils.getLogger(this);
     }
 
-    private String getMimeType(final Resource resource, final HttpServletRequest request){
+    private String getMimeType(final Resource resource, final HttpServletRequest request) {
         Buffer mime = _mimeTypes.getMimeByExtension(resource.toString());
         if (mime == null)
             mime = _mimeTypes.getMimeByExtension(request.getPathInfo());
@@ -475,7 +474,7 @@ public class SmartlyResourceHandler extends HandlerWrapper {
         return resource;
     }
 
-    private VelocityContext  createVelocityContext(final Resource resource, final HttpServletRequest request, final HttpServletResponse response){
+    private VelocityContext createVelocityContext(final Resource resource, final HttpServletRequest request, final HttpServletResponse response) {
         final VelocityContext result = new VelocityContext();
 
         //-- "$req" tool --//

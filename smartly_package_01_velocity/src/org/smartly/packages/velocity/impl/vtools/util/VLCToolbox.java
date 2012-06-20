@@ -1,15 +1,15 @@
 /*
  * 
  */
-package org.smartly.packages.velocity.impl.vtools;
+package org.smartly.packages.velocity.impl.vtools.util;
 
 import org.apache.velocity.VelocityContext;
 import org.smartly.commons.util.ExceptionUtils;
 import org.smartly.commons.util.StringUtils;
-import org.smartly.packages.velocity.impl.vtools.impl.App;
-import org.smartly.packages.velocity.impl.vtools.impl.Formatter;
-import org.smartly.packages.velocity.impl.vtools.impl.Math;
-import org.smartly.packages.velocity.impl.vtools.impl.System;
+import org.smartly.packages.velocity.impl.vtools.*;
+import org.smartly.packages.velocity.impl.vtools.Formatter;
+import org.smartly.packages.velocity.impl.vtools.Math;
+import org.smartly.packages.velocity.impl.vtools.System;
 
 import java.util.*;
 
@@ -47,11 +47,12 @@ public class VLCToolbox {
      * @param toolClass Class reference of tool
      * @param args      Arguments to pass at tool constructor
      */
-    public void add(final String id, final Class toolClass,
-                    final Object[] args, final boolean isSingleton) {
-        final VLCToolboxItem item = new VLCToolboxItem(id, toolClass,
-                args, isSingleton);
-        add(item);
+    public void add(final String id,
+                    final Class toolClass,
+                    final Object[] args,
+                    final boolean isSingleton) {
+        final VLCToolboxItem item = new VLCToolboxItem(id, toolClass, args, isSingleton);
+        this.add(item);
     }
 
     /**
@@ -94,10 +95,11 @@ public class VLCToolbox {
      * @param args        Array
      * @param isSingleton boolean
      */
-    public void replace(final String id, final Class toolClass,
-                        final Object[] args, final boolean isSingleton) {
-        final VLCToolboxItem item = new VLCToolboxItem(id, toolClass,
-                args, isSingleton);
+    public void replace(final String id,
+                        final Class toolClass,
+                        final Object[] args,
+                        final boolean isSingleton) {
+        final VLCToolboxItem item = new VLCToolboxItem(id, toolClass, args, isSingleton);
         this.replace(item);
     }
 
@@ -174,7 +176,7 @@ public class VLCToolbox {
     // ------------------------------------------------------------------------
     private void initTools() {
         // add Formatter for date and number
-        add(Formatter.NAME, org.smartly.packages.velocity.impl.vtools.impl.Formatter.class, null, true);
+        add(Formatter.NAME, Formatter.class, null, true);
 
         // add Math helper.
         add(Math.NAME, Math.class, null, true);

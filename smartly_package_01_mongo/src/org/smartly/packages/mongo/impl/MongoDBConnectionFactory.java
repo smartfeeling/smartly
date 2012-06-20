@@ -5,28 +5,45 @@ import org.json.JSONObject;
 import org.smartly.Smartly;
 import org.smartly.commons.util.FormatUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * User: angelo.geminiani
  */
 public class MongoDBConnectionFactory {
 
-    private MongoDBConnectionFactory() { }
+    private MongoDBConnectionFactory() {
+    }
 
     // ------------------------------------------------------------------------
     //                      S T A T I C
     // ------------------------------------------------------------------------
 
-    public static boolean hasDBConnection(final String name){
-        try{
-           return null!= getDB(name);
-        }catch(Throwable ignored){}
+    private static Map<String, MongoDBConnection> _connections = new HashMap<String, MongoDBConnection>();
+
+    private static MongoDBConnection getConn(final String dbName) {
+        if (!_connections.containsKey(dbName)) {
+            final JSONObject config = Smartly.getConfiguration().getJSONObject("databases." + dbName);
+            if (null != config) {
+                _connections.put(dbName, new MongoDBConnection(config));
+            }
+        }
+        return _connections.get(dbName);
+    }
+
+    public static boolean hasDBConnection(final String name) {
+        try {
+            return null != getDB(name);
+        } catch (Throwable ignored) {
+        }
         return false;
     }
 
-    public static MongoDBConnection getConnection( final String dbName ) throws StandardCodedException {
-        final Object config = Smartly.getConfiguration().get("databases." + dbName);
-        if(config instanceof JSONObject){
-            return new MongoDBConnection((JSONObject)config);
+    public static MongoDBConnection getConnection(final String dbName) throws StandardCodedException {
+        final MongoDBConnection conn = getConn(dbName);
+        if (null != conn) {
+            return conn;
         } else {
             throw new StandardCodedException(
                     FormatUtils.format(
@@ -37,11 +54,11 @@ public class MongoDBConnectionFactory {
 
     public static DB getDB(final String dbName) throws StandardCodedException {
         final MongoDBConnection connection = getConnection(dbName);
-        return null!=connection?connection.getDB():null;
+        return null != connection ? connection.getDB() : null;
     }
 
 
-    public static String[] getLanguages(){
+    public static String[] getLanguages() {
         return Smartly.getLanguages();
     }
 }

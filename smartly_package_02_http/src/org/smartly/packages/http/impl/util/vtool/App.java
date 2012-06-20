@@ -1,24 +1,50 @@
 package org.smartly.packages.http.impl.util.vtool;
 
 
+import org.smartly.Smartly;
 import org.smartly.packages.http.SmartlyHttp;
 
-public class App extends org.smartly.packages.velocity.impl.vtools.impl.App {
+/**
+ * Module: SmartlyHttp
+ *
+ */
+public class App extends org.smartly.packages.velocity.impl.vtools.App {
 
-    public final String getAppToken(){
-        try{
-           return (String)super.getConfiguration().get("remoting.app_securetoken");
-        } catch(Throwable ignored){
+    public final String getAppToken() {
+        try {
+            return getSmartlyAppToken();
+        } catch (Throwable ignored) {
         }
         return "";
     }
 
     public String getHttpRoot() {
         try {
-            return SmartlyHttp.getHTTPUrl("");
+            return getSmartlyAppUrl();
         } catch (Throwable ignored) {
         }
         return "";
+    }
+
+    // --------------------------------------------------------------------
+    //               S T A T I C
+    // --------------------------------------------------------------------
+
+    private static String __APP_TOKEN = null;
+    private static String __APP_URL = null;
+
+    private static String getSmartlyAppToken() {
+        if (null == __APP_TOKEN) {
+            __APP_TOKEN = Smartly.getConfiguration().getString("remoting.app_securetoken");
+        }
+        return __APP_TOKEN;
+    }
+
+    private static String getSmartlyAppUrl() {
+        if (null == __APP_URL) {
+            __APP_URL = SmartlyHttp.getHTTPUrl("");
+        }
+        return __APP_URL;
     }
 
 }

@@ -23,6 +23,7 @@ public class Cookies implements IVLCTool {
     private final HttpServletRequest _request;
     private final HttpServletResponse _response;
     private final Map<String, String> __cookies;
+    private JSONObject _authCookie;
 
     private String _langCode;
     private String _userAgent;
@@ -72,8 +73,9 @@ public class Cookies implements IVLCTool {
     }
 
     public void addCookie(final String name, final String value) {
-        _response.addCookie(new Cookie(name, value));
-        __cookies.put(name, value);
+        final Cookie cookie = new Cookie(name, value);
+        cookie.setPath("/");
+        this.addCookie(cookie);
     }
 
     public boolean hasCookie(final String name) {
@@ -84,7 +86,10 @@ public class Cookies implements IVLCTool {
     }
 
     public JSONObject getAuth() {
-        return this.getAuthCookie();
+        if (null == _authCookie) {
+            _authCookie = this.getAuthCookie();
+        }
+        return _authCookie;
     }
 
 
@@ -136,7 +141,7 @@ public class Cookies implements IVLCTool {
 
         // lang
         if (!this.hasCookie("lang")) {
-            this.addCookie("lang", "en");
+            this.addCookie("lang", getLangCode());
         }
         JsonWrapper.put(result, "lang", this.getCookieValue("lang"));
 
@@ -154,13 +159,13 @@ public class Cookies implements IVLCTool {
 
         // decimalsep
         if (!this.hasCookie("decimalsep")) {
-            this.addCookie("decimalsep", "US");
+            this.addCookie("decimalsep", ".");
         }
         JsonWrapper.put(result, "decimalsep", this.getCookieValue("decimalsep"));
 
         // discount
         if (!this.hasCookie("discount")) {
-            this.addCookie("discount", "US");
+            this.addCookie("discount", "0");
         }
         JsonWrapper.put(result, "discount", this.getCookieValue("discount"));
 
@@ -171,5 +176,9 @@ public class Cookies implements IVLCTool {
         JsonWrapper.put(result, "userenabled", this.getCookieValue("userenabled"));
 
         return result;
+    }
+
+    private String getLangCode() {
+        return Req.getLang(_request);
     }
 }

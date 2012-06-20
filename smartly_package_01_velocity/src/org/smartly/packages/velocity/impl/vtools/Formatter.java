@@ -3,7 +3,7 @@
  *
  *
  */
-package org.smartly.packages.velocity.impl.vtools.impl;
+package org.smartly.packages.velocity.impl.vtools;
 
 import org.smartly.commons.util.*;
 import org.smartly.packages.velocity.impl.vtools.IVLCTool;
