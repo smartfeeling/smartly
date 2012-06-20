@@ -386,7 +386,7 @@ public class CmdLineParser {
      * given Option, or an empty Vector if the option was not set.
      */
     public final Vector getOptionValues( Option option ) {
-        Vector result = new Vector();
+        Vector<Object> result = new Vector<Object>();
 
         while (true) {
             Object o = getOptionValue(option, null);

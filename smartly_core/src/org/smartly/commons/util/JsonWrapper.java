@@ -549,14 +549,14 @@ public class JsonWrapper {
         final JSONArray result = new JSONArray();
         if (object instanceof JSONObject) {
             final JSONObject item = (JSONObject) object;
-            final Iterator<String> keys = item.keys();
+            final Iterator keys = item.keys();
             while (keys.hasNext()) {
-                result.put(item.opt(keys.next()));
+                result.put(item.opt(keys.next().toString()));
             }
         } else if (object instanceof Map) {
             final Map item = (Map) object;
-            final Set<String> keys = item.keySet();
-            for (final String key : keys) {
+            final Set keys = item.keySet();
+            for (final Object key : keys) {
                 result.put(item.get(key));
             }
         }
@@ -572,9 +572,9 @@ public class JsonWrapper {
      */
     public static Map<String, Object> toMap(final JSONObject item) {
         final Map<String, Object> result = new LinkedHashMap<String, Object>();
-        final Iterator<String> keys = item.sortedKeys();
+        final Iterator keys = item.sortedKeys();
         while (keys.hasNext()) {
-            final String name = keys.next();
+            final String name = keys.next().toString();
             if (null != name) {
                 final Object value = item.opt(name);
                 result.put(name, null != value ? value : "");
@@ -598,9 +598,9 @@ public class JsonWrapper {
 
     public static Map<String, String> toMapOfString(final JSONObject json) {
         final Map<String, String> result = new HashMap<String, String>();
-        final Iterator<String> iterator = json.keys();
+        final Iterator iterator = json.keys();
         while (iterator.hasNext()) {
-            final String key = iterator.next();
+            final String key = iterator.next().toString();
             final Object value = json.opt(key);
             if (null != value) {
                 result.put(key, StringUtils.toString(value));
@@ -632,9 +632,9 @@ public class JsonWrapper {
                 }
             } else if (object instanceof JSONObject) {
                 final JSONObject jobject = (JSONObject) object;
-                final Iterator<String> keys = jobject.keys();
+                final Iterator keys = jobject.keys();
                 while (keys.hasNext()) {
-                    final String key = keys.next();
+                    final String key = keys.next().toString();
                     final Object value = jobject.opt(key);
                     if (null != value) {
                         result.add(value);
@@ -666,9 +666,9 @@ public class JsonWrapper {
                 }
             } else if (object instanceof JSONObject) {
                 final JSONObject jobject = (JSONObject) object;
-                final Iterator<String> keys = jobject.keys();
+                final Iterator keys = jobject.keys();
                 while (keys.hasNext()) {
-                    final String key = keys.next();
+                    final String key = keys.next().toString();
                     final JSONObject value = jobject.optJSONObject(key);
                     if (null != value) {
                         result.add(value);
@@ -781,10 +781,10 @@ public class JsonWrapper {
      */
     public static JSONObject extend(final JSONObject target,
                                     final JSONObject source, final boolean overwrite, final Object nullValue) {
-        final Iterator<String> keys = source.keys();
+        final Iterator keys = source.keys();
         while (keys.hasNext()) {
             try {
-                final String key = keys.next();
+                final String key = keys.next().toString();
                 final Object sourceval = source.opt(key);
                 if (target.has(key)) {
                     if (overwrite) {
@@ -1010,7 +1010,7 @@ public class JsonWrapper {
     }
 
     public static List getList(final Object item, final String field) {
-        final List result = new LinkedList();
+        final List<Object> result = new LinkedList<Object>();
         if (null != item) {
             final JSONArray array = JsonWrapper.getArray(item, field);
             if (array.length() > 0) {
@@ -1059,9 +1059,9 @@ public class JsonWrapper {
         if (CompareUtils.equals(item1, item2)) {
             return true;
         } else if (null != item1 && null != item2) {
-            final Iterator<String> keys = item1.keys();
+            final Iterator keys = item1.keys();
             while (keys.hasNext()) {
-                final String key = keys.next();
+                final String key = keys.next().toString();
                 final Object value1 = item1.opt(key);
                 final Object value2 = item2.opt(key);
                 if (!equals(value1, value2)) {

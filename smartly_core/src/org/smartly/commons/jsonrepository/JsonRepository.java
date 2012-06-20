@@ -42,9 +42,9 @@ public class JsonRepository {
         final Object data = this.get(path);
         if (data instanceof JSONObject) {
             final JSONObject jsonData = (JSONObject) data;
-            final Iterator<String> keys = jsonData.keys();
+            final Iterator keys = jsonData.keys();
             while (keys.hasNext()) {
-                final String key = keys.next();
+                final String key = keys.next().toString();
                 final Object value = jsonData.opt(key);
                 if (value instanceof JSONObject) {
                     result.add((JSONObject) value);
@@ -307,9 +307,9 @@ public class JsonRepository {
         }
 
         private void init(final JSONObject parent, final JSONObject metadata) {
-            final Iterator<String> keys = metadata.keys();
+            final Iterator keys = metadata.keys();
             while (keys.hasNext()) {
-                final String key = keys.next();
+                final String key = keys.next().toString();
                 if (!NAME.equalsIgnoreCase(key)) {
                     // creates node or load details
                     if (VALUE.equalsIgnoreCase(key)) {

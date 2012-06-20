@@ -75,6 +75,7 @@ abstract class AbstractLauncher {
     //                      p r i v a t e
     // ------------------------------------------------------------------------
 
+    @SuppressWarnings("unchecked")
     private void runInternal() {
         try {
             final SmartlyPackageLoader packageLoader = new SmartlyPackageLoader();

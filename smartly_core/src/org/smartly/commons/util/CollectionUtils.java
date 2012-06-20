@@ -140,7 +140,7 @@ public abstract class CollectionUtils {
         if (isEmpty(array)) {
             return array;
         }
-        final Set set = new TreeSet();
+        final Set<String> set = new TreeSet<String>();
         for (final String token : array) {
             set.add(token);
         }
@@ -242,7 +242,7 @@ public abstract class CollectionUtils {
      * @return a Set of String entries in the list
      */
     public static Set<String> commaDelimitedListToSet(final String str) {
-        final Set set = new TreeSet();
+        final Set<String> set = new TreeSet<String>();
         final String[] tokens = StringUtils.split(str, ",");
         for (final String token : tokens) {
             set.add(token);
@@ -476,6 +476,7 @@ public abstract class CollectionUtils {
         return new HashMap<String, Object>();
     }
 
+    @SuppressWarnings("unchecked")
     public static Map<String, Object> toMap(final String[] tokens) {
         final Map<String, Object> result = new LinkedHashMap<String, Object>();
         if (null != tokens) {
@@ -493,12 +494,12 @@ public abstract class CollectionUtils {
                     continue;
                 }
                 if (result.containsKey(key)) {
-                    final List list;
+                    final List<Object> list;
                     final Object val = result.get(key);
                     if (val instanceof List) {
                         list = (List) val;
                     } else {
-                        list = new LinkedList();
+                        list = new LinkedList<Object>();
                         list.add(val);
                         result.put(key, list);
                     }
@@ -945,14 +946,20 @@ public abstract class CollectionUtils {
             if (item.getClass().isArray()) {
                 return (Object[]) item;
             }
-            final List result = toList(item);
+            final List<?> result = toList(item);
             return result.toArray(new Object[result.size()]);
         }
         return new Object[0];
     }
 
-    public static String[] toArrayOfString(final Object item) {
-        final List<String> result = toList(item);
+    public static String[] toArrayOfString(final Iterator<?> item) {
+        final List<String> result = new LinkedList<String>();
+        while(item.hasNext()){
+            final Object val = item.next();
+            if(null!=val){
+                result.add(val.toString());
+            }
+        }
         return result.toArray(new String[result.size()]);
     }
 
@@ -962,7 +969,8 @@ public abstract class CollectionUtils {
      * @param item
      * @return
      */
-    public static List toList(final Object item) {
+    @SuppressWarnings("unchecked")
+    public static List<Object> toList(final Object item) {
         final List result = new LinkedList();
         try {
             if (null != item) {

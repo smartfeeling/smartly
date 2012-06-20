@@ -6,7 +6,7 @@ import java.util.*;
 public class LocaleUtils {
 
     public static final Locale DEFAULT = new Locale("en", "US");
-    private final static InheritableThreadLocal _thdLocale = new InheritableThreadLocal();
+    private final static InheritableThreadLocal<Locale> _thdLocale = new InheritableThreadLocal<Locale>();
     /**
      * Locales that are found so far.
      */

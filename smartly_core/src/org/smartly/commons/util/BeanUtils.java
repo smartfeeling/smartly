@@ -368,6 +368,7 @@ public abstract class BeanUtils {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public static String[] getPropertyNames(final Class aclass,
                                             final Class... retTypeFilter) {
         final List<String> result = new ArrayList<String>();

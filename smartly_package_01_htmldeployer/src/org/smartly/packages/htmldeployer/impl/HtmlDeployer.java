@@ -7,6 +7,7 @@ import org.smartly.commons.logging.Level;
 import org.smartly.commons.repository.deploy.FileDeployer;
 import org.smartly.commons.util.ConversionUtils;
 import org.smartly.commons.util.FormatUtils;
+import org.smartly.commons.util.StringUtils;
 import org.smartly.packages.htmldeployer.impl.compressor.Compressor;
 
 public class HtmlDeployer extends FileDeployer {
@@ -62,7 +63,10 @@ public class HtmlDeployer extends FileDeployer {
     private static String docRoot() {
         final JsonRepository config = getConfiguration();
         if (null != config) {
-            final String path = (String) config.get("http.webserver.root");
+            final String path = config.getString("http.webserver.root");
+            if (!StringUtils.hasText(path)) {
+                return null;
+            }
             return Smartly.getAbsolutePath(path);
         }
         return "";

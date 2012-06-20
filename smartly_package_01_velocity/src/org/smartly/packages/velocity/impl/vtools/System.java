@@ -216,7 +216,7 @@ public class System
      * @param item
      * @return
      */
-    public List toList(final Object item) {
+    public List<Object> toList(final Object item) {
         return CollectionUtils.toList(item);
     }
 

@@ -163,7 +163,7 @@ public class CSVWriter
         int result = 0;
         int i = 0;
         String[] header = null;
-        for (Map<? extends Object, ? extends Object> item : allLines) {
+        for (final Map item : allLines) {
             if (i == 0 && includeColumnNames) {
                 header = this.getNames(item);
                 this.writeNext(header);
@@ -308,10 +308,10 @@ public class CSVWriter
         return __pwriter;
     }
 
-    private String[] getNames(final Map<? extends Object, ? extends Object> map) {
+    private String[] getNames(final Map map) {
         final String[] result = new String[map.size()];
         int i = 0;
-        final Set<? extends Object> keys = map.keySet();
+        final Set keys = map.keySet();
         for (final Object key : keys) {
             result[i] = key.toString();
             i++;
@@ -320,7 +320,7 @@ public class CSVWriter
     }
 
     private String[] getValues(final String[] keys,
-                               final Map<? extends Object, ? extends Object> map) {
+                               final Map map) {
         final String[] result = new String[map.size()];
         int i = 0;
         if (null != keys && keys.length > 0) {
@@ -330,7 +330,7 @@ public class CSVWriter
                 i++;
             }
         } else {
-            final Collection<? extends Object> values = map.values();
+            final Collection values = map.values();
             for (final Object value : values) {
                 result[i] = this.getFormatter().serialize(value);
                 i++;

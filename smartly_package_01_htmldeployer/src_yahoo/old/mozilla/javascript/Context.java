@@ -75,6 +75,7 @@ import java.util.Locale;
  * @author Brendan Eich
  */
 
+@SuppressWarnings("unchecked")
 public class Context
 {
     /**

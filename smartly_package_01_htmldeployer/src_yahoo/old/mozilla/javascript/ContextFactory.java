@@ -292,6 +292,7 @@ public class ContextFactory
         throw new IllegalArgumentException(String.valueOf(featureIndex));
     }
 
+    @SuppressWarnings("unchecked")
 	private boolean isDom3Present() {
 		Class nodeClass = Kit.classOrNull("org.w3c.dom.Node");
 		if (nodeClass == null) return false;

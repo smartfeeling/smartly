@@ -57,6 +57,7 @@ import java.util.Hashtable;
  * @author Roger Lawrence
  */
 
+@SuppressWarnings("unchecked")
 public class Codegen extends Interpreter
 {
     public Object compile(CompilerEnvirons compilerEnv,

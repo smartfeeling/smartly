@@ -54,6 +54,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unchecked")
 public class Interpreter
 {
 
@@ -2316,7 +2317,7 @@ public class Interpreter
             return null;
         }
         
-        List list = new ArrayList();
+        final List<Object> list = new ArrayList<Object>();
         String lineSeparator = SecurityUtilities.getSystemProperty("line.separator");
 
         CallFrame[] array = (CallFrame[])ex.interpreterStackInfo;
@@ -2325,7 +2326,7 @@ public class Interpreter
         int linePCIndex = linePC.length;
         while (arrayIndex != 0) {
             --arrayIndex;
-            StringBuffer sb = new StringBuffer();
+            final StringBuffer sb = new StringBuffer();
             CallFrame frame = array[arrayIndex];
             while (frame != null) {
                 if (linePCIndex == 0) Kit.codeBug();

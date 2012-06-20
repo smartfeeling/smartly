@@ -82,6 +82,7 @@ import java.util.*;
  * @author JSON.org
  * @version 2009-03-06
  */
+@SuppressWarnings("unchecked")
 public class JSONObject {
 
     /**
