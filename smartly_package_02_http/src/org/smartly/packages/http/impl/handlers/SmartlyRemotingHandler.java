@@ -133,6 +133,8 @@ public class SmartlyRemotingHandler extends ContextHandler {
             } catch (Throwable t) {
                 // service not found or execution error
                 this.writeResponse(response, FORMAT_JSON, t);
+                this.getSmartlyLogger().log(Level.SEVERE,
+                        FormatUtils.format("ERROR HANDLING SERVICE REQUEST TO '{0}': {1}", path, t));
             }
         }
     }

@@ -1,6 +1,3 @@
-/*
- * 
- */
 package org.smartly.commons.util;
 
 import org.json.JSONArray;
@@ -9,9 +6,7 @@ import org.json.JSONObject;
 import java.util.*;
 import java.util.Map.Entry;
 
-/**
- * @author
- */
+
 public abstract class CollectionUtils {
 
     //---------------------------------------------------------------------
@@ -141,9 +136,7 @@ public abstract class CollectionUtils {
             return array;
         }
         final Set<String> set = new TreeSet<String>();
-        for (final String token : array) {
-            set.add(token);
-        }
+        Collections.addAll(set, array);
         return (String[]) set.toArray(new String[set.size()]);
     }
 
@@ -193,10 +186,10 @@ public abstract class CollectionUtils {
         }
 
         Properties result = new Properties();
-        for (int i = 0; i < array.length; i++) {
-            String element = array[i];
+        for (final String item : array) {
+            String element = item;
             if (charsToDelete != null) {
-                element = StringUtils.deleteAny(array[i], charsToDelete);
+                element = StringUtils.deleteAny(item, charsToDelete);
             }
             String[] splittedElement = StringUtils.splitFirst(element, delimiter);
             if (splittedElement == null) {
@@ -220,10 +213,10 @@ public abstract class CollectionUtils {
         }
 
         Map<String, String> result = new HashMap<String, String>();
-        for (int i = 0; i < array.length; i++) {
-            String element = array[i];
+        for (final String item : array) {
+            String element = item;
             if (charsToDelete != null) {
-                element = StringUtils.deleteAny(array[i], charsToDelete);
+                element = StringUtils.deleteAny(item, charsToDelete);
             }
             String[] splittedElement = StringUtils.splitFirst(element, delimiter);
             if (splittedElement == null) {
@@ -244,20 +237,18 @@ public abstract class CollectionUtils {
     public static Set<String> commaDelimitedListToSet(final String str) {
         final Set<String> set = new TreeSet<String>();
         final String[] tokens = StringUtils.split(str, ",");
-        for (final String token : tokens) {
-            set.add(token);
-        }
+        Collections.addAll(set, tokens);
         return set;
     }
 
-    public static String arrayToString(Object[] arr) {
+    public static String arrayToString(final Object[] arr) {
         if (arr == null) {
             return "";
         }
 
-        final StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < arr.length; i++) {
-            sb.append(arr[i]);
+        final StringBuilder sb = new StringBuilder();
+        for (final Object item : arr) {
+            sb.append(item);
         }
         return sb.toString();
     }
@@ -276,7 +267,7 @@ public abstract class CollectionUtils {
             return "";
         }
 
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         for (int i = 0; i < arr.length; i++) {
             if (i > 0) {
                 sb.append(delim);
@@ -287,12 +278,13 @@ public abstract class CollectionUtils {
     }
 
     public static String toDelimitedString(final Object[] arr,
-                                           final String delim, int startIndex, int endIndex) {
+                                           final String delim,
+                                           int startIndex, int endIndex) {
         if (arr == null) {
             return "";
         }
 
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         endIndex = arr.length - 1 < endIndex ? arr.length - 1 : endIndex;
         for (int i = startIndex; i < endIndex + 1; i++) {
             if (i > 0) {
@@ -303,11 +295,11 @@ public abstract class CollectionUtils {
         return sb.toString();
     }
 
-    public static String collectionToString(Collection<? extends Object> list) {
+    public static String collectionToString(Collection<?> list) {
         if (null == list) {
             return null;
         }
-        final StringBuffer sb = new StringBuffer();
+        final StringBuilder sb = new StringBuilder();
         for (final Object item : list) {
             if (null != item) {
                 sb.append(item.toString());
@@ -342,7 +334,9 @@ public abstract class CollectionUtils {
      * @param suffix string to end each element with
      */
     public static String tooDelimitedString(final Collection coll,
-                                            final String delim, final String prefix, final String suffix) {
+                                            final String delim,
+                                            final String prefix,
+                                            final String suffix) {
         if (coll == null) {
             return "";
         }
@@ -393,7 +387,7 @@ public abstract class CollectionUtils {
         return toDelimitedString(coll, ",");
     }
 
-    public static String mapToString(Map map) {
+    public static String mapToString(final Map map) {
         if (null == map) {
             return "";
         }
@@ -401,8 +395,8 @@ public abstract class CollectionUtils {
         return text.substring(1, text.length() - 1);
     }
 
-    public static <T extends Object, E extends Object> String mapToString(
-            final Map<T, E> map, final String separator) {
+    public static <T, E> String mapToString(final Map<T, E> map,
+                                            final String separator) {
         if (null == map) {
             return "";
         }
@@ -525,8 +519,8 @@ public abstract class CollectionUtils {
 
     public static String[] subtract(final String[] valuestoremove,
                                     final String[] targetarray) {
-        final List<Object> result = new LinkedList<Object>();
-        for (final Object value : targetarray) {
+        final List<String> result = new LinkedList<String>();
+        for (final String value : targetarray) {
             if (!contains(valuestoremove, value)) {
                 result.add(value);
             }
@@ -543,8 +537,8 @@ public abstract class CollectionUtils {
      */
     public static String[] match(final String[] targetvalues,
                                  final String[] checkvalues) {
-        final List<Object> result = new LinkedList<Object>();
-        for (final Object value : checkvalues) {
+        final List<String> result = new LinkedList<String>();
+        for (final String value : checkvalues) {
             if (contains(targetvalues, value)) {
                 result.add(value);
             }
@@ -559,7 +553,7 @@ public abstract class CollectionUtils {
      * @param checkvalues  Second list
      * @return
      */
-    public static <T extends Object> Collection<T> match(
+    public static <T> Collection<T> match(
             final Collection<T> targetvalues,
             final Collection<T> checkvalues) {
         final List<T> result = new LinkedList<T>();
@@ -582,27 +576,19 @@ public abstract class CollectionUtils {
     }
 
     public static boolean contains(Class[] array, Class value) {
-        return null != array
-                ? indexOf(array, value) >= 0
-                : false;
+        return null != array && indexOf(array, value) >= 0;
     }
 
     public static boolean contains(char[] array, char value) {
-        return null != array
-                ? indexOf(array, value) >= 0
-                : false;
+        return null != array && indexOf(array, value) >= 0;
     }
 
     public static boolean contains(Object[] array, Object value) {
-        return null != array
-                ? indexOf(array, value) >= 0
-                : false;
+        return null != array && indexOf(array, value) >= 0;
     }
 
     public static boolean containsLike(Class[] array, Class value) {
-        return null != array
-                ? indexOfLike(array, value) >= 0
-                : false;
+        return null != array && indexOfLike(array, value) >= 0;
     }
 
     /**
@@ -732,8 +718,7 @@ public abstract class CollectionUtils {
         if (null != arrays && arrays.length > 0) {
             for (Class[] array : arrays) {
                 if (null != array) {
-                    for (int i = 0; i < array.length; i++) {
-                        final Class item = array[i];
+                    for (final Class item : array) {
                         if (null != item) {
                             result.add(item);
                         }
@@ -756,8 +741,7 @@ public abstract class CollectionUtils {
         if (null != arrays && arrays.length > 0) {
             for (Object[] array : arrays) {
                 if (null != array) {
-                    for (int i = 0; i < array.length; i++) {
-                        final Object item = array[i];
+                    for (final Object item : array) {
                         if (null != item) {
                             result.add(item);
                         }
@@ -775,10 +759,10 @@ public abstract class CollectionUtils {
      * @param collections Variable number of collections
      * @return LinkedList containig all collections items.
      */
-    public static Collection<? extends Object> mergeNoDuplicates(Collection<? extends Object>... collections) {
-        Collection<Object> result = new LinkedList<Object>();
+    public static Collection<?> mergeNoDuplicates(Collection<?>... collections) {
+        final Collection<Object> result = new LinkedList<Object>();
         if (null != collections && collections.length > 0) {
-            for (Collection<? extends Object> coll : collections) {
+            for (final Collection<?> coll : collections) {
                 if (!result.contains(coll)) {
                     result.add(coll);
                 }
@@ -787,8 +771,8 @@ public abstract class CollectionUtils {
         return result;
     }
 
-    public static <T extends Object> Collection<T> add(
-            final Collection<T> collection, final T item) {
+    public static <T> Collection<T> add(final Collection<T> collection,
+                                                       final T item) {
         if (null != item) {
             if (null != collection) {
                 collection.add(item);
@@ -798,14 +782,19 @@ public abstract class CollectionUtils {
     }
 
     public static void add(final Collection<String> collection,
-                           final String value, final int minLenght, final boolean trim,
+                           final String value,
+                           final int minLength,
+                           final boolean trim,
                            final boolean allowDuplicates) {
-        add(collection, value, minLenght, trim, allowDuplicates, null);
+        add(collection, value, minLength, trim, allowDuplicates, null);
     }
 
     public static void add(final Collection<String> collection,
-                           final String value, final int minLenght, final boolean trim,
-                           final boolean allowDuplicates, final String[] excludes) {
+                           final String value,
+                           final int minLenght,
+                           final boolean trim,
+                           final boolean allowDuplicates,
+                           final String[] excludes) {
         if (null != value) {
             if (null != collection) {
                 if (StringUtils.hasLength(value, minLenght)) {
@@ -823,7 +812,9 @@ public abstract class CollectionUtils {
     }
 
     public static void add(final Collection<String> collection,
-                           final String value, final boolean trim, final String[] excludes) {
+                           final String value,
+                           final boolean trim,
+                           final String[] excludes) {
         if (isEmpty(excludes)) {
             collection.add(trim ? value.trim() : value);
         } else if (!contains(excludes, value)) {
@@ -839,8 +830,8 @@ public abstract class CollectionUtils {
      * @param item
      * @return
      */
-    public static <T extends Object> Collection<T> addNoDuplicates(
-            final Collection<T> collection, final T item) {
+    public static <T> Collection<T> addNoDuplicates(final Collection<T> collection,
+                                                                   final T item) {
         if (null != item) {
             if (null != collection) {
                 if (!collection.contains(item)) {
@@ -859,8 +850,8 @@ public abstract class CollectionUtils {
      * @param items      Items to add to collection
      * @return Collection with all items
      */
-    public static <T extends Object> Collection<T> addAllNoDuplicates(
-            final Collection<T> collection, final Collection<T> items) {
+    public static <T> Collection<T> addAllNoDuplicates(final Collection<T> collection,
+                                                                      final Collection<T> items) {
         if (null != items) {
             if (null != collection) {
                 for (T item : items) {
@@ -873,13 +864,13 @@ public abstract class CollectionUtils {
         return collection;
     }
 
-    @SuppressWarnings({"unchecked", "element-type-mismatch"})
-    public static <T extends Object> Collection<T> addAllNoDuplicates(Collection<T> collection, Object[] items) {
+    public static <T> Collection<T> addAllNoDuplicates(final Collection<T> collection,
+                                                                      final T[] items) {
         if (null != items) {
             if (null != collection) {
-                for (Object item : items) {
+                for (final T item : items) {
                     if (!collection.contains(item)) {
-                        collection.add((T) item);
+                        collection.add(item);
                     }
                 }
             }
@@ -887,19 +878,17 @@ public abstract class CollectionUtils {
         return collection;
     }
 
-    @SuppressWarnings("unchecked")
-    public static <T extends Object> Collection<T> addAll(Collection<T> collection, Object[] items) {
+    public static <T> Collection<T> addAll(final Collection<T> collection,
+                                                          final T[] items) {
         if (null != items) {
             if (null != collection) {
-                for (Object item : items) {
-                    collection.add((T) item);
-                }
+                Collections.addAll(collection, items);
             }
         }
         return collection;
     }
 
-    public static <T extends Object> Set<List<T>> cartesianProduct(
+    public static <T> Set<List<T>> cartesianProduct(
             final Collection<Collection<T>> sets) {
         if (sets.size() < 2) {
             throw new IllegalArgumentException(
@@ -910,7 +899,7 @@ public abstract class CollectionUtils {
         return _cartesianProduct(0, sets);
     }
 
-    public static <T extends Object> Set<Map<String, T>> cartesianProduct(
+    public static <T> Set<Map<String, T>> cartesianProduct(
             final Map<String, Collection<T>> mapOfColl) {
         if (mapOfColl.size() < 2) {
             throw new IllegalArgumentException(
@@ -954,9 +943,9 @@ public abstract class CollectionUtils {
 
     public static String[] toArrayOfString(final Iterator<?> item) {
         final List<String> result = new LinkedList<String>();
-        while(item.hasNext()){
+        while (item.hasNext()) {
             final Object val = item.next();
-            if(null!=val){
+            if (null != val) {
                 result.add(val.toString());
             }
         }
@@ -970,7 +959,7 @@ public abstract class CollectionUtils {
      * @return
      */
     @SuppressWarnings("unchecked")
-    public static List<Object> toList(final Object item) {
+    public static List toList(final Object item) {
         final List result = new LinkedList();
         try {
             if (null != item) {
@@ -1000,12 +989,12 @@ public abstract class CollectionUtils {
                     result.add(item);
                 }
             }
-        } catch (Throwable t) {
+        } catch (Throwable ignored) {
         }
         return result;
     }
 
-    public static <T extends Object> List<T> toList(T... args) {
+    public static <T> List<T> toList(T... args) {
         return Arrays.asList(args);
     }
 
@@ -1118,14 +1107,14 @@ public abstract class CollectionUtils {
         return null != result ? result : defaultValue;
     }
 
-    public static <T extends Object> T get(T[] array, int index) {
+    public static <T> T get(T[] array, int index) {
         if (array.length < index + 1) {
             return null;
         }
         return array[index];
     }
 
-    public static <T extends Object> T get(final T[] array, final int index,
+    public static <T> T get(final T[] array, final int index,
                                            final T defaultValue) {
         if (array.length < index + 1) {
             return defaultValue;
@@ -1134,7 +1123,7 @@ public abstract class CollectionUtils {
         return null != result ? result : defaultValue; // array[index];
     }
 
-    public static <T extends Object> T get(final Collection<T> collection, final int index) {
+    public static <T> T get(final Collection<T> collection, final int index) {
         if (collection.size() < index + 1) {
             return null;
         }
@@ -1151,7 +1140,7 @@ public abstract class CollectionUtils {
     /**
      * Return first item of an array. NULL if array is empty or is null.
      */
-    public static <T extends Object> T getFirst(T[] array) {
+    public static <T> T getFirst(T[] array) {
         if (!isEmpty(array)) {
             return array[0];
         }
@@ -1174,7 +1163,7 @@ public abstract class CollectionUtils {
     /**
      * Return last item of an array. NULL if array is empty or is null.
      */
-    public static <T extends Object> T getLast(final T[] array) {
+    public static <T> T getLast(final T[] array) {
         if (!isEmpty(array)) {
             return array[array.length - 1];
         }
@@ -1213,7 +1202,7 @@ public abstract class CollectionUtils {
      * @param propertyValue VALUE of KEY property
      * @return NULL or retrieved item.
      */
-    public static <T extends Object> T getByBeanProperty(
+    public static <T> T getByBeanProperty(
             final Collection<T> list, final String properyName,
             final Object propertyValue) {
         if (StringUtils.hasText(properyName)) {
@@ -1229,36 +1218,18 @@ public abstract class CollectionUtils {
         return null;
     }
 
-    /**
-     * Remove item in list by value of its property.
-     *
-     * @param properyName   KEY property
-     * @param propertyValue VALUE of KEY property
-     * @return NULL or removed item.
-     */
-    public static <T extends Object> T removeByBeanProperty(
-            final Collection<T> list, final String properyName,
-            final Object propertyValue) {
-        final T item = CollectionUtils.getByBeanProperty(list,
-                properyName, propertyValue);
-        if (null != item) {
-            list.remove(item);
-        }
-        return item;
-    }
-
     // ------------------------------------------------------------------------
     //                      p r i v a t e
     // ------------------------------------------------------------------------
     private static Object _getValue(final Object item, final String propertyName) {
         try {
             return BeanUtils.getValue(item, propertyName);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         return null;
     }
 
-    private static <T extends Object> Set<List<T>> _cartesianProduct(int index,
+    private static <T> Set<List<T>> _cartesianProduct(int index,
                                                                      final Collection<Collection<T>> sets) {
         final Set<List<T>> ret = new LinkedHashSet<List<T>>();
         if (index == sets.size()) {
@@ -1274,7 +1245,7 @@ public abstract class CollectionUtils {
         return ret;
     }
 
-    private static <T extends Object> Set<Map<String, T>> _cartesianProduct(int index,
+    private static <T> Set<Map<String, T>> _cartesianProduct(int index,
                                                                             final Map<String, Collection<T>> sets) {
         final Set<Map<String, T>> ret = new LinkedHashSet<Map<String, T>>();
         if (index == sets.size()) {

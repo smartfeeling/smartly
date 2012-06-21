@@ -731,11 +731,13 @@ public final class StringUtils {
     }
 
     public static boolean isJSONObject(final Object value) {
-        return null != value && (value.toString().startsWith("{") && value.toString().endsWith("}"));
+        final String string = null!=value ? RegExUtils.replaceLineTerminators(value.toString()):"";
+        return string.startsWith("{") && string.endsWith("}");
     }
 
     public static boolean isJSONArray(final Object value) {
-        return null != value && (value.toString().startsWith("[") && value.toString().endsWith("]"));
+        final String string = null!=value ? RegExUtils.replaceLineTerminators(value.toString()):"";
+        return string.startsWith("[") && string.endsWith("]");
     }
 
 

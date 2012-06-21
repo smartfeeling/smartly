@@ -6,7 +6,6 @@ import org.json.JSONObject;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.util.JsonWrapper;
-import org.smartly.launcher.SmartlyLauncher;
 
 import java.util.Arrays;
 
@@ -24,13 +23,14 @@ public abstract class AbstractPackage
 
     /**
      * Creates Package instance.
-     * @param id  Unique id for package.
+     *
+     * @param id       Unique id for package.
      * @param priority Priority is important in order of execution. System packages has priority from 0 to 100.
      *                 For standard packages use priority grater than 100.
      */
     public AbstractPackage(final String id, final int priority) {
-         _id = id;
-        _priority = (this instanceof ISmartlySystemPackage)?priority:(priority<100?priority+100:priority);
+        _id = id;
+        _priority = (this instanceof ISmartlySystemPackage) ? priority : (priority < 100 ? priority + 100 : priority);
         _version = "0.0.1";
         _dependencies = new JSONObject();
     }
@@ -51,28 +51,25 @@ public abstract class AbstractPackage
             return false;
         }
         final AbstractPackage other = (AbstractPackage) obj;
-        if ((this.getId() == null) ? (other.getId() != null) : !this.getId().equals(other.getId())) {
-            return false;
-        }
-        return true;
+        return !((this.getId() == null) ? (other.getId() != null) : !this.getId().equals(other.getId()));
     }
 
     @Override
-    public int compareTo (final AbstractPackage o) {
-        if(_priority == o.getPriority()){
-           return 0;
-        } else if (_priority>o.getPriority()){
-           return +1;
+    public int compareTo(final AbstractPackage o) {
+        if (_priority == o.getPriority()) {
+            return 0;
+        } else if (_priority > o.getPriority()) {
+            return +1;
         } else {
-           return -1;
+            return -1;
         }
     }
 
-    public final String getId(){
+    public final String getId() {
         return _id;
     }
 
-    public int getPriority(){
+    public int getPriority() {
         return _priority;
     }
 
@@ -124,53 +121,58 @@ public abstract class AbstractPackage
      * or it may be a hash group of dependencies which define a set of options, any one of which satisfies
      * the dependency. The ordering of the group is significant and earlier entries have higher priority.<br>
      * For example:
-     *  dependencies": {
-     *      webkit": "1.2",
-     *      ssl": {
-     *          gnutls": ["1.0", "2.0"],
-     *          openssl": "0.9.8",
-     *          },
-     *  }
+     * dependencies": {
+     * webkit": "1.2",
+     * ssl": {
+     * gnutls": ["1.0", "2.0"],
+     * openssl": "0.9.8",
+     * },
+     * }
+     *
      * @return JSONObject
      */
-    public JSONObject getDependencies(){
+    public JSONObject getDependencies() {
         return _dependencies;
     }
 
     /**
      * Add dependency as single version.
+     *
      * @param moduleName Name of Module
-     * @param version module version
+     * @param version    module version
      */
-    public void addDependency(final String moduleName, final String version){
-       JsonWrapper.put(_dependencies, moduleName, version);
+    public void addDependency(final String moduleName, final String version) {
+        JsonWrapper.put(_dependencies, moduleName, version);
     }
 
     /**
      * Add dependency from a list of versions.
+     *
      * @param moduleName Name of Module.
-     * @param versions List of versions.
+     * @param versions   List of versions.
      */
-    public void addDependency(final String moduleName, final String[] versions){
+    public void addDependency(final String moduleName, final String[] versions) {
         final JSONArray array = new JSONArray(Arrays.asList(versions));
         JsonWrapper.put(_dependencies, moduleName, array);
     }
 
     /**
      * Add hash group of dependencies.
+     *
      * @param moduleName Name of Module.
-     * @param modules Hash group of dependencies
+     * @param modules    Hash group of dependencies
      */
-    public void addDependency(final String moduleName, final JSONObject modules){
+    public void addDependency(final String moduleName, final JSONObject modules) {
         JsonWrapper.put(_dependencies, moduleName, modules);
     }
 
-    public Logger getLogger(){
+    public Logger getLogger() {
         return LoggingUtils.getLogger(this);
     }
 
     /**
      * Enter point for a package
+     *
      * @throws Exception
      */
     public abstract void load() throws Exception;

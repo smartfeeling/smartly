@@ -7,10 +7,10 @@ import java.net.URLClassLoader;
 
 /**
  * A <code>ClassLoader</code> used for application class loading. This class
- * provides constructors and methods to add jar directories to the classpath.
- * <p/>
- * <p>Note that class lookups are cached, so adding a jar file after a class has
- * already been looked up won't make the classes available.
+ * provides constructors and methods to add jar directories to the classpath.<br/>
+ * <p>
+ * Adding a jar file after a class has already been looked up (in constructor) won't make the classes available.
+ * </p>
  */
 public class SmartlyClassLoader extends URLClassLoader {
 

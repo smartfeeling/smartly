@@ -2,6 +2,7 @@ package org.smartly.packages.http.impl.util.vtool;
 
 
 import org.smartly.Smartly;
+import org.smartly.commons.util.PathUtils;
 import org.smartly.packages.http.SmartlyHttp;
 
 /**
@@ -21,6 +22,15 @@ public class App extends org.smartly.packages.velocity.impl.vtools.App {
     public String getHttpRoot() {
         try {
             return getSmartlyAppUrl();
+        } catch (Throwable ignored) {
+        }
+        return "";
+    }
+
+    public String getHttpPath(final String path) {
+        try {
+            final String root = getHttpRoot();
+            return PathUtils.concat(root, path);
         } catch (Throwable ignored) {
         }
         return "";

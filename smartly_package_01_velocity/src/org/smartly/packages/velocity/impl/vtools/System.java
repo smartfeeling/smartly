@@ -97,6 +97,31 @@ public class System
         }
         return "";
     }
+
+    public String toHTML(final String text) {
+        final StringBuilder result = new StringBuilder();
+        if (StringUtils.hasText(text)) {
+            final String[] lines = StringUtils.split(text, "\n");
+            for (final String line : lines) {
+                if (result.length() > 0) {
+                    result.append("<br/>");
+                    result.append("\n");
+                }
+                // split for a title
+                final String[] tokens = StringUtils.splitFirst(line, ":");
+                if (tokens.length > 1) {
+                    result.append("<span style='font-weight:bold;'>");
+                    result.append(tokens[0]).append(":&nbsp;");
+                    result.append("</span>");
+                    result.append(tokens[1]);
+                } else {
+                    result.append(line);
+                }
+            }
+        }
+        return result.toString();
+    }
+
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc=" CALENDAR DATE (getNow, getTomorrow, isToday...)">
