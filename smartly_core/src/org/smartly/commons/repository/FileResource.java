@@ -1,4 +1,3 @@
-
 package org.smartly.commons.repository;
 
 import java.io.File;

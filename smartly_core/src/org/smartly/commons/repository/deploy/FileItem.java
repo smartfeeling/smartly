@@ -1,6 +1,3 @@
-/*
- * 
- */
 package org.smartly.commons.repository.deploy;
 
 import org.smartly.commons.logging.Level;
