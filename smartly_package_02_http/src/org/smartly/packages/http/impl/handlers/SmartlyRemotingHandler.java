@@ -195,28 +195,23 @@ public class SmartlyRemotingHandler extends ContextHandler {
             if (FORMAT_JSON.equalsIgnoreCase(format)) {
                 final String serialized = JsonSerializer.serialize(data);
                 final byte[] bytes = serialized.getBytes(Smartly.getCharset());
-                ServletUtils.doResponseHeaders(response, null, bytes.length, MIMETYPE_JSON);
-                ServletUtils.writeResponse(response, DateUtils.now().getTime(), bytes);
+                ServletUtils.writeResponse(response, DateUtils.now().getTime(), MIMETYPE_JSON, bytes);
             } else if (FORMAT_XML.equalsIgnoreCase(format)) {
                 // not supported yet
             } else if (FORMAT_BIN.equalsIgnoreCase(format)) {
                 if (data instanceof BinaryData) {
                     final BinaryData bin_data = (BinaryData) data;
                     final byte[] bytes = bin_data.getBytes();
-                    ServletUtils.doResponseHeaders(response, null, bytes.length, bin_data.getMimetype());
-                    ServletUtils.writeResponse(response, DateUtils.now().getTime(), bytes);
+                    ServletUtils.writeResponse(response, DateUtils.now().getTime(), bin_data.getMimetype(), bytes);
                 } else if (ByteUtils.isByteArray(data)) {
                     final byte[] bytes = (byte[]) data;
-                    ServletUtils.doResponseHeaders(response, null, bytes.length, MIMETYPE_PNG);
-                    ServletUtils.writeResponse(response, DateUtils.now().getTime(), bytes);
+                    ServletUtils.writeResponse(response, DateUtils.now().getTime(), MIMETYPE_PNG, bytes);
                 } else if (data instanceof String) {
                     final byte[] bytes = ((String) data).getBytes(Smartly.getCharset());
-                    ServletUtils.doResponseHeaders(response, null, bytes.length, MIMETYPE_TEXT);
-                    ServletUtils.writeResponse(response, DateUtils.now().getTime(), bytes);
+                    ServletUtils.writeResponse(response, DateUtils.now().getTime(), MIMETYPE_TEXT, bytes);
                 } else if (data instanceof InputStream) {
                     final byte[] bytes = ByteUtils.getBytes((InputStream) data);
-                    ServletUtils.doResponseHeaders(response, null, bytes.length, MIMETYPE_ZIP);
-                    ServletUtils.writeResponse(response, DateUtils.now().getTime(), bytes);
+                    ServletUtils.writeResponse(response, DateUtils.now().getTime(), MIMETYPE_ZIP, bytes);
                 } else {
                     // data not supported
                 }

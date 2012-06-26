@@ -10,6 +10,7 @@ import org.smartly.packages.velocity.launcher.Main;
 import org.smartly.packages.velocity.impl.VLCManager;
 
 import java.io.File;
+import java.util.HashMap;
 
 
 public class SmartlyVelocityTest {
@@ -30,7 +31,7 @@ public class SmartlyVelocityTest {
         System.out.println("TEMPLATE:");
         System.out.println(template);
 
-        final String resolved = VLCManager.mergeText("test", template, null);
+        final String resolved = VLCManager.getInstance().evaluateText("test", template, new HashMap<String, Object>());
         System.out.println("RESOLVED:");
         System.out.println(resolved);
         Assert.assertNotNull(resolved);

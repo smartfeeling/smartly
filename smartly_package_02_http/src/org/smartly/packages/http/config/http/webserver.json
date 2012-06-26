@@ -44,6 +44,11 @@
                         "endpoint":"/*",
                         "class":"org.smartly.packages.http.impl.handlers.servlets.HelloSmartlyServlet",
                         "params":"'here you can pass a simple string, JSONObject or JSONArray'"
+                    } ,
+                    {
+                        "endpoint":"*.vhtml",
+                        "class":"org.smartly.packages.http.impl.handlers.servlets.SmartlyVHTMLServlet",
+                        "params":""
                     }
                 ]
             }

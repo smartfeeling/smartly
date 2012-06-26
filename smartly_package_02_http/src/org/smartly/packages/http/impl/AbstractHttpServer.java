@@ -13,6 +13,9 @@ import org.smartly.commons.logging.LoggingRepository;
 import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.util.JsonWrapper;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @author angelo.geminiani
  */
@@ -23,6 +26,7 @@ public abstract class AbstractHttpServer {
     private final String _absoluteBaseResource;
     private final JSONObject _configuration;
     private final Server _jetty;
+    private final Set<String> _servletExtensions; // resource's extensions managed from servlet (i.e. vhtml)
 
     public AbstractHttpServer(final String absolutePath, final JSONObject configuration) {
         _absoluteBaseResource = absolutePath;
@@ -32,15 +36,24 @@ public abstract class AbstractHttpServer {
         LoggingRepository.getInstance().setLogFileName(this.getClass(), LOG_FILE);
 
         _jetty = new Server();
+
+        _servletExtensions = new HashSet<String>();
     }
 
-    protected Server getJetty(){
-        return _jetty;
+    //-- RESOURCE EXTENSIONS MANAGED BY SERVLETS --//
+
+    public void registerEndPoint(final String endPoint){
+       if(endPoint.startsWith("*.")){
+           final String ext = endPoint.substring(1);
+           _servletExtensions.add(ext);
+       }
     }
 
-    public String getRoot() {
-        return _absoluteBaseResource;
+    public Set<String> getServletExtensions(){
+        return _servletExtensions;
     }
+
+    //-- CONFIGURATION --//
 
     public JSONObject getConfiguration() {
         return _configuration;
@@ -48,6 +61,16 @@ public abstract class AbstractHttpServer {
 
     public boolean isDebugMode() {
         return JsonWrapper.getBoolean(_configuration, "debug");
+    }
+
+    //-- SERVER --//
+
+    protected Server getJetty(){
+        return _jetty;
+    }
+
+    public String getRoot() {
+        return _absoluteBaseResource;
     }
 
     public void join() throws InterruptedException {
@@ -67,6 +90,8 @@ public abstract class AbstractHttpServer {
             _jetty.stop();
         }
     }
+
+    //-- LOG --//
 
     public void debug(final String message) {
         if (this.isDebugMode()) {

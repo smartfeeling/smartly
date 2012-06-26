@@ -1,6 +1,5 @@
 package org.smartly.packages.http.impl.handlers;
 
-import org.apache.velocity.VelocityContext;
 import org.eclipse.jetty.http.HttpHeaders;
 import org.eclipse.jetty.http.HttpMethods;
 import org.eclipse.jetty.http.HttpStatus;
@@ -9,23 +8,18 @@ import org.eclipse.jetty.io.Buffer;
 import org.eclipse.jetty.io.ByteArrayBuffer;
 import org.eclipse.jetty.io.WriterOutputStream;
 import org.eclipse.jetty.server.AbstractHttpConnection;
-import org.eclipse.jetty.server.Dispatcher;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.HandlerWrapper;
 import org.eclipse.jetty.util.URIUtil;
 import org.eclipse.jetty.util.resource.FileResource;
 import org.eclipse.jetty.util.resource.Resource;
-import org.smartly.Smartly;
-import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
-import org.smartly.commons.util.*;
+import org.smartly.commons.util.DateUtils;
+import org.smartly.commons.util.PathUtils;
+import org.smartly.packages.http.impl.WebServer;
 import org.smartly.packages.http.impl.util.ServletUtils;
-import org.smartly.packages.http.impl.util.resource.MemoryResource;
-import org.smartly.packages.http.impl.util.vtool.Cookies;
-import org.smartly.packages.http.impl.util.vtool.Req;
-import org.smartly.packages.velocity.impl.VLCManager;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -33,17 +27,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * User: angelo.geminiani
  */
 public class SmartlyResourceHandler extends HandlerWrapper {
-
-    private static final String MIME_HTML = "text/html"; // + ";charset=" + Smartly.getCharset();
-    private static final Set<String> _velocityExtensions = new HashSet<String>(Arrays.asList(".vhtml"));
 
     ContextHandler _context;
     Resource _baseResource;
@@ -52,25 +40,31 @@ public class SmartlyResourceHandler extends HandlerWrapper {
     String[] _welcomeFiles = {"index.html"};
     MimeTypes _mimeTypes = new MimeTypes();
     ByteArrayBuffer _cacheControl;
+    WebServer _server;
     boolean _aliases;
     boolean _directory;
 
-    /* ------------------------------------------------------------ */
+
     public SmartlyResourceHandler() {
 
     }
 
-    /* ------------------------------------------------------------ */
+    // --------------------------------------------------------------------
+    //               p u b l i c
+    // --------------------------------------------------------------------
+
+    public void setServer(final WebServer server) {
+        _server = server;
+    }
+
     public MimeTypes getMimeTypes() {
         return _mimeTypes;
     }
 
-    /* ------------------------------------------------------------ */
     public void setMimeTypes(MimeTypes mimeTypes) {
         _mimeTypes = mimeTypes;
     }
 
-    /* ------------------------------------------------------------ */
 
     /**
      * @return True if resource aliases are allowed.
@@ -119,7 +113,7 @@ public class SmartlyResourceHandler extends HandlerWrapper {
     @Override
     public void doStart()
             throws Exception {
-        ContextHandler.Context scontext = ContextHandler.getCurrentContext();
+        final ContextHandler.Context scontext = ContextHandler.getCurrentContext();
         _context = (scontext == null ? null : scontext.getContextHandler());
 
         if (_context != null)
@@ -159,7 +153,7 @@ public class SmartlyResourceHandler extends HandlerWrapper {
     /**
      * @param base The resourceBase to set.
      */
-    public void setBaseResource(Resource base) {
+    public void setBaseResource(final Resource base) {
         _baseResource = base;
     }
 
@@ -234,52 +228,16 @@ public class SmartlyResourceHandler extends HandlerWrapper {
     }
 
     /* ------------------------------------------------------------ */
-    /*
-     */
-    public Resource getResource(String path) throws MalformedURLException {
-        if (path == null || !path.startsWith("/"))
-            throw new MalformedURLException(path);
 
-        Resource base = _baseResource;
-        if (base == null) {
-            if (_context == null)
-                return null;
-            base = _context.getBaseResource();
-            if (base == null)
-                return null;
-        }
-
-        try {
-            path = URIUtil.canonicalPath(path);
-            return base.addPath(path);
-        } catch (Exception ignore) {
-        }
-
-        return null;
+    public Resource getResource(final String path) throws MalformedURLException {
+        return ServletUtils.getResource(_baseResource, _context, path);
     }
 
     /* ------------------------------------------------------------ */
-    protected Resource getResource(HttpServletRequest request) throws MalformedURLException {
-        String servletPath;
-        String pathInfo;
-        Boolean included = request.getAttribute(Dispatcher.INCLUDE_REQUEST_URI) != null;
-        if (included != null && included.booleanValue()) {
-            servletPath = (String) request.getAttribute(Dispatcher.INCLUDE_SERVLET_PATH);
-            pathInfo = (String) request.getAttribute(Dispatcher.INCLUDE_PATH_INFO);
 
-            if (servletPath == null && pathInfo == null) {
-                servletPath = request.getServletPath();
-                pathInfo = request.getPathInfo();
-            }
-        } else {
-            servletPath = request.getServletPath();
-            pathInfo = request.getPathInfo();
-        }
-
-        String pathInContext = URIUtil.addPaths(servletPath, pathInfo);
-        return getResource(pathInContext);
+    protected String getResourcePath(final HttpServletRequest request) throws MalformedURLException {
+        return ServletUtils.getResourcePath(request);
     }
-
 
     /* ------------------------------------------------------------ */
     public String[] getWelcomeFiles() {
@@ -292,13 +250,12 @@ public class SmartlyResourceHandler extends HandlerWrapper {
     }
 
     /* ------------------------------------------------------------ */
-    protected Resource getWelcome(Resource directory) throws MalformedURLException, IOException {
+    protected Resource getWelcome(final Resource directory) throws IOException {
         for (int i = 0; i < _welcomeFiles.length; i++) {
-            Resource welcome = directory.addPath(_welcomeFiles[i]);
+            final Resource welcome = directory.addPath(_welcomeFiles[i]);
             if (welcome.exists() && !welcome.isDirectory())
                 return welcome;
         }
-
         return null;
     }
 
@@ -321,7 +278,8 @@ public class SmartlyResourceHandler extends HandlerWrapper {
             skipContentBody = true;
         }
 
-        Resource resource = this.getResource(request);
+        final String resourcePath = this.getResourcePath(request);
+        Resource resource = this.getResource(resourcePath);
 
         //-- is css request?--//
         if (resource == null || !resource.exists()) {
@@ -343,32 +301,41 @@ public class SmartlyResourceHandler extends HandlerWrapper {
             return;
         }
 
-        // We are going to serve something
-        baseRequest.setHandled(true);
 
         if (resource.isDirectory()) {
             if (!request.getPathInfo().endsWith(URIUtil.SLASH)) {
                 response.sendRedirect(response.encodeRedirectURL(URIUtil.addPaths(request.getRequestURI(), URIUtil.SLASH)));
+                baseRequest.setHandled(true);
                 return;
             }
 
-            Resource welcome = getWelcome(resource);
-            if (welcome != null && welcome.exists())
-                resource = welcome;
-            else {
-                doDirectory(request, response, resource);
+            final Resource welcome = getWelcome(resource);
+            if (welcome != null && welcome.exists()) {
+                //resource = welcome;
+                // does not serve "/", but send redirect
+                response.sendRedirect(response.encodeRedirectURL(URIUtil.addPaths(resourcePath, welcome.getFile().getName())));
+                baseRequest.setHandled(true);
+                return;
+            } else {
+                this.doDirectory(request, response, resource);
                 baseRequest.setHandled(true);
                 return;
             }
         }
 
-        final boolean is_velocity = this.isVelocity(resource.getName());
-        //-- if velocity, merge resource with template --//
-        final Resource outResource = is_velocity ? this.merge(resource, request, response) : resource;
+        final boolean is_servlet = this.isServletExtension(resourcePath);
+
+        if (is_servlet) {
+            baseRequest.setHandled(false);
+            return;
+        }
+
+        // We are going to serve something
+        baseRequest.setHandled(true);
 
         // set some headers
-        final long last_modified = is_velocity ? DateUtils.now().getTime() : outResource.lastModified();
-        if (!is_velocity && last_modified > 0) {
+        final long last_modified = is_servlet ? DateUtils.now().getTime() : resource.lastModified();
+        if (!is_servlet && last_modified > 0) {
             long if_modified = request.getDateHeader(HttpHeaders.IF_MODIFIED_SINCE);
             if (if_modified > 0 && last_modified / 1000 <= if_modified / 1000) {
                 response.setStatus(HttpStatus.NOT_MODIFIED_304);
@@ -376,10 +343,10 @@ public class SmartlyResourceHandler extends HandlerWrapper {
             }
         }
 
-        final String mimeType = is_velocity ? MIME_HTML : this.getMimeType(outResource, request);
+        final String mimeType = this.getMimeType(resource, request);
 
         // set the headers
-        this.doResponseHeaders(response, outResource, mimeType != null ? mimeType : null);
+        this.doResponseHeaders(response, resource, mimeType != null ? mimeType : null);
 
         response.setDateHeader(HttpHeaders.LAST_MODIFIED, last_modified);
 
@@ -396,10 +363,10 @@ public class SmartlyResourceHandler extends HandlerWrapper {
 
         // See if a short direct method can be used?
         if (out instanceof AbstractHttpConnection.Output) {
-            ((AbstractHttpConnection.Output) out).sendContent(outResource.getInputStream());
+            ((AbstractHttpConnection.Output) out).sendContent(resource.getInputStream());
         } else {
             // Write content normally
-            outResource.writeTo(out, 0, outResource.length());
+            resource.writeTo(out, 0, resource.length());
         }
     }
 
@@ -444,45 +411,13 @@ public class SmartlyResourceHandler extends HandlerWrapper {
         return mime.toString();
     }
 
-    private boolean isVelocity(final String target) {
-        final String ext = PathUtils.getFilenameExtension(target, true);
-        return _velocityExtensions.contains(ext);
-    }
-
-    /**
-     * Merge resource content with solved velocity template.
-     *
-     * @param resource
-     */
-    private Resource merge(final Resource resource, final HttpServletRequest request, final HttpServletResponse response) {
-        try {
-            //-- creates context data for velocity engine --//
-            final VelocityContext vcontext = this.createVelocityContext(resource, request, response);
-
-            //-- eval velocity template --//
-            final String text = new String(ByteUtils.getBytes(resource.getInputStream()), Smartly.getCharset());
-            final String result = VLCManager.getInstance().evaluateText(resource.getName(), text, vcontext);
-
-            if (StringUtils.hasText(result)) {
-                return new MemoryResource(resource.getName(), result.getBytes());
-            }
-        } catch (Throwable t) {
-            this.getLogger().log(Level.SEVERE, FormatUtils.format(
-                    "ERROR MERGING TEMPLATE FOR RESOURCE '{0}': {1}",
-                    resource.getName(), ExceptionUtils.getRealMessage(t)), t);
+    private boolean isServletExtension(final String target) {
+        if (null != _server) {
+            final String ext = PathUtils.getFilenameExtension(target, true);
+            return _server.getServletExtensions().contains(ext);
         }
-        return resource;
+        return false;
     }
 
-    private VelocityContext createVelocityContext(final Resource resource, final HttpServletRequest request, final HttpServletResponse response) {
-        final VelocityContext result = new VelocityContext();
 
-        //-- "$req" tool --//
-        result.put(Req.NAME, new Req(resource, request, response));
-
-        //-- "$cookies" tool --//
-        result.put(Cookies.NAME, new Cookies(resource, request, response));
-
-        return result;
-    }
 }

@@ -95,7 +95,7 @@ public abstract class VLCTemplateManager
                 if (!CollectionUtils.isEmpty(context)) {
                     _internalContex.putAll(context);
                 }
-                return VLCManager.mergeText(KEY_CONTENT, text, _internalContex);
+                return VLCManager.getInstance().evaluateText(KEY_CONTENT, text, _internalContex);
             } catch (Exception ex) {
                 this.getLogger().log(Level.SEVERE, null, ex);
                 return text;

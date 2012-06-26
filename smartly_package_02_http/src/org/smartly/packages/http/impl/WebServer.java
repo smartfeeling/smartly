@@ -27,6 +27,7 @@ import java.util.List;
 
 public class WebServer extends AbstractHttpServer {
 
+
     public WebServer(final String docRoot, final JSONObject configuration) {
         super(docRoot, configuration);
     }
@@ -142,7 +143,6 @@ public class WebServer extends AbstractHttpServer {
             //-- shutdown handler --//
             main.addHandler(new SmartlyShutdownHandler(server.getJetty(), shutdownToken));
 
-
             //-- add endpoints (servlets and rest) --//
             final ContextHandlerCollection endpoints = initContextHandlers(server, JsonWrapper.getJSON(handlers, "endpoints"));
             if (null != endpoints) {
@@ -175,9 +175,9 @@ public class WebServer extends AbstractHttpServer {
         final ContextHandlerCollection result = new ContextHandlerCollection();
         if (null != endpoints && JsonWrapper.getBoolean(endpoints, "enabled")) {
             // rest
-            loadRestHandlers(result, server,  JsonWrapper.toListOfJSONObject(JsonWrapper.getArray(endpoints, "data")));
+            loadRestHandlers(result, server, JsonWrapper.toListOfJSONObject(JsonWrapper.getArray(endpoints, "data")));
             // servlets
-            final ServletContextHandler servlets = initServletHandlers(JsonWrapper.getJSON(endpoints, "servlets"));
+            final ServletContextHandler servlets = initServletHandlers(server, JsonWrapper.getJSON(endpoints, "servlets"));
             if (null != servlets) {
                 result.addHandler(servlets);
             }
@@ -196,7 +196,6 @@ public class WebServer extends AbstractHttpServer {
         }
     }
 
-
     private static Handler createHandler(final WebServer server, final JSONObject file) {
         if (null != file) {
             try {
@@ -210,6 +209,8 @@ public class WebServer extends AbstractHttpServer {
                             ? ClassLoaderUtils.newInstance(handlerClass, new Class[]{Object.class}, new Object[]{params})
                             : ClassLoaderUtils.newInstance(handlerClass);
                     if (instance instanceof Handler) {
+                        // server
+                        BeanUtils.setValueIfAny(instance, "server", server);
                         // doc_root
                         BeanUtils.setValueIfAny(instance, "resourceBase", server.getRoot());
                         // welcome files
@@ -230,7 +231,7 @@ public class WebServer extends AbstractHttpServer {
         return null;
     }
 
-    private static ServletContextHandler initServletHandlers(final JSONObject servlets) {
+    private static ServletContextHandler initServletHandlers(final WebServer server, final JSONObject servlets) {
         if (null != servlets && JsonWrapper.getBoolean(servlets, "enabled")) {
             // creates context
             final String contextPath = JsonWrapper.getString(servlets, "endpoint", "/");
@@ -242,10 +243,11 @@ public class WebServer extends AbstractHttpServer {
             if (null != data && data.length() > 0) {
                 for (int i = 0; i < data.length(); i++) {
                     final JSONObject servletJSON = data.optJSONObject(i);
-                    final ServletHolder servlet = createServlet(servletJSON);
+                    final ServletHolder servlet = createServlet(server, servletJSON);
                     if (null != servlet) {
                         final String pathSpec = JsonWrapper.getString(servletJSON, "endpoint");
                         context.addServlet(servlet, pathSpec);
+                        server.registerEndPoint(pathSpec);
                     }
                 }
             }
@@ -254,7 +256,7 @@ public class WebServer extends AbstractHttpServer {
         return null;
     }
 
-    private static ServletHolder createServlet(final JSONObject servlet) {
+    private static ServletHolder createServlet(final WebServer server, final JSONObject servlet) {
         if (null != servlet) {
             try {
                 final String className = JsonWrapper.getString(servlet, "class");
@@ -268,7 +270,11 @@ public class WebServer extends AbstractHttpServer {
                         } else {
                             instance = ClassLoaderUtils.newInstance(servletClass);
                         }
-                        return new ServletHolder((Servlet) instance);
+                        if (instance instanceof Servlet) {
+                            // doc_root
+                            BeanUtils.setValueIfAny(instance, "resourceBase", server.getRoot());
+                            return new ServletHolder((Servlet) instance);
+                        }
                     }
                 }
             } catch (Throwable t) {

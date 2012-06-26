@@ -6,14 +6,10 @@ package org.smartly.packages.velocity.impl;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
-import org.smartly.commons.event.EventEmitter;
 import org.smartly.commons.lang.CharEncoding;
 import org.smartly.commons.util.RegExUtils;
-import org.smartly.packages.velocity.impl.engine.VLCContextFactory;
 import org.smartly.packages.velocity.impl.engine.VLCEngine;
-import org.smartly.packages.velocity.impl.events.OnBeforeEvaluate;
 import org.smartly.packages.velocity.impl.vtools.util.VLCToolbox;
-import org.smartly.packages.velocity.impl.vtools.util.VLCToolboxItem;
 
 import java.io.StringWriter;
 import java.util.Map;
@@ -25,53 +21,45 @@ import java.util.regex.Pattern;
  *
  * @author
  */
-public class VLCManager extends EventEmitter
-        implements IVLCCostants {
+public class VLCManager implements IVLCCostants {
 
     private VLCEngine _engine;
 
     private VLCManager() {
     }
 
-    public String evaluateText(final String vlcText,
+    public String evaluateText(final String templateName,
+                               final String vlcText,
                                final Map<String, Object> contextData) throws Exception {
-        return this.evaluateText("VLC-TEXT", vlcText, contextData);
+        final VelocityContext context = getContext(contextData);
+        return this.evaluate(null, templateName, vlcText, context);
+    }
+
+    public String evaluateText(final VelocityEngine engine,
+                               final String templateName,
+                               final String vlcText,
+                               final Map<String, Object> contextData) throws Exception {
+        final VelocityContext context = getContext(contextData);
+        return this.evaluate(engine, templateName, vlcText, context);
     }
 
     public String evaluateText(final String templateName,
                                final String vlcText,
-                               final Map<String, Object> contextData) throws Exception {
-        final VelocityContext context = VLCContextFactory.getContext(contextData);
-        return this.evaluateTemplate(templateName, vlcText, context);
+                               final VelocityContext context) throws Exception {
+        return this.evaluate(null, templateName, vlcText, context);
     }
 
-    public String evaluateText(final String templateName,
+    public String evaluateText(final VelocityEngine engine,
+                               final String templateName,
                                final String vlcText,
-                               final VelocityContext contextData) throws Exception {
-        final VelocityContext context = VLCContextFactory.getContext(contextData);
-        return this.evaluateTemplate(templateName, vlcText, context);
+                               final VelocityContext context) throws Exception {
+        return this.evaluate(engine, templateName, vlcText, context);
     }
 
-    public String evaluate(final String templateName,
-                           final VelocityContext contextData) throws Exception {
-        final VelocityContext context = VLCContextFactory.getContext(contextData);
-        return this.evaluateTemplate(templateName, context);
-    }
-
-
-    public String evaluate(final String templateName,
-                           final Map<String, Object> contextData) throws Exception {
-        final VelocityContext context = VLCContextFactory.getContext(contextData);
-        return this.evaluateTemplate(templateName, context);
-    }
-
-    public void addTool(final VLCToolboxItem item) {
-        VLCToolbox.getInstance().add(item);
-    }
-
-    public void addTool(final String id, final Class toolClass,
-                        final Object[] args, final boolean isSingleton) {
-        VLCToolbox.getInstance().add(id, toolClass, args, isSingleton);
+    public String mergeTemplate(final String templateName,
+                                final Map<String, Object> contextData) throws Exception {
+        final VelocityContext context = getContext(contextData);
+        return this.merge(null, templateName, context);
     }
 
     public VLCEngine getEngine() {
@@ -114,28 +102,26 @@ public class VLCManager extends EventEmitter
         return sb.toString();
     }
 
-    private String evaluateTemplate(final String templateName,
-                                    final String vlcText,
-                                    final VelocityContext context) throws Exception {
-        //-- raise event --//
-        super.emit(new OnBeforeEvaluate(this, context));
+    private String evaluate(final VelocityEngine engine,
+                            final String templateName,
+                            final String vlcText,
+                            final VelocityContext context) throws Exception {
         //-- evaluate template --//
-        final VelocityEngine engine = this.getNativeEngine();
+        final VelocityEngine velocity = null!=engine?engine:this.getNativeEngine();
         final StringWriter writer = new StringWriter();
-        engine.evaluate(context, writer, templateName, vlcText);
+        velocity.evaluate(context, writer, templateName, vlcText);
 
         return this.replaceUnsolvedVariables(writer.toString());
     }
 
-    private String evaluateTemplate(final String templateName,
-                                    final VelocityContext context) throws Exception {
-        //-- raise event --//
-        super.emit(new OnBeforeEvaluate(this, context));
+    private String merge(final VelocityEngine engine,
+                         final String templateName,
+                         final VelocityContext context) throws Exception {
         //-- evaluate template --//
-        final VelocityEngine engine = this.getNativeEngine();
+        final VelocityEngine velocity = null!=engine?engine:this.getNativeEngine();
         final StringWriter writer = new StringWriter();
 
-        final Template template = engine.getTemplate(templateName, CharEncoding.getDefault());
+        final Template template = velocity.getTemplate(templateName, CharEncoding.getDefault());
         template.merge(context, writer);
 
         return this.replaceUnsolvedVariables(writer.toString());
@@ -153,22 +139,10 @@ public class VLCManager extends EventEmitter
         return _instance;
     }
 
-    public static String mergeText(final String vlcText,
-                                   final Map<String, Object> contextData) throws Exception {
-        final VLCManager instance = getInstance();
-        return instance.evaluateText(vlcText, contextData);
-    }
 
-    public static String mergeText(final String templateName,
-                                   final String vlcText,
-                                   final Map<String, Object> contextData) throws Exception {
-        final VLCManager instance = getInstance();
-        return instance.evaluateText(templateName, vlcText, contextData);
-    }
-
-    public static String mergeTemplate(final String templateName,
-                                       final Map<String, Object> contextData) throws Exception {
-        final VLCManager instance = getInstance();
-        return instance.evaluate(templateName, contextData);
+    private static VelocityContext getContext(final Map<String, Object> contextData) {
+        return null != contextData && !contextData.isEmpty()
+                ? new VelocityContext(contextData, VLCToolbox.getInstance().getToolsContext())
+                : new VelocityContext(VLCToolbox.getInstance().getToolsContext());
     }
 }

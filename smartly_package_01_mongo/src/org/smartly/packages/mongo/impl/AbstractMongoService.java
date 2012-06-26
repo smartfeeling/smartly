@@ -428,9 +428,10 @@ public abstract class AbstractMongoService {
         return null;
     }
 
-    public MongoPage paged(final DBObject filter, final String[] fieldNames,
-                              final int skip, final int limit,
-                              final String[] sortAscBy, final String[] sortDescBy) {
+    public MongoPage paged(final DBObject filter,
+                           final String[] fieldNames,
+                           final int skip, final int limit,
+                           final String[] sortAscBy, final String[] sortDescBy) {
         final MongoPage result = new MongoPage();
         // result cursor
         final DBCursor cursor = this.cursor(filter, fieldNames, skip, limit,

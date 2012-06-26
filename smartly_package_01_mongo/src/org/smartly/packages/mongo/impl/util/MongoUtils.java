@@ -231,7 +231,8 @@ public class MongoUtils implements IMongoConstants {
     }
 
     public static List getList(final DBObject object,
-                               final String fieldName, final List defaultValue) {
+                               final String fieldName,
+                               final List defaultValue) {
         if (null != object) {
             if (object.containsField(fieldName)) {
                 final Object result = object.get(fieldName);

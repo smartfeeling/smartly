@@ -1,5 +1,7 @@
 package org.smartly.packages.http.impl.handlers.servlets;
 
+import org.eclipse.jetty.server.handler.ContextHandler;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
