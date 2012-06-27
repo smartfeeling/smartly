@@ -12,6 +12,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.smartly.Smartly;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
@@ -53,9 +54,11 @@ public class WebServer extends AbstractHttpServer {
             // init velocity engine
             initVelocity(jettyHome);
 
-            //-- start jetty --//
-            super.getJetty().start();
-            super.getJetty().join();
+            if (!Smartly.isTestUnitMode()) {
+                //-- start jetty --//
+                super.getJetty().start();
+                super.getJetty().join();
+            }
         } catch (Throwable t) {
             super.error(t);
         }

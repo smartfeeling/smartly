@@ -6,6 +6,7 @@ import org.smartly.Smartly;
 import org.smartly.commons.cmdline.CmdLineParser;
 import org.smartly.commons.lang.CharEncoding;
 import org.smartly.commons.logging.LoggingRepository;
+import org.smartly.commons.util.BeanUtils;
 import org.smartly.commons.util.FileUtils;
 import org.smartly.commons.util.PathUtils;
 import org.smartly.packages.SmartlyPackageLoader;
@@ -16,6 +17,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLDecoder;
+import java.util.HashMap;
+import java.util.Map;
 
 abstract class AbstractLauncher {
 
@@ -27,6 +30,7 @@ abstract class AbstractLauncher {
     private static final String CLASSPATH_SMARTLY = Smartly.class.getCanonicalName();
 
     private final String[] _args;
+    private final Map<String, Object> _argsMap;
     private boolean _smartlyLauncher;
     private Class _runnerClass;
     private Object _runnerInstance;
@@ -34,12 +38,15 @@ abstract class AbstractLauncher {
 
     protected AbstractLauncher(final String[] args) {
         _args = args;
+        _argsMap = new HashMap<String, Object>();
         _initialized = false;
         try {
             final ClassLoader loader = this.init(args);
 
             _runnerClass = loader.loadClass(CLASSPATH_SMARTLY);
             _runnerInstance = _runnerClass.newInstance();
+            // try inject args to runner
+            BeanUtils.setValueIfAny(_runnerInstance, "launcherArgs", _argsMap);
         } catch (Exception x) {
             System.err.println("Uncaught exception: ");
             x.printStackTrace();
@@ -56,6 +63,10 @@ abstract class AbstractLauncher {
 
     public final String[] getArgs() {
         return _args;
+    }
+
+    public final Map<String, Object> getArgsMap(){
+        return _argsMap;
     }
 
     public final boolean isSmartlyLauncher() {
@@ -122,19 +133,26 @@ abstract class AbstractLauncher {
             final CmdLineParser parser = new CmdLineParser();
 
             final CmdLineParser.Option workspaceOpt = parser.addStringOption('w', "workspace");
-            final CmdLineParser.Option charsetOpt = parser.addStringOption("charset");
+            final CmdLineParser.Option charsetOpt = parser.addStringOption('c', "charset");
+            final CmdLineParser.Option testOpt = parser.addBooleanOption('t', "test"); // test mode (only for test unit)
 
             parser.parse(args);
 
             final String workspace = (String) parser.getOptionValue(workspaceOpt);
             if (null != workspace) {
                 System.setProperty(IConstants.SYSPROP_HOME, workspace);
+                _argsMap.put("w", workspace);
             }
 
             final String charset = (String) parser.getOptionValue(charsetOpt, CharEncoding.getDefault());
             if (null != charset) {
                 CharEncoding.setDefault(charset);
+                _argsMap.put("c", charset);
             }
+
+            final boolean test = (Boolean)parser.getOptionValue(testOpt, false);
+            _argsMap.put("t", test);
+
 
         }
     }

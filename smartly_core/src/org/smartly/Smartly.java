@@ -12,6 +12,7 @@ import org.smartly.packages.SmartlyPackageLoader;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class Smartly {
@@ -20,6 +21,10 @@ public class Smartly {
 
     public Smartly() {
 
+    }
+
+    public void setLauncherArgs(final Map<String, Object> args){
+        _launcherArgs = args;
     }
 
     public void run(final SmartlyPackageLoader packageLoader) throws Exception {
@@ -65,7 +70,7 @@ public class Smartly {
     private static String[] __langCodes;
     private static JsonRepository _configuration;
     private static Set<String> _packages; // loaded packages
-
+    private static Map<String, Object> _launcherArgs;
 
     public static String getHome() {
         if (null == __home) {
@@ -87,6 +92,15 @@ public class Smartly {
         }
         return __classLoader;
     }
+
+    public static Map<String, Object> getLauncherArgs(){
+        return _launcherArgs;
+    }
+
+    public static boolean isTestUnitMode(){
+        return getLauncherArgs().containsKey("t") && (Boolean)getLauncherArgs().get("t");
+    }
+
 
     public static String getCharset() {
         return CharEncoding.getDefault();
