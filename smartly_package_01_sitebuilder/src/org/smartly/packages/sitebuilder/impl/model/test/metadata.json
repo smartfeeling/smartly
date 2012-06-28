@@ -1,0 +1,9 @@
+{
+    "pages":[
+        {
+            "name":"/index.vhtml",
+            "data":"$db.get('test')",
+            "page_size":10
+        }
+    ]
+}

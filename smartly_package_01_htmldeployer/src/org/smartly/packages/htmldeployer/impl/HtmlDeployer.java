@@ -32,6 +32,11 @@ public class HtmlDeployer extends FileDeployer {
     }
 
     @Override
+    public byte[] beforeDeploy(byte[] data, final String filename) {
+        return data;
+    }
+
+    @Override
     public final byte[] compress(byte[] data, final String filename) {
         try {
             final Compressor compressor = new Compressor();

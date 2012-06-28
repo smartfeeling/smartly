@@ -45,7 +45,9 @@ public abstract class FileDeployer {
     //                      Variables
     // ------------------------------------------------------------------------
     private final Set<String> _compilableFiles;
+    private final Map<String, String> _compilableValues;
     private final List<FileItem> _resources;
+    private final String _startFolder;
     private final String _targetFolder;
     private boolean _overwriteAll;
     private String[] _overwriteItems;
@@ -65,7 +67,9 @@ public abstract class FileDeployer {
                 + "Start Folder: '{1}', Target Folder: '{2}'",
                 this.getClass().getSimpleName(), startFolder, targetFolder);
         _compilableFiles = new HashSet<String>(Arrays.asList(DIRECTIVE_FILES));
+        _compilableValues = new HashMap<String, String>();
         _resources = new LinkedList<FileItem>();
+        _startFolder = startFolder;
         _targetFolder = targetFolder;
         _overwriteAll = false;
         _overwriteItems = new String[0];
@@ -73,15 +77,7 @@ public abstract class FileDeployer {
         _debugApp = debugApp;
         _debugJs = debugJs;
 
-        try {
-            this.loadResources(startFolder);
-
-            this.logInfo("Created FileDeployer '{0}'. Resources: {1}",
-                    this.getClass().getSimpleName(), _resources.size());
-
-        } catch (Throwable t) {
-            this.getLogger().severe(FormatUtils.format("Unable to Create FileDeployer: {0}", t));
-        }
+        this.init();
     }
 
     // ------------------------------------------------------------------------
@@ -103,20 +99,32 @@ public abstract class FileDeployer {
         _overwriteItems = value;
     }
 
-    public Set<String> getCompilableFiles(){
+    public Set<String> getCompilableFiles() {
         return _compilableFiles;
     }
 
+    public Map<String, String> getCompilableValues() {
+        return _compilableValues;
+    }
+
+    public void deployChildren() {
+        this.deploy(_targetFolder, true);
+    }
+
     public void deploy() {
-        this.deploy(_targetFolder);
+        this.deploy(_targetFolder, false);
     }
 
     /**
      * Deploy content into target
      *
      * @param targetFolder Parent root. i.e. "c:\", "ftp://USERNAME:PASSWORD@host:21/myfolder/mysubfolder"
+     * @param children Deploy only content of startFolder into targetFolder
      */
-    public void deploy(final String targetFolder) {
+    public void deploy(final String targetFolder,
+                       final boolean children) {
+        this.loadResources(_startFolder);
+
         this.logStart();
 
         for (final FileItem item : _resources) {
@@ -129,11 +137,20 @@ public abstract class FileDeployer {
 
     public abstract byte[] compress(final byte[] data, final String filename);
 
+    public abstract byte[] beforeDeploy(final byte[] data, final String filename);
+
     // ------------------------------------------------------------------------
     //                      p r i v a t e
     // ------------------------------------------------------------------------
     protected Logger getLogger() {
         return LoggingUtils.getLogger(this);
+    }
+
+    private void init() {
+        //-- init compilable values --//
+        _compilableValues.put(DIRECTIVE_VERSION, DIRECTIVE_VERSION_VALUE);
+        _compilableValues.put(DIRECTIVE_DEBUG_APP, _debugApp + "");
+        _compilableValues.put(DIRECTIVE_DEBUG_JS, _debugJs + "");
     }
 
     private void logStart() {
@@ -178,7 +195,14 @@ public abstract class FileDeployer {
                             if (compilable) {
                                 binaryData = this.compile(binaryData);
                             }
+
+                            //-- before deploy event --//
+                            binaryData = this.beforeDeploy(binaryData, target.getName());
+
+                            //-- deploy file --//
                             FileUtils.copy(binaryData, target);
+
+                            //-- compress file --//
                             if (compressible) {
                                 // creates new minified file
                                 final byte[] compressedData = this.compress(binaryData, target.getName());
@@ -261,14 +285,11 @@ public abstract class FileDeployer {
     private byte[] compile(final byte[] text) throws UnsupportedEncodingException {
         String result = new String(text);
         if (StringUtils.hasText(result)) {
-            if (result.contains(DIRECTIVE_VERSION)) {
-                result = StringUtils.replace(result, DIRECTIVE_VERSION, DIRECTIVE_VERSION_VALUE);
-            }
-            if (result.contains(DIRECTIVE_DEBUG_APP)) {
-                result = StringUtils.replace(result, DIRECTIVE_DEBUG_APP, _debugApp + "");
-            }
-            if (result.contains(DIRECTIVE_DEBUG_JS)) {
-                result = StringUtils.replace(result, DIRECTIVE_DEBUG_JS, _debugJs + "");
+            final Set<String> keys = _compilableValues.keySet();
+            for (final String key : keys) {
+                if (result.contains(key)) {
+                    result = StringUtils.replace(result, key, _compilableValues.get(key));
+                }
             }
         }
         return result.getBytes(CharEncoding.getDefault());
@@ -290,22 +311,32 @@ public abstract class FileDeployer {
         return "";
     }*/
 
-    private void loadResources(final String startFolder) throws IOException {
-        final String root = this.getRootFullPath();
-        final String folder = PathUtils.concat(root, startFolder);
+    private void loadResources(final String startFolder) {
+        _resources.clear();
+        try {
+            final String root = this.getRootFullPath();
+            final String folder = PathUtils.concat(root, startFolder);
 
-        this.logInfo("LOADING resources from Root: '{0}', "
-                + "Folder: '{1}'",
-                root, folder);
+            this.logInfo("LOADING resources from Root: '{0}', "
+                    + "Folder: '{1}'",
+                    root, folder);
 
-        final String[] resources;
-        if (PathUtils.isJar(folder)) {
-            resources = this.getResourcesFromJar(folder);
-        } else {
-            resources = this.getResourcesFromRepository(folder);
-        }
-        for (final String child : resources) {
-            _resources.add(new FileItem(this, root, child));
+            final String[] resources;
+            if (PathUtils.isJar(folder)) {
+                resources = this.getResourcesFromJar(folder);
+            } else {
+                resources = this.getResourcesFromRepository(folder);
+            }
+            for (final String child : resources) {
+                _resources.add(new FileItem(this, root, child));
+            }
+
+
+            this.logInfo("Created FileDeployer '{0}'. Resources: {1}",
+                    this.getClass().getSimpleName(), _resources.size());
+
+        } catch (Throwable t) {
+            this.getLogger().severe(FormatUtils.format("Unable to Create FileDeployer: {0}", t));
         }
     }
 

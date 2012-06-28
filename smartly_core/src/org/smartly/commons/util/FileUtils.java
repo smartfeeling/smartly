@@ -62,6 +62,10 @@ public abstract class FileUtils {
         return fileName;
     }
 
+    public static boolean exists(final String fileName) {
+        return (new File(fileName)).exists();
+    }
+
     public static long getCRC(final InputStream is) {
         try {
             // Computer CRC32 checksum
@@ -582,4 +586,6 @@ public abstract class FileUtils {
 
         return result;
     }
+
+
 }

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <meta charset="UTF-8"/>
+    <meta name="author" content="Gian Angelo Geminiani"/>
+    <meta name="copyright" content="smartfeeling.org"/>
+    <meta name="robots" content="index, follow"/>
+    <meta name="description" content="This is a sample template page"/>
+    <meta name="keywords" content="Site Generator"/>
+
+    <title>Site Builder Test Page</title>
+
+    <link rel="Shortcut Icon" href="favicon.ico" type="image/x-icon"/>
+    <link rel="stylesheet" href="/css/print.css" type="text/css" media="print"/>
+    <link rel="stylesheet" href="/css/screen.css" type="text/css" media="screen,projection"/>
+    <link rel="index" title="" href=""/>
+
+    <!--[if lt IE 9 ]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <script src="/js/hello.js"></script>
+
+</head>
+
+<body class="" lang="en-US">
+
+<header id="primary-header">
+
+    <nav id="primary-navigation">
+        <ul>
+            <li><a href="" title=""></a></li>
+        </ul>
+    </nav>
+
+</header>
+
+<div id="content-wrapper">
+
+    <aside id="left">
+        <nav id="contextual-navigation">
+            <ul>
+                <li><a href="" title=""></a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <section id="content">
+
+        <p>$data</p>
+        <p>$pagedata</p>
+        <p>$linknext</p>
+        <p>$linkprev</p>
+
+    </section>
+
+</div>
+
+<footer>
+</footer>
+
+</body>
+
+</html>

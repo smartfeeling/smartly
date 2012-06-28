@@ -1,0 +1,5 @@
+{
+    "models":"./sitebuilder/models",
+    "templates":"./sitebuilder/templates",
+    "output":"./sitebuilder/output"
+}

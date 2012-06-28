@@ -11,6 +11,11 @@ public class Deployer extends FileDeployer {
     }
 
     @Override
+    public byte[] beforeDeploy(byte[] data, final String filename) {
+        return data;
+    }
+
+    @Override
     public byte[] compress(byte[] data, final String filename) {
         return null;
     }
