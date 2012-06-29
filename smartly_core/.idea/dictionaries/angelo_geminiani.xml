@@ -10,8 +10,14 @@
       <w>htmlparser</w>
       <w>httprequest</w>
       <w>httpresponse</w>
+      <w>linknext</w>
+      <w>linkprev</w>
       <w>mkdirs</w>
       <w>mongodb</w>
+      <w>pagecount</w>
+      <w>pagedata</w>
+      <w>pagenr</w>
+      <w>pagenrt</w>
       <w>remoting</w>
       <w>runned</w>
       <w>securetoken</w>

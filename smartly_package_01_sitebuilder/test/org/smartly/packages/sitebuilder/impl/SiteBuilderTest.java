@@ -26,7 +26,17 @@ public class SiteBuilderTest {
     @Test
     public void testNewTemplate() throws Exception {
 
-        SiteBuilder.getInstance().newTemplate("test", "A");
+        System.out.println("-----------------------------------------------------------");
+        System.out.println("\t\t DEPLOY");
+        System.out.println("-----------------------------------------------------------");
+
+        try{
+            SiteBuilder.getInstance().newTemplate("test", "A");
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+        SiteBuilder.getInstance().buildSite("A");
 
     }
 }

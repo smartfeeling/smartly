@@ -128,7 +128,7 @@ public abstract class FileDeployer {
         this.logStart();
 
         for (final FileItem item : _resources) {
-            final String message = this.deploy(targetFolder, item);
+            final String message = this.deploy(targetFolder, item, children);
             if (StringUtils.hasText(message)) {
                 this.logInfo(message);
             }
@@ -169,12 +169,17 @@ public abstract class FileDeployer {
         }
     }
 
-    private String deploy(final String targetFolder, final FileItem item) {
+    private String deploy(final String targetFolder, final FileItem item, final boolean children) {
         String message = "";
         final String filename = item.getFileName();
         // check if file extension is not excluded
         if (this.isDeployable(filename)) {
-            final String targetPath = PathUtils.merge(targetFolder, filename);
+            final String targetPath;
+            if(children){
+                targetPath = PathUtils.merge(targetFolder, PathUtils.splitPathRoot(filename));
+            } else {
+                targetPath = PathUtils.merge(targetFolder, filename);
+            }
             final File target = new File(targetPath);
             final boolean exists = target.exists();
             final boolean overwrite = this.isOverwritable(filename);

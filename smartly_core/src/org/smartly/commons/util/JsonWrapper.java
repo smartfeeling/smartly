@@ -127,7 +127,7 @@ public class JsonWrapper {
         return null;
     }
 
-    public String edeepString(final String path) {
+    public String deepString(final String path) {
         return this.deepString(path, "");
     }
 

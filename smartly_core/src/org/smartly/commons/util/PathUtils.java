@@ -38,20 +38,19 @@ public abstract class PathUtils
      */
     public static String getParent(final String path) {
         try {
-            final String clean = path;
-            final int separatorIndex = clean.lastIndexOf(FOLDER_SEPARATOR);
+            final int separatorIndex = path.lastIndexOf(FOLDER_SEPARATOR);
             final String result;
             if (separatorIndex == -1) {
                 result = "";
             } else if (separatorIndex == 0) {
                 result = FOLDER_SEPARATOR;
             } else {
-                result = clean.substring(0, separatorIndex);
+                result = path.substring(0, separatorIndex);
             }
             return result;
             //final File file = new File(clean);
             //return file.getParent();
-        } catch (Throwable t) {
+        } catch (Throwable ignored) {
         }
         return path;
     }
@@ -369,14 +368,32 @@ public abstract class PathUtils
     }
 
     public static String getPathRoot(final String path) {
-        String[] tokens = toUnixPath(path).split("/");
+        final String[] tokens = toUnixPath(path).split("/");
         if (tokens.length > 0) {
-            final String result = tokens[0];
-            return !StringUtils.hasText(result)
-                    ? FOLDER_SEPARATOR
-                    : result;
+            for(final String token:tokens){
+                if(StringUtils.hasLength(token)){
+                    return FOLDER_SEPARATOR + token;
+                }
+            }
         }
         return path;
+    }
+
+
+    public static String splitPathRoot(final String path) {
+        final String root = getPathRoot(path);
+        if(StringUtils.hasText(root) && !root.equalsIgnoreCase("/")){
+            return path.substring(path.indexOf(root)+root.length());
+        }
+        return path;
+    }
+
+    public static String getCanonicalPath(final String path) {
+        try{
+            return (new File(path)).getCanonicalPath();
+        } catch(Throwable ignored){
+            return path;
+        }
     }
 
     /**

@@ -52,6 +52,7 @@ public class SmartlySiteBuilder extends AbstractPackage {
 
     private void init() {
         final JSONObject configuration = Smartly.getConfiguration().getJSONObject("sitebuilder");
+        _DOMAIN = JsonWrapper.getString(configuration, "domain");
         _PATH_TEMPLATES = Smartly.getAbsolutePath(JsonWrapper.getString(configuration, "templates"));
         _PATH_OUTPUT = Smartly.getAbsolutePath(JsonWrapper.getString(configuration, "output"));
         _PATH_MODELS = Smartly.getAbsolutePath(JsonWrapper.getString(configuration, "models"));
@@ -66,6 +67,7 @@ public class SmartlySiteBuilder extends AbstractPackage {
 
         // deploy models
         final ModelDeployer deployer = new ModelDeployer(_PATH_MODELS);
+        deployer.setOverwrite(true);
         deployer.deploy();
     }
 
@@ -73,9 +75,14 @@ public class SmartlySiteBuilder extends AbstractPackage {
     //               S T A T I C
     // --------------------------------------------------------------------
 
+    private static String _DOMAIN;
     private static String _PATH_MODELS;
     private static String _PATH_TEMPLATES;
     private static String _PATH_OUTPUT;
+
+    public static String getDomain() {
+        return _DOMAIN;
+    }
 
     public static String getPathModels() {
         return _PATH_MODELS;

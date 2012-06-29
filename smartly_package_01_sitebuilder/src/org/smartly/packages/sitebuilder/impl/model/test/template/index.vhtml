@@ -32,7 +32,7 @@
 
     <nav id="primary-navigation">
         <ul>
-            <li><a href="" title=""></a></li>
+            <li><a href="" title="">$db.get('data.test')</a></li>
         </ul>
     </nav>
 
@@ -43,7 +43,7 @@
     <aside id="left">
         <nav id="contextual-navigation">
             <ul>
-                <li><a href="" title=""></a></li>
+                <li><a href="" title="">$dic.get($lang, 'label1')</a></li>
             </ul>
         </nav>
     </aside>
@@ -52,8 +52,8 @@
 
         <p>$data</p>
         <p>$pagedata</p>
-        <p>$linknext</p>
-        <p>$linkprev</p>
+        <p>LINK NEXT: $linknext</p>
+        <p>LINK PREV: $linkprev</p>
 
     </section>
 

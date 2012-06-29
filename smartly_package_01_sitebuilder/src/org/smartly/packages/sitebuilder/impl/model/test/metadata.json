@@ -1,9 +1,16 @@
 {
+    "domain":"[DOMAIN]/[SITE-NAME]/",
+    "languages":["it", "en"],
     "pages":[
         {
             "name":"/index.vhtml",
-            "data":"$db.get('test')",
-            "page_size":10
+            "data":"data.large_list",
+            "page_size":5
+        },
+        {
+            "name":"/pages/static.html",
+            "data":"",
+            "page_size":0
         }
     ]
 }

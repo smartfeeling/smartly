@@ -296,7 +296,7 @@ public abstract class FileUtils {
      * @param writer the Writer to copy to
      * @throws java.io.IOException reader case of I/O errors
      */
-    public static void copy(Reader reader, Writer writer) throws IOException {
+    public static void copy(final Reader reader, final Writer writer) throws IOException {
         copy(reader, writer, true);
     }
 
@@ -354,7 +354,7 @@ public abstract class FileUtils {
      * @return the String that has been copied to
      * @throws java.io.IOException in case of I/O errors
      */
-    public static String copyToString(Reader in) throws IOException {
+    public static String copyToString(final Reader in) throws IOException {
         final StringWriter out = new StringWriter();
         copy(in, out, true);
         return out.toString();
