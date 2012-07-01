@@ -83,7 +83,7 @@ public class MongoExporter {
                 return filepath;
             }
         } else {
-            return PathUtils.concat(path, _collName.concat(".csv"));
+            return PathUtils.join(path, _collName.concat(".csv"));
         }
     }
 

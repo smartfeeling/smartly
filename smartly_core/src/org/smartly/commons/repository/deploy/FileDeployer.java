@@ -320,7 +320,7 @@ public abstract class FileDeployer {
         _resources.clear();
         try {
             final String root = this.getRootFullPath();
-            final String folder = PathUtils.concat(root, startFolder);
+            final String folder = PathUtils.join(root, startFolder);
 
             this.logInfo("LOADING resources from Root: '{0}', "
                     + "Folder: '{1}'",
@@ -398,7 +398,7 @@ public abstract class FileDeployer {
                         // if it is a subdirectory, we just return the directory name
                         //entry = entry.substring(0, checkSubdir);
                     }
-                    final String resname = "jar:" + PathUtils.concat(path, entry);
+                    final String resname = "jar:" + PathUtils.join(path, entry);
                     resNames.add(resname);
                     // debug logging
                     this.getLogger().log(Level.FINER,

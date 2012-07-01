@@ -41,7 +41,7 @@ public class ClassLoaderUtils {
     public static InputStream getResourceAsStream(final ClassLoader classLoader, final Class packageClass, final String resourceName) {
         final ClassLoader cl = null != classLoader ? classLoader : Thread.currentThread().getContextClassLoader();
         final String packagePath = PathUtils.getPackagePath(packageClass);
-        final String resourcePath = PathUtils.concat(packagePath, resourceName);
+        final String resourcePath = PathUtils.join(packagePath, resourceName);
         return cl.getResourceAsStream(resourcePath);
     }
 
@@ -60,7 +60,7 @@ public class ClassLoaderUtils {
     public static URL getResource(final ClassLoader classLoader, final Class packageClass, final String resourceName) {
         final ClassLoader cl = null != classLoader ? classLoader : Thread.currentThread().getContextClassLoader();
         final String packagePath = PathUtils.getPackagePath(packageClass);
-        final String resourcePath = PathUtils.concat(packagePath, resourceName);
+        final String resourcePath = PathUtils.join(packagePath, resourceName);
         return cl.getResource(resourcePath);
     }
 

@@ -1,6 +1,7 @@
 <component name="ProjectDictionaryState">
   <dictionary name="angelo.geminiani">
     <words>
+      <w>concat</w>
       <w>configfiles</w>
       <w>delim</w>
       <w>deployers</w>
@@ -10,6 +11,7 @@
       <w>htmlparser</w>
       <w>httprequest</w>
       <w>httpresponse</w>
+      <w>linkcurrent</w>
       <w>linknext</w>
       <w>linkprev</w>
       <w>mkdirs</w>

@@ -20,4 +20,5 @@ public interface ISiteBuilderConstants {
     public static final String CTX_PAGENR = "pagenr";
     public static final String CTX_LINKPREV = "linkprev";
     public static final String CTX_LINKNEXT = "linknext";
+    public static final String CTX_LINKCURRENT = "linkcurrent";
 }

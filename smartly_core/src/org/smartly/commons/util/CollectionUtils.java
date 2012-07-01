@@ -227,6 +227,30 @@ public abstract class CollectionUtils {
         return result;
     }
 
+    public static String toString(final Collection list) {
+        final StringBuilder sb = new StringBuilder();
+        if (null != list) {
+            for (final Object item : list) {
+                if (null != item) {
+                    sb.append(item);
+                }
+            }
+        }
+        return sb.toString();
+    }
+
+    public static String toString(final Object[] list) {
+        final StringBuilder sb = new StringBuilder();
+        if (null != list) {
+            for (final Object item : list) {
+                if (null != item) {
+                    sb.append(item);
+                }
+            }
+        }
+        return sb.toString();
+    }
+
     /**
      * Convenience method to convert a CSV string list to a set. Note that this
      * will suppress duplicates.
@@ -772,7 +796,7 @@ public abstract class CollectionUtils {
     }
 
     public static <T> Collection<T> add(final Collection<T> collection,
-                                                       final T item) {
+                                        final T item) {
         if (null != item) {
             if (null != collection) {
                 collection.add(item);
@@ -831,7 +855,7 @@ public abstract class CollectionUtils {
      * @return
      */
     public static <T> Collection<T> addNoDuplicates(final Collection<T> collection,
-                                                                   final T item) {
+                                                    final T item) {
         if (null != item) {
             if (null != collection) {
                 if (!collection.contains(item)) {
@@ -851,7 +875,7 @@ public abstract class CollectionUtils {
      * @return Collection with all items
      */
     public static <T> Collection<T> addAllNoDuplicates(final Collection<T> collection,
-                                                                      final Collection<T> items) {
+                                                       final Collection<T> items) {
         if (null != items) {
             if (null != collection) {
                 for (T item : items) {
@@ -865,7 +889,7 @@ public abstract class CollectionUtils {
     }
 
     public static <T> Collection<T> addAllNoDuplicates(final Collection<T> collection,
-                                                                      final T[] items) {
+                                                       final T[] items) {
         if (null != items) {
             if (null != collection) {
                 for (final T item : items) {
@@ -879,7 +903,7 @@ public abstract class CollectionUtils {
     }
 
     public static <T> Collection<T> addAll(final Collection<T> collection,
-                                                          final T[] items) {
+                                           final T[] items) {
         if (null != items) {
             if (null != collection) {
                 Collections.addAll(collection, items);
@@ -1115,7 +1139,7 @@ public abstract class CollectionUtils {
     }
 
     public static <T> T get(final T[] array, final int index,
-                                           final T defaultValue) {
+                            final T defaultValue) {
         if (array.length < index + 1) {
             return defaultValue;
         }
@@ -1230,7 +1254,7 @@ public abstract class CollectionUtils {
     }
 
     private static <T> Set<List<T>> _cartesianProduct(int index,
-                                                                     final Collection<Collection<T>> sets) {
+                                                      final Collection<Collection<T>> sets) {
         final Set<List<T>> ret = new LinkedHashSet<List<T>>();
         if (index == sets.size()) {
             ret.add(new LinkedList<T>());
@@ -1246,7 +1270,7 @@ public abstract class CollectionUtils {
     }
 
     private static <T> Set<Map<String, T>> _cartesianProduct(int index,
-                                                                            final Map<String, Collection<T>> sets) {
+                                                             final Map<String, Collection<T>> sets) {
         final Set<Map<String, T>> ret = new LinkedHashSet<Map<String, T>>();
         if (index == sets.size()) {
             ret.add(new LinkedHashMap<String, T>());

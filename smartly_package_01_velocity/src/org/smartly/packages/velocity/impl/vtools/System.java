@@ -471,7 +471,7 @@ public class System
                            final String defaultImage) {
         if (StringUtils.hasText(path)) {
             if (StringUtils.hasText(root)) {
-                return PathUtils.concat(root, path);
+                return PathUtils.join(root, path);
             } else {
                 return path;
             }

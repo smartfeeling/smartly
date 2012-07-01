@@ -25,7 +25,7 @@ public class SmartlyPackageLoader {
     private AbstractPackage _modalPackage;
 
     public SmartlyPackageLoader() throws IOException {
-        _root = PathUtils.concat(Smartly.getHome(), IConstants.PATH_PACKAGES);
+        _root = PathUtils.join(Smartly.getHome(), IConstants.PATH_PACKAGES);
         _packages = Collections.synchronizedMap(new HashMap<String, AbstractPackage>());
         _runned = false;
         _modalPackage = null;
@@ -192,9 +192,9 @@ public class SmartlyPackageLoader {
 
     private void ensureExists(final AbstractPackage pkg) {
         try {
-            final String packagePath = PathUtils.concat(_root, pkg.getId());
+            final String packagePath = PathUtils.join(_root, pkg.getId());
             FileUtils.mkdirs(packagePath);
-            final File packageJson = new File(PathUtils.concat(packagePath, "package.json"));
+            final File packageJson = new File(PathUtils.join(packagePath, "package.json"));
             if (!packageJson.exists()) {
                 // read default
                 this.copyDefault(packageJson, pkg);
@@ -207,7 +207,7 @@ public class SmartlyPackageLoader {
     private void copyDefault(final File packageJson, final AbstractPackage pkg) throws IOException {
         final ClassLoader cl = Thread.currentThread().getContextClassLoader(); //this.getClass().getClassLoader();
         final String path = PathUtils.getPackagePath(this.getClass());
-        final String filePath = PathUtils.concat(path, packageJson.getName());
+        final String filePath = PathUtils.join(path, packageJson.getName());
         final InputStream is = cl.getResourceAsStream(filePath);
         if(null!=is){
             final byte[] content = ByteUtils.getBytes(is);

@@ -3,6 +3,7 @@ package org.smartly.commons.util;
 import org.junit.Test;
 
 import java.io.File;
+import java.nio.file.Path;
 
 import static org.junit.Assert.assertTrue;
 
@@ -26,6 +27,19 @@ public class PathUtilsTest {
 
         assertTrue(result.equalsIgnoreCase("/path1/file.txt"));
         System.out.println(result);
+
+    }
+
+    @Test
+    public void testResolve() throws Exception {
+
+        String root = "http://localhost/dir1/dir2/";
+        String path = "../../file.html";
+        String concat = root + path;
+        String resolved = PathUtils.resolve(concat);
+
+        assertTrue(resolved.equalsIgnoreCase("http://localhost/file.html"));
+        System.out.println(resolved);
 
     }
 

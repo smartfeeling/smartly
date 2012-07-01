@@ -3,14 +3,16 @@
     "languages":["it", "en"],
     "pages":[
         {
-            "name":"/index.vhtml",
-            "data":"data.large_list",
-            "page_size":5
+            "page_uri":"/index.vhtml",
+            "page_data":"data.large_list",
+            "page_size":1,
+            "file_name":"attr:name"
         },
         {
-            "name":"/pages/static.html",
-            "data":"",
-            "page_size":0
+            "page_uri":"/pages/static.html",
+            "page_data":"",
+            "page_size":0,
+            "file_name": "pagenr"
         }
     ]
 }

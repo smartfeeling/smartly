@@ -97,7 +97,7 @@ public class SmartlyHttp
 
         final String url;
         if (StringUtils.hasText(path)) {
-            url = PathUtils.concat(result.toString(), path);
+            url = PathUtils.join(result.toString(), path);
         } else {
             url = result.toString().concat("/");
         }

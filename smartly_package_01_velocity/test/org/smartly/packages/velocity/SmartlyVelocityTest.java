@@ -24,7 +24,7 @@ public class SmartlyVelocityTest {
     public void testMain() throws Exception {
 
         final String docRoot = Smartly.getAbsolutePath((String) Smartly.getConfiguration().get("velocity.doc_root"));
-        final String templatePath = PathUtils.concat(docRoot, "test.vt");
+        final String templatePath = PathUtils.join(docRoot, "test.vt");
         final String template = new String(FileUtils.copyToByteArray(new File(templatePath)));
         Assert.assertNotNull(template);
 

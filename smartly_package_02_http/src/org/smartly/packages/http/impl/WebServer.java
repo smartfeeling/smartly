@@ -111,7 +111,7 @@ public class WebServer extends AbstractHttpServer {
                     final SslSelectChannelConnector ssl = new SslSelectChannelConnector();
                     ssl.setName(key);
                     ssl.setPort(JsonWrapper.getInt(connector, "port", 8443));
-                    final String keySorePath = mkdirs(PathUtils.concat(jettyHome, "/etc/keystore"));
+                    final String keySorePath = mkdirs(PathUtils.join(jettyHome, "/etc/keystore"));
                     final SslContextFactory cf = ssl.getSslContextFactory();
                     cf.setKeyStorePath(keySorePath);
                     cf.setKeyStorePassword(JsonWrapper.getString(connector, "port", "OBF:1vny1zlo1x8e1vnw1vn61x8g1zlu1vn4"));

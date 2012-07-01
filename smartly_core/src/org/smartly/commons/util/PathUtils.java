@@ -10,6 +10,8 @@ import org.smartly.commons.lang.CharEncoding;
 
 import java.io.File;
 import java.net.URLEncoder;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -186,7 +188,7 @@ public abstract class PathUtils
 
     public static String changeFileName(final String path, final String newName) {
         final String parent = PathUtils.getParent(path);
-        return PathUtils.concat(parent, newName);
+        return PathUtils.join(parent, newName);
     }
 
     public static String suggestFileName(final String fileName) {
@@ -370,8 +372,8 @@ public abstract class PathUtils
     public static String getPathRoot(final String path) {
         final String[] tokens = toUnixPath(path).split("/");
         if (tokens.length > 0) {
-            for(final String token:tokens){
-                if(StringUtils.hasLength(token)){
+            for (final String token : tokens) {
+                if (StringUtils.hasLength(token)) {
                     return FOLDER_SEPARATOR + token;
                 }
             }
@@ -382,16 +384,16 @@ public abstract class PathUtils
 
     public static String splitPathRoot(final String path) {
         final String root = getPathRoot(path);
-        if(StringUtils.hasText(root) && !root.equalsIgnoreCase("/")){
-            return path.substring(path.indexOf(root)+root.length());
+        if (StringUtils.hasText(root) && !root.equalsIgnoreCase("/")) {
+            return path.substring(path.indexOf(root) + root.length());
         }
         return path;
     }
 
     public static String getCanonicalPath(final String path) {
-        try{
+        try {
             return (new File(path)).getCanonicalPath();
-        } catch(Throwable ignored){
+        } catch (Throwable ignored) {
             return path;
         }
     }
@@ -451,7 +453,7 @@ public abstract class PathUtils
      */
     public static String getRelativePath(final String startingPoint, final String destination) {
         final String prefix = getPathLevelsPrefix(startingPoint);
-        return PathUtils.concat(prefix, destination);
+        return PathUtils.join(prefix, destination);
     }
 
     /**
@@ -725,9 +727,32 @@ public abstract class PathUtils
         return result.toString();
     }
 
-    public static String concatAndClean(final String path1, final String path2) {
-        final String result = concat(path1, path2);
-        return toUnixPath(result);
+    /**
+     * Resolve path from c:/dir1/dir2/../file.txt to C:/dir1/file.txt
+     *
+     * @param url Path. ie: c:/dir1/dir2/../file.txt
+     * @return Resolved Path  C:/dir1/file.txt
+     */
+    public static String resolve(final String url) {
+        final String protocol = PathUtils.getProtocol(url);
+        final String path = StringUtils.hasText(protocol) ? url.substring(protocol.length()) : url;
+        final List<String> list = new LinkedList<String>();
+        final String[] tokens = StringUtils.split(path, "/");
+        for (int i = 0; i < tokens.length; i++) {
+            final String token = tokens[i];
+            if (StringUtils.hasText(token)) {
+                if (token.equalsIgnoreCase("..")) {
+                    // move back
+                    if (!list.isEmpty()) {
+                        list.remove(list.size() - 1);
+                    }
+                } else if (!token.equalsIgnoreCase(".")) {
+                    // add token
+                    list.add(i==tokens.length-1?token : token + "/");
+                }
+            }
+        }
+        return protocol + (list.isEmpty() ? path : CollectionUtils.toString(list));
     }
 
     /**
@@ -739,7 +764,33 @@ public abstract class PathUtils
      * @param path2
      * @return Concatenated path.
      */
-    public static String concat(final String path1, final String path2) {
+    public static String concat (final String path1, final String path2) {
+        if (StringUtils.hasText(path1)) {
+            if (!path1.endsWith(FOLDER_SEPARATOR)
+                    && !path2.startsWith(FOLDER_SEPARATOR)) {
+                return path1.concat(FOLDER_SEPARATOR).concat(path2);
+            } else {
+                if (path1.equalsIgnoreCase(FOLDER_SEPARATOR)) {
+                    return path2;
+                }
+                if (path1.endsWith(FOLDER_SEPARATOR) && path2.startsWith(FOLDER_SEPARATOR)) {
+                    return path1.concat(path2.substring(1));
+                }
+                return path1.concat(path2);
+            }
+        } else {
+            return path2;
+        }
+    }
+
+    /**
+     * Like concat, but clean path 2
+     *
+     * @param path1
+     * @param path2
+     * @return Concatenated path.
+     */
+    public static String join(final String path1, final String path2) {
         final String cleanpath2 = clean(path2);
         if (StringUtils.hasText(path1)) {
             if (!path1.endsWith(FOLDER_SEPARATOR)
@@ -844,11 +895,11 @@ public abstract class PathUtils
         }
         final File f = new File(Smartly.getHome());
         final String converted;
-        final String relativePath = path.startsWith(".")?path.substring(1):path;
-        if(f.getAbsolutePath().endsWith(".")){
-            converted = PathUtils.toUnixPath( f.getAbsolutePath().replace(".", relativePath) );
-        }  else {
-            converted = PathUtils.toUnixPath( concat(f.getAbsolutePath(), relativePath) );
+        final String relativePath = path.startsWith(".") ? path.substring(1) : path;
+        if (f.getAbsolutePath().endsWith(".")) {
+            converted = PathUtils.toUnixPath(f.getAbsolutePath().replace(".", relativePath));
+        } else {
+            converted = PathUtils.toUnixPath(join(f.getAbsolutePath(), relativePath));
         }
         return converted;
     }

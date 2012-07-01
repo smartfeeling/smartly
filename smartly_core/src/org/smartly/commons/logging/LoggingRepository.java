@@ -124,7 +124,7 @@ public final class LoggingRepository {
     public void setLogFileName(final String key, final String fileName) {
         synchronized (_customPaths) {
             final String name = PathUtils.getFilename(fileName, true);
-            _customPaths.put(key, PathUtils.concat(_root, name));
+            _customPaths.put(key, PathUtils.join(_root, name));
         }
         synchronized (_data) {
             this.createLogItems(key);

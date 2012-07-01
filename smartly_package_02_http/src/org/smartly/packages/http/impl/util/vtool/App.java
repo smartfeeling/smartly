@@ -30,7 +30,7 @@ public class App extends org.smartly.packages.velocity.impl.vtools.App {
     public String getHttpPath(final String path) {
         try {
             final String root = getHttpRoot();
-            return PathUtils.concat(root, path);
+            return PathUtils.join(root, path);
         } catch (Throwable ignored) {
         }
         return "";

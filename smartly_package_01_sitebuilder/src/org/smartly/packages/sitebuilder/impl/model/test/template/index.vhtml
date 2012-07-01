@@ -32,7 +32,7 @@
 
     <nav id="primary-navigation">
         <ul>
-            <li><a href="" title="">$db.get('data.test')</a></li>
+            <li><a href="/pages/static.html" title="">$db.get('data.test')</a></li>
         </ul>
     </nav>
 
