@@ -6,6 +6,7 @@
     <wildcardResourcePatterns>
       <entry name="?*.properties" />
       <entry name="?*.xml" />
+      <entry name="?*.ico" />
       <entry name="?*.gif" />
       <entry name="?*.png" />
       <entry name="?*.jpeg" />

@@ -26,7 +26,7 @@ public class SiteBuilder {
      * @throws Exception If template already exists.
      */
     public void newTemplate(final String modelName, final String templateName) throws Exception {
-        final String target = PathUtils.join(SmartlySiteBuilder.getPathTemplates(), templateName);
+        final String target = PathUtils.join(SmartlySiteBuilder.getAbsolutePathTemplates(), templateName);
         if (FileUtils.exists(target)) {
             throw new Exception("Template already Exists: " + templateName);
         }

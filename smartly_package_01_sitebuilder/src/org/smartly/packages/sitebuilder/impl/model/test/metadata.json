@@ -1,17 +1,17 @@
 {
     "domain":"[DOMAIN]/[SITE-NAME]/",
     "languages":["it", "en"],
-    "pages":[
+    "files":[
         {
-            "page_uri":"/index.vhtml",
-            "page_data":"data.large_list",
-            "page_size":1,
+            "uri":"/index.html",
+            "data":"data.large_list",
+            "size":1,
             "file_name":"attr:name"
         },
         {
-            "page_uri":"/pages/static.html",
-            "page_data":"",
-            "page_size":0,
+            "uri":"/pages/static.html",
+            "data":"",
+            "size":0,
             "file_name": "pagenr"
         }
     ]

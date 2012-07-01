@@ -81,7 +81,7 @@
       <file leaf-file-name="SiteBuilder.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/impl/SiteBuilder.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="37" column="0" selection-start="1311" selection-end="1311" vertical-scroll-proportion="0.0">
+            <state line="37" column="0" selection-start="1319" selection-end="1319" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -90,34 +90,19 @@
       <file leaf-file-name="SiteBuilderEngine.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/impl/engine/SiteBuilderEngine.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="286" column="70" selection-start="12814" selection-end="12814" vertical-scroll-proportion="0.4874552">
-              <folding />
+            <state line="166" column="43" selection-start="7305" selection-end="7305" vertical-scroll-proportion="0.33333334">
+              <folding>
+                <element signature="e#4550#4558#0" expanded="true" />
+                <element signature="method#mergeLink#0;class#SiteBuilderEngine#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.vhtml" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/impl/model/test/template/index.vhtml">
+      <file leaf-file-name="metadata.json" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/impl/model/test/metadata.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="43" column="23" selection-start="1154" selection-end="1154" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="HtmlParser.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../smartly_package_01_htmlparser/src/org/smartly/packages/htmlparser/impl/HtmlParser.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="37" column="127" selection-start="982" selection-end="982" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Db.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/impl/engine/vtool/Db.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="0" selection-start="572" selection-end="572" vertical-scroll-proportion="0.0">
+            <state line="12" column="13" selection-start="297" selection-end="297" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -136,18 +121,18 @@
         <option value="$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/impl/model/test/dic/dic.json" />
         <option value="$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/impl/engine/vtool/Dic.java" />
         <option value="$PROJECT_DIR$/src/org/smartly/commons/util/JsonWrapper.java" />
-        <option value="$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/SmartlySiteBuilder.java" />
         <option value="$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/config/Deployer.java" />
         <option value="$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/impl/model/test/dic/it.json" />
         <option value="$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/impl/model/test/dic/en.json" />
         <option value="$PROJECT_DIR$/src/org/smartly/commons/util/FileUtils.java" />
         <option value="$PROJECT_DIR$/test/org/smartly/commons/util/RegExUtilsTest.java" />
-        <option value="$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/impl/model/test/metadata.json" />
         <option value="$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/impl/ISiteBuilderConstants.java" />
-        <option value="$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/impl/model/test/template/index.vhtml" />
         <option value="$PROJECT_DIR$/src/org/smartly/commons/util/CollectionUtils.java" />
         <option value="$PROJECT_DIR$/test/org/smartly/commons/util/PathUtilsTest.java" />
         <option value="$PROJECT_DIR$/src/org/smartly/commons/util/PathUtils.java" />
+        <option value="$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/impl/model/test/template/index.vhtml" />
+        <option value="$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/SmartlySiteBuilder.java" />
+        <option value="$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/impl/model/test/metadata.json" />
         <option value="$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/impl/engine/SiteBuilderEngine.java" />
       </list>
     </option>
@@ -184,6 +169,26 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="PackagesPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smartly" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -202,24 +207,174 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="PackagesPane">
-        <subPane>
           <PATH>
             <PATH_ELEMENT>
               <option name="myItemId" value="smartly" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smartly_package_01_sitebuilder" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sitebuilder" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smartly" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smartly_package_01_sitebuilder" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sitebuilder" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="impl" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smartly" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smartly_package_01_sitebuilder" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sitebuilder" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="impl" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="model" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smartly" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smartly_package_01_sitebuilder" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sitebuilder" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="impl" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="model" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smartly" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smartly_package_01_sitebuilder" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sitebuilder" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="impl" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="model" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="test" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="template" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smartly" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smartly_package_01_sitebuilder" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sitebuilder" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="impl" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="engine" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smartly" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smartly_package_01_sitebuilder" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -228,7 +383,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="GenerateAntBuildDialog.generateIdeaHomeProperty" value="false" />
-    <property name="project.structure.last.edited" value="Artifacts" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="OverrideImplement.combined" value="true" />
@@ -292,7 +447,7 @@
       <recent name="Z:\ARCHIVIO\Smartly\main\smartly_core\src\org\smartly\commons" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Package SITEBUILDER">
+  <component name="RunManager" selected="JUnit.SiteBuilderTest">
     <configuration default="false" name="SiteBuilderTest" type="JUnit" factoryName="JUnit" temporary="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -778,25 +933,25 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="54" y="-8" width="1874" height="1096" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27884614" sideWeight="0.4254967" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.27884614" sideWeight="0.42384106" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.37713677" sideWeight="0.5419426" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.37713677" sideWeight="0.70198673" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.37713677" sideWeight="0.45419425" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.37713677" sideWeight="0.2941501" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32905984" sideWeight="0.39072847" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.18696581" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2781457" sideWeight="0.32905984" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27704194" sideWeight="0.22115384" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2781457" sideWeight="0.2863248" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27704194" sideWeight="0.39423078" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -863,11 +1018,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/org/smartly/commons/jsonrepository/JsonRepository.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="208" column="18" selection-start="6664" selection-end="6664" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/org/smartly/commons/util/RegExUtilsTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="10" column="23" selection-start="299" selection-end="299" vertical-scroll-proportion="0.31423292" />
@@ -878,31 +1028,34 @@
         <state line="61" column="31" selection-start="2470" selection-end="2470" vertical-scroll-proportion="0.33333334" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/impl/model/test/metadata.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="29" selection-start="232" selection-end="232" vertical-scroll-proportion="0.24242425" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/impl/ISiteBuilderConstants.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="57" selection-start="928" selection-end="928" vertical-scroll-proportion="0.6666667" />
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.7.0_02/src.zip!/java/util/StringTokenizer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="102" column="6" selection-start="3001" selection-end="3001" vertical-scroll-proportion="-2.4086022" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/impl/SiteBuilder.java">
+    <entry file="file://$PROJECT_DIR$/src/org/smartly/commons/util/CollectionUtils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="37" column="0" selection-start="1311" selection-end="1311" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
+        <state line="251" column="7" selection-start="8740" selection-end="8740" vertical-scroll-proportion="0.75166005" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/impl/model/test/template/index.vhtml">
+    <entry file="jar://$PROJECT_DIR$/../../lib/junit-4.9-sources.jar!/org/junit/runners/ParentRunner.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="43" column="23" selection-start="1154" selection-end="1154" vertical-scroll-proportion="0.0">
+        <state line="266" column="0" selection-start="9261" selection-end="9261" vertical-scroll-proportion="0.33333334" />
+      </provider>
+    </entry>
+    <entry file="jar://$PROJECT_DIR$/../../lib/junit-4.9-sources.jar!/org/junit/internal/runners/model/ReflectiveCallable.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="8" selection-start="326" selection-end="326" vertical-scroll-proportion="0.33512545" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/test/org/smartly/commons/util/PathUtilsTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="40" column="0" selection-start="913" selection-end="913" vertical-scroll-proportion="0.6344086" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/impl/SiteBuilder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="37" column="0" selection-start="1319" selection-end="1319" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -917,51 +1070,48 @@
         <state line="24" column="0" selection-start="572" selection-end="572" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/smartly/commons/util/CollectionUtils.java">
+    <entry file="file://$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/SmartlySiteBuilder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="251" column="7" selection-start="8740" selection-end="8740" vertical-scroll-proportion="0.75166005">
-          <folding>
-            <element signature="e#16842#16872#0" expanded="true" />
-            <element signature="e#24731#24761#0" expanded="true" />
-            <element signature="e#33678#33708#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$PROJECT_DIR$/../../lib/junit-4.9-sources.jar!/org/junit/runners/ParentRunner.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="266" column="0" selection-start="9261" selection-end="9261" vertical-scroll-proportion="0.33333334">
+        <state line="101" column="16" selection-start="3625" selection-end="3625" vertical-scroll-proportion="1.609319">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/../../lib/junit-4.9-sources.jar!/org/junit/internal/runners/model/ReflectiveCallable.java">
+    <entry file="file://$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/impl/ISiteBuilderConstants.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="8" selection-start="326" selection-end="326" vertical-scroll-proportion="0.33512545">
+        <state line="7" column="31" selection-start="220" selection-end="220" vertical-scroll-proportion="0.21326165">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/test/org/smartly/commons/util/PathUtilsTest.java">
+    <entry file="file://$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/impl/model/test/template/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="0" selection-start="913" selection-end="913" vertical-scroll-proportion="0.6344086">
+        <state line="22" column="15" selection-start="803" selection-end="803" vertical-scroll-proportion="0.7030075">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/org/smartly/commons/util/PathUtils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="766" column="31" selection-start="27179" selection-end="27185" vertical-scroll-proportion="0.36379927">
-          <folding>
-            <element signature="e#26158#26166#0" expanded="true" />
-          </folding>
+        <state line="85" column="0" selection-start="2416" selection-end="2416" vertical-scroll-proportion="0.33333334">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/impl/model/test/metadata.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="13" selection-start="297" selection-end="297" vertical-scroll-proportion="0.0">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/impl/engine/SiteBuilderEngine.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="286" column="70" selection-start="12814" selection-end="12814" vertical-scroll-proportion="0.4874552">
-          <folding />
+        <state line="166" column="43" selection-start="7305" selection-end="7305" vertical-scroll-proportion="0.33333334">
+          <folding>
+            <element signature="e#4550#4558#0" expanded="true" />
+            <element signature="method#mergeLink#0;class#SiteBuilderEngine#0" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -988,7 +1138,7 @@
           <splitter-proportions>
             <option name="proportions">
               <list>
-                <option value="0.2" />
+                <option value="0.33872834" />
               </list>
             </option>
           </splitter-proportions>

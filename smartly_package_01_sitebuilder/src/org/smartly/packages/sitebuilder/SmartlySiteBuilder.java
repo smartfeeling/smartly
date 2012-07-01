@@ -53,20 +53,23 @@ public class SmartlySiteBuilder extends AbstractPackage {
     private void init() {
         final JSONObject configuration = Smartly.getConfiguration().getJSONObject("sitebuilder");
         _DOMAIN = JsonWrapper.getString(configuration, "domain");
-        _PATH_TEMPLATES = Smartly.getAbsolutePath(JsonWrapper.getString(configuration, "templates"));
-        _PATH_OUTPUT = Smartly.getAbsolutePath(JsonWrapper.getString(configuration, "output"));
-        _PATH_MODELS = Smartly.getAbsolutePath(JsonWrapper.getString(configuration, "models"));
+        _PATH_MODELS = JsonWrapper.getString(configuration, "models");
+        _PATH_OUTPUT = JsonWrapper.getString(configuration, "output");
+        _PATH_TEMPLATES = JsonWrapper.getString(configuration, "templates");
+        _ABSOLUTE_PATH_TEMPLATES = Smartly.getAbsolutePath(_PATH_TEMPLATES);
+        _ABSOLUTE_PATH_OUTPUT = Smartly.getAbsolutePath(_PATH_OUTPUT);
+        _ABSOLUTE_PATH_MODELS = Smartly.getAbsolutePath(_PATH_MODELS);
 
         // ensure dir exists
         try {
-            FileUtils.mkdirs(_PATH_TEMPLATES);
-            FileUtils.mkdirs(_PATH_OUTPUT);
-            FileUtils.mkdirs(_PATH_MODELS);
+            FileUtils.mkdirs(_ABSOLUTE_PATH_TEMPLATES);
+            FileUtils.mkdirs(_ABSOLUTE_PATH_OUTPUT);
+            FileUtils.mkdirs(_ABSOLUTE_PATH_MODELS);
         } catch (Throwable ignored) {
         }
 
         // deploy models
-        final ModelDeployer deployer = new ModelDeployer(_PATH_MODELS);
+        final ModelDeployer deployer = new ModelDeployer(_ABSOLUTE_PATH_MODELS);
         deployer.setOverwrite(true);
         deployer.deploy();
     }
@@ -79,6 +82,9 @@ public class SmartlySiteBuilder extends AbstractPackage {
     private static String _PATH_MODELS;
     private static String _PATH_TEMPLATES;
     private static String _PATH_OUTPUT;
+    private static String _ABSOLUTE_PATH_MODELS;
+    private static String _ABSOLUTE_PATH_TEMPLATES;
+    private static String _ABSOLUTE_PATH_OUTPUT;
 
     public static String getDomain() {
         return _DOMAIN;
@@ -94,6 +100,18 @@ public class SmartlySiteBuilder extends AbstractPackage {
 
     public static String getPathOutput() {
         return _PATH_OUTPUT;
+    }
+
+    public static String getAbsolutePathModels() {
+        return _ABSOLUTE_PATH_MODELS;
+    }
+
+    public static String getAbsolutePathTemplates() {
+        return _ABSOLUTE_PATH_TEMPLATES;
+    }
+
+    public static String getAbsolutePathOutput() {
+        return _ABSOLUTE_PATH_OUTPUT;
     }
 
 }
