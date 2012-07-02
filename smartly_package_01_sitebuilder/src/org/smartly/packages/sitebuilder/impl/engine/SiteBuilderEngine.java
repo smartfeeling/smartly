@@ -97,8 +97,8 @@ public class SiteBuilderEngine {
         innerContext.put(Formatter.NAME, new Formatter());
         innerContext.put(Math.NAME, new Math());
         // context builder
-        innerContext.put(Dic.NAME, new Dic(PathUtils.join(_absoluteTemplatePath, ISiteBuilderConstants.PATH_DIC)));
-        innerContext.put(Db.NAME, new Db(PathUtils.join(_absoluteTemplatePath, ISiteBuilderConstants.PATH_DB)));
+        innerContext.put(Dic.NAME, new Dic(PathUtils.concat(_absoluteTemplatePath, ISiteBuilderConstants.PATH_DIC)));
+        innerContext.put(Db.NAME, new Db(PathUtils.concat(_absoluteTemplatePath, ISiteBuilderConstants.PATH_DB)));
         _velocityContext = new VelocityContext(innerContext);
 
         _initialized = true;
@@ -155,9 +155,9 @@ public class SiteBuilderEngine {
             this.updatePageHistory(history, i, pageNr, countPages, httpRoot, file_name, path, name, ext, toList(data));
             // add context variable: pagenr
             context.put(ISiteBuilderConstants.CTX_PAGENR, pageNr);
-            context.put(ISiteBuilderConstants.CTX_LINKNEXT, history.next);
-            context.put(ISiteBuilderConstants.CTX_LINKPREV, history.prev);
-            context.put(ISiteBuilderConstants.CTX_LINKCURRENT, history.current);
+            context.put(ISiteBuilderConstants.CTX_LINKNEXT, history.http_next);
+            context.put(ISiteBuilderConstants.CTX_LINKPREV, history.http_prev);
+            context.put(ISiteBuilderConstants.CTX_LINKCURRENT, history.http_current);
             context.put(ISiteBuilderConstants.CTX_PAGEDATA, pageData);
 
             //-- merge velocity template --//
@@ -167,7 +167,7 @@ public class SiteBuilderEngine {
             out = updateLinks(_domain, path, out);
 
             // save output --//
-            final String fileName = history.current;
+            final String fileName = history.file_current;
             FileUtils.mkdirs(fileName);
             FileUtils.copy(out.getBytes(Smartly.getCharset()), new File(fileName));
         }
@@ -185,34 +185,53 @@ public class SiteBuilderEngine {
     private void updatePageHistory(final PageHistory history, final int i, final int pageNr, final int countPages,
                                    final String httpRoot, final String pattern, final String path,
                                    final String baseName, final String ext, final List<Object> data) {
-        String current = "";
-        String next = "";
-        String prev = "";
+        String file_current = "";
+        String file_next = "";
+        String file_prev = "";
+        String http_current = "";
+        String http_next = "";
+        String http_prev = "";
         if (pattern.startsWith("attr:") && !CollectionUtils.isEmpty(data)) {
             final String attr = pattern.substring(5);
             final String attrValue = toValidFileName(BeanUtils.getValueIfAny(data.get(i), attr).toString());
             final String attrNextValue = data.size() > pageNr + 1 ? toValidFileName(BeanUtils.getValueIfAny(data.get(i + 1), attr).toString()) : "";
-            current = PathUtils.concat(_absoluteOutputPath, PathUtils.concat(path, attrValue + ext));
-            prev = pageNr == 1 ? "" : history.current;
-            next = PathUtils.concat(_absoluteOutputPath, PathUtils.concat(path, attrNextValue + ext));
+            file_current = PathUtils.concat(_absoluteOutputPath, PathUtils.concat(path, attrValue + ext));
+            file_prev = pageNr == 1 ? "" : history.file_current;
+            file_next = PathUtils.concat(_absoluteOutputPath, PathUtils.concat(path, attrNextValue + ext));
+            http_current = PathUtils.concat(httpRoot, attrValue + ext);
+            http_prev = pageNr == 1 ? "" : history.http_current;
+            http_next = PathUtils.concat(httpRoot, attrNextValue + ext);
         } else if (pattern.startsWith("prefix:") && !CollectionUtils.isEmpty(data)) {
             final String prefix = pattern.substring(7);
-            current = i == 0
+            file_current = i == 0
                     ? PathUtils.concat(_absoluteOutputPath, PathUtils.concat(path, prefix + ext))
                     : PathUtils.concat(_absoluteOutputPath, PathUtils.concat(path, prefix + "_" + (pageNr) + ext));
-            next = pageNr == countPages ? "" : PathUtils.concat(httpRoot, prefix + "_" + (pageNr + 1) + ext);
-            prev = pageNr == 1 ? "" : PathUtils.concat(httpRoot, prefix + "_" + (pageNr - 1) + ext);
+            file_next = pageNr == countPages ? "" : PathUtils.concat(_absoluteOutputPath, PathUtils.concat(path, prefix + "_" + (pageNr + 1) + ext));
+            file_prev = pageNr == 1 ? "" : PathUtils.concat(_absoluteOutputPath, PathUtils.concat(path, prefix + "_" + (pageNr - 1) + ext));
+            http_current = i == 0
+                    ? PathUtils.concat(httpRoot, prefix + ext)
+                    : PathUtils.concat(httpRoot, prefix + "_" + (pageNr) + ext);
+            http_next = pageNr == countPages ? "" : PathUtils.concat(httpRoot, prefix + "_" + (pageNr + 1) + ext);
+            http_prev = pageNr == 1 ? "" : PathUtils.concat(httpRoot, prefix + "_" + (pageNr - 1) + ext);
         } else {
             // standard progressive baseName based names
-            current = i == 0
+            file_current = i == 0
                     ? PathUtils.concat(_absoluteOutputPath, PathUtils.concat(path, baseName + ext))
                     : PathUtils.concat(_absoluteOutputPath, PathUtils.concat(path, baseName + "_" + (pageNr) + ext));
-            next = pageNr == countPages ? "" : PathUtils.concat(httpRoot, baseName + "_" + (pageNr + 1) + ext);
-            prev = pageNr == 1 ? "" : PathUtils.concat(httpRoot, baseName + "_" + (pageNr - 1) + ext);
+            file_next = pageNr == countPages ? "" : PathUtils.concat(_absoluteOutputPath, PathUtils.concat(path, baseName + "_" + (pageNr + 1) + ext));
+            file_prev = pageNr == 1 ? "" : PathUtils.concat(_absoluteOutputPath, PathUtils.concat(path, baseName + "_" + (pageNr - 1) + ext));
+            http_current = i == 0
+                    ? PathUtils.concat(httpRoot, baseName + ext)
+                    : PathUtils.concat(httpRoot, baseName + "_" + (pageNr) + ext);
+            http_next = pageNr == countPages ? "" : PathUtils.concat(httpRoot, baseName + "_" + (pageNr + 1) + ext);
+            http_prev = pageNr == 1 ? "" : PathUtils.concat(httpRoot, baseName + "_" + (pageNr - 1) + ext);
         }
-        history.current = current;
-        history.next = next;
-        history.prev = prev;
+        history.file_current = file_current;
+        history.file_next = file_next;
+        history.file_prev = file_prev;
+        history.http_current = http_current;
+        history.http_next = http_next;
+        history.http_prev = http_prev;
     }
 
     private void deployFiles(final Set<String> pageDeployed) throws IOException {
@@ -385,9 +404,12 @@ public class SiteBuilderEngine {
 
     private class PageHistory {
 
-        String current;
-        String next;
-        String prev;
+        String file_current;
+        String file_next;
+        String file_prev;
+        String http_current;
+        String http_next;
+        String http_prev;
 
     }
 }
