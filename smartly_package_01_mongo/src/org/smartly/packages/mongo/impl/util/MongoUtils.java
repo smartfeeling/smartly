@@ -32,6 +32,10 @@ public class MongoUtils implements IMongoConstants {
         return UUID.randomUUID().toString().replace("-", "");
     }
 
+    public static String createUUID(final int len) {
+        return RandomUtils.random(len, RandomUtils.CHARS_LOW_NUMBERS);
+    }
+
     /**
      * Return an ID based on date and time. i.e. "20010101_12:45:22".
      *
