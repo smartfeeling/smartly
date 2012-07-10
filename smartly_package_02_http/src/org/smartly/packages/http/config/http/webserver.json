@@ -38,10 +38,10 @@
             ],
             "servlets":{
                 "enabled":true,
-                "endpoint":"/servlet",
+                "endpoint":"/",
                 "data":[
                     {
-                        "endpoint":"/*",
+                        "endpoint":"/servlet/*",
                         "class":"org.smartly.packages.http.impl.handlers.servlets.HelloSmartlyServlet",
                         "params":"'here you can pass a simple string, JSONObject or JSONArray'"
                     } ,

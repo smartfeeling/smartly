@@ -208,6 +208,9 @@ public class WebServer extends AbstractHttpServer {
                 final Object params = JsonWrapper.get(file, "params");
                 if (StringUtils.hasText(className)) {
                     final Class handlerClass = ClassLoaderUtils.forName(className);
+                    if (null == handlerClass) {
+                        throw new Exception(FormatUtils.format("Class not found '{0}'", className));
+                    }
                     final Object instance = null != params
                             ? ClassLoaderUtils.newInstance(handlerClass, new Class[]{Object.class}, new Object[]{params})
                             : ClassLoaderUtils.newInstance(handlerClass);
