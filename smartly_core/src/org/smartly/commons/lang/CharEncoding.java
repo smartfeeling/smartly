@@ -106,7 +106,7 @@ public class CharEncoding {
      *      encoding names</a>
      */
     public static boolean isSupported(final String name) {
-        if (name == null) {
+        if (name == null || name.length()==0) {
             return false;
         }
         try {

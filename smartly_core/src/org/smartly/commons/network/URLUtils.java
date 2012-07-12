@@ -39,9 +39,18 @@ public class URLUtils {
     public static InputStream getInputStream(final String uri) {
         try {
             final URL url = new URL(uri);
+            return getInputStream(url, 3000);
+        } catch (Throwable ignored) {
+        }
+        // file not found or connection timeout
+        return ClassLoaderUtils.getResourceAsStream(null, URLUtils.class, "timeout.html");
+    }
+
+    public static InputStream getInputStream(final URL url, final int timeout) {
+        try {
             final Proxy proxy = NetworkUtils.getProxy();
             final URLConnection conn = url.openConnection(proxy);
-            conn.setConnectTimeout(3000);
+            conn.setConnectTimeout(timeout);
             conn.connect();
             return conn.getInputStream();
         } catch (Throwable ignored) {

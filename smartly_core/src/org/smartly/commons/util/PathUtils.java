@@ -714,7 +714,7 @@ public abstract class PathUtils
                         paramsStr.append("&");
                     }
                     paramsStr.append(key).append("=");
-                    if (encodeValues) {
+                    if (encodeValues && !StringUtils.isURLEncoded(value.toString())) {
                         paramsStr.append(encode(value.toString()));
                     } else {
                         paramsStr.append(value.toString());

@@ -40,6 +40,33 @@ public final class Formatter
         return this.formatDate(d);
     }
 
+    /**
+     * Return a localized date.
+     *
+     * @param inputDate       date as string: e.g. 20120206
+     * @param inputDateFormat pattern: eg. yyyyMMdd
+     * @param locale            language e.g. en-US, en_US, en
+     * @return
+     */
+    public String formatDate(final String inputDate,
+                             final String inputDateFormat,
+                             final Locale locale) {
+        String result = null;
+        try {
+            if (null != inputDate && null != inputDateFormat) {
+                final DateWrapper dd = new DateWrapper();
+                dd.setDateTime(inputDate, inputDateFormat);
+                result = dd.toString(locale);
+            } else {
+                throw new Exception("Date and Format cannot be null.");
+            }
+        } catch (Exception ex) {
+            result = "Error: [" + ex.getMessage() + "]";
+        }
+        return result;
+    }
+
+
     public String formatDate(final Date date) {
         String result = null;
         try {
@@ -104,7 +131,8 @@ public final class Formatter
     }
 
     public String formatDate(final String inputDate,
-                             final String inputDateFormat, final String outputDateFormat) {
+                             final String inputDateFormat,
+                             final String outputDateFormat) {
         String result = null;
         try {
             final DateWrapper dd = new DateWrapper();

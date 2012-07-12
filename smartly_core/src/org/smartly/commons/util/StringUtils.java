@@ -1,9 +1,11 @@
 package org.smartly.commons.util;
 
 import org.smartly.IConstants;
+import org.smartly.Smartly;
 import org.smartly.commons.lang.CharEncoding;
 
 import java.io.*;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.*;
 
@@ -731,12 +733,12 @@ public final class StringUtils {
     }
 
     public static boolean isJSONObject(final Object value) {
-        final String string = null!=value ? RegExUtils.replaceLineTerminators(value.toString()):"";
+        final String string = null != value ? RegExUtils.replaceLineTerminators(value.toString()) : "";
         return string.startsWith("{") && string.endsWith("}");
     }
 
     public static boolean isJSONArray(final Object value) {
-        final String string = null!=value ? RegExUtils.replaceLineTerminators(value.toString()):"";
+        final String string = null != value ? RegExUtils.replaceLineTerminators(value.toString()) : "";
         return string.startsWith("[") && string.endsWith("]");
     }
 
@@ -1331,6 +1333,14 @@ public final class StringUtils {
         return text.toUpperCase();
     }
 
+    public static boolean isURLEncoded(final String value) {
+        try {
+            return !URLDecoder.decode(value, Smartly.getCharset()).equalsIgnoreCase(value);
+        } catch (Exception ignored) {
+        }
+        return false;
+    }
+
     // ------------------------------------------------------------------------
     //                      p r i v a t e
     // ------------------------------------------------------------------------
@@ -1399,5 +1409,6 @@ public final class StringUtils {
         final String afterDelimiter = toSplit.substring(offset + delimiter.length());
         return new String[]{beforeDelimiter, afterDelimiter};
     }
+
 
 }
