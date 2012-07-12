@@ -7,6 +7,7 @@ import org.smartly.Smartly;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.util.StringUtils;
+import org.smartly.packages.remoting.SmartlyRemoting;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -110,7 +111,7 @@ public abstract class RemoteService {
 
     private static String getAppToken() {
         if (null == __APP_TOKEN) {
-            __APP_TOKEN = Smartly.getConfiguration().getString("remoting.app_securetoken");
+            __APP_TOKEN = SmartlyRemoting.getAppToken();
         }
         return null != __APP_TOKEN ? __APP_TOKEN : "";
     }

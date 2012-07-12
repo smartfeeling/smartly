@@ -304,8 +304,13 @@ public class SmartlyResourceHandler extends HandlerWrapper {
 
         if (resource.isDirectory()) {
             if (!request.getPathInfo().endsWith(URIUtil.SLASH)) {
-                response.sendRedirect(response.encodeRedirectURL(URIUtil.addPaths(request.getRequestURI(), URIUtil.SLASH)));
-                baseRequest.setHandled(true);
+                if (!this.isServletPath(resourcePath.concat(URIUtil.SLASH))) {
+                    response.sendRedirect(response.encodeRedirectURL(URIUtil.addPaths(request.getRequestURI(), URIUtil.SLASH)));
+                    baseRequest.setHandled(true);
+                } else {
+                    // is a servlet
+                    baseRequest.setHandled(false);
+                }
                 return;
             }
 
@@ -317,8 +322,13 @@ public class SmartlyResourceHandler extends HandlerWrapper {
                 baseRequest.setHandled(true);
                 return;
             } else {
-                this.doDirectory(request, response, resource);
-                baseRequest.setHandled(true);
+                if (!this.isServletPath(resourcePath)) {
+                    this.doDirectory(request, response, resource);
+                    baseRequest.setHandled(true);
+                } else {
+                    // is a servlet
+                    baseRequest.setHandled(false);
+                }
                 return;
             }
         }
@@ -415,6 +425,14 @@ public class SmartlyResourceHandler extends HandlerWrapper {
         if (null != _server) {
             final String ext = PathUtils.getFilenameExtension(target, true);
             return _server.getServletExtensions().contains(ext);
+        }
+        return false;
+    }
+
+    private boolean isServletPath(final String target) {
+        if (null != _server) {
+            final String path = URIUtil.stripPath(target);
+            return _server.getServletPaths().contains(path);
         }
         return false;
     }

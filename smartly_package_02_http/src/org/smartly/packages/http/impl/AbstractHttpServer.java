@@ -27,6 +27,7 @@ public abstract class AbstractHttpServer {
     private final JSONObject _configuration;
     private final Server _jetty;
     private final Set<String> _servletExtensions; // resource's extensions managed from servlet (i.e. vhtml)
+    private final Set<String> _servletPaths;
 
     public AbstractHttpServer(final String absolutePath, final JSONObject configuration) {
         _absoluteBaseResource = absolutePath;
@@ -38,6 +39,7 @@ public abstract class AbstractHttpServer {
         _jetty = new Server();
 
         _servletExtensions = new HashSet<String>();
+        _servletPaths = new HashSet<String>();
     }
 
     //-- RESOURCE EXTENSIONS MANAGED BY SERVLETS --//
@@ -46,11 +48,18 @@ public abstract class AbstractHttpServer {
        if(endPoint.startsWith("*.")){
            final String ext = endPoint.substring(1);
            _servletExtensions.add(ext);
+       } else {
+           final String path = endPoint.replace("*", "");
+           _servletPaths.add(path);
        }
     }
 
     public Set<String> getServletExtensions(){
         return _servletExtensions;
+    }
+
+    public Set<String> getServletPaths(){
+        return _servletPaths;
     }
 
     //-- CONFIGURATION --//

@@ -3,6 +3,7 @@ package org.smartly.packages.http;
 
 import org.json.JSONObject;
 import org.smartly.Smartly;
+import org.smartly.commons.jsonrepository.JsonRepository;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.util.FileUtils;
 import org.smartly.commons.util.JsonWrapper;
@@ -105,4 +106,24 @@ public class SmartlyHttp
         return url;
     }
 
+    /**
+     * Returns file path of doc root.
+     * @return
+     */
+    public static String getDocRoot() {
+        JsonRepository config;
+        try{
+            config =Smartly.getConfiguration(true);
+        }catch(Throwable ignored){
+            config = Smartly.getConfiguration();
+        }
+        if (null != config) {
+            final String path = config.getString("http.webserver.root");
+            if (!StringUtils.hasText(path)) {
+                return null;
+            }
+            return Smartly.getAbsolutePath(path);
+        }
+        return "";
+    }
 }

@@ -281,6 +281,8 @@ public class WebServer extends AbstractHttpServer {
                             BeanUtils.setValueIfAny(instance, "resourceBase", server.getRoot());
                             return new ServletHolder((Servlet) instance);
                         }
+                    } else {
+                        staticLogger().log(Level.WARNING, FormatUtils.format("Servlet not found: '{0}'", className));
                     }
                 }
             } catch (Throwable t) {
