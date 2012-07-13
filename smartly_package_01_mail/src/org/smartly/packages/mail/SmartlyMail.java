@@ -2,6 +2,7 @@ package org.smartly.packages.mail;
 
 
 import org.smartly.Smartly;
+import org.smartly.commons.jsonrepository.JsonRepository;
 import org.smartly.packages.AbstractPackage;
 import org.smartly.packages.ISmartlySystemPackage;
 import org.smartly.packages.mail.config.Deployer;
@@ -43,5 +44,47 @@ public class SmartlyMail extends AbstractPackage
     private void init() {
         Smartly.register(new Deployer(Smartly.getConfigurationPath()));
     }
+
+    // --------------------------------------------------------------------
+    //               S T A T I C
+    // --------------------------------------------------------------------
+
+    private static JsonRepository __config;
+
+    private static JsonRepository getConfiguration() throws Exception {
+        if (null == __config) {
+            __config = Smartly.getConfiguration(true);
+        }
+        return __config;
+    }
+
+    public static String getFrom() throws Exception {
+        return (String) getConfiguration().get("mail.smtp.reply_to");
+    }
+
+    public static String getHost() throws Exception {
+        return (String) getConfiguration().get("mail.smtp.host");
+    }
+
+    public static int getPort() throws Exception {
+        return (Integer) getConfiguration().get("mail.smtp.port");
+    }
+
+    public static String getUsername() throws Exception {
+        return (String) getConfiguration().get("mail.smtp.username");
+    }
+
+    public static String getPassword() throws Exception {
+        return (String) getConfiguration().get("mail.smtp.password");
+    }
+
+    public static boolean getTLS() throws Exception {
+        return (Boolean) getConfiguration().get("mail.smtp.TLS");
+    }
+
+    public static boolean isDebug() throws Exception {
+        return (Boolean) getConfiguration().get("mail.smtp.debug");
+    }
+
 
 }

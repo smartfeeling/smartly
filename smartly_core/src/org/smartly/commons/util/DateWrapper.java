@@ -424,23 +424,5 @@ public class DateWrapper {
         return null;
     }
 
-    /**
-     * Return String format of passed date. Uses ENGLISH as locale.
-     * @param date Date to format
-     * @return "EEE, d MMM yyyy HH:mm:ss"  Tue, 5 Jan 2013 21:47:38
-     */
-    public static String format(final Date date) {
-        return format(date, LocaleUtils.getLocale(Locale.ENGLISH));
-    }
 
-    /**
-     * Return String format of passed date.
-     * @param date Date to format
-     * @param locale Locale
-     * @return "EEE, d MMM yyyy HH:mm:ss"  Tue, 5 Jan 2013 21:47:38
-     */
-    public static String format(final Date date, final Locale locale) {
-        final DateWrapper dt = new DateWrapper(date);
-        return dt.toString(PATTERNS[2], locale);
-    }
 }

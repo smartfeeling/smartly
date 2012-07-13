@@ -5,10 +5,9 @@
  */
 package org.smartly.packages.mail.impl;
 
-import org.smartly.Smartly;
-import org.smartly.commons.jsonrepository.JsonRepository;
 import org.smartly.commons.util.MimeTypeUtils;
 import org.smartly.commons.util.StringUtils;
+import org.smartly.packages.mail.SmartlyMail;
 
 
 public final class MailUtils {
@@ -19,14 +18,14 @@ public final class MailUtils {
     public static Thread sendMailTo(final String[] to,
                                     final String subject,
                                     final String body) throws Exception {
-        final String from = getFrom();
+        final String from = SmartlyMail.getFrom();
         return sendMailTo(from, to, subject, body);
     }
 
     public static Thread sendMailHTMLTo(final String[] to,
                                         final String subject,
                                         final String body) throws Exception {
-        final String from = getFrom();
+        final String from = SmartlyMail.getFrom();
         return sendMailHTMLTo(from, to, subject, body);
     }
 
@@ -61,11 +60,11 @@ public final class MailUtils {
                                     final String body,
                                     final String mimeType) throws Exception {
         if (null != addresses && addresses.length > 0 && !StringUtils.isNULL(from)) {
-            final String smtpHost = getHost();
-            final int smtpPort = getPort();
-            final String user = getUsername();
-            final String password = getPassword();
-            final boolean TLS = getTLS();
+            final String smtpHost = SmartlyMail.getHost();
+            final int smtpPort = SmartlyMail.getPort();
+            final String user = SmartlyMail.getUsername();
+            final String password = SmartlyMail.getPassword();
+            final boolean TLS = SmartlyMail.getTLS();
             return sendMail(smtpHost,
                     smtpPort,
                     user,
@@ -110,7 +109,7 @@ public final class MailUtils {
             //-- creates message --//
             final RunnablePostman sender = new RunnablePostman();
             //-- fill message --//
-            sender.setDebug(isDebug());
+            sender.setDebug(SmartlyMail.isDebug());
             sender.setSmtpHost(smtpHost);
             sender.setSmtpPort(smtpPort);
             sender.setUser(user);
@@ -128,45 +127,5 @@ public final class MailUtils {
         throw new Exception("NULL ADDRESS EXCEPTION: Addresses cannot be null object.");
     }
 
-    // ------------------------------------------------------------------------
-    //                      config
-    // ------------------------------------------------------------------------
-
-    private static JsonRepository __config;
-
-    private static JsonRepository getConfiguration() throws Exception {
-        if (null == __config) {
-            __config = Smartly.getConfiguration(true);
-        }
-        return __config;
-    }
-
-    private static String getFrom() throws Exception {
-        return (String) getConfiguration().get("mail.smtp.reply_to");
-    }
-
-    private static String getHost() throws Exception {
-        return (String) getConfiguration().get("mail.smtp.host");
-    }
-
-    private static int getPort() throws Exception {
-        return (Integer) getConfiguration().get("mail.smtp.port");
-    }
-
-    private static String getUsername() throws Exception {
-        return (String) getConfiguration().get("mail.smtp.username");
-    }
-
-    private static String getPassword() throws Exception {
-        return (String) getConfiguration().get("mail.smtp.password");
-    }
-
-    private static boolean getTLS() throws Exception {
-        return (Boolean) getConfiguration().get("mail.smtp.TLS");
-    }
-
-    private static boolean isDebug() throws Exception {
-        return (Boolean) getConfiguration().get("mail.smtp.debug");
-    }
 
 }
