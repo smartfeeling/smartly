@@ -5,7 +5,6 @@ package org.smartly.packages.velocity.impl.vtools.util;
 
 import org.smartly.commons.util.ClassLoaderUtils;
 import org.smartly.commons.util.CollectionUtils;
-import org.smartly.packages.velocity.impl.vtools.IVLCTool;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -21,7 +20,7 @@ public final class VLCToolboxItem {
     private final String _id;
     private final Class _toolClass;
     private final List<Object> _args;
-    private IVLCTool _toolInstance;
+    private Object _toolInstance;
     private boolean _singleton;
 
     // ------------------------------------------------------------------------
@@ -79,7 +78,7 @@ public final class VLCToolboxItem {
         return _id;
     }
 
-    public Class<IVLCTool> getToolClass() {
+    public Class getToolClass() {
         return _toolClass;
     }
 
@@ -98,7 +97,8 @@ public final class VLCToolboxItem {
     // ------------------------------------------------------------------------
     //                      p u b l i c
     // ------------------------------------------------------------------------
-    public IVLCTool getInstance() throws Exception {
+
+    public Object getInstance() throws Exception {
         if (null != _toolClass) {
             if (_singleton) {
                 if (null == _toolInstance) {
@@ -114,11 +114,11 @@ public final class VLCToolboxItem {
     // ------------------------------------------------------------------------
     //                      p r i v a t e
     // ------------------------------------------------------------------------
-    private IVLCTool createInstance() throws Exception {
+    private Object createInstance() throws Exception {
         if (CollectionUtils.isEmpty(_args)) {
-            return (IVLCTool) _toolClass.newInstance();
+            return _toolClass.newInstance();
         } else {
-            return (IVLCTool) ClassLoaderUtils.newInstance(_toolClass, _args.toArray(new Object[_args.size()]));
+            return ClassLoaderUtils.newInstance(_toolClass, _args.toArray(new Object[_args.size()]));
         }
     }
 }

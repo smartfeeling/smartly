@@ -4,7 +4,11 @@
 package org.smartly.packages.velocity.impl.vtools.util;
 
 import org.apache.velocity.VelocityContext;
+import org.smartly.commons.logging.Level;
+import org.smartly.commons.logging.util.LoggingUtils;
+import org.smartly.commons.util.BeanUtils;
 import org.smartly.commons.util.ExceptionUtils;
+import org.smartly.commons.util.FormatUtils;
 import org.smartly.commons.util.StringUtils;
 import org.smartly.packages.velocity.impl.vtools.*;
 import org.smartly.packages.velocity.impl.vtools.Formatter;
@@ -69,8 +73,8 @@ public class VLCToolbox {
         if (null != __vcontext) {
             try {
                 if (!__vcontext.containsKey(item.getId())) {
-                    final IVLCTool tool = item.getInstance();
-                    __vcontext.put(tool.getName(), tool);
+                    final Object tool = item.getInstance();
+                    __vcontext.put(getName(tool), tool);
                 }
             } catch (Throwable ignored) {
             }
@@ -79,8 +83,8 @@ public class VLCToolbox {
         if (null != __mcontext) {
             try {
                 if (!__mcontext.containsKey(item.getId())) {
-                    final IVLCTool tool = item.getInstance();
-                    __mcontext.put(tool.getName(), tool);
+                    final Object tool = item.getInstance();
+                    __mcontext.put(getName(tool), tool);
                 }
             } catch (Throwable ignored) {
             }
@@ -195,7 +199,7 @@ public class VLCToolbox {
         //-- add static (no-context) vtools --//
         for (final VLCToolboxItem item : _tools) {
             try {
-                final IVLCTool tool = item.getInstance();
+                final Object tool = item.getInstance();
                 vcontext.put(item.getId(), tool);
             } catch (Throwable ignored) {
             }
@@ -208,7 +212,7 @@ public class VLCToolbox {
         //-- add static (no-context) vtools --//
         for (final VLCToolboxItem item : _tools) {
             try {
-                final IVLCTool tool = item.getInstance();
+                final Object tool = item.getInstance();
                 mcontext.put(item.getId(), tool);
             } catch (Throwable ignored) {
             }
@@ -226,5 +230,14 @@ public class VLCToolbox {
             __instance = new VLCToolbox();
         }
         return __instance;
+    }
+
+    private static String getName(final Object instance){
+        final String result = (String)BeanUtils.getValueIfAny(instance, "name");
+        if(StringUtils.hasText(result)){
+             return result;
+        }
+        LoggingUtils.getLogger(VLCToolbox.class).log(Level.SEVERE, FormatUtils.format("INVALID TOOL IN TOOLBOX. Missing 'name' property, so a default name 'undefined' will be assigned: {0}", instance));
+        return "undefined";
     }
 }
