@@ -1,7 +1,6 @@
 package org.smartly.packages.http.impl.util.vtool;
 
 
-import org.eclipse.jetty.util.resource.Resource;
 import org.json.JSONObject;
 import org.smartly.commons.util.JsonWrapper;
 import org.smartly.packages.velocity.impl.vtools.IVLCTool;
@@ -19,7 +18,6 @@ public class Cookies implements IVLCTool {
     public static final String HEADER_SET_COOKIE = "Set-Cookie";
     public static final String HEADER_COOKIE = "Cookie";
 
-    private final Resource _resource;
     private final HttpServletRequest _request;
     private final HttpServletResponse _response;
     private final Map<String, String> __cookies;
@@ -28,8 +26,7 @@ public class Cookies implements IVLCTool {
     private String _langCode;
     private String _userAgent;
 
-    public Cookies(final Resource resource, final HttpServletRequest httprequest, final HttpServletResponse httpresponse) {
-        _resource = resource;
+    public Cookies(final HttpServletRequest httprequest, final HttpServletResponse httpresponse) {
         _request = httprequest;
         _response = httpresponse;
         __cookies = new HashMap<String, String>();

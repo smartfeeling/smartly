@@ -49,6 +49,11 @@
                         "endpoint":"*.vhtml",
                         "class":"org.smartly.packages.http.impl.handlers.servlets.SmartlyVHTMLServlet",
                         "params":""
+                    },
+                    {
+                        "endpoint":"/*",
+                        "class":"org.smartly.packages.http.impl.handlers.servlets.SmartlyCMSServlet",
+                        "params":""
                     }
                 ]
             }

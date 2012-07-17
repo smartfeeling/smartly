@@ -1,7 +1,7 @@
 package org.smartly.packages.http.impl.util.vtool;
 
 
-import org.eclipse.jetty.util.resource.Resource;
+import org.smartly.commons.util.BeanUtils;
 import org.smartly.commons.util.ConversionUtils;
 import org.smartly.commons.util.LocaleUtils;
 import org.smartly.commons.util.StringUtils;
@@ -18,15 +18,15 @@ public class Req implements IVLCTool {
     public static final String HEADER_ACCEPT_LANGUAGE = "Accept-Language";
     public static final String HEADER_USER_AGENT = "User-Agent";
 
-    private final Resource _resource;
+    private final String _resourcePath;
     private final HttpServletRequest _request;
     private final HttpServletResponse _response;
 
     private String _langCode;
     private String _userAgent;
 
-    public Req(final Resource resource, final HttpServletRequest httprequest, final HttpServletResponse httpresponse) {
-        _resource = resource;
+    public Req(final String resourcePath, final HttpServletRequest httprequest, final HttpServletResponse httpresponse) {
+        _resourcePath = resourcePath;
         _request = httprequest;
         _response = httpresponse;
     }
@@ -42,7 +42,7 @@ public class Req implements IVLCTool {
      * @return i.e. "/pages/index.html"
      */
     public String getFilePath() {
-        return null != _resource ? _resource.getName() : "";
+        return _resourcePath;
     }
 
     /**

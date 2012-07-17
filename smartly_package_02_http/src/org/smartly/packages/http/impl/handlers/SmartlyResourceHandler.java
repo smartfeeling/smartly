@@ -18,6 +18,7 @@ import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.util.DateUtils;
 import org.smartly.commons.util.PathUtils;
+import org.smartly.packages.http.SmartlyHttp;
 import org.smartly.packages.http.impl.WebServer;
 import org.smartly.packages.http.impl.util.ServletUtils;
 
@@ -301,8 +302,13 @@ public class SmartlyResourceHandler extends HandlerWrapper {
             return;
         }
 
-
         if (resource.isDirectory()) {
+
+            if(this.isCMSPath(resourcePath)){
+                baseRequest.setHandled(false);
+                return;
+            }
+
             if (!request.getPathInfo().endsWith(URIUtil.SLASH)) {
                 if (!this.isServletPath(resourcePath.concat(URIUtil.SLASH))) {
                     response.sendRedirect(response.encodeRedirectURL(URIUtil.addPaths(request.getRequestURI(), URIUtil.SLASH)));
@@ -333,9 +339,9 @@ public class SmartlyResourceHandler extends HandlerWrapper {
             }
         }
 
-        final boolean is_servlet = this.isServletExtension(resourcePath);
+        final boolean is_servlet_file = this.isServletExtension(resourcePath);
 
-        if (is_servlet) {
+        if (is_servlet_file) {
             baseRequest.setHandled(false);
             return;
         }
@@ -344,8 +350,8 @@ public class SmartlyResourceHandler extends HandlerWrapper {
         baseRequest.setHandled(true);
 
         // set some headers
-        final long last_modified = is_servlet ? DateUtils.now().getTime() : resource.lastModified();
-        if (!is_servlet && last_modified > 0) {
+        final long last_modified = is_servlet_file ? DateUtils.now().getTime() : resource.lastModified();
+        if (!is_servlet_file && last_modified > 0) {
             long if_modified = request.getDateHeader(HttpHeaders.IF_MODIFIED_SINCE);
             if (if_modified > 0 && last_modified / 1000 <= if_modified / 1000) {
                 response.setStatus(HttpStatus.NOT_MODIFIED_304);
@@ -437,5 +443,7 @@ public class SmartlyResourceHandler extends HandlerWrapper {
         return false;
     }
 
-
+    private boolean isCMSPath(final String target) {
+        return SmartlyHttp.getCMS().contains(target);
+    }
 }

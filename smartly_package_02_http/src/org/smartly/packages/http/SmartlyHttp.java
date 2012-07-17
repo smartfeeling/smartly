@@ -14,6 +14,7 @@ import org.smartly.packages.ISmartlyModalPackage;
 import org.smartly.packages.ISmartlySystemPackage;
 import org.smartly.packages.http.config.Deployer;
 import org.smartly.packages.http.impl.WebServer;
+import org.smartly.packages.http.impl.htsite.SmartlyCMS;
 import org.smartly.packages.velocity.SmartlyVelocity;
 
 /**
@@ -84,6 +85,19 @@ public class SmartlyHttp
     //               S T A T I C
     // --------------------------------------------------------------------
 
+    private static SmartlyCMS __cms;
+
+    public static void registerCMS(final SmartlyCMS cms) {
+        __cms = cms;
+    }
+
+    public static SmartlyCMS getCMS() {
+        if (null == __cms) {
+            __cms = new SmartlyCMS();
+        }
+        return __cms;
+    }
+
     public static String getHTTPUrl(final String path) {
         final StringBuilder result = new StringBuilder();
         final String protocol = "http://";
@@ -108,13 +122,14 @@ public class SmartlyHttp
 
     /**
      * Returns file path of doc root.
+     *
      * @return
      */
     public static String getDocRoot() {
         JsonRepository config;
-        try{
-            config =Smartly.getConfiguration(true);
-        }catch(Throwable ignored){
+        try {
+            config = Smartly.getConfiguration(true);
+        } catch (Throwable ignored) {
             config = Smartly.getConfiguration();
         }
         if (null != config) {

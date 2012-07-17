@@ -15,7 +15,7 @@ public class FileItem {
     private String _absolutePath;
     private String _relativePath;
 
-    public FileItem(final FileDeployer deployer,
+    public FileItem(final Object parent,
                     final String dir,
                     final String absolutePath) {
         final String root = this.getRoot(dir, absolutePath);
@@ -24,7 +24,7 @@ public class FileItem {
             if (!this.isJar(_absolutePath)) {
                 _fileName = PathUtils.subtract(root, _absolutePath);
                 _relativePath = PathUtils.merge(
-                        PathUtils.getPackagePath(deployer.getClass()),
+                        PathUtils.getPackagePath(parent.getClass()),
                         _fileName);
             } else {
                 // root: file:/C:/lib/BEEingX.jar!/org/sf/quickpin/htdocs/
