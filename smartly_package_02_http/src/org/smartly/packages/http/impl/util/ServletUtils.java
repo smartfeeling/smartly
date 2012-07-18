@@ -2,6 +2,7 @@ package org.smartly.packages.http.impl.util;
 
 import org.eclipse.jetty.http.HttpFields;
 import org.eclipse.jetty.http.HttpHeaders;
+import org.eclipse.jetty.http.HttpStatus;
 import org.eclipse.jetty.io.Buffer;
 import org.eclipse.jetty.io.ByteArrayBuffer;
 import org.eclipse.jetty.io.WriterOutputStream;
@@ -16,6 +17,7 @@ import org.smartly.commons.util.ByteUtils;
 import org.smartly.commons.util.FileUtils;
 import org.smartly.commons.util.StringUtils;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
@@ -32,6 +34,10 @@ public class ServletUtils {
 
     private ServletUtils() {
 
+    }
+
+    public static void notFound404(final HttpServletResponse response) throws IOException {
+        response.sendError(HttpStatus.NOT_FOUND_404);
     }
 
     public static void writeResponse(final HttpServletResponse response,
@@ -127,6 +133,26 @@ public class ServletUtils {
         } else {
             servletPath = request.getServletPath();
             pathInfo = request.getPathInfo();
+        }
+
+        return URIUtil.addPaths(servletPath, pathInfo);
+    }
+
+    public static String getResourcePath(final ServletRequest request) throws MalformedURLException {
+        String servletPath = "";
+        String pathInfo = "";
+        Boolean included = request.getAttribute(Dispatcher.INCLUDE_REQUEST_URI) != null;
+        if (included != null && included.booleanValue()) {
+            servletPath = (String) request.getAttribute(Dispatcher.INCLUDE_SERVLET_PATH);
+            pathInfo = (String) request.getAttribute(Dispatcher.INCLUDE_PATH_INFO);
+
+            if (servletPath == null && pathInfo == null) {
+                //servletPath = request.getServletPath();
+                //pathInfo = request.getPathInfo();
+            }
+        } else {
+            //servletPath = request.getServletPath();
+            //pathInfo = request.getPathInfo();
         }
 
         return URIUtil.addPaths(servletPath, pathInfo);

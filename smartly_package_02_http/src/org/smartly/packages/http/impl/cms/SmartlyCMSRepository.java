@@ -1,9 +1,8 @@
-package org.smartly.packages.http.impl.htsite;
+package org.smartly.packages.http.impl.cms;
 
 import org.json.JSONObject;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
-import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.repository.FileRepository;
 import org.smartly.commons.repository.Resource;
 import org.smartly.commons.repository.deploy.FileItem;

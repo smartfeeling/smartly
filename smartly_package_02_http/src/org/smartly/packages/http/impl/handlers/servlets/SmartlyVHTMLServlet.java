@@ -80,8 +80,7 @@ public class SmartlyVHTMLServlet
         final Resource resource = ServletUtils.getResource(_baseResource, null, resourcePath);
 
         if (!resource.exists()) {
-            response.sendError(HttpStatus.NOT_FOUND_404);
-            return;
+            ServletUtils.notFound404(response);
         }
 
         // parse resource

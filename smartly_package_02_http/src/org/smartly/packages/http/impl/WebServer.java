@@ -7,6 +7,7 @@ import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.nio.SelectChannelConnector;
 import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
+import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
@@ -21,7 +22,10 @@ import org.smartly.packages.http.impl.handlers.SmartlyShutdownHandler;
 import org.smartly.packages.http.impl.util.vtool.App;
 import org.smartly.packages.velocity.impl.VLCManager;
 
+import javax.servlet.DispatcherType;
+import javax.servlet.Filter;
 import javax.servlet.Servlet;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -245,24 +249,35 @@ public class WebServer extends AbstractHttpServer {
             context.setContextPath(contextPath);
 
             // creates servlets
-            final JSONArray data = JsonWrapper.getArray(servlets, "data");
-            if (null != data && data.length() > 0) {
-                for (int i = 0; i < data.length(); i++) {
-                    final JSONObject servletJSON = data.optJSONObject(i);
-                    final ServletHolder servlet = createServlet(server, servletJSON);
-                    if (null != servlet) {
+            final JSONArray servletData = JsonWrapper.getArray(servlets, "data");
+            if (null != servletData && servletData.length() > 0) {
+                for (int i = 0; i < servletData.length(); i++) {
+                    final JSONObject servletJSON = servletData.optJSONObject(i);
+                    final Object handler = createServlet(server, servletJSON);
+                    if (null != handler) {
                         final String pathSpec = JsonWrapper.getString(servletJSON, "endpoint");
-                        context.addServlet(servlet, pathSpec);
-                        server.registerEndPoint(pathSpec);
+                        if (handler instanceof Servlet) {
+                            context.addServlet(new ServletHolder((Servlet) handler), pathSpec);
+                            server.registerEndPoint(pathSpec);
+                        } else if (handler instanceof Filter) {
+                            context.addFilter(new FilterHolder((Filter) handler), pathSpec, EnumSet.allOf(DispatcherType.class));
+                            server.registerEndPoint(pathSpec);
+                        } else {
+                            staticLogger().log(Level.WARNING, FormatUtils.format("UNSUPPORTED HANDLER. " +
+                                    "Only Servlets and Filter are admitted. Handler '{0}' is not supported " +
+                                    "and will not be installed on path '{1}'.",
+                                    handler.getClass().getName(), pathSpec));
+                        }
                     }
                 }
             }
+
             return context;
         }
         return null;
     }
 
-    private static ServletHolder createServlet(final WebServer server, final JSONObject servlet) {
+    private static Object createServlet(final WebServer server, final JSONObject servlet) {
         if (null != servlet) {
             try {
                 final String className = JsonWrapper.getString(servlet, "class");
@@ -276,10 +291,40 @@ public class WebServer extends AbstractHttpServer {
                         } else {
                             instance = ClassLoaderUtils.newInstance(servletClass);
                         }
+                        // server
+                        BeanUtils.setValueIfAny(instance, "server", server);
+                        // doc_root
+                        BeanUtils.setValueIfAny(instance, "resourceBase", server.getRoot());
+                        return instance;
+                    } else {
+                        staticLogger().log(Level.WARNING, FormatUtils.format("Servlet not found: '{0}'", className));
+                    }
+                }
+            } catch (Throwable t) {
+                staticLogger().log(Level.SEVERE, null, t);
+            }
+        }
+        return null;
+    }
+
+    private static FilterHolder createFilter(final WebServer server, final JSONObject filter) {
+        if (null != filter) {
+            try {
+                final String className = JsonWrapper.getString(filter, "class");
+                if (StringUtils.hasText(className)) {
+                    final Class servletClass = ClassLoaderUtils.forName(className);
+                    if (null != servletClass) {
+                        final Object params = JsonWrapper.get(filter, "params");
+                        final Object instance;
+                        if (null != params) {
+                            instance = ClassLoaderUtils.newInstance(servletClass, new Class[]{Object.class}, new Object[]{params});
+                        } else {
+                            instance = ClassLoaderUtils.newInstance(servletClass);
+                        }
                         if (instance instanceof Servlet) {
                             // doc_root
                             BeanUtils.setValueIfAny(instance, "resourceBase", server.getRoot());
-                            return new ServletHolder((Servlet) instance);
+                            return new FilterHolder((Filter) instance);
                         }
                     } else {
                         staticLogger().log(Level.WARNING, FormatUtils.format("Servlet not found: '{0}'", className));

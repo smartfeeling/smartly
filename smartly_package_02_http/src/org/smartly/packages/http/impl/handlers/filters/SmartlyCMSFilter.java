@@ -1,14 +1,16 @@
-package org.smartly.packages.http.impl.handlers.servlets;
+package org.smartly.packages.http.impl.handlers.filters;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.eclipse.jetty.http.HttpStatus;
 import org.eclipse.jetty.util.resource.Resource;
-import org.smartly.Smartly;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
-import org.smartly.commons.util.*;
+import org.smartly.commons.util.DateUtils;
+import org.smartly.commons.util.ExceptionUtils;
+import org.smartly.commons.util.FormatUtils;
+import org.smartly.commons.util.StringUtils;
 import org.smartly.packages.http.SmartlyHttp;
-import org.smartly.packages.http.impl.WebServer;
 import org.smartly.packages.http.impl.cms.SmartlyCMS;
 import org.smartly.packages.http.impl.cms.SmartlyCMSPage;
 import org.smartly.packages.http.impl.util.ServletUtils;
@@ -17,43 +19,31 @@ import org.smartly.packages.http.impl.util.vtool.Req;
 import org.smartly.packages.velocity.impl.VLCManager;
 import org.smartly.packages.velocity.impl.vtools.util.VLCToolbox;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Servlet for site file parsing.
  */
-public class SmartlyCMSServlet
-        extends HttpServlet {
+public class SmartlyCMSFilter
+        implements Filter {
 
     public static String PATH = "/*";
     private static final String MIME_HTML = "text/html";
 
-    private static final Set<String> _extensions = new HashSet<String>(Arrays.asList(new String[]{".vhtml"}));
-
     private Resource _baseResource;
-    private WebServer _server;
 
-    public SmartlyCMSServlet() {
-
-    }
-
-    public SmartlyCMSServlet(final Object params) {
+    public SmartlyCMSFilter() {
 
     }
 
-    // --------------------------------------------------------------------
-    //               p u b l i c
-    // --------------------------------------------------------------------
+    public SmartlyCMSFilter(final Object params) {
 
-    public void setServer(final WebServer server) {
-        _server = server;
-        _server.getServletExtensions().addAll(_extensions);
     }
 
     public void setBaseResource(final Resource base) {
@@ -69,20 +59,29 @@ public class SmartlyCMSServlet
         }
     }
 
-    protected void doGet(final HttpServletRequest request,
-                         final HttpServletResponse response) throws ServletException, IOException {
-        this.handle(request, response);
+    @Override
+    public void init(final FilterConfig filterConfig) throws ServletException {
+
     }
 
-    protected void doPost(final HttpServletRequest request,
-                          final HttpServletResponse response) throws ServletException, IOException {
-       this.handle(request, response);
+    @Override
+    public void doFilter(final ServletRequest request,
+                         final ServletResponse response,
+                         final FilterChain chain) throws IOException, ServletException {
+        boolean handled = false;
+        if(request instanceof HttpServletRequest && response instanceof HttpServletResponse){
+            handled = this.handle((HttpServletRequest)request, (HttpServletResponse)response);
+        }
+        if(!handled){
+            chain.doFilter(request, response);
+        }
     }
 
-    protected void handle(final HttpServletRequest request,
-                          final HttpServletResponse response) throws ServletException, IOException {
-        this.handleInternal(request, response);
+    @Override
+    public void destroy() {
+
     }
+
 
     // ------------------------------------------------------------------------
     //                      p r i v a t e
@@ -92,19 +91,17 @@ public class SmartlyCMSServlet
         return SmartlyCMS.getLogger();
     }
 
-    private void handleInternal(final HttpServletRequest request,
-                                final HttpServletResponse response) throws ServletException, IOException {
+    private boolean handle(final HttpServletRequest request,
+                        final HttpServletResponse response) throws ServletException, IOException {
         final String resourcePath = ServletUtils.getResourcePath(request);
         final SmartlyCMS cms = SmartlyHttp.getCMS();
-
         if (cms.contains(resourcePath)) {
-            //-- CMS --//
+
             final SmartlyCMSPage page = cms.getPage(resourcePath);
             final String template = cms.getPageTemplate(resourcePath);
-
             if (null == page || !StringUtils.hasText(template)) {
-                ServletUtils.notFound404(response);
-                return;
+                response.sendError(HttpStatus.NOT_FOUND_404);
+                return true;
             }
 
             // eval template
@@ -112,28 +109,11 @@ public class SmartlyCMSServlet
 
             // write body
             ServletUtils.writeResponse(response, DateUtils.now().getTime(), MIME_HTML, output);
-            return;
-        } else if (isVelocity(resourcePath)) {
-            //-- .vhtml --//
-            final Resource resource = ServletUtils.getResource(_baseResource, null, resourcePath);
-
-            if (!resource.exists()) {
-                ServletUtils.notFound404(response);
-                return;
-            }
-
-            // parse resource
-            final byte[] output = this.merge(resource, request, response);
-
-            // write body
-            ServletUtils.writeResponse(response, DateUtils.now().getTime(), MIME_HTML, output);
-            return;
+            return true;
+        } else {
+            return false;
         }
-
-        ServletUtils.notFound404(response);
     }
-
-
 
     private byte[] merge(final String templateText,
                          final SmartlyCMSPage page,
@@ -150,8 +130,7 @@ public class SmartlyCMSServlet
             final VelocityEngine engine = getEngine();
 
             // execution context
-            final VelocityContext context = new VelocityContext(sessionContext, this.createInnerContext(
-                    page.getUrl(), request, response));
+            final VelocityContext context = new VelocityContext(sessionContext, this.createInnerContext(page.getUrl(), request, response));
 
             // creates new context page
             final SmartlyCMSPage ctxPage = new SmartlyCMSPage(page, engine, context);
@@ -165,6 +144,8 @@ public class SmartlyCMSServlet
             } else {
                 result = VLCManager.getInstance().evaluateText(ctxPage.getUrl(), templateText, context);
             }
+
+
             if (StringUtils.hasText(result)) {
                 return result.getBytes();
             }
@@ -176,41 +157,6 @@ public class SmartlyCMSServlet
         return new byte[0];
     }
 
-    private byte[] merge(final Resource resource,
-                         final HttpServletRequest request,
-                         final HttpServletResponse response) {
-        try {
-            // session context
-            final HttpSession session = request.getSession(true);
-            if (session.isNew()) {
-                session.setAttribute("velocity-context", new HashMap<String, Object>());
-            }
-
-            final Map<String, Object> sessionContext = (Map<String, Object>) session.getAttribute("velocity-context");
-            final VelocityEngine engine = getEngine();
-
-            // execution context
-            final VelocityContext context = new VelocityContext(sessionContext, this.createInnerContext(
-                    resource.getName(), request, response));
-
-            //-- eval velocity template --//
-            final String text = new String(ByteUtils.getBytes(resource.getInputStream()), Smartly.getCharset());
-            final String result;
-            if (null != engine) {
-                result = VLCManager.getInstance().evaluateText(engine, resource.getName(), text, context);
-            } else {
-                result = VLCManager.getInstance().evaluateText(resource.getName(), text, context);
-            }
-            if (StringUtils.hasText(result)) {
-                return result.getBytes();
-            }
-        } catch (Throwable t) {
-            this.getLogger().log(Level.SEVERE, FormatUtils.format(
-                    "ERROR MERGING TEMPLATE FOR RESOURCE '{0}': {1}",
-                    resource.getName(), ExceptionUtils.getRealMessage(t)), t);
-        }
-        return new byte[0];
-    }
 
     private VelocityContext createInnerContext(final String url,
                                                final HttpServletRequest request,
@@ -240,8 +186,5 @@ public class SmartlyCMSServlet
         return __engine;
     }
 
-    private static boolean isVelocity(final String path) {
-        final String ext = PathUtils.getFilenameExtension(path, true);
-        return _extensions.contains(ext);
-    }
+
 }

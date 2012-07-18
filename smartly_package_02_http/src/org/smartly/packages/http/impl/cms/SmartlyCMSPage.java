@@ -1,4 +1,4 @@
-package org.smartly.packages.http.impl.htsite;
+package org.smartly.packages.http.impl.cms;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;

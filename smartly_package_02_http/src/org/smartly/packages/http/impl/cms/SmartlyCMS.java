@@ -1,4 +1,4 @@
-package org.smartly.packages.http.impl.htsite;
+package org.smartly.packages.http.impl.cms;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -81,16 +81,20 @@ public class SmartlyCMS {
                 if (null != page) {
                     try {
                         // url
-                        final String url = JsonWrapper.getString(page, "url");
+                        final String[] urls = StringUtils.split(JsonWrapper.getString(page, "url"), ",");
                         // page
                         final String path = JsonWrapper.getString(page, "path");
                         final SmartlyCMSPage sp = this.createPage(path);
                         // template
                         final String templatePath = JsonWrapper.getString(page, "template");
                         final String tpl = this.readTemplate(templatePath);
-                        // add all together if no errors
-                        _sitemap.put(url, page);
-                        _pages.put(url, sp);
+
+                        // add urls
+                        for(final String url:urls){
+                            _sitemap.put(url, page);
+                            _pages.put(url, sp);
+                        }
+                        // add template
                         _templates.put(templatePath, tpl);
                     } catch (Throwable t) {
                         this.getLogger().log(Level.SEVERE, null, t);

@@ -34,16 +34,16 @@ import java.net.MalformedURLException;
  */
 public class SmartlyResourceHandler extends HandlerWrapper {
 
-    ContextHandler _context;
-    Resource _baseResource;
-    Resource _defaultStylesheet;
-    Resource _stylesheet;
-    String[] _welcomeFiles = {"index.html"};
-    MimeTypes _mimeTypes = new MimeTypes();
-    ByteArrayBuffer _cacheControl;
-    WebServer _server;
-    boolean _aliases;
-    boolean _directory;
+    private ContextHandler _context;
+    private Resource _baseResource;
+    private Resource _defaultStylesheet;
+    private Resource _stylesheet;
+    private String[] _welcomeFiles = {"index.html"};
+    private MimeTypes _mimeTypes = new MimeTypes();
+    private ByteArrayBuffer _cacheControl;
+    private WebServer _server;
+    private boolean _aliases;
+    private boolean _directory;
 
 
     public SmartlyResourceHandler() {
@@ -284,6 +284,12 @@ public class SmartlyResourceHandler extends HandlerWrapper {
 
         //-- is css request?--//
         if (resource == null || !resource.exists()) {
+
+            if(this.isCMSPath(request.getPathInfo())){
+                baseRequest.setHandled(false);
+                return;
+            }
+
             if (target.endsWith("/jetty-dir.css")) {
                 resource = getStylesheet();
                 if (resource == null)
@@ -292,6 +298,7 @@ public class SmartlyResourceHandler extends HandlerWrapper {
             } else {
                 //no resource - try other handlers
                 super.handle(target, baseRequest, request, response);
+                // ServletUtils.notFound404(response);
                 return;
             }
         }

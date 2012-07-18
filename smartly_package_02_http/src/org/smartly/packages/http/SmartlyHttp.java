@@ -14,7 +14,7 @@ import org.smartly.packages.ISmartlyModalPackage;
 import org.smartly.packages.ISmartlySystemPackage;
 import org.smartly.packages.http.config.Deployer;
 import org.smartly.packages.http.impl.WebServer;
-import org.smartly.packages.http.impl.htsite.SmartlyCMS;
+import org.smartly.packages.http.impl.cms.SmartlyCMS;
 import org.smartly.packages.velocity.SmartlyVelocity;
 
 /**
