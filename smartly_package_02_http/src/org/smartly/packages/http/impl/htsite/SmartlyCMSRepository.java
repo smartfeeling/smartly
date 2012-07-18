@@ -31,13 +31,21 @@ public class SmartlyCMSRepository {
     private boolean _use_cache;
 
     public SmartlyCMSRepository(final String root) {
-        _root = PathUtils.toUnixPath((new File(root)).getAbsolutePath());
+        _root = root; // PathUtils.toUnixPath((new File(root)).getAbsolutePath());
         _resources = new LinkedList<FileItem>();
         _cache = Collections.synchronizedMap(new HashMap<String, String>());
         _is_jar = false;
         _use_cache = true;
 
         this.loadResources("");
+    }
+
+    public boolean isEmpty(){
+        return this.size()==0;
+    }
+
+    public int size(){
+        return _resources.size();
     }
 
     public String getString(final String path) {
@@ -64,7 +72,7 @@ public class SmartlyCMSRepository {
     // ------------------------------------------------------------------------
 
     private Logger getLogger() {
-        return LoggingUtils.getLogger(this);
+        return SmartlyCMS.getLogger();
     }
 
     private void loadResources(final String startFolder) {
@@ -142,23 +150,41 @@ public class SmartlyCMSRepository {
         return resNames.toArray(new String[resNames.size()]);
     }
 
+    private String getAbsolutePath(final String path){
+        if(_is_jar){
+            if(!path.startsWith("jar:")){
+                return "jar:" + PathUtils.concat(_root, path);
+            }
+        }
+        return PathUtils.concat(_root, path);
+    }
+
     private FileItem getFile(final String path) {
-        final String fullpath = _is_jar ? "jar:" + PathUtils.concat(_root, path) : PathUtils.concat(_root, path);
-        // this.getLogger().info("LOOKING FOR: " + fullpath);
-        for (final FileItem item : _resources) {
-            // this.getLogger().info("CHECKING: " + item.getAbsolutePath());
-            if (fullpath.equalsIgnoreCase(item.getAbsolutePath())) {
-                return item;
+        if(_resources.size()>0){
+            final String fullPath = this.getAbsolutePath(path); //_is_jar ? "jar:" + PathUtils.concat(_root, path) : PathUtils.concat(_root, path);
+
+            // this.getLogger().info("LOOKING FOR: " + fullPath);
+
+            for (final FileItem item : _resources) {
+
+                // this.getLogger().info("CHECKING: " + item.getAbsolutePath());
+
+                if (fullPath.equalsIgnoreCase(item.getAbsolutePath())) {
+                    return item;
+                }
             }
         }
         return null;
     }
 
     private String read(final String path) throws Exception {
-        if (_use_cache && _cache.containsKey(path)) {
-            return _cache.get(path);
+        if(_resources.size()>0 || _cache.size()>0){
+            if (_use_cache && _cache.containsKey(path)) {
+                return _cache.get(path);
+            }
+            return _use_cache ? this.readSync(path) : readNoSync(path);
         }
-        return _use_cache ? this.readSync(path) : readNoSync(path);
+        return null;
     }
 
     private String readNoSync(final String path) throws Exception {

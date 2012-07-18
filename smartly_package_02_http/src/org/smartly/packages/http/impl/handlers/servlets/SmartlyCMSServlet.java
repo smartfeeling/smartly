@@ -76,7 +76,7 @@ public class SmartlyCMSServlet
     // ------------------------------------------------------------------------
 
     private Logger getLogger() {
-        return LoggingUtils.getLogger(this);
+        return SmartlyCMS.getLogger();
     }
 
     private void handle(final HttpServletRequest request,

@@ -3,6 +3,7 @@ package org.smartly.packages.http.impl.htsite;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.json.JSONObject;
+import org.smartly.commons.logging.Logger;
 import org.smartly.commons.util.JsonWrapper;
 import org.smartly.commons.util.StringUtils;
 import org.smartly.packages.velocity.impl.VLCManager;
@@ -107,6 +108,9 @@ public class SmartlyCMSPage {
     //                      p r i v a t e
     // ------------------------------------------------------------------------
 
+    private Logger getLogger() {
+        return SmartlyCMS.getLogger();
+    }
 
     // --------------------------------------------------------------------
     //               S T A T I C
