@@ -246,7 +246,7 @@ public final class LoggingRepository {
     private String getCleanLogFileName(final String name) {
         if (_customPaths.containsKey(name)) {
             final String path = _customPaths.get(name);
-            return path.startsWith(".")?path.substring(1):path;
+            return path; //path.startsWith(".")?path.substring(1):path;
         }
         return _customPaths.get(DEFAULT);
     }
