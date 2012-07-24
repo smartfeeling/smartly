@@ -46,6 +46,54 @@ public class Req implements IVLCTool {
     }
 
     /**
+     *
+     * Returns the part of this request's URL from the protocol
+     * name up to the query string in the first line of the HTTP request.
+     * The web container does not decode this String.
+     * For example:
+     * <table summary="Examples of Returned Values">
+     * <tr align=left><th>First line of HTTP request      </th>
+     * <th>     Returned Value</th>
+     * <tr><td>POST /some/path.html HTTP/1.1<td><td>/some/path.html
+     * <tr><td>GET http://foo.bar/a.html HTTP/1.0
+     * <td><td>/a.html
+     * <tr><td>HEAD /xyz?a=b HTTP/1.1<td><td>/xyz
+     * </table>
+     * @return		a <code>String</code> containing
+     *			the part of the URL from the
+     *			protocol name up to the query string
+     *
+     */
+    public String getRequestURI() {
+        return _request.getRequestURI();
+    }
+
+    /**
+     *
+     * Returns any extra path information associated with
+     * the URL the client sent when it made this request.
+     * The extra path information follows the servlet path
+     * but precedes the query string and will start with
+     * a "/" character.
+     *
+     * <p>This method returns <code>null</code> if there
+     * was no extra path information.
+     *
+     * <p>Same as the value of the CGI variable PATH_INFO.
+     * @return		a <code>String</code>, decoded by the
+     *			web container, specifying
+     *			extra path information that comes
+     *			after the servlet path but before
+     *			the query string in the request URL;
+     *			or <code>null</code> if the URL does not have
+     *			any extra path information
+     *
+     */
+    public String getPathInfo() {
+        return _request.getPathInfo();
+    }
+
+    /**
      * Return request parameter or empty String
      *
      * @param name Name of parameter into POST or GET request
