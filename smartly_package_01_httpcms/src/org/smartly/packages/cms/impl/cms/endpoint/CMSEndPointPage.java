@@ -1,4 +1,4 @@
-package org.smartly.packages.http.impl.cms;
+package org.smartly.packages.cms.impl.cms.endpoint;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -6,12 +6,13 @@ import org.json.JSONObject;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.util.JsonWrapper;
 import org.smartly.commons.util.StringUtils;
+import org.smartly.packages.cms.SmartlyHttpCms;
 import org.smartly.packages.velocity.impl.VLCManager;
 
 /**
  *
  */
-public class SmartlyCMSPage {
+public class CMSEndPointPage {
 
 
     private static final String VHTML_DIRECTIVE = "<!-- [vhtml] -->";
@@ -25,9 +26,9 @@ public class SmartlyCMSPage {
     private String _content;
     private String _footer;
 
-    public SmartlyCMSPage(final SmartlyCMSPage page,
-                          final VelocityEngine engine,
-                          final VelocityContext context) {
+    public CMSEndPointPage(final CMSEndPointPage page,
+                           final VelocityEngine engine,
+                           final VelocityContext context) {
         _vcontext = context;
         _vengine = engine;
         _url = page._url;
@@ -38,7 +39,7 @@ public class SmartlyCMSPage {
         _footer = page._footer;
     }
 
-    public SmartlyCMSPage(final String url) {
+    public CMSEndPointPage(final String url) {
         _vcontext = null;
         _vengine = null;
         _url = url;
@@ -109,7 +110,7 @@ public class SmartlyCMSPage {
     // ------------------------------------------------------------------------
 
     private Logger getLogger() {
-        return SmartlyCMS.getLogger();
+        return SmartlyHttpCms.getCMSLogger();
     }
 
     // --------------------------------------------------------------------

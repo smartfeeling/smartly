@@ -4,6 +4,7 @@ package org.smartly.packages.http;
 import org.json.JSONObject;
 import org.smartly.Smartly;
 import org.smartly.commons.jsonrepository.JsonRepository;
+import org.smartly.commons.lang.CharEncoding;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.util.FileUtils;
 import org.smartly.commons.util.JsonWrapper;
@@ -14,8 +15,12 @@ import org.smartly.packages.ISmartlyModalPackage;
 import org.smartly.packages.ISmartlySystemPackage;
 import org.smartly.packages.http.config.Deployer;
 import org.smartly.packages.http.impl.WebServer;
-import org.smartly.packages.http.impl.cms.SmartlyCMS;
 import org.smartly.packages.velocity.SmartlyVelocity;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * This package must be started ( load() method ) before application packages and must be ready ( method ready() )
@@ -85,17 +90,15 @@ public class SmartlyHttp
     //               S T A T I C
     // --------------------------------------------------------------------
 
-    private static SmartlyCMS __cms;
+    private static String __htdocs;
+    private static Set<String> _cmsPaths = new HashSet<String>(); // connector for CMS module. (paths are required in SmartlyResourceHandler)
 
-    public static void registerCMS(final SmartlyCMS cms) {
-        __cms = cms;
+    public static void registerCMSPaths(final Set<String> paths) {
+        _cmsPaths.addAll(paths);
     }
 
-    public static SmartlyCMS getCMS() {
-        if (null == __cms) {
-            __cms = new SmartlyCMS();
-        }
-        return __cms;
+    public static Set<String> getCMSPaths() {
+        return _cmsPaths;
     }
 
     public static String getHTTPUrl(final String path) {
@@ -126,19 +129,25 @@ public class SmartlyHttp
      * @return
      */
     public static String getDocRoot() {
-        JsonRepository config;
-        try {
-            config = Smartly.getConfiguration(true);
-        } catch (Throwable ignored) {
-            config = Smartly.getConfiguration();
-        }
-        if (null != config) {
-            final String path = config.getString("http.webserver.root");
-            if (!StringUtils.hasText(path)) {
-                return null;
+        if (!StringUtils.hasText(__htdocs)) {
+            JsonRepository config;
+            try {
+                config = Smartly.getConfiguration(true);
+            } catch (Throwable ignored) {
+                config = Smartly.getConfiguration();
             }
-            return Smartly.getAbsolutePath(path);
+            if (null != config) {
+                final String path = config.getString("http.webserver.root");
+                if (StringUtils.hasText(path)) {
+                    __htdocs = Smartly.getAbsolutePath(path);
+                }
+            }
         }
-        return "";
+        return __htdocs;
+    }
+
+    public static String readFile(final String path) throws IOException {
+        final String fullPath = PathUtils.concat(getDocRoot(), path);
+        return new String(FileUtils.copyToByteArray(new File(fullPath)), CharEncoding.getDefault());
     }
 }

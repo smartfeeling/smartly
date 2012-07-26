@@ -1,7 +1,8 @@
 package org.smartly.packages.http.impl.util.vtool;
 
 
-import org.smartly.commons.util.BeanUtils;
+import org.smartly.Smartly;
+import org.smartly.commons.util.ByteUtils;
 import org.smartly.commons.util.ConversionUtils;
 import org.smartly.commons.util.LocaleUtils;
 import org.smartly.commons.util.StringUtils;
@@ -9,7 +10,12 @@ import org.smartly.packages.velocity.impl.vtools.IVLCTool;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.InputStream;
+import java.net.URLDecoder;
+import java.util.LinkedHashMap;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 public class Req implements IVLCTool {
 
@@ -46,7 +52,6 @@ public class Req implements IVLCTool {
     }
 
     /**
-     *
      * Returns the part of this request's URL from the protocol
      * name up to the query string in the first line of the HTTP request.
      * The web container does not decode this String.
@@ -59,35 +64,34 @@ public class Req implements IVLCTool {
      * <td><td>/a.html
      * <tr><td>HEAD /xyz?a=b HTTP/1.1<td><td>/xyz
      * </table>
-     * @return		a <code>String</code> containing
-     *			the part of the URL from the
-     *			protocol name up to the query string
      *
+     * @return a <code>String</code> containing
+     * the part of the URL from the
+     * protocol name up to the query string
      */
     public String getRequestURI() {
         return _request.getRequestURI();
     }
 
     /**
-     *
      * Returns any extra path information associated with
      * the URL the client sent when it made this request.
      * The extra path information follows the servlet path
      * but precedes the query string and will start with
      * a "/" character.
-     *
+     * <p/>
      * <p>This method returns <code>null</code> if there
      * was no extra path information.
-     *
+     * <p/>
      * <p>Same as the value of the CGI variable PATH_INFO.
-     * @return		a <code>String</code>, decoded by the
-     *			web container, specifying
-     *			extra path information that comes
-     *			after the servlet path but before
-     *			the query string in the request URL;
-     *			or <code>null</code> if the URL does not have
-     *			any extra path information
      *
+     * @return a <code>String</code>, decoded by the
+     * web container, specifying
+     * extra path information that comes
+     * after the servlet path but before
+     * the query string in the request URL;
+     * or <code>null</code> if the URL does not have
+     * any extra path information
      */
     public String getPathInfo() {
         return _request.getPathInfo();
@@ -256,13 +260,73 @@ public class Req implements IVLCTool {
     //               S T A T I C
     // --------------------------------------------------------------------
 
+    private static String decode(final String value) {
+        try {
+            return URLDecoder.decode(value, Smartly.getCharset());
+        } catch (Exception ex) {
+            return value;
+        }
+    }
+
     public static String getLang(final HttpServletRequest request) {
+        return getLang(request, Smartly.getConfiguration().getString("smartly.lang"));
+    }
+
+    public static String getLang(final HttpServletRequest request, final String defaultLang) {
         final String value = request.getHeader(HEADER_ACCEPT_LANGUAGE);
         final String[] tokens = StringUtils.split(value, ",");
         if (tokens.length > 0) {
             final Locale locale = LocaleUtils.getLocaleFromString(tokens[0]);
             return locale.getLanguage();
         }
-        return LocaleUtils.getCurrent().getLanguage();
+        return StringUtils.hasText(defaultLang)?defaultLang:LocaleUtils.getCurrent().getLanguage();
+    }
+
+    public static Map<String, String> getParameters(final HttpServletRequest request) {
+        final String method = request.getMethod();
+        return getParameters(method, request);
+    }
+
+    public static Map<String, String> getParameters(final String method, final HttpServletRequest request) {
+        final Map<String, String> result = new LinkedHashMap<String, String>();
+        if (method.equalsIgnoreCase("GET")) {
+            //-- GET METHOD --//
+            final Map<String, String[]> map = request.getParameterMap();
+            if (map.size() > 0) {
+                final Set<String> keys = map.keySet();
+                for (final String key : keys) {
+                    final String[] value = map.get(key);
+                    if (null != key && key.length() > 0) {
+                        result.put(key, value[0]);
+                    } else {
+                        result.put(key, "");
+                    }
+                }
+            }
+        } else {
+            //-- POST METHOD --//
+            try {
+                final InputStream is = request.getInputStream();
+                final byte[] bytes = ByteUtils.getBytes(is);
+                if (null != bytes) {
+                    final String data = new String(bytes, Smartly.getCharset());
+                    if (StringUtils.hasLength(data)) {
+                        final String[] queryTokens = StringUtils.split(data, "&");
+                        for (final String qt : queryTokens) {
+                            final String[] keyValue = StringUtils.split(qt, "=");
+                            if (keyValue.length == 2) {
+                                result.put(keyValue[0], decode(keyValue[1]));
+                            } else {
+                                result.put(keyValue[0], "");
+                            }
+                        }
+                    }
+                }
+                is.close();
+            } catch (Throwable ignored) {
+            }
+        }
+
+        return result;
     }
 }

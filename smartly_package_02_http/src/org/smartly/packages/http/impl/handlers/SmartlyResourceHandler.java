@@ -47,7 +47,7 @@ public class SmartlyResourceHandler extends HandlerWrapper {
 
 
     public SmartlyResourceHandler() {
-
+        _mimeTypes.addMimeMapping("vcf", "text/vcard");
     }
 
     // --------------------------------------------------------------------
@@ -62,7 +62,7 @@ public class SmartlyResourceHandler extends HandlerWrapper {
         return _mimeTypes;
     }
 
-    public void setMimeTypes(MimeTypes mimeTypes) {
+    public void setMimeTypes(final MimeTypes mimeTypes) {
         _mimeTypes = mimeTypes;
     }
 
@@ -197,7 +197,7 @@ public class SmartlyResourceHandler extends HandlerWrapper {
     /**
      * @param stylesheet The location of the stylesheet to be used as a String.
      */
-    public void setStylesheet(String stylesheet) {
+    public void setStylesheet(final String stylesheet) {
         try {
             _stylesheet = Resource.newResource(stylesheet);
             if (!_stylesheet.exists()) {
@@ -206,7 +206,7 @@ public class SmartlyResourceHandler extends HandlerWrapper {
             }
         } catch (Exception e) {
             this.getLogger().warning(e.toString());
-            throw new IllegalArgumentException(stylesheet.toString());
+            throw new IllegalArgumentException(stylesheet);
         }
     }
 
@@ -285,7 +285,7 @@ public class SmartlyResourceHandler extends HandlerWrapper {
         //-- is css request?--//
         if (resource == null || !resource.exists()) {
 
-            if(this.isCMSPath(request.getPathInfo())){
+            if (this.isCMSPath(request.getPathInfo())) {
                 baseRequest.setHandled(false);
                 return;
             }
@@ -311,7 +311,7 @@ public class SmartlyResourceHandler extends HandlerWrapper {
 
         if (resource.isDirectory()) {
 
-            if(this.isCMSPath(resourcePath)){
+            if (this.isCMSPath(resourcePath)) {
                 baseRequest.setHandled(false);
                 return;
             }
@@ -451,6 +451,6 @@ public class SmartlyResourceHandler extends HandlerWrapper {
     }
 
     private boolean isCMSPath(final String target) {
-        return SmartlyHttp.getCMS().contains(target);
+        return SmartlyHttp.getCMSPaths().contains(target);
     }
 }

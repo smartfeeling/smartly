@@ -1,4 +1,4 @@
-package org.smartly.packages.http.impl.cms;
+package org.smartly.packages.cms.impl.cms.endpoint;
 
 import org.json.JSONObject;
 import org.smartly.commons.logging.Level;
@@ -7,6 +7,7 @@ import org.smartly.commons.repository.FileRepository;
 import org.smartly.commons.repository.Resource;
 import org.smartly.commons.repository.deploy.FileItem;
 import org.smartly.commons.util.*;
+import org.smartly.packages.cms.SmartlyHttpCms;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,9 +20,9 @@ import java.util.jar.JarFile;
 /**
  *
  */
-public class SmartlyCMSRepository {
+public class CMSEndPointRepository {
 
-    public static final String CHARSET = SmartlyCMS.CHARSET;
+    public static final String CHARSET = CMSEndPoint.CHARSET;
 
     private final String _root;
     private final List<FileItem> _resources;
@@ -29,7 +30,7 @@ public class SmartlyCMSRepository {
     private boolean _is_jar;
     private boolean _use_cache;
 
-    public SmartlyCMSRepository(final String root) {
+    public CMSEndPointRepository(final String root) {
         _root = root; // PathUtils.toUnixPath((new File(root)).getAbsolutePath());
         _resources = new LinkedList<FileItem>();
         _cache = Collections.synchronizedMap(new HashMap<String, String>());
@@ -39,11 +40,11 @@ public class SmartlyCMSRepository {
         this.loadResources("");
     }
 
-    public boolean isEmpty(){
-        return this.size()==0;
+    public boolean isEmpty() {
+        return this.size() == 0;
     }
 
-    public int size(){
+    public int size() {
         return _resources.size();
     }
 
@@ -71,7 +72,7 @@ public class SmartlyCMSRepository {
     // ------------------------------------------------------------------------
 
     private Logger getLogger() {
-        return SmartlyCMS.getLogger();
+        return SmartlyHttpCms.getCMSLogger();
     }
 
     private void loadResources(final String startFolder) {
@@ -149,9 +150,9 @@ public class SmartlyCMSRepository {
         return resNames.toArray(new String[resNames.size()]);
     }
 
-    private String getAbsolutePath(final String path){
-        if(_is_jar){
-            if(!path.startsWith("jar:")){
+    private String getAbsolutePath(final String path) {
+        if (_is_jar) {
+            if (!path.startsWith("jar:")) {
                 return "jar:" + PathUtils.concat(_root, path);
             }
         }
@@ -159,7 +160,7 @@ public class SmartlyCMSRepository {
     }
 
     private FileItem getFile(final String path) {
-        if(_resources.size()>0){
+        if (_resources.size() > 0) {
             final String fullPath = this.getAbsolutePath(path); //_is_jar ? "jar:" + PathUtils.concat(_root, path) : PathUtils.concat(_root, path);
 
             // this.getLogger().info("LOOKING FOR: " + fullPath);
@@ -177,7 +178,7 @@ public class SmartlyCMSRepository {
     }
 
     private String read(final String path) throws Exception {
-        if(_resources.size()>0 || _cache.size()>0){
+        if (_resources.size() > 0 || _cache.size() > 0) {
             if (_use_cache && _cache.containsKey(path)) {
                 return _cache.get(path);
             }

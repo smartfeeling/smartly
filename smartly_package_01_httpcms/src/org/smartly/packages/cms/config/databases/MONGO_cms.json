@@ -1,0 +1,10 @@
+{
+    "enabled":true,
+    "_id":"MONGO_cms",
+    "host":"localhost",
+    "port":27017,
+    "username":"beeing",
+    "password":"beeing",
+    "type":"MONGO",
+    "dbname":"cms"
+}

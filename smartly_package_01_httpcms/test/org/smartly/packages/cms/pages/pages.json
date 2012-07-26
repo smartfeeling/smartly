@@ -1,0 +1,16 @@
+[
+    {
+        "_id":"professionisti-gian-angelo-geminiani",
+        "template":"/macro/templates/userpages/basic/template.vhtml",
+        "template_it":"/macro/templates/userpages/basic/template.vhtml",
+        "title":"Gian Angelo Geminiani, Professional Profile",
+        "title_it":"Gian Angelo Geminiani, Profilo Professionale",
+        "description":"Gian Angelo Geminiani",
+        "description_it":"Gian Angelo Geminiani",
+        "sections":[
+            {
+                "_id":"main"
+            }
+        ]
+    }
+]

@@ -2,7 +2,7 @@
     "enabled":true,
     "debug":false,
     "root":"./jetty",
-    "domain":"192.168.1.6",
+    "domain":"localhost",
     "shutdown_token":"smartly",
     "connectors":{
         "http":{
@@ -41,13 +41,13 @@
                 "endpoint":"/",
                 "data":[
                     {
-                        "endpoint":"/servlet/*",
-                        "class":"org.smartly.packages.http.impl.handlers.servlets.HelloSmartlyServlet",
-                        "params":"'here you can pass a simple string, JSONObject or JSONArray'"
-                    } ,
+                        "endpoint":"/*",
+                        "class":"org.smartly.packages.cms.impl.handlers.servlets.endpoint.EndPointServlet",
+                        "params":""
+                    },
                     {
-                        "endpoint":"*.vhtml",
-                        "class":"org.smartly.packages.http.impl.handlers.servlets.SmartlyVHTMLServlet",
+                        "endpoint":"/pages/*",
+                        "class":"org.smartly.packages.cms.impl.handlers.servlets.pages.PagesServlet",
                         "params":""
                     }
                 ]

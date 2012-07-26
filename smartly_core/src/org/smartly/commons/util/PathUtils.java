@@ -853,10 +853,10 @@ public abstract class PathUtils
      * </p>
      *
      * @param subtractPath Path to remove from inPath
-     * @param inPath       Original path
+     * @param fullPath       Original path
      * @return Resultant path
      */
-    public static String subtract(String subtractPath, String inPath) {
+    public static String subtract(String subtractPath, String fullPath) {
 
         //-- Clean the subtract path --//
         subtractPath = PathUtils.validateFolderSeparator(subtractPath);
@@ -866,7 +866,7 @@ public abstract class PathUtils
             subtractPath = subtractPath.substring(1);
         }
         //-- Clean inputpath (the result) --//
-        String result = inPath;
+        String result = fullPath;
         if (!PathUtils.isAbsolute(subtractPath)) {
             if (!subtractPath.endsWith(FOLDER_SEPARATOR)) {
                 subtractPath = subtractPath.concat(FOLDER_SEPARATOR);

@@ -1,4 +1,4 @@
-package org.smartly.packages.http.impl.cms;
+package org.smartly.packages.cms.impl.cms.endpoint;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -8,6 +8,7 @@ import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.LoggingRepository;
 import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.util.*;
+import org.smartly.packages.cms.SmartlyHttpCms;
 import org.smartly.packages.http.SmartlyHttp;
 
 import java.io.File;
@@ -25,26 +26,25 @@ import java.util.Set;
  * </p>
  * <p/>
  * <p/>
- * Register a CMS manager calling  SmartlyHttp.registerCMS(<code>cms-instance</code>)
+ * Register a CMS manager calling  SmartlyHttp.registerCMSEndPoint(<code>cms-instance</code>)
  * in "ready" method of your AbstractPackage implementation.
  */
-public class SmartlyCMS {
+public class CMSEndPoint {
 
     public static final String CHARSET = CharEncoding.getDefault();
-    private static final String DOC_ROOT = SmartlyHttp.getDocRoot();
 
     private final String _root;
     private final Map<String, JSONObject> _sitemap;
-    private final Map<String, SmartlyCMSPage> _pages;
+    private final Map<String, CMSEndPointPage> _pages;
     private final Map<String, String> _templates;
-    private SmartlyCMSRepository _repo;
+    private CMSEndPointRepository _repo;
 
-    public SmartlyCMS() {
+    public CMSEndPoint() {
         _root = getRootFullPath(this.getClass());
         _sitemap = new HashMap<String, JSONObject>();
-        _pages = new HashMap<String, SmartlyCMSPage>();
+        _pages = new HashMap<String, CMSEndPointPage>();
         _templates = new HashMap<String, String>();
-        _repo = new SmartlyCMSRepository(_root);
+        _repo = new CMSEndPointRepository(_root);
 
         final JSONObject sitemap = _repo.getJSONObject("sitemap.json");
         if (null != sitemap && sitemap.length() > 0) {
@@ -58,7 +58,7 @@ public class SmartlyCMS {
         return _sitemap.containsKey(path);
     }
 
-    public SmartlyCMSPage getPage(final String path) {
+    public CMSEndPointPage getPage(final String path) {
         return _pages.get(path);
     }
 
@@ -73,6 +73,10 @@ public class SmartlyCMS {
     //                      p r i v a t e
     // ------------------------------------------------------------------------
 
+    private Logger getLogger() {
+        return SmartlyHttpCms.getCMSLogger();
+    }
+
     private void init(final JSONObject sitemap) {
         final JSONArray pages = JsonWrapper.getArray(sitemap, "pages");
         if (null != pages && pages.length() > 0) {
@@ -84,13 +88,13 @@ public class SmartlyCMS {
                         final String[] urls = StringUtils.split(JsonWrapper.getString(page, "url"), ",");
                         // page
                         final String path = JsonWrapper.getString(page, "path");
-                        final SmartlyCMSPage sp = this.createPage(path);
+                        final CMSEndPointPage sp = this.createPage(path);
                         // template
                         final String templatePath = JsonWrapper.getString(page, "template");
                         final String tpl = this.readTemplate(templatePath);
 
                         // add urls
-                        for(final String url:urls){
+                        for (final String url : urls) {
                             _sitemap.put(url, page);
                             _pages.put(url, sp);
                         }
@@ -102,21 +106,23 @@ public class SmartlyCMS {
                 }
             }
         }
+        
+        //-- add CMS endpoints to Http Module --//
+        SmartlyHttp.registerCMSPaths(_sitemap.keySet());
     }
 
     private String readTemplate(final String path) throws IOException {
-        final String fullPath = PathUtils.concat(DOC_ROOT, path);
-        return new String(FileUtils.copyToByteArray(new File(fullPath)), CHARSET);
+        return SmartlyHttp.readFile(path);
     }
 
-    private SmartlyCMSPage createPage(final String path) throws Exception {
+    private CMSEndPointPage createPage(final String path) throws Exception {
         final String hhead = _repo.getString(PathUtils.concat(path, "hhead.smrt"));
         final String hheader = _repo.getString(PathUtils.concat(path, "hheader.smrt"));
         final String hcontent = _repo.getString(PathUtils.concat(path, "hcontent.smrt"));
         final String hfooter = _repo.getString(PathUtils.concat(path, "hfooter.smrt"));
         final JSONObject labels = _repo.getJSONObject(PathUtils.concat(path, "labels.json"));
 
-        final SmartlyCMSPage result = new SmartlyCMSPage(path);
+        final CMSEndPointPage result = new CMSEndPointPage(path);
         result.setContent(hcontent);
         result.setFooter(hfooter);
         result.setHead(hhead);
@@ -154,13 +160,7 @@ public class SmartlyCMS {
     //               S T A T I C
     // --------------------------------------------------------------------
 
-    static {
-        LoggingRepository.getInstance().setLogFileName(SmartlyCMS.class, "./smartly_cms.log");
-    }
 
-    public static Logger getLogger() {
-        return LoggingUtils.getLogger(SmartlyCMS.class);
-    }
 
     private static String getRootFullPath(final Class aclass) {
         final URL url = ClassLoaderUtils.getResource(null, aclass, "");

@@ -1,4 +1,4 @@
-package org.smartly.packages.http.impl.handlers.filters;
+package org.smartly.packages.cms.impl.handlers.filters;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -10,9 +10,9 @@ import org.smartly.commons.util.DateUtils;
 import org.smartly.commons.util.ExceptionUtils;
 import org.smartly.commons.util.FormatUtils;
 import org.smartly.commons.util.StringUtils;
-import org.smartly.packages.http.SmartlyHttp;
-import org.smartly.packages.http.impl.cms.SmartlyCMS;
-import org.smartly.packages.http.impl.cms.SmartlyCMSPage;
+import org.smartly.packages.cms.SmartlyHttpCms;
+import org.smartly.packages.cms.impl.cms.endpoint.CMSEndPoint;
+import org.smartly.packages.cms.impl.cms.endpoint.CMSEndPointPage;
 import org.smartly.packages.http.impl.util.ServletUtils;
 import org.smartly.packages.http.impl.util.vtool.Cookies;
 import org.smartly.packages.http.impl.util.vtool.Req;
@@ -69,10 +69,10 @@ public class SmartlyCMSFilter
                          final ServletResponse response,
                          final FilterChain chain) throws IOException, ServletException {
         boolean handled = false;
-        if(request instanceof HttpServletRequest && response instanceof HttpServletResponse){
-            handled = this.handle((HttpServletRequest)request, (HttpServletResponse)response);
+        if (request instanceof HttpServletRequest && response instanceof HttpServletResponse) {
+            handled = this.handle((HttpServletRequest) request, (HttpServletResponse) response);
         }
-        if(!handled){
+        if (!handled) {
             chain.doFilter(request, response);
         }
     }
@@ -88,16 +88,16 @@ public class SmartlyCMSFilter
     // ------------------------------------------------------------------------
 
     private Logger getLogger() {
-        return SmartlyCMS.getLogger();
+        return SmartlyHttpCms.getCMSLogger();
     }
 
     private boolean handle(final HttpServletRequest request,
-                        final HttpServletResponse response) throws ServletException, IOException {
+                           final HttpServletResponse response) throws ServletException, IOException {
         final String resourcePath = ServletUtils.getResourcePath(request);
-        final SmartlyCMS cms = SmartlyHttp.getCMS();
+        final CMSEndPoint cms = SmartlyHttpCms.getCMS();
         if (cms.contains(resourcePath)) {
 
-            final SmartlyCMSPage page = cms.getPage(resourcePath);
+            final CMSEndPointPage page = cms.getPage(resourcePath);
             final String template = cms.getPageTemplate(resourcePath);
             if (null == page || !StringUtils.hasText(template)) {
                 response.sendError(HttpStatus.NOT_FOUND_404);
@@ -116,7 +116,7 @@ public class SmartlyCMSFilter
     }
 
     private byte[] merge(final String templateText,
-                         final SmartlyCMSPage page,
+                         final CMSEndPointPage page,
                          final HttpServletRequest request,
                          final HttpServletResponse response) {
         try {
@@ -133,7 +133,7 @@ public class SmartlyCMSFilter
             final VelocityContext context = new VelocityContext(sessionContext, this.createInnerContext(page.getUrl(), request, response));
 
             // creates new context page
-            final SmartlyCMSPage ctxPage = new SmartlyCMSPage(page, engine, context);
+            final CMSEndPointPage ctxPage = new CMSEndPointPage(page, engine, context);
 
             context.put("page", ctxPage);
 

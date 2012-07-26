@@ -3,7 +3,6 @@ package org.smartly.packages.http.impl.util;
 import org.eclipse.jetty.http.HttpFields;
 import org.eclipse.jetty.http.HttpHeaders;
 import org.eclipse.jetty.http.HttpStatus;
-import org.eclipse.jetty.io.Buffer;
 import org.eclipse.jetty.io.ByteArrayBuffer;
 import org.eclipse.jetty.io.WriterOutputStream;
 import org.eclipse.jetty.server.AbstractHttpConnection;
@@ -13,19 +12,17 @@ import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.util.URIUtil;
 import org.eclipse.jetty.util.resource.Resource;
 import org.smartly.Smartly;
-import org.smartly.commons.util.ByteUtils;
 import org.smartly.commons.util.FileUtils;
-import org.smartly.commons.util.StringUtils;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URLDecoder;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Set;
 
 /**
  *
@@ -67,9 +64,9 @@ public class ServletUtils {
         // See if a short direct method can be used?
         if (out instanceof AbstractHttpConnection.Output) {
             ((AbstractHttpConnection.Output) out).sendContent(content);
-        } else if(out instanceof WriterOutputStream){
+        } else if (out instanceof WriterOutputStream) {
             // Write content normally
-            FileUtils.copy((InputStream)content, out);
+            FileUtils.copy((InputStream) content, out);
         }
     }
 
@@ -179,49 +176,6 @@ public class ServletUtils {
         }
 
         return null;
-    }
-
-    public static Map<String, String> getParameters(final String method, final HttpServletRequest request) {
-        final Map<String, String> result = new LinkedHashMap<String, String>();
-        if (method.equalsIgnoreCase("GET")) {
-            //-- GET METHOD --//
-            final Map<String, String[]> map = request.getParameterMap();
-            if (map.size() > 0) {
-                final Set<String> keys = map.keySet();
-                for (final String key : keys) {
-                    final String[] value = map.get(key);
-                    if (null != key && key.length() > 0) {
-                        result.put(key, value[0]);
-                    } else {
-                        result.put(key, "");
-                    }
-                }
-            }
-        } else {
-            //-- POST METHOD --//
-            try {
-                final InputStream is = request.getInputStream();
-                final byte[] bytes = ByteUtils.getBytes(is);
-                if (null != bytes) {
-                    final String data = new String(bytes, Smartly.getCharset());
-                    if (StringUtils.hasLength(data)) {
-                        final String[] queryTokens = StringUtils.split(data, "&");
-                        for (final String qt : queryTokens) {
-                            final String[] keyValue = StringUtils.split(qt, "=");
-                            if (keyValue.length == 2) {
-                                result.put(keyValue[0], decode(keyValue[1]));
-                            } else {
-                                result.put(keyValue[0], "");
-                            }
-                        }
-                    }
-                }
-                is.close();
-            } catch (Throwable ignored) {
-            }
-        }
-
-        return result;
     }
 
     // --------------------------------------------------------------------

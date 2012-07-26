@@ -1,4 +1,4 @@
-package org.smartly.packages.http.impl.handlers.servlets;
+package org.smartly.packages.cms.impl.handlers.servlets.endpoint;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -7,10 +7,10 @@ import org.smartly.Smartly;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.util.*;
-import org.smartly.packages.http.SmartlyHttp;
+import org.smartly.packages.cms.SmartlyHttpCms;
+import org.smartly.packages.cms.impl.cms.endpoint.CMSEndPoint;
+import org.smartly.packages.cms.impl.cms.endpoint.CMSEndPointPage;
 import org.smartly.packages.http.impl.WebServer;
-import org.smartly.packages.http.impl.cms.SmartlyCMS;
-import org.smartly.packages.http.impl.cms.SmartlyCMSPage;
 import org.smartly.packages.http.impl.util.ServletUtils;
 import org.smartly.packages.http.impl.util.vtool.Cookies;
 import org.smartly.packages.http.impl.util.vtool.Req;
@@ -28,7 +28,7 @@ import java.util.*;
 /**
  * Servlet for site file parsing.
  */
-public class SmartlyCMSServlet
+public class EndPointServlet
         extends HttpServlet {
 
     public static String PATH = "/*";
@@ -39,11 +39,11 @@ public class SmartlyCMSServlet
     private Resource _baseResource;
     private WebServer _server;
 
-    public SmartlyCMSServlet() {
+    public EndPointServlet() {
 
     }
 
-    public SmartlyCMSServlet(final Object params) {
+    public EndPointServlet(final Object params) {
 
     }
 
@@ -76,7 +76,7 @@ public class SmartlyCMSServlet
 
     protected void doPost(final HttpServletRequest request,
                           final HttpServletResponse response) throws ServletException, IOException {
-       this.handle(request, response);
+        this.handle(request, response);
     }
 
     protected void handle(final HttpServletRequest request,
@@ -89,17 +89,17 @@ public class SmartlyCMSServlet
     // ------------------------------------------------------------------------
 
     private Logger getLogger() {
-        return SmartlyCMS.getLogger();
+        return SmartlyHttpCms.getCMSLogger();
     }
 
     private void handleInternal(final HttpServletRequest request,
                                 final HttpServletResponse response) throws ServletException, IOException {
         final String resourcePath = ServletUtils.getResourcePath(request);
-        final SmartlyCMS cms = SmartlyHttp.getCMS();
+        final CMSEndPoint cms = SmartlyHttpCms.getCMS();
 
         if (cms.contains(resourcePath)) {
             //-- CMS --//
-            final SmartlyCMSPage page = cms.getPage(resourcePath);
+            final CMSEndPointPage page = cms.getPage(resourcePath);
             final String template = cms.getPageTemplate(resourcePath);
 
             if (null == page || !StringUtils.hasText(template)) {
@@ -134,9 +134,8 @@ public class SmartlyCMSServlet
     }
 
 
-
     private byte[] merge(final String templateText,
-                         final SmartlyCMSPage page,
+                         final CMSEndPointPage page,
                          final HttpServletRequest request,
                          final HttpServletResponse response) {
         try {
@@ -154,7 +153,7 @@ public class SmartlyCMSServlet
                     page.getUrl(), request, response));
 
             // creates new context page
-            final SmartlyCMSPage ctxPage = new SmartlyCMSPage(page, engine, context);
+            final CMSEndPointPage ctxPage = new CMSEndPointPage(page, engine, context);
 
             context.put("page", ctxPage);
 
