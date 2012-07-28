@@ -1,0 +1,67 @@
+body {
+    margin: 0px;
+}
+
+.title {
+    color: #E9E8E3;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
+    font-family: "museo-slab-1", "museo-slab-2", serif;
+    font-size: 30px;
+    letter-spacing: -1px;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-family: "museo-slab-1", "museo-slab-2", serif;
+    color: #84B34B;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    font-size: 25px;
+    font-weight: 300;
+}
+
+.header {
+    background: #3E565A;
+    text-align: center;
+}
+
+.logo{
+    max-width: 150px;
+}
+
+/*----------------------------------------------
+              responsive
+------------------------------------------------*/
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+@media \0screen {
+    img {
+        width: auto; /* for ie 8 */
+    }
+}
+
+/*
+  VIDEO
+*/
+.video {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+}
+
+.video iframe,
+.video object,
+.video embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.break-word {
+    word-wrap: break-word;
+}

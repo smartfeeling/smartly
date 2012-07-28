@@ -1,0 +1,11 @@
+#set ($debug = [RT-DEBUGJS])
+#***  APP CONSTANTS  ***#
+#set ($appname = "qrboost")
+#set ($appdescription = "Boost your QR-Codes")
+#set ($apptoken = "$app.appToken")
+#set ($userid = $sys.notNull($cookies.auth.userid, "0"))
+#set ($userenabled = $sys.isTrue($cookies.auth.userenabled))
+#set ($lang = $cookies.auth.lang)
+#set ($country = $cookies.auth.country)
+#set ($currency = $cookies.auth.currency)
+#set ($locale = $sys.getLocale($lang, $country))

@@ -1,8 +1,6 @@
 package org.smartly.packages.cms.impl.cms.page.mongodb.entities;
 
 import com.mongodb.DBObject;
-import org.json.JSONArray;
-import org.smartly.commons.util.CollectionUtils;
 import org.smartly.commons.util.StringUtils;
 import org.smartly.packages.mongo.impl.MongoObject;
 import org.smartly.packages.mongo.impl.util.MongoUtils;
@@ -22,7 +20,13 @@ public class CMSUserpage extends MongoObject {
 
     public static final String TEMPLATE = "template";
     public static final String TITLE = "title";
+    public static final String SUBTITLE = "subtitle";
     public static final String DESCRIPTION = "description";
+    public static final String KEYWORDS = "keywords";
+    public static final String LOGO = "logo";
+    public static final String DATA = "data";
+    public static final String EXCERPT = "excerpt";
+    public static final String CONTENT = "content";
     public static final String SECTIONS = "sections";
 
     // --------------------------------------------------------------------
@@ -61,7 +65,7 @@ public class CMSUserpage extends MongoObject {
 
     public static void setTemplate(final DBObject item, final String lang, final String value) {
         final String field = TEMPLATE;
-        final String key = StringUtils.hasText(lang)?field.concat("_").concat(lang):field;
+        final String key = StringUtils.hasText(lang) ? field.concat("_").concat(lang) : field;
         MongoUtils.put(item, key, value);
     }
 
@@ -73,8 +77,20 @@ public class CMSUserpage extends MongoObject {
 
     public static void setTitle(final DBObject item, final String lang, final String value) {
         final String field = TITLE;
-        final String key = StringUtils.hasText(lang)?field.concat("_").concat(lang):field;
+        final String key = StringUtils.hasText(lang) ? field.concat("_").concat(lang) : field;
         MongoUtils.put(item, key, value);
+    }
+
+    public static void setLogo(final DBObject item, final String lang, final String value) {
+        final String field = SUBTITLE;
+        final String key = StringUtils.hasText(lang) ? field.concat("_").concat(lang) : field;
+        MongoUtils.put(item, key, value);
+    }
+
+    public static String getSubtitle(final DBObject item, final String lang) {
+        final String field = SUBTITLE;
+        final String result = MongoUtils.getString(item, field.concat("_").concat(lang));
+        return StringUtils.hasText(result) ? result : MongoUtils.getString(item, field);
     }
 
     public static String getDescription(final DBObject item, final String lang) {
@@ -85,7 +101,20 @@ public class CMSUserpage extends MongoObject {
 
     public static void setDescription(final DBObject item, final String lang, final String value) {
         final String field = DESCRIPTION;
-        final String key = StringUtils.hasText(lang)?field.concat("_").concat(lang):field;
+        final String key = StringUtils.hasText(lang) ? field.concat("_").concat(lang) : field;
+        MongoUtils.put(item, key, value);
+    }
+
+    public static String getLogo(final DBObject item, final String lang) {
+        final String field = LOGO;
+        final String result = MongoUtils.getString(item, field.concat("_").concat(lang));
+        return StringUtils.hasText(result) ? result : MongoUtils.getString(item, field);
+    }
+
+
+    public static void setSubtitle(final DBObject item, final String lang, final String value) {
+        final String field = LOGO;
+        final String key = StringUtils.hasText(lang) ? field.concat("_").concat(lang) : field;
         MongoUtils.put(item, key, value);
     }
 

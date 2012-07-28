@@ -6,6 +6,8 @@
 package org.smartly.packages.velocity.impl.vtools;
 
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
@@ -202,7 +204,14 @@ public class System
                 return CollectionUtils.isEmpty((Map) obj);
             } else if (obj.getClass().isArray()) {
                 return CollectionUtils.isEmpty((Object[]) obj);
+            } else if (obj instanceof JSONObject) {
+                return ((JSONObject) obj).length() == 0;
+            } else if (obj instanceof JSONArray) {
+                return ((JSONArray) obj).length() == 0;
+            } else if (obj instanceof String) {
+                return !StringUtils.hasText((String) obj);
             }
+            return false;
         }
         return true;
     }
@@ -227,6 +236,10 @@ public class System
                 return ((Object[]) obj).length;
             } else if (obj instanceof String) {
                 return ((String) obj).length();
+            } else if (obj instanceof JSONObject) {
+                return ((JSONObject) obj).length();
+            } else if (obj instanceof JSONArray) {
+                return ((JSONArray) obj).length();
             } else {
                 // try with number
                 return ConversionUtils.toInteger(obj);
@@ -293,6 +306,17 @@ public class System
         } catch (Throwable t) {
         }
         return "";
+    }
+
+    public Object get(final Object object, final String fieldName, final Object def) {
+        try {
+            final Object result = BeanUtils.getValue(object, fieldName);
+            if (null != result) {
+                return result;
+            }
+        } catch (Throwable t) {
+        }
+        return def;
     }
 
     /**
@@ -569,6 +593,20 @@ public class System
         public boolean equals(final Object obj) {
             if (null != obj) {
                 return _count == _sys.size(obj);
+            }
+            return false;
+        }
+
+        public boolean gt(final Object obj) {
+            if (null != obj) {
+                return _count > _sys.size(obj);
+            }
+            return false;
+        }
+
+        public boolean lt(final Object obj) {
+            if (null != obj) {
+                return _count < _sys.size(obj);
             }
             return false;
         }

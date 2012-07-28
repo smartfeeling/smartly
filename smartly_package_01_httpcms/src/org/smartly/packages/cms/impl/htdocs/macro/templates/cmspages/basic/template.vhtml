@@ -1,0 +1,54 @@
+#** MACROS **#
+#parse("VM_const.vm")
+
+#** VARIABLES **#
+
+<!doctype html>
+<html class="no-js" dir="ltr" lang="$lang">
+<head>
+    <title>$page.getTitle($lang)</title>
+    <meta charset="utf-8">
+
+    <link type="text/css" rel="stylesheet" href="/css/reset.css"/>
+    <link type="text/css" rel="stylesheet" href="/css/main-screen.css" media="only screen"/>
+    <link rel="stylesheet" href="/css/vendor/jquerymobile/jquery.mobile-1.1.0.css"/>
+
+    <link rel="stylesheet" href="/macro/templates/userpages/basic/font.css"/>
+    <link rel="stylesheet" href="/macro/templates/userpages/basic/style.css"/>
+
+    <script type="text/javascript" src="/js/lib/vendor/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="/js/lib/vendor/jquerymobile/jquery.mobile-1.1.0.js"></script>
+
+    <script type="text/javascript" src="/macro/templates/userpages/basic/script.js"></script>
+    <script type="text/javascript" src="/macro/templates/userpages/basic/init.js"></script>
+
+</head>
+<body>
+
+<!--[if IE]>
+<style type="text/css">
+    img,
+    p {
+        width: 100%;
+    }
+</style><![endif]-->
+
+<div data-role="page" data-theme="b">
+
+    <div class="break-word header">
+        <div class="title">$page.getTitle($lang)</div>
+        <div class="subtitle">$page.getSubtitle($lang)</div>
+        <img class="logo" src="$page.getLogo($lang)">
+    </div>
+
+    <div data-role="content">
+
+
+    </div>
+    <!-- /content -->
+
+
+</div>
+
+</body>
+</html>
