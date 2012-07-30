@@ -33,6 +33,24 @@
             "picasa":"",
             "flickr":"",
             "wordpress":"http://www.smartfeeling.org",
+            "map":"",
+            "sections":[
+                {
+                    "_id":"languages",
+                    "title":"Languages",
+                    "content":"<ol><li>Java</li><li>C#</li><li>Javascript</li><li>HTML5</li><li>CSS3</li><li>ActionScript</li><li>SQL</li><li>MongoDB</li></ol>"
+                },
+                {
+                    "_id":"databases",
+                    "title":"Databases",
+                    "content":"<ol><li>MS-SQL</li><li>MySQL</li><li>Oracle</li><li>MongoDB</li><li>CouchDB</li></ol>"
+                },
+                {
+                    "_id":"expertise",
+                    "title":"Expertise",
+                    "content":"<ol><li>Web Applications</li><li>Desktop Applications</li><li>Mobile Applications</li><li>Configurators</li><li>ERP</li><li>Social Networks</li><li>eCommerce</li><li>Frameworks Development</li><li>Data Collection</li></ol>"
+                }
+            ],
             "footer":""
         },
         "data_it":{
@@ -55,34 +73,187 @@
             "picasa":"",
             "flickr":"",
             "wordpress":"http://www.smartfeeling.org",
+            "map":"",
+            "sections":[
+                {
+                    "_id":"languages",
+                    "title":"Linguaggi",
+                    "content":"<ol><li>Java</li><li>C#</li><li>Javascript</li><li>HTML5</li><li>CSS3</li><li>ActionScript</li><li>SQL</li><li>MongoDB</li></ol>"
+                },
+                {
+                    "_id":"databases",
+                    "title":"Databases",
+                    "content":"<ol><li>MS-SQL</li><li>MySQL</li><li>Oracle</li><li>MongoDB</li><li>CouchDB</li></ol>"
+                },
+                {
+                    "_id":"expertise",
+                    "title":"Competenze",
+                    "content":"<ol><li>Applicazioni Web</li><li>Applicazioni Desktop</li><li>Applicazioni Mobile</li><li>Sistemi di Configurazione</li><li>Gestionali</li><li>Social Networks</li><li>eCommerce</li><li>Sviluppo Frameworks</li><li>Data Collection</li></ol>"
+                }
+            ],
             "footer":""
         },
         "excerpt":"",
         "excerpt_it":"",
         "content":"<p>Web Developer, Java Architect, UX Designer and eCommerce developer.</p>",
-        "content_it":"<p>Web Developer, Java Architect, UX Designer, esperto di sistemi di configurazione ed e-commerce avanzati.</p><br><p>Lavora in java, c++, HTML5, CSS3, javascript e actionscript, sia per il web che per il desktop ed il settore “mobile”.<br>Contribuisce a diversi progetti OpenSource ed è blogger su www.smartfeeling.org, per cui scrive di codice, ma anche di Social Media e dell’evoluzione di internet.</p>",
-        "sections":[
-            {
-                "_id":"languages",
-                "title":"Languages",
-                "title_it":"Linguaggi",
-                "content":"<ol><li>Java</li><li>C#</li><li>Javascript</li><li>HTML5</li><li>CSS3</li><li>ActionScript</li><li>SQL</li><li>MongoDB</li></ol>",
-                "content_it":"<ol><li>Java</li><li>C#</li><li>Javascript</li><li>HTML5</li><li>CSS3</li><li>ActionScript</li><li>SQL</li><li>MongoDB</li></ol>"
-            },
-            {
-                "_id":"databases",
-                "title":"Databases",
-                "title_it":"Databases",
-                "content":"<ol><li>MS-SQL</li><li>MySQL</li><li>Oracle</li><li>MongoDB</li><li>CouchDB</li></ol>",
-                "content_it":"<ol><li>MS-SQL</li><li>MySQL</li><li>Oracle</li><li>MongoDB</li><li>CouchDB</li></ol>"
-            },
-            {
-                "_id":"expertise",
-                "title":"Expertise",
-                "title_it":"Competenze",
-                "content":"<ol><li>Web Applications</li><li>Desktop Applications</li><li>Mobile Applications</li><li>Configurators</li><li>ERP</li><li>Social Networks</li><li>eCommerce</li><li>Frameworks Development</li><li>Data Collection</li></ol>",
-                "content_it":"<ol><li>Applicazioni Web</li><li>Applicazioni Desktop</li><li>Applicazioni Mobile</li><li>Sistemi di Configurazione</li><li>Gestionali</li><li>Social Networks</li><li>eCommerce</li><li>Sviluppo Frameworks</li><li>Data Collection</li></ol>"
-            }
-        ]
+        "content_it":"<p>Web Developer, Java Architect, UX Designer, esperto di sistemi di configurazione ed e-commerce avanzati.</p><br><p>Lavora in java, c++, HTML5, CSS3, javascript e actionscript, sia per il web che per il desktop ed il settore “mobile”.<br>Contribuisce a diversi progetti OpenSource ed è blogger su www.smartfeeling.org, per cui scrive di codice, ma anche di Social Media e dell’evoluzione di internet.</p>"
+    } ,
+    {
+        "_id":"educatricesimona-debattistis",
+        "template":"/macro/templates/cmspages/basic/template.vhtml",
+        "template_it":"/macro/templates/cmspages/basic/template.vhtml",
+        "title":"Simona Debattistis",
+        "title_it":"Simona Debattistis",
+        "subtitle":"Professional Profile",
+        "subtitle_it":"Profilo Professionale",
+        "description":"Profilo professionale di Simona Debattistis  (Educatrice)",
+        "description_it":"Profilo professionale di Simona Debattistis  (Educatrice)",
+        "keywords":"Simona Debattistis, educatrice",
+        "keywords_it":"Simona Debattistis, educatrice",
+        "logo":"http://www.smartfeeling.org/images/simona.png",
+        "logo_it":"http://www.smartfeeling.org/images/simona.png",
+        "data":{
+            "name":"Simona",
+            "surname":"Debattistis",
+            "address":"",
+            "cell":"+393394769640",
+            "tel":"",
+            "org":"",
+            "url":"",
+            "email":"simonadebattistis@gmail.com",
+            "linkedin":"",
+            "twitter":"",
+            "facebook":"",
+            "google":"",
+            "friendfeed":"",
+            "slideshare":"",
+            "youtube":"",
+            "vimeo":"",
+            "picasa":"",
+            "flickr":"",
+            "wordpress":"",
+            "map":"",
+            "sections":[
+                {
+                    "_id":"specializations",
+                    "title":"Specializzazioni",
+                    "content":"<ol><li>corso 'Disagio Scolastico e Promozione del Benessere'</li><li>corsi di aggiornamento sul tema 'Formazione Disturbo della Condotta'</li><li>corso Anti Incendio</li><li>corso Alimentarista</li></ol>"
+                }
+            ],
+            "footer":""
+        },
+        "data_it":{
+            "name":"Simona",
+            "surname":"Debattistis",
+            "address":"",
+            "cell":"+393394769640",
+            "tel":"",
+            "org":"",
+            "url":"",
+            "email":"simonadebattistis@gmail.com",
+            "linkedin":"",
+            "twitter":"",
+            "facebook":"",
+            "google":"",
+            "friendfeed":"",
+            "slideshare":"",
+            "youtube":"",
+            "vimeo":"",
+            "picasa":"",
+            "flickr":"",
+            "wordpress":"",
+            "map":"",
+            "sections":[
+                {
+                    "_id":"specializations",
+                    "title":"Specializzazioni",
+                    "content":"<ol><li>corso 'Disagio Scolastico e Promozione del Benessere'</li><li>corsi di aggiornamento sul tema 'Formazione Disturbo della Condotta'</li><li>corso Anti Incendio</li><li>corso Alimentarista</li></ol>"
+                }
+            ],
+            "footer":""
+        },
+        "excerpt":"",
+        "excerpt_it":"",
+        "content":"<p>Simona è un'esperta educatrice, lavora da diversi anni a supporto di bambini con diverse problematiche.</p><br><p>Si è specializzata frequentando il corso 'Disagio Scolastico e Promozione del Benessere' presso il centro <em>Elisabetta Renzi</em> di Riccione e con diversi corsi di aggiornamento sul tema 'Formazione Disturbo della Condotta'.</p><br>Dal 2005 lavora come Educatrice nelle scuole elementari di Riccione e a domicilio con bambini italiani e stranieri.<br><p>Nel 2012 ha frequentato il 'Corso  Anti Incendio' per la prevenzione ed il pronto intervento in caso di incendio.</p>",
+        "content_it":"<p>Simona è un'esperta educatrice, lavora da diversi anni a supporto di bambini con diverse problematiche.</p><br><p>Si è specializzata frequentando il corso 'Disagio Scolastico e Promozione del Benessere' presso il centro <em>Elisabetta Renzi</em> di Riccione e con diversi corsi di aggiornamento sul tema 'Formazione Disturbo della Condotta'.</p><br>Dal 2005 lavora come Educatrice nelle scuole elementari di Riccione e a domicilio con bambini italiani e stranieri.<br><p>Nel 2012 ha frequentato il 'Corso  Anti Incendio' per la prevenzione ed il pronto intervento in caso di incendio.</p>"
+    },
+    {
+        "_id":"riccione-spiaggia-151",
+        "template":"/macro/templates/cmspages/basic/template.vhtml",
+        "template_it":"/macro/templates/cmspages/basic/template.vhtml",
+        "title":"Beach 151",
+        "title_it":"Spiaggia 151",
+        "subtitle":"Riccione",
+        "subtitle_it":"Riccione",
+        "description":"Beach 151, Riccione",
+        "description_it":"Spiaggia 151, Riccione",
+        "keywords":"Beach 151, Riccione",
+        "keywords_it":"Spiaggia 151, Riccione",
+        "logo":"/uploads/cmspages/spiaggia151/logo.png",
+        "logo_it":"/uploads/cmspages/spiaggia151/logo.png",
+        "data":{
+            "name":"Spiaggia 151",
+            "surname":"",
+            "address":"Viale D'Annunzio, Riccione",
+            "cell":"+393396571710",
+            "tel":"",
+            "org":"Spiaggia 151",
+            "url":"http://www.151riccione.com/",
+            "email":"claudio@151riccione.com",
+            "linkedin":"",
+            "twitter":"",
+            "facebook":"http://www.facebook.com/claudio.angelini.585",
+            "google":"http://tinyurl.com/d6r3ucm",
+            "friendfeed":"",
+            "slideshare":"",
+            "youtube":"http://tinyurl.com/br2c69e",
+            "vimeo":"",
+            "picasa":"",
+            "flickr":"",
+            "wordpress":"",
+            "map":"http://tinyurl.com/cwcx4ab",
+            "sections":[
+                {
+                    "_id":"specializations",
+                    "title":"Photo Gallery",
+                    "content":""
+                }
+            ],
+            "footer":""
+        },
+        "data_it":{
+            "name":"Spiaggia 151",
+            "surname":"",
+            "address":"Viale D'Annunzio, Riccione",
+            "cell":"+393396571710",
+            "tel":"",
+            "org":"Spiaggia 151",
+            "url":"http://www.151riccione.com/",
+            "email":"claudio@151riccione.com",
+            "linkedin":"",
+            "twitter":"",
+            "facebook":"http://www.facebook.com/claudio.angelini.585",
+            "google":"http://tinyurl.com/d6r3ucm",
+            "friendfeed":"",
+            "slideshare":"",
+            "youtube":"http://tinyurl.com/br2c69e",
+            "vimeo":"",
+            "picasa":"",
+            "flickr":"",
+            "wordpress":"",
+            "map":"http://tinyurl.com/cwcx4ab",
+            "sections":[
+                {
+                    "_id":"specializations",
+                    "title":"Foto",
+                    "content":"<ul class='gallery'><li><a href='/uploads/cmspages/spiaggia151/gallery/full/001.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/001.jpg' alt='Image 001' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/002.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/002.jpg' alt='Image 002' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/003.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/003.jpg' alt='Image 003' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/004.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/004.jpg' alt='Image 004' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/005.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/005.jpg' alt='Image 005' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/006.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/006.jpg' alt='Image 006' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/007.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/007.jpg' alt='Image 007' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/008.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/008.jpg' alt='Image 008' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/009.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/009.jpg' alt='Image 009' /></a></li></ul>"
+                }
+            ],
+            "footer":""
+        },
+        "excerpt":"",
+        "excerpt_it":"",
+        "content":"<p> A sports village dedicated to sports sailing, sailing, windsurfing, kite, located on the border with Rimini in a still wild, where you can breathe the smell of the sea and wind, ideal place for sailing. </p> <p>Have two lanes outbound vessels, changing rooms, hot showers, storage, open even in winter on windy days, a heated on cold days. </p> Easily accessible by car, ample parking available, bus stop number 36 </p>",
+        "content_it":"<p>Un villaggio sportivo dedicato agli sport velici, vela, windsurf, kite, situato al confine con rimini in una zona ancora selvaggia dove si respira l’odore del mare e del vento, luogo ideale per praticare gli sport velici.</p><p>A disposizione due corsie uscita natanti, spogliatoi, docce calde, rimessaggio, aperto anche in inverno nelle giornate di vento, locali riscaldati nelle giornate fredde.</p><p>Facilmente raggiungibile in macchina, a disposizione ampio parcheggio, in autobus fermata n.36</p>"
     }
 ]

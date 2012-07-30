@@ -90,10 +90,6 @@ public class CMSPage {
         return this.get(_dbpage, lang, CMSUserpage.CONTENT);
     }
 
-    public Object getSections() {
-        return get(_dbpage, CMSUserpage.SECTIONS);
-    }
-
     // ------------------------------------------------------------------------
     //                      p r i v a t e
     // ------------------------------------------------------------------------

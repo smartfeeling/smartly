@@ -27,7 +27,6 @@ public class CMSUserpage extends MongoObject {
     public static final String DATA = "data";
     public static final String EXCERPT = "excerpt";
     public static final String CONTENT = "content";
-    public static final String SECTIONS = "sections";
 
     // --------------------------------------------------------------------
     //               Constructor
@@ -118,8 +117,5 @@ public class CMSUserpage extends MongoObject {
         MongoUtils.put(item, key, value);
     }
 
-    public static List<DBObject> getSections(final DBObject item, final String lang) {
-        final String field = SECTIONS;
-        return MongoUtils.getList(item, field);
-    }
+
 }

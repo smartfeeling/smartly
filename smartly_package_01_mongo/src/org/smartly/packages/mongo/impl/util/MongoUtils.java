@@ -6,7 +6,8 @@ package org.smartly.packages.mongo.impl.util;
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import com.mongodb.util.JSON;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.smartly.commons.cryptograph.SecurityMessageDigester;
 import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.util.*;
@@ -89,7 +90,69 @@ public class MongoUtils implements IMongoConstants {
     }
 
     public static DBObject parseObject(final String jsontext) {
-        return (DBObject) JSON.parse(jsontext);
+        if (StringUtils.hasText(jsontext) && StringUtils.isJSON(jsontext)) {
+            final JsonWrapper wrapper = new JsonWrapper(jsontext);
+            return wrapper.isJSONArray()
+                    ? parseObject(wrapper.getJSONArray())
+                    : parseObject(wrapper.getJSONObject());
+        }
+        return null;
+    }
+
+    public static DBObject parseObject(final JSONObject jsonObject) {
+        if (null == jsonObject) {
+            return null;
+        }
+        final BasicDBObject result = new BasicDBObject();
+        final Iterator<String> keys = jsonObject.keys();
+        while (keys.hasNext()) {
+            final String key = keys.next();
+            final Object value = jsonObject.opt(key);
+            if(null!=value){
+                if(value instanceof JSONObject){
+                    final DBObject item = parseObject((JSONArray) value);
+                    if (null != item) {
+                        result.put(key, item);
+                    }
+                } else if (value instanceof JSONArray){
+                    final DBObject item = parseObject((JSONObject) value);
+                    if (null != item) {
+                        result.put(key, item);
+                    }
+                } else {
+                    result.put(key, value);
+                }
+            }
+        }
+        return result;
+    }
+
+    public static DBObject parseObject(final JSONArray jsonArray) {
+        if (null == jsonArray) {
+            return null;
+        }
+        final BasicDBList result = new BasicDBList();
+        if (null != jsonArray && jsonArray.length() > 0) {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                final Object value = jsonArray.opt(i);
+                if (null != value) {
+                    if (value instanceof JSONArray) {
+                        final DBObject item = parseObject((JSONArray) value);
+                        if (null != item) {
+                            result.add(item);
+                        }
+                    } else if (value instanceof JSONObject) {
+                        final DBObject item = parseObject((JSONObject) value);
+                        if (null != item) {
+                            result.add(item);
+                        }
+                    } else {
+                        result.add(value);
+                    }
+                }
+            }
+        }
+        return result;
     }
 
     /**
