@@ -110,12 +110,12 @@ public class MongoUtils implements IMongoConstants {
             final Object value = jsonObject.opt(key);
             if(null!=value){
                 if(value instanceof JSONObject){
-                    final DBObject item = parseObject((JSONArray) value);
+                    final DBObject item = parseObject((JSONObject) value);
                     if (null != item) {
                         result.put(key, item);
                     }
                 } else if (value instanceof JSONArray){
-                    final DBObject item = parseObject((JSONObject) value);
+                    final DBObject item = parseObject((JSONArray) value);
                     if (null != item) {
                         result.put(key, item);
                     }
