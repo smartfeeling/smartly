@@ -38,17 +38,17 @@
                 {
                     "_id":"languages",
                     "title":"Languages",
-                    "content":"<ol><li>Java</li><li>C#</li><li>Javascript</li><li>HTML5</li><li>CSS3</li><li>ActionScript</li><li>SQL</li><li>MongoDB</li></ol>"
+                    "content":"<ol class='list'><li>Java</li><li>C#</li><li>Javascript</li><li>HTML5</li><li>CSS3</li><li>ActionScript</li><li>SQL</li><li>MongoDB</li></ol>"
                 },
                 {
                     "_id":"databases",
                     "title":"Databases",
-                    "content":"<ol><li>MS-SQL</li><li>MySQL</li><li>Oracle</li><li>MongoDB</li><li>CouchDB</li></ol>"
+                    "content":"<ol class='list'><li>MS-SQL</li><li>MySQL</li><li>Oracle</li><li>MongoDB</li><li>CouchDB</li></ol>"
                 },
                 {
                     "_id":"expertise",
                     "title":"Expertise",
-                    "content":"<ol><li>Web Applications</li><li>Desktop Applications</li><li>Mobile Applications</li><li>Configurators</li><li>ERP</li><li>Social Networks</li><li>eCommerce</li><li>Frameworks Development</li><li>Data Collection</li></ol>"
+                    "content":"<ol class='list'><li>Web Applications</li><li>Desktop Applications</li><li>Mobile Applications</li><li>Configurators</li><li>ERP</li><li>Social Networks</li><li>eCommerce</li><li>Frameworks Development</li><li>Data Collection</li></ol>"
                 }
             ],
             "footer":""
@@ -78,17 +78,17 @@
                 {
                     "_id":"languages",
                     "title":"Linguaggi",
-                    "content":"<ol><li>Java</li><li>C#</li><li>Javascript</li><li>HTML5</li><li>CSS3</li><li>ActionScript</li><li>SQL</li><li>MongoDB</li></ol>"
+                    "content":"<ol class='list'><li>Java</li><li>C#</li><li>Javascript</li><li>HTML5</li><li>CSS3</li><li>ActionScript</li><li>SQL</li><li>MongoDB</li></ol>"
                 },
                 {
                     "_id":"databases",
                     "title":"Databases",
-                    "content":"<ol><li>MS-SQL</li><li>MySQL</li><li>Oracle</li><li>MongoDB</li><li>CouchDB</li></ol>"
+                    "content":"<ol class='list'><li>MS-SQL</li><li>MySQL</li><li>Oracle</li><li>MongoDB</li><li>CouchDB</li></ol>"
                 },
                 {
                     "_id":"expertise",
                     "title":"Competenze",
-                    "content":"<ol><li>Applicazioni Web</li><li>Applicazioni Desktop</li><li>Applicazioni Mobile</li><li>Sistemi di Configurazione</li><li>Gestionali</li><li>Social Networks</li><li>eCommerce</li><li>Sviluppo Frameworks</li><li>Data Collection</li></ol>"
+                    "content":"<ol class='list'><li>Applicazioni Web</li><li>Applicazioni Desktop</li><li>Applicazioni Mobile</li><li>Sistemi di Configurazione</li><li>Gestionali</li><li>Social Networks</li><li>eCommerce</li><li>Sviluppo Frameworks</li><li>Data Collection</li></ol>"
                 }
             ],
             "footer":""
@@ -137,7 +137,7 @@
                 {
                     "_id":"specializations",
                     "title":"Specializzazioni",
-                    "content":"<ol><li>corso 'Disagio Scolastico e Promozione del Benessere'</li><li>corsi di aggiornamento sul tema 'Formazione Disturbo della Condotta'</li><li>corso Anti Incendio</li><li>corso Alimentarista</li></ol>"
+                    "content":"<ol class='list'><li>corso 'Disagio Scolastico e Promozione del Benessere'</li><li>corsi di aggiornamento sul tema 'Formazione Disturbo della Condotta'</li><li>corso Anti Incendio</li><li>corso Alimentarista</li></ol>"
                 }
             ],
             "footer":""
@@ -167,7 +167,7 @@
                 {
                     "_id":"specializations",
                     "title":"Specializzazioni",
-                    "content":"<ol><li>corso 'Disagio Scolastico e Promozione del Benessere'</li><li>corsi di aggiornamento sul tema 'Formazione Disturbo della Condotta'</li><li>corso Anti Incendio</li><li>corso Alimentarista</li></ol>"
+                    "content":"<ol class='list'><li>corso 'Disagio Scolastico e Promozione del Benessere'</li><li>corsi di aggiornamento sul tema 'Formazione Disturbo della Condotta'</li><li>corso Anti Incendio</li><li>corso Alimentarista</li></ol>"
                 }
             ],
             "footer":""
@@ -216,7 +216,7 @@
                 {
                     "_id":"specializations",
                     "title":"Photo Gallery",
-                    "content":""
+                    "content":"<div class='gallery-page'><ul class='gallery'><li><a href='/uploads/cmspages/spiaggia151/gallery/full/001.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/001.jpg' alt='Image 001' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/002.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/002.jpg' alt='Image 002' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/003.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/003.jpg' alt='Image 003' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/004.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/004.jpg' alt='Image 004' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/005.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/005.jpg' alt='Image 005' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/006.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/006.jpg' alt='Image 006' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/007.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/007.jpg' alt='Image 007' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/008.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/008.jpg' alt='Image 008' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/009.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/009.jpg' alt='Image 009' /></a></li></ul></div>"
                 }
             ],
             "footer":""
@@ -246,7 +246,7 @@
                 {
                     "_id":"specializations",
                     "title":"Foto",
-                    "content":"<ul class='gallery'><li><a href='/uploads/cmspages/spiaggia151/gallery/full/001.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/001.jpg' alt='Image 001' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/002.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/002.jpg' alt='Image 002' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/003.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/003.jpg' alt='Image 003' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/004.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/004.jpg' alt='Image 004' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/005.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/005.jpg' alt='Image 005' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/006.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/006.jpg' alt='Image 006' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/007.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/007.jpg' alt='Image 007' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/008.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/008.jpg' alt='Image 008' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/009.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/009.jpg' alt='Image 009' /></a></li></ul>"
+                    "content":"<div class='gallery-page'><ul class='gallery'><li><a href='/uploads/cmspages/spiaggia151/gallery/full/001.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/001.jpg' alt='Image 001' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/002.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/002.jpg' alt='Image 002' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/003.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/003.jpg' alt='Image 003' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/004.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/004.jpg' alt='Image 004' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/005.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/005.jpg' alt='Image 005' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/006.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/006.jpg' alt='Image 006' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/007.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/007.jpg' alt='Image 007' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/008.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/008.jpg' alt='Image 008' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/009.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/009.jpg' alt='Image 009' /></a></li></ul></div>"
                 }
             ],
             "footer":""

@@ -96,7 +96,7 @@ public abstract class DateUtils {
         return result;
     }
 
-    public static Date postpone(Date date, int measureUnit, int amount) {
+    public static Date postpone(final Date date, final int measureUnit, final int amount) {
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
 
@@ -125,6 +125,17 @@ public abstract class DateUtils {
         }
 
         return calendar.getTime();
+    }
+
+    public static Date postponeWorkingDay(final Date date, final int measureUnit, final int amount, final Long[] holidays) {
+        Date result = date;
+        for(int i=0;i<amount;i++){
+            result = postpone(result, measureUnit, 1);
+            if(isWorkingDay(result, holidays)){
+               result = nextWorkingDay(result, holidays).getTime();
+            }
+        }
+        return result;
     }
 
     /**
