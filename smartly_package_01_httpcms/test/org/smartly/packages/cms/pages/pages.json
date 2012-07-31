@@ -221,7 +221,7 @@
                 {
                     "_id":"location",
                     "title":"Location",
-                    "content":"<ol class='list'><li>Viale D'Annunzio</li><li>Zona 151</li><li>Riccione</li><li>tel.339-6571710</li></ol><a href='http://tinyurl.com/cwcx4ab' rel='external' data-role='button'>Map</a>"
+                    "content":"<ol class='list'><li>Viale D'Annunzio</li><li>Zona 151</li><li>Riccione</li><li>tel.339-6571710</li></ol><a href='http://tinyurl.com/cwcx4ab' rel='external' data-role='button' data-theme='c'>Map</a>"
                 }
             ],
             "slides":["/uploads/cmspages/spiaggia151/slide1.png", "/uploads/cmspages/spiaggia151/slide2.png", "/uploads/cmspages/spiaggia151/slide3.png"],
@@ -642,7 +642,7 @@
         },
         "excerpt":"",
         "excerpt_it":"",
-        "content":"<div class='round-box shadow'><p><em>Scritto da luca.villa Il 15 - ottobre - 2010</em><br>Riccione 151 organizza corsi di vela, windsurf, kitesurf con istruttori qualificati</p><ol class='list'><li>FIV (federazione italiana vela)</li><li>FKI (federazione kitesurf italiana)</li><li>IKO (international kitesurf organization)</li></ol><br><strong>Aiuto Istruttore: Marco</strong><br><a href='tel:+393483231406' data-role='button' data-theme='c'>Call Now</a></div>",
-        "content_it":"<div class='round-box shadow'><p><em>Scritto da luca.villa Il 15 - ottobre - 2010</em><br>Riccione 151 organizza corsi di vela, windsurf, kitesurf con istruttori qualificati</p><ol class='list'><li>FIV (federazione italiana vela)</li><li>FKI (federazione kitesurf italiana)</li><li>IKO (international kitesurf organization)</li></ol><br><strong>Aiuto Istruttore: Marco</strong><br><a href='tel:+393483231406' data-role='button' data-theme='c'>Chiama Ora</a></p></div>"
+        "content":"<div class='round-box shadow'><p>Riccione 151 organizza corsi di vela, windsurf, kitesurf con istruttori qualificati</p><ol class='list'><li>FIV (federazione italiana vela)</li><li>FKI (federazione kitesurf italiana)</li><li>IKO (international kitesurf organization)</li></ol><br><strong>Aiuto Istruttore: Marco</strong><br><a href='tel:+393483231406' data-role='button' data-theme='c'>Call Now</a></div>",
+        "content_it":"<div class='round-box shadow'><p>Riccione 151 organizza corsi di vela, windsurf, kitesurf con istruttori qualificati</p><ol class='list'><li>FIV (federazione italiana vela)</li><li>FKI (federazione kitesurf italiana)</li><li>IKO (international kitesurf organization)</li></ol><br><strong>Aiuto Istruttore: Marco</strong><br><a href='tel:+393483231406' data-role='button' data-theme='c'>Chiama Ora</a></p></div>"
     }
 ]
