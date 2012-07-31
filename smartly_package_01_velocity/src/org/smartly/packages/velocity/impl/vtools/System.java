@@ -280,7 +280,13 @@ public class System
     }
 
     public String toString(final Object obj) {
-        return null != obj ? obj.toString() : "";
+        if (null != obj) {
+            if (obj instanceof Collection) {
+                CollectionUtils.toCommaDelimitedString((Collection) obj);
+            }
+            return obj.toString();
+        }
+        return "";
     }
 
     public String concat(final Object... args) {
@@ -481,6 +487,28 @@ public class System
 
     public String[] split(final String string, final String delim) {
         return StringUtils.split(string, delim);
+    }
+
+    public Object getFirst(final Object array){
+        if(null!=array){
+            if(array.getClass().isArray()){
+                return CollectionUtils.getFirst((Object[])array);
+            } else if (array instanceof Collection){
+                return CollectionUtils.getFirst((Collection)array);
+            }
+        }
+        return null;
+    }
+
+    public Object getLast(final Object array){
+        if(null!=array){
+            if(array.getClass().isArray()){
+                return CollectionUtils.getLast((Object[])array);
+            } else if (array instanceof Collection){
+                return CollectionUtils.getLast((Collection)array);
+            }
+        }
+        return null;
     }
 
     public String getImage(final String path) {

@@ -62,6 +62,10 @@ public class CMSPage {
         return this.get(_dbpage, lang, CMSUserpage.TITLE);
     }
 
+    public Object getParent() {
+        return this.get(_dbpage, CMSUserpage.PARENT);
+    }
+
     public Object getSubtitle(final String lang) {
         return this.get(_dbpage, lang, CMSUserpage.SUBTITLE);
     }

@@ -51,6 +51,7 @@
                     "content":"<ol class='list'><li>Web Applications</li><li>Desktop Applications</li><li>Mobile Applications</li><li>Configurators</li><li>ERP</li><li>Social Networks</li><li>eCommerce</li><li>Frameworks Development</li><li>Data Collection</li></ol>"
                 }
             ],
+            "gallery":[],
             "footer":""
         },
         "data_it":{
@@ -91,6 +92,7 @@
                     "content":"<ol class='list'><li>Applicazioni Web</li><li>Applicazioni Desktop</li><li>Applicazioni Mobile</li><li>Sistemi di Configurazione</li><li>Gestionali</li><li>Social Networks</li><li>eCommerce</li><li>Sviluppo Frameworks</li><li>Data Collection</li></ol>"
                 }
             ],
+            "gallery":[],
             "footer":""
         },
         "excerpt":"",
@@ -140,6 +142,7 @@
                     "content":"<ol class='list'><li>corso 'Disagio Scolastico e Promozione del Benessere'</li><li>corsi di aggiornamento sul tema 'Formazione Disturbo della Condotta'</li><li>corso Anti Incendio</li><li>corso Alimentarista</li></ol>"
                 }
             ],
+            "gallery":[],
             "footer":""
         },
         "data_it":{
@@ -170,6 +173,7 @@
                     "content":"<ol class='list'><li>corso 'Disagio Scolastico e Promozione del Benessere'</li><li>corsi di aggiornamento sul tema 'Formazione Disturbo della Condotta'</li><li>corso Anti Incendio</li><li>corso Alimentarista</li></ol>"
                 }
             ],
+            "gallery":[],
             "footer":""
         },
         "excerpt":"",
@@ -179,8 +183,9 @@
     },
     {
         "_id":"riccione-spiaggia-151",
-        "template":"/macro/templates/cmspages/basic/template.vhtml",
-        "template_it":"/macro/templates/cmspages/basic/template.vhtml",
+        "parent":"",
+        "template":"/macro/templates/cmspages/advanced/page_home.vhtml",
+        "template_it":"/macro/templates/cmspages/advanced/page_home.vhtml",
         "title":"Beach 151",
         "title_it":"Spiaggia 151",
         "subtitle":"Riccione",
@@ -198,8 +203,8 @@
             "cell":"+393396571710",
             "tel":"",
             "org":"Spiaggia 151",
-            "url":"http://www.151riccione.com/",
-            "email":"claudio@151riccione.com",
+            "url":"",
+            "email":"",
             "linkedin":"",
             "twitter":"",
             "facebook":"http://www.facebook.com/claudio.angelini.585",
@@ -211,12 +216,31 @@
             "picasa":"",
             "flickr":"",
             "wordpress":"",
-            "map":"http://tinyurl.com/cwcx4ab",
+            "map":"",
             "sections":[
                 {
-                    "_id":"specializations",
+                    "_id":"location",
+                    "title":"Location",
+                    "content":"<ol class='list'><li>Viale D'Annunzio</li><li>Zona 151</li><li>Riccione</li><li>tel.339-6571710</li></ol><a href='http://tinyurl.com/cwcx4ab' rel='external' data-role='button'>Map</a>"
+                }
+            ],
+            "slides":["/uploads/cmspages/spiaggia151/slide1.png", "/uploads/cmspages/spiaggia151/slide2.png", "/uploads/cmspages/spiaggia151/slide3.png"],
+            "gallery":[],
+            "links":[
+                {
+                    "title":"Beach 151",
+                    "url":"/pages/riccione-spiaggia-151_content",
+                    "attr":""
+                },
+                {
+                    "title":"Sailing School",
+                    "url":"/pages/riccione-spiaggia-151_school",
+                    "attr":""
+                },
+                {
                     "title":"Photo Gallery",
-                    "content":"<div class='gallery-page'><ul class='gallery'><li><a href='/uploads/cmspages/spiaggia151/gallery/full/001.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/001.jpg' alt='Image 001' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/002.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/002.jpg' alt='Image 002' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/003.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/003.jpg' alt='Image 003' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/004.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/004.jpg' alt='Image 004' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/005.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/005.jpg' alt='Image 005' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/006.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/006.jpg' alt='Image 006' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/007.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/007.jpg' alt='Image 007' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/008.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/008.jpg' alt='Image 008' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/009.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/009.jpg' alt='Image 009' /></a></li></ul></div>"
+                    "url":"/pages/riccione-spiaggia-151_gallery",
+                    "attr": "data-ajax='false'"
                 }
             ],
             "footer":""
@@ -228,8 +252,77 @@
             "cell":"+393396571710",
             "tel":"",
             "org":"Spiaggia 151",
+            "url":"",
+            "email":"",
+            "linkedin":"",
+            "twitter":"",
+            "facebook":"http://www.facebook.com/claudio.angelini.585",
+            "google":"http://tinyurl.com/d6r3ucm",
+            "friendfeed":"",
+            "slideshare":"",
+            "youtube":"http://tinyurl.com/br2c69e",
+            "vimeo":"",
+            "picasa":"",
+            "flickr":"",
+            "wordpress":"",
+            "map":"",
+            "sections":[
+                {
+                    "_id":"location",
+                    "title":"Dove siamo",
+                    "content":"<ol class='list'><li>Viale D'Annunzio</li><li>Zona 151</li><li>Riccione</li><li>tel.339-6571710</li></ol><a href='http://tinyurl.com/cwcx4ab' rel='external' data-role='button' data-theme='c'>Map</a>"
+                }
+            ],
+            "slides":["/uploads/cmspages/spiaggia151/slide1.png", "/uploads/cmspages/spiaggia151/slide2.png", "/uploads/cmspages/spiaggia151/slide3.png"],
+            "gallery":[],
+            "links":[
+                {
+                    "title":"Spiaggia 151",
+                    "url":"/pages/riccione-spiaggia-151_content",
+                    "attr": ""
+                },
+                {
+                    "title":"Scuola Vela",
+                    "url":"/pages/riccione-spiaggia-151_school",
+                    "attr": ""
+                },
+                {
+                    "title":"Foto Gallery",
+                    "url":"/pages/riccione-spiaggia-151_gallery",
+                    "attr": "data-ajax='false'"
+                }
+            ],
+            "footer":""
+        },
+        "excerpt":"",
+        "excerpt_it":"",
+        "content":"<p> A sports village dedicated to sports sailing, sailing, windsurfing, kite, located on the border with Rimini in a still wild, where you can breathe the smell of the sea and wind, ideal place for sailing. </p> <p>Have two lanes outbound vessels, changing rooms, hot showers, storage, open even in winter on windy days, a heated on cold days. </p> Easily accessible by car, ample parking available, bus stop number 36 </p>",
+        "content_it":"<p>Un villaggio sportivo dedicato agli sport velici, vela, windsurf, kite, situato al confine con rimini in una zona ancora selvaggia dove si respira l’odore del mare e del vento, luogo ideale per praticare gli sport velici.</p><p>A disposizione due corsie uscita natanti, spogliatoi, docce calde, rimessaggio, aperto anche in inverno nelle giornate di vento, locali riscaldati nelle giornate fredde.</p><p>Facilmente raggiungibile in macchina, a disposizione ampio parcheggio, in autobus fermata n.36</p>"
+    },
+    {
+        "_id":"riccione-spiaggia-151_gallery",
+        "parent":"riccione-spiaggia-151",
+        "template":"/macro/templates/cmspages/advanced/page_gallery.vhtml",
+        "template_it":"/macro/templates/cmspages/advanced/page_gallery.vhtml",
+        "title":"Photo Gallery",
+        "title_it":"Foto Gallery",
+        "subtitle":"Riccione",
+        "subtitle_it":"Riccione",
+        "description":"Beach 151, Riccione",
+        "description_it":"Spiaggia 151, Riccione",
+        "keywords":"Beach 151, Riccione",
+        "keywords_it":"Spiaggia 151, Riccione",
+        "logo":"/uploads/cmspages/spiaggia151/logo.png",
+        "logo_it":"/uploads/cmspages/spiaggia151/logo.png",
+        "data":{
+            "name":"Spiaggia 151",
+            "surname":"",
+            "address":"Viale D'Annunzio, Riccione",
+            "cell":"+393396571710",
+            "tel":"",
+            "org":"Spiaggia 151",
             "url":"http://www.151riccione.com/",
-            "email":"claudio@151riccione.com",
+            "email":"",
             "linkedin":"",
             "twitter":"",
             "facebook":"http://www.facebook.com/claudio.angelini.585",
@@ -242,18 +335,314 @@
             "flickr":"",
             "wordpress":"",
             "map":"http://tinyurl.com/cwcx4ab",
-            "sections":[
+            "sections":[],
+            "slides":["/uploads/cmspages/spiaggia151/slide1.png", "/uploads/cmspages/spiaggia151/slide2.png", "/uploads/cmspages/spiaggia151/slide3.png"],
+            "gallery":[
                 {
-                    "_id":"specializations",
-                    "title":"Foto",
-                    "content":"<div class='gallery-page'><ul class='gallery'><li><a href='/uploads/cmspages/spiaggia151/gallery/full/001.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/001.jpg' alt='Image 001' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/002.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/002.jpg' alt='Image 002' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/003.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/003.jpg' alt='Image 003' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/004.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/004.jpg' alt='Image 004' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/005.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/005.jpg' alt='Image 005' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/006.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/006.jpg' alt='Image 006' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/007.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/007.jpg' alt='Image 007' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/008.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/008.jpg' alt='Image 008' /></a></li><li><a href='/uploads/cmspages/spiaggia151/gallery/full/009.jpg' rel='external'><img src='/uploads/cmspages/spiaggia151/gallery/thumb/009.jpg' alt='Image 009' /></a></li></ul></div>"
+                    "full":"/uploads/cmspages/spiaggia151/gallery/full/001.jpg",
+                    "thumb":"/uploads/cmspages/spiaggia151/gallery/thumb/001.jpg",
+                    "alt":"001"
+                },
+                {
+                    "full":"/uploads/cmspages/spiaggia151/gallery/full/002.jpg",
+                    "thumb":"/uploads/cmspages/spiaggia151/gallery/thumb/002.jpg",
+                    "alt":"002"
+                },
+                {
+                    "full":"/uploads/cmspages/spiaggia151/gallery/full/003.jpg",
+                    "thumb":"/uploads/cmspages/spiaggia151/gallery/thumb/003.jpg",
+                    "alt":"003"
+                },
+                {
+                    "full":"/uploads/cmspages/spiaggia151/gallery/full/004.jpg",
+                    "thumb":"/uploads/cmspages/spiaggia151/gallery/thumb/004.jpg",
+                    "alt":"004"
+                },
+                {
+                    "full":"/uploads/cmspages/spiaggia151/gallery/full/005.jpg",
+                    "thumb":"/uploads/cmspages/spiaggia151/gallery/thumb/005.jpg",
+                    "alt":"005"
+                },
+                {
+                    "full":"/uploads/cmspages/spiaggia151/gallery/full/006.jpg",
+                    "thumb":"/uploads/cmspages/spiaggia151/gallery/thumb/006.jpg",
+                    "alt":"006"
+                },
+                {
+                    "full":"/uploads/cmspages/spiaggia151/gallery/full/007.jpg",
+                    "thumb":"/uploads/cmspages/spiaggia151/gallery/thumb/007.jpg",
+                    "alt":"007"
+                },
+                {
+                    "full":"/uploads/cmspages/spiaggia151/gallery/full/008.jpg",
+                    "thumb":"/uploads/cmspages/spiaggia151/gallery/thumb/008.jpg",
+                    "alt":"008"
+                },
+                {
+                    "full":"/uploads/cmspages/spiaggia151/gallery/full/009.jpg",
+                    "thumb":"/uploads/cmspages/spiaggia151/gallery/thumb/009.jpg",
+                    "alt":"009"
                 }
             ],
+            "links":[],
+            "footer":""
+        },
+        "data_it":{
+            "name":"Spiaggia 151",
+            "surname":"",
+            "address":"Viale D'Annunzio, Riccione",
+            "cell":"+393396571710",
+            "tel":"",
+            "org":"Spiaggia 151",
+            "url":"http://www.151riccione.com/",
+            "email":"",
+            "linkedin":"",
+            "twitter":"",
+            "facebook":"http://www.facebook.com/claudio.angelini.585",
+            "google":"http://tinyurl.com/d6r3ucm",
+            "friendfeed":"",
+            "slideshare":"",
+            "youtube":"http://tinyurl.com/br2c69e",
+            "vimeo":"",
+            "picasa":"",
+            "flickr":"",
+            "wordpress":"",
+            "map":"http://tinyurl.com/cwcx4ab",
+            "sections":[],
+            "slides":["/uploads/cmspages/spiaggia151/slide1.png", "/uploads/cmspages/spiaggia151/slide2.png", "/uploads/cmspages/spiaggia151/slide3.png"],
+            "gallery":[
+                {
+                    "full":"/uploads/cmspages/spiaggia151/gallery/full/001.jpg",
+                    "thumb":"/uploads/cmspages/spiaggia151/gallery/thumb/001.jpg",
+                    "alt":"001"
+                },
+                {
+                    "full":"/uploads/cmspages/spiaggia151/gallery/full/002.jpg",
+                    "thumb":"/uploads/cmspages/spiaggia151/gallery/thumb/002.jpg",
+                    "alt":"002"
+                },
+                {
+                    "full":"/uploads/cmspages/spiaggia151/gallery/full/003.jpg",
+                    "thumb":"/uploads/cmspages/spiaggia151/gallery/thumb/003.jpg",
+                    "alt":"003"
+                },
+                {
+                    "full":"/uploads/cmspages/spiaggia151/gallery/full/004.jpg",
+                    "thumb":"/uploads/cmspages/spiaggia151/gallery/thumb/004.jpg",
+                    "alt":"004"
+                },
+                {
+                    "full":"/uploads/cmspages/spiaggia151/gallery/full/005.jpg",
+                    "thumb":"/uploads/cmspages/spiaggia151/gallery/thumb/005.jpg",
+                    "alt":"005"
+                },
+                {
+                    "full":"/uploads/cmspages/spiaggia151/gallery/full/006.jpg",
+                    "thumb":"/uploads/cmspages/spiaggia151/gallery/thumb/006.jpg",
+                    "alt":"006"
+                },
+                {
+                    "full":"/uploads/cmspages/spiaggia151/gallery/full/007.jpg",
+                    "thumb":"/uploads/cmspages/spiaggia151/gallery/thumb/007.jpg",
+                    "alt":"007"
+                },
+                {
+                    "full":"/uploads/cmspages/spiaggia151/gallery/full/008.jpg",
+                    "thumb":"/uploads/cmspages/spiaggia151/gallery/thumb/008.jpg",
+                    "alt":"008"
+                },
+                {
+                    "full":"/uploads/cmspages/spiaggia151/gallery/full/009.jpg",
+                    "thumb":"/uploads/cmspages/spiaggia151/gallery/thumb/009.jpg",
+                    "alt":"009"
+                }
+            ],
+            "links":[],
+            "footer":""
+        },
+        "excerpt":"",
+        "excerpt_it":"",
+        "content":"",
+        "content_it":""
+    },
+    {
+        "_id":"riccione-spiaggia-151_content",
+        "parent":"",
+        "template":"/macro/templates/cmspages/advanced/page_content.vhtml",
+        "template_it":"/macro/templates/cmspages/advanced/page_content.vhtml",
+        "title":"Beach 151",
+        "title_it":"Spiaggia 151",
+        "subtitle":"Riccione",
+        "subtitle_it":"Riccione",
+        "description":"Beach 151, Riccione",
+        "description_it":"Spiaggia 151, Riccione",
+        "keywords":"Beach 151, Riccione",
+        "keywords_it":"Spiaggia 151, Riccione",
+        "logo":"/uploads/cmspages/spiaggia151/logo.png",
+        "logo_it":"/uploads/cmspages/spiaggia151/logo.png",
+        "data":{
+            "name":"",
+            "surname":"",
+            "address":"",
+            "cell":"",
+            "tel":"",
+            "org":"",
+            "url":"",
+            "email":"",
+            "linkedin":"",
+            "twitter":"",
+            "facebook":"",
+            "google":"",
+            "friendfeed":"",
+            "slideshare":"",
+            "youtube":"",
+            "vimeo":"",
+            "picasa":"",
+            "flickr":"",
+            "wordpress":"",
+            "map":"",
+            "sections":[],
+            "slides":["/uploads/cmspages/spiaggia151/slide1.png", "/uploads/cmspages/spiaggia151/slide2.png", "/uploads/cmspages/spiaggia151/slide3.png"],
+            "gallery":[],
+            "links":[],
+            "footer":""
+        },
+        "data_it":{
+            "name":"",
+            "surname":"",
+            "address":"",
+            "cell":"",
+            "tel":"",
+            "org":"",
+            "url":"",
+            "email":"",
+            "linkedin":"",
+            "twitter":"",
+            "facebook":"",
+            "google":"",
+            "friendfeed":"",
+            "slideshare":"",
+            "youtube":"",
+            "vimeo":"",
+            "picasa":"",
+            "flickr":"",
+            "wordpress":"",
+            "map":"",
+            "sections":[],
+            "slides":["/uploads/cmspages/spiaggia151/slide1.png", "/uploads/cmspages/spiaggia151/slide2.png", "/uploads/cmspages/spiaggia151/slide3.png"],
+            "gallery":[],
+            "links":[],
             "footer":""
         },
         "excerpt":"",
         "excerpt_it":"",
         "content":"<p> A sports village dedicated to sports sailing, sailing, windsurfing, kite, located on the border with Rimini in a still wild, where you can breathe the smell of the sea and wind, ideal place for sailing. </p> <p>Have two lanes outbound vessels, changing rooms, hot showers, storage, open even in winter on windy days, a heated on cold days. </p> Easily accessible by car, ample parking available, bus stop number 36 </p>",
         "content_it":"<p>Un villaggio sportivo dedicato agli sport velici, vela, windsurf, kite, situato al confine con rimini in una zona ancora selvaggia dove si respira l’odore del mare e del vento, luogo ideale per praticare gli sport velici.</p><p>A disposizione due corsie uscita natanti, spogliatoi, docce calde, rimessaggio, aperto anche in inverno nelle giornate di vento, locali riscaldati nelle giornate fredde.</p><p>Facilmente raggiungibile in macchina, a disposizione ampio parcheggio, in autobus fermata n.36</p>"
+    },
+    {
+        "_id":"riccione-spiaggia-151_school",
+        "parent":"",
+        "template":"/macro/templates/cmspages/advanced/page_details.vhtml",
+        "template_it":"/macro/templates/cmspages/advanced/page_details.vhtml",
+        "title":"Sailing School",
+        "title_it":"Scuola Vela",
+        "subtitle":"Riccione",
+        "subtitle_it":"Riccione",
+        "description":"Beach 151, Riccione",
+        "description_it":"Spiaggia 151, Riccione",
+        "keywords":"Beach 151, Riccione",
+        "keywords_it":"Spiaggia 151, Riccione",
+        "logo":"/uploads/cmspages/spiaggia151/logo.png",
+        "logo_it":"/uploads/cmspages/spiaggia151/logo.png",
+        "data":{
+            "name":"",
+            "surname":"",
+            "address":"",
+            "cell":"",
+            "tel":"",
+            "org":"",
+            "url":"",
+            "email":"",
+            "linkedin":"",
+            "twitter":"",
+            "facebook":"",
+            "google":"",
+            "friendfeed":"",
+            "slideshare":"",
+            "youtube":"",
+            "vimeo":"",
+            "picasa":"",
+            "flickr":"",
+            "wordpress":"",
+            "map":"",
+            "sections":[
+                {
+                    "_id":"kitesurf",
+                    "title":"Kite Surf",
+                    "content":"<p>Sport estremo, si pratica utilizzando un aquilone come vela, con la tavola da surf agganciata ai piedi. Una sensazione unica che unisce il fascino della vela,a quella del volo,che ti permette di fare salti spettacolari ,e di surfare le onde.Corsi a partire da 16 anni</p><br><p>Corso 7 ore € 250,00<br>Norme di sicurezza, condizioni meteo marine, preparazione attrezzatura, pratica a terra, orientamento, conoscenza della power zone, uso del trapezio, conoscenza dei safety system del kite e pratica, decolli atterraggi, pratica in mare, body drag ,utilizzo sistemi di sicurezza in mare in caso di pericolo, tecnica di ritorno in caso di avarie in maniera autonoma, water start, tecnica di partenza con posizione corretta del kite(ore11), posizione corretta del corpo rispetto al vent ,e partenze.</p><br><p>Corso 4 ore € 140,00<br>Norme di sicurezza, condizioni meteo marine, preparazione attrezzatura, pratica a terra, orientamento, conoscenza della power zone, bordo finestra, utilizzo dei sistemi di sicurezza in caso di pericolo, teoria dei venti(off shore on shore),decolli atterraggi.</p><br><p>Corso 1 ora € 35,00<br>Avvicinamento generale al kite per chi vuole assaggiare questo sport spettacolare.</p>"
+                },
+                {
+                    "_id":"windsurf",
+                    "title":"Wind Surf",
+                    "content":"<p>Sport nato negli anni settanta, figlio del surf da onda, si è evoluto negli anni adattando le attrezzature a tutte le condizioni di mare e di vento, facile da imparare, considerato uno stile di vita, imbarcazione ideale per il primo approccio al mare.<br>Corsi a partire da 7 anni</p><br><p>Corso 1 settimana (5 gg. – 5 lezioni) € 95,00<br>Teoria di base, nomenclatura della attrezzatura, condizioni meteo marine, conoscenza dei venti, delle andature, ambientamento in mare, tecnica di recupero della vela, equilibrio, partenza in andatura base.<br>Importante i bambini devono saper nuotare</p><br><p>Corso 2 settimane (10 gg. – 10 lezioni) € 180,00<br>Tecnica delle andature(bolina, traverso, lasco, poppa), orientamento, partenza in andatura base con rientro alla scuola in maniera autonoma.<br>Importante i bambini devono saper nuotare</p><br><p>Corso Week-end (8 ore) € 150,00<br>Corso per i più grandi comprende due week end, composto da una buona teoriasui venti e sulle condizioni meteo marine, sulla nomenclatura della attrezzatura, ambientamento con equilibrio in mare, tecnica di recupero della vela con posizione corretta del corpo in andatura base</p><br><p>Corso 1 mese (12 gg. – 12 lezioni) € 190,00<br>Con questo pacchetto si ha la possibilità di poter praticare quello che viene insegnato durante il corso base</p><br><p>Corso stagionale (36 lezioni) € 400,00<br>Sfruttare per tutta la stagione prima di un acquisto le attrezzature della scuola per capire se questo bellissimo sport è quello giusto, con la possibilità di avvicinarsi alle prime planate con vento forte sempre con l’assistenza di un istruttore FIV.</p>"
+                },
+                {
+                    "_id":"sailing",
+                    "title":"Vela",
+                    "content":"<p>Il fascino della vela, le tecniche di navigazione, il profumo del mare rendono affascinante questo sport Anche per i più giovani.<br>Lo scopo dei nostri corsi e quello di avvicinare i giovani al mare con sistema didattico che mira alla conoscenza del nostro ambiente delle condizioni ambientali trasformando il corso in un gioco.</p><br><p>Corso 1 settimana (5 gg. – 5 lezioni) € 95,00<br>Socializzazione di base fra i gruppi, teoria, conoscenza delle imbarcazioni, nomenclatura, primo approccio con la vela, conoscenza dei venti, condizioni meteo marine, andature.</p><br><p>Corso 2 settimane (10 gg. – 10 lezioni) € 180,00<br>Tecniche di navigazione (bolina, traverso, lasco, poppa), punti di riferimento in mare, regolazioni della barca, regatina di fine corso</p><br><p>Corso Week-end (8 ore) € 150,00<br>Corso di due week end, teoria, conoscenza dei venti, delle condizioni meteo marine, primo approccio In mare, tecniche di navigazione, punti di riferimento, recupero barca scuffiata.</p><br><p>Corso 1 mese (12 gg. – 12 lezioni) € 190,00<br>Approfondimento del corso con condizioni di vento sostenuto, navigazione in autonomia, tecniche di recupero della barca scuffiata, preparazione delle vele in autonomia.<br>Alla fine del corso si metteranno alla prova gli allievi per verificare le capacità acquisite anche a livello di sicurezza in mare.</p><br><p>Corso stagionale (36 lezioni) € 400,00<br>La possibilità di poter praticare con l’assistenza di un istruttore FIV per tutta la stagione aumentando la conoscenza e le tecniche migliori per navigare.</p><br><p>Uscita prova con istruttore € 25,00<br>Avvicinamento al mondo della vela per scoprire uno sport nuovo all’aria aperta.</p>"
+                }
+            ],
+            "slides":["/uploads/cmspages/spiaggia151/slide1.png", "/uploads/cmspages/spiaggia151/slide2.png", "/uploads/cmspages/spiaggia151/slide3.png"],
+            "gallery":[],
+            "links":[],
+            "footer":""
+        },
+        "data_it":{
+            "name":"",
+            "surname":"",
+            "address":"",
+            "cell":"",
+            "tel":"",
+            "org":"",
+            "url":"",
+            "email":"",
+            "linkedin":"",
+            "twitter":"",
+            "facebook":"",
+            "google":"",
+            "friendfeed":"",
+            "slideshare":"",
+            "youtube":"",
+            "vimeo":"",
+            "picasa":"",
+            "flickr":"",
+            "wordpress":"",
+            "map":"",
+            "sections":[
+                {
+                    "_id":"kitesurf",
+                    "title":"Kite Surf",
+                    "content":"<p>Sport estremo, si pratica utilizzando un aquilone come vela, con la tavola da surf agganciata ai piedi. Una sensazione unica che unisce il fascino della vela,a quella del volo,che ti permette di fare salti spettacolari ,e di surfare le onde.Corsi a partire da 16 anni</p><br><p>Corso 7 ore € 250,00<br>Norme di sicurezza, condizioni meteo marine, preparazione attrezzatura, pratica a terra, orientamento, conoscenza della power zone, uso del trapezio, conoscenza dei safety system del kite e pratica, decolli atterraggi, pratica in mare, body drag ,utilizzo sistemi di sicurezza in mare in caso di pericolo, tecnica di ritorno in caso di avarie in maniera autonoma, water start, tecnica di partenza con posizione corretta del kite(ore11), posizione corretta del corpo rispetto al vent ,e partenze.</p><br><p>Corso 4 ore € 140,00<br>Norme di sicurezza, condizioni meteo marine, preparazione attrezzatura, pratica a terra, orientamento, conoscenza della power zone, bordo finestra, utilizzo dei sistemi di sicurezza in caso di pericolo, teoria dei venti(off shore on shore),decolli atterraggi.</p><br><p>Corso 1 ora € 35,00<br>Avvicinamento generale al kite per chi vuole assaggiare questo sport spettacolare.</p>"
+                },
+                {
+                    "_id":"windsurf",
+                    "title":"Wind Surf",
+                    "content":"<p>Sport nato negli anni settanta, figlio del surf da onda, si è evoluto negli anni adattando le attrezzature a tutte le condizioni di mare e di vento, facile da imparare, considerato uno stile di vita, imbarcazione ideale per il primo approccio al mare.<br>Corsi a partire da 7 anni</p><br><p>Corso 1 settimana (5 gg. – 5 lezioni) € 95,00<br>Teoria di base, nomenclatura della attrezzatura, condizioni meteo marine, conoscenza dei venti, delle andature, ambientamento in mare, tecnica di recupero della vela, equilibrio, partenza in andatura base.<br>Importante i bambini devono saper nuotare</p><br><p>Corso 2 settimane (10 gg. – 10 lezioni) € 180,00<br>Tecnica delle andature(bolina, traverso, lasco, poppa), orientamento, partenza in andatura base con rientro alla scuola in maniera autonoma.<br>Importante i bambini devono saper nuotare</p><br><p>Corso Week-end (8 ore) € 150,00<br>Corso per i più grandi comprende due week end, composto da una buona teoriasui venti e sulle condizioni meteo marine, sulla nomenclatura della attrezzatura, ambientamento con equilibrio in mare, tecnica di recupero della vela con posizione corretta del corpo in andatura base</p><br><p>Corso 1 mese (12 gg. – 12 lezioni) € 190,00<br>Con questo pacchetto si ha la possibilità di poter praticare quello che viene insegnato durante il corso base</p><br><p>Corso stagionale (36 lezioni) € 400,00<br>Sfruttare per tutta la stagione prima di un acquisto le attrezzature della scuola per capire se questo bellissimo sport è quello giusto, con la possibilità di avvicinarsi alle prime planate con vento forte sempre con l’assistenza di un istruttore FIV.</p>"
+                },
+                {
+                    "_id":"sailing",
+                    "title":"Vela",
+                    "content":"<p>Il fascino della vela, le tecniche di navigazione, il profumo del mare rendono affascinante questo sport Anche per i più giovani.<br>Lo scopo dei nostri corsi e quello di avvicinare i giovani al mare con sistema didattico che mira alla conoscenza del nostro ambiente delle condizioni ambientali trasformando il corso in un gioco.</p><br><p>Corso 1 settimana (5 gg. – 5 lezioni) € 95,00<br>Socializzazione di base fra i gruppi, teoria, conoscenza delle imbarcazioni, nomenclatura, primo approccio con la vela, conoscenza dei venti, condizioni meteo marine, andature.</p><br><p>Corso 2 settimane (10 gg. – 10 lezioni) € 180,00<br>Tecniche di navigazione (bolina, traverso, lasco, poppa), punti di riferimento in mare, regolazioni della barca, regatina di fine corso</p><br><p>Corso Week-end (8 ore) € 150,00<br>Corso di due week end, teoria, conoscenza dei venti, delle condizioni meteo marine, primo approccio In mare, tecniche di navigazione, punti di riferimento, recupero barca scuffiata.</p><br><p>Corso 1 mese (12 gg. – 12 lezioni) € 190,00<br>Approfondimento del corso con condizioni di vento sostenuto, navigazione in autonomia, tecniche di recupero della barca scuffiata, preparazione delle vele in autonomia.<br>Alla fine del corso si metteranno alla prova gli allievi per verificare le capacità acquisite anche a livello di sicurezza in mare.</p><br><p>Corso stagionale (36 lezioni) € 400,00<br>La possibilità di poter praticare con l’assistenza di un istruttore FIV per tutta la stagione aumentando la conoscenza e le tecniche migliori per navigare.</p><br><p>Uscita prova con istruttore € 25,00<br>Avvicinamento al mondo della vela per scoprire uno sport nuovo all’aria aperta.</p>"
+                }
+            ],
+            "slides":["/uploads/cmspages/spiaggia151/slide1.png", "/uploads/cmspages/spiaggia151/slide2.png", "/uploads/cmspages/spiaggia151/slide3.png"],
+            "gallery":[],
+            "links":[],
+            "footer":""
+        },
+        "excerpt":"",
+        "excerpt_it":"",
+        "content":"<div class='round-box shadow'><p><em>Scritto da luca.villa Il 15 - ottobre - 2010</em><br>Riccione 151 organizza corsi di vela, windsurf, kitesurf con istruttori qualificati</p><ol class='list'><li>FIV (federazione italiana vela)</li><li>FKI (federazione kitesurf italiana)</li><li>IKO (international kitesurf organization)</li></ol><br><strong>Aiuto Istruttore: Marco</strong><br><a href='tel:+393483231406' data-role='button' data-theme='c'>Call Now</a></div>",
+        "content_it":"<div class='round-box shadow'><p><em>Scritto da luca.villa Il 15 - ottobre - 2010</em><br>Riccione 151 organizza corsi di vela, windsurf, kitesurf con istruttori qualificati</p><ol class='list'><li>FIV (federazione italiana vela)</li><li>FKI (federazione kitesurf italiana)</li><li>IKO (international kitesurf organization)</li></ol><br><strong>Aiuto Istruttore: Marco</strong><br><a href='tel:+393483231406' data-role='button' data-theme='c'>Chiama Ora</a></p></div>"
     }
 ]

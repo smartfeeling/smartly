@@ -18,6 +18,7 @@ public class CMSUserpage extends MongoObject {
     // ------------------------------------------------------------------------
     public static final String COLLECTION = "userpages";
 
+    public static final String PARENT = "parent";
     public static final String TEMPLATE = "template";
     public static final String TITLE = "title";
     public static final String SUBTITLE = "subtitle";
@@ -54,6 +55,14 @@ public class CMSUserpage extends MongoObject {
 
     public static void setId(final DBObject item, final String value) {
         MongoUtils.put(item, ID, value);
+    }
+
+    public static String getParent(final DBObject item) {
+        return MongoUtils.getString(item, PARENT);
+    }
+
+    public static void setParent(final DBObject item, final String value) {
+        MongoUtils.put(item, PARENT, value);
     }
 
     public static String getTemplate(final DBObject item, final String lang) {

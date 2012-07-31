@@ -22,6 +22,7 @@ import org.smartly.packages.sitebuilder.impl.engine.vtool.Dic;
 import org.smartly.packages.velocity.impl.VLCManager;
 import org.smartly.packages.velocity.impl.engine.VLCEngine;
 import org.smartly.packages.velocity.impl.vtools.Formatter;
+import org.smartly.packages.velocity.impl.vtools.Js;
 import org.smartly.packages.velocity.impl.vtools.Math;
 import org.smartly.packages.velocity.impl.vtools.System;
 
@@ -94,6 +95,7 @@ public class SiteBuilderEngine {
         final VelocityContext innerContext = new VelocityContext();
         // context smartly
         innerContext.put(System.NAME, new System());
+        innerContext.put(Js.NAME, new Js());
         innerContext.put(Formatter.NAME, new Formatter());
         innerContext.put(Math.NAME, new Math());
         // context builder
