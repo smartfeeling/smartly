@@ -11,12 +11,12 @@ import java.util.List;
  * Userpage.
  * Users can create pages and every page is positioned into this collection.
  */
-public class CMSUserpage extends MongoObject {
+public class CMSPageEntity extends MongoObject {
 
     // ------------------------------------------------------------------------
     //                      Constants
     // ------------------------------------------------------------------------
-    public static final String COLLECTION = "userpages";
+    public static final String COLLECTION = "cmspages";
 
     public static final String PARENT = "parent";
     public static final String TEMPLATE = "template";
@@ -33,7 +33,7 @@ public class CMSUserpage extends MongoObject {
     //               Constructor
     // --------------------------------------------------------------------
 
-    public CMSUserpage() {
+    public CMSPageEntity() {
         this.init();
     }
 
@@ -42,7 +42,7 @@ public class CMSUserpage extends MongoObject {
     // ------------------------------------------------------------------------
 
     private void init() {
-        CMSUserpage.setId(this, MongoUtils.createUUID());
+        CMSPageEntity.setId(this, MongoUtils.createUUID());
     }
 
     // --------------------------------------------------------------------

@@ -7,7 +7,7 @@ public class Deployer extends FileDeployer {
     public Deployer(final String targetFolder) {
         super("", targetFolder,
                 false, false, false);
-        super.setOverwrite(true);
+        super.setOverwrite(false);
     }
 
     @Override

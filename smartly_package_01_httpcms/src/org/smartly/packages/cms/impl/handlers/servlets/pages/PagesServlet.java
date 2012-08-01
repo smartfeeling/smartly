@@ -6,9 +6,11 @@ import org.apache.velocity.app.VelocityEngine;
 import org.eclipse.jetty.util.resource.Resource;
 import org.smartly.Smartly;
 import org.smartly.packages.cms.SmartlyHttpCms;
-import org.smartly.packages.cms.impl.cms.page.CMSPage;
-import org.smartly.packages.cms.impl.cms.page.mongodb.entities.CMSUserpage;
-import org.smartly.packages.cms.impl.cms.page.mongodb.services.CMSUserpageService;
+import org.smartly.packages.cms.impl.cms.page.mongodb.entities.CMSPageEntity;
+import org.smartly.packages.cms.impl.cms.page.mongodb.entities.CMSPageEntity;
+import org.smartly.packages.cms.impl.cms.page.mongodb.entities.CMSPageEntity;
+import org.smartly.packages.cms.impl.cms.page.mongodb.services.CMSPageEntityService;
+import org.smartly.packages.cms.impl.cms.page.mongodb.services.CMSPageEntityService;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.util.*;
@@ -101,11 +103,11 @@ public class PagesServlet
         final String resourcePath = ServletUtils.getResourcePath(request);
         final String lang = Req.getLang(request);
         final String pageId = resourcePath.replace(PATH, "");
-        final DBObject page = CMSUserpageService.getPage(pageId);
+        final DBObject page = CMSPageEntityService.getPage(pageId);
 
         if (null!=page) {
             //-- CMS --//
-            final String template = SmartlyHttp.readFile( CMSUserpage.getTemplate(page, lang) );
+            final String template = SmartlyHttp.readFile( CMSPageEntity.getTemplate(page, lang) );
 
             if (null == page || !StringUtils.hasText(template)) {
                 ServletUtils.notFound404(response);
@@ -161,7 +163,7 @@ public class PagesServlet
                     url, request, response));
 
             // creates new context page
-            final CMSPage ctxPage = new CMSPage(lang, page);
+            final org.smartly.packages.cms.impl.cms.page.CMSPage ctxPage = new org.smartly.packages.cms.impl.cms.page.CMSPage(lang, page);
 
             context.put("page", ctxPage);
 

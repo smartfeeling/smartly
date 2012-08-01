@@ -1,18 +1,15 @@
 package org.smartly.packages.cms.impl.cms.page.mongodb.entities.items;
 
 import com.mongodb.DBObject;
-import org.smartly.commons.util.CollectionUtils;
 import org.smartly.commons.util.StringUtils;
 import org.smartly.packages.mongo.impl.MongoObject;
 import org.smartly.packages.mongo.impl.util.MongoUtils;
-
-import java.util.List;
 
 /**
  * Userpage.
  * Users can create pages and every page is positioned into this collection.
  */
-public class CMSUserpageSection extends MongoObject {
+public class CMSPageEntitySection extends MongoObject {
 
     // ------------------------------------------------------------------------
     //                      Constants
@@ -27,7 +24,7 @@ public class CMSUserpageSection extends MongoObject {
     //               Constructor
     // --------------------------------------------------------------------
 
-    public CMSUserpageSection() {
+    public CMSPageEntitySection() {
         this.init();
     }
 
@@ -36,7 +33,7 @@ public class CMSUserpageSection extends MongoObject {
     // ------------------------------------------------------------------------
 
     private void init() {
-        CMSUserpageSection.setId(this, MongoUtils.createUUID(6));
+        CMSPageEntitySection.setId(this, MongoUtils.createUUID(6));
     }
 
     // --------------------------------------------------------------------

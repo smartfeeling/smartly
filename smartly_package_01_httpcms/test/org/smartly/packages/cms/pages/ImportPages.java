@@ -5,8 +5,11 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.smartly.packages.cms.impl.cms.page.mongodb.entities.CMSUserpage;
-import org.smartly.packages.cms.impl.cms.page.mongodb.services.CMSUserpageService;
+import org.smartly.packages.cms.impl.cms.page.mongodb.entities.CMSPageEntity;
+import org.smartly.packages.cms.impl.cms.page.mongodb.entities.CMSPageEntity;
+import org.smartly.packages.cms.impl.cms.page.mongodb.entities.CMSPageEntity;
+import org.smartly.packages.cms.impl.cms.page.mongodb.services.CMSPageEntityService;
+import org.smartly.packages.cms.impl.cms.page.mongodb.services.CMSPageEntityService;
 import org.smartly.packages.cms.ImportAll;
 import org.smartly.commons.util.FormatUtils;
 import org.smartly.packages.mongo.impl.StandardCodedException;
@@ -37,19 +40,19 @@ public class ImportPages {
     }
 
     public void start() throws Exception {
-        System.out.println("Importing '" + CMSUserpage.COLLECTION + "'....");
+        System.out.println("Importing '" + CMSPageEntity.COLLECTION + "'....");
         int count = this.importOnMongo();
 
         assertTrue(count > 0);
 
-        System.out.println("IMPORTED '" + CMSUserpage.COLLECTION + "': " + count);
+        System.out.println("IMPORTED '" + CMSPageEntity.COLLECTION + "': " + count);
     }
 
 
     public void reset() throws StandardCodedException {
-        System.out.println("Removig '" + CMSUserpage.COLLECTION + "'....");
+        System.out.println("Removig '" + CMSPageEntity.COLLECTION + "'....");
 
-        final CMSUserpageService srvc = new CMSUserpageService();
+        final CMSPageEntityService srvc = new CMSPageEntityService();
         int items = srvc.removeAll();
         int indexes = srvc.dropIndexes();
         System.out.println(FormatUtils.format("\tRemoved {0} items and {1} indexes", items, indexes));
@@ -71,7 +74,7 @@ public class ImportPages {
 
     private void importItem(final JSONObject jobject) throws StandardCodedException {
         final DBObject item = MongoUtils.parseObject(jobject.toString());
-        (new CMSUserpageService()).upsert(item);
+        (new CMSPageEntityService()).upsert(item);
     }
 
 }

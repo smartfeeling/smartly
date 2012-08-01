@@ -5,7 +5,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.smartly.commons.util.JsonWrapper;
 import org.smartly.commons.util.StringUtils;
-import org.smartly.packages.cms.impl.cms.page.mongodb.entities.CMSUserpage;
+import org.smartly.packages.cms.impl.cms.page.mongodb.entities.CMSPageEntity;
 import org.smartly.packages.mongo.impl.util.MongoUtils;
 
 import java.util.Collection;
@@ -26,11 +26,11 @@ public class CMSPage {
         _jsonpage = JsonWrapper.wrap(page.toString()).getJSONObject();
     }
 
-    public DBObject getObject(){
+    public DBObject getObject() {
         return _dbpage;
     }
 
-    public JSONObject getJson(){
+    public JSONObject getJson() {
         return _jsonpage;
     }
 
@@ -59,39 +59,39 @@ public class CMSPage {
     }
 
     public Object getTitle(final String lang) {
-        return this.get(_dbpage, lang, CMSUserpage.TITLE);
+        return this.get(_dbpage, lang, CMSPageEntity.TITLE);
     }
 
     public Object getParent() {
-        return this.get(_dbpage, CMSUserpage.PARENT);
+        return this.get(_dbpage, CMSPageEntity.PARENT);
     }
 
     public Object getSubtitle(final String lang) {
-        return this.get(_dbpage, lang, CMSUserpage.SUBTITLE);
+        return this.get(_dbpage, lang, CMSPageEntity.SUBTITLE);
     }
 
     public Object getDescription(final String lang) {
-        return this.get(_dbpage, lang, CMSUserpage.DESCRIPTION);
+        return this.get(_dbpage, lang, CMSPageEntity.DESCRIPTION);
     }
 
     public Object getKeywords(final String lang) {
-        return this.get(_dbpage, lang, CMSUserpage.KEYWORDS);
+        return this.get(_dbpage, lang, CMSPageEntity.KEYWORDS);
     }
 
     public Object getLogo(final String lang) {
-        return this.get(_dbpage, lang, CMSUserpage.LOGO);
+        return this.get(_dbpage, lang, CMSPageEntity.LOGO);
     }
 
     public Object getData(final String lang) {
-        return this.get(_dbpage, lang, CMSUserpage.DATA);
+        return this.get(_dbpage, lang, CMSPageEntity.DATA);
     }
 
     public Object getExcerpt(final String lang) {
-        return this.get(_dbpage, lang, CMSUserpage.EXCERPT);
+        return this.get(_dbpage, lang, CMSPageEntity.EXCERPT);
     }
 
     public Object getContent(final String lang) {
-        return this.get(_dbpage, lang, CMSUserpage.CONTENT);
+        return this.get(_dbpage, lang, CMSPageEntity.CONTENT);
     }
 
     // ------------------------------------------------------------------------

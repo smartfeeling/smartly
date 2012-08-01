@@ -6,14 +6,16 @@ package org.smartly.packages.cms.impl.cms.page.mongodb.services;
 import com.mongodb.DBObject;
 import org.smartly.Smartly;
 import org.smartly.packages.cms.impl.cms.page.mongodb.CMSDBFactory;
-import org.smartly.packages.cms.impl.cms.page.mongodb.entities.CMSUserpage;
+import org.smartly.packages.cms.impl.cms.page.mongodb.entities.CMSPageEntity;
+import org.smartly.packages.cms.impl.cms.page.mongodb.entities.CMSPageEntity;
+import org.smartly.packages.cms.impl.cms.page.mongodb.entities.CMSPageEntity;
 import org.smartly.packages.mongo.impl.AbstractMongoService;
 import org.smartly.packages.mongo.impl.StandardCodedException;
 
 /**
  * @author angelo.geminiani
  */
-public class CMSUserpageService extends AbstractMongoService {
+public class CMSPageEntityService extends AbstractMongoService {
 
     // ------------------------------------------------------------------------
     //                      Constants
@@ -23,9 +25,9 @@ public class CMSUserpageService extends AbstractMongoService {
     // ------------------------------------------------------------------------
     //                      Constructor
     // ------------------------------------------------------------------------
-    public CMSUserpageService() throws StandardCodedException {
+    public CMSPageEntityService() throws StandardCodedException {
         super(CMSDBFactory.getInstance().getDBMain(),
-                CMSUserpage.COLLECTION,
+                CMSPageEntity.COLLECTION,
                 Smartly.getLanguages());
     }
 
@@ -55,7 +57,7 @@ public class CMSUserpageService extends AbstractMongoService {
     public static DBObject getPage(final String url) {
         try {
             final String id = url.replaceAll("/", "");
-            final CMSUserpageService srvc = new CMSUserpageService();
+            final CMSPageEntityService srvc = new CMSPageEntityService();
             return srvc.getById(id);
         } catch (Throwable ignored) {
         }
