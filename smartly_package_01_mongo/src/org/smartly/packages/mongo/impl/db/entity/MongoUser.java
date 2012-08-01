@@ -32,6 +32,7 @@ public class MongoUser extends MongoObject {
     public static final String UID = IMongoEntityConstants.UID;
     public static final String ENABLED = IMongoEntityConstants.ENABLED;
     public static final String REMOVED = IMongoEntityConstants.REMOVED;
+    public static final String FINDABLE = IMongoEntityConstants.FINDABLE;
     public static final String LANG = IMongoEntityConstants.LANG;
     public static final String COUNTRY_ID = IMongoEntityConstants.COUNTRY_ID;
     public static final String COUNTRY = IMongoEntityConstants.COUNTRY; // late initialized (after login)
@@ -304,6 +305,14 @@ public class MongoUser extends MongoObject {
 
     public static void setRemoved(final DBObject item, final boolean value) {
         MongoUtils.put(item, REMOVED, value);
+    }
+
+    public static boolean getFindable(final DBObject item) {
+        return MongoUtils.getBoolean(item, FINDABLE, false);
+    }
+
+    public static void setFindable(final DBObject item, final boolean value) {
+        MongoUtils.put(item, FINDABLE, value);
     }
 
     public static String getEmail(final DBObject item) {

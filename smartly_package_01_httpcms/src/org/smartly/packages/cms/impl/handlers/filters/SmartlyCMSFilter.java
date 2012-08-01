@@ -135,7 +135,7 @@ public class SmartlyCMSFilter
             // creates new context page
             final CMSEndPointPage ctxPage = new CMSEndPointPage(page, engine, context);
 
-            context.put("page", ctxPage);
+            context.put(CMSEndPointPage.NAME, ctxPage);
 
             //-- eval velocity template --//
             final String result;

@@ -14,6 +14,7 @@ import org.smartly.packages.velocity.impl.VLCManager;
  */
 public class CMSEndPointPage {
 
+    public static final String NAME = "page";
 
     private static final String VHTML_DIRECTIVE = "<!-- [vhtml] -->";
 
