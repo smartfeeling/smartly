@@ -1,6 +1,5 @@
 {
     "enabled":true,
-    "debug":false,
     "root":"./jetty",
     "domain":"192.168.1.6",
     "shutdown_token":"smartly",
@@ -33,7 +32,11 @@
             "data":[
                 {
                     "endpoint":"/rest",
-                    "class":"org.smartly.packages.http.impl.handlers.SmartlyRemotingHandler"
+                    "class":"org.smartly.packages.http.impl.handlers.rest.SmartlyRESTHandler"
+                },
+                {
+                    "endpoint":"/remoting",
+                    "class":"org.smartly.packages.http.impl.handlers.remoting.SmartlyRemotingHandler"
                 }
             ],
             "servlets":{

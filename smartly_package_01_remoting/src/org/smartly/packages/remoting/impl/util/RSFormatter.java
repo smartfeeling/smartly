@@ -17,12 +17,12 @@ import java.util.Locale;
  *
  * @author angelo.geminiani
  */
-public class RestFormatter
+public class RSFormatter
         extends RemoteService {
 
     public static final String NAME = "formatter";
 
-    public RestFormatter() {
+    public RSFormatter() {
         super(NAME);
     }
 

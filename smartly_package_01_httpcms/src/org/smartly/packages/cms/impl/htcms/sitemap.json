@@ -1,0 +1,14 @@
+{
+    "pages":[
+        {
+            "url":"/,/index",
+            "template":"/vlc/templates/t_page.vhtml",
+            "path":"/index"
+        },
+        {
+            "url":"/login",
+            "template":"/vlc/templates/t_page.vhtml",
+            "path":"/login"
+        }
+    ]
+}

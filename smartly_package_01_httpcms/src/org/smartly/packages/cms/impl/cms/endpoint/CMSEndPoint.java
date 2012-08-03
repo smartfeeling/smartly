@@ -33,6 +33,12 @@ public class CMSEndPoint {
 
     public static final String CHARSET = CharEncoding.getDefault();
 
+    private static final String FILE_HEAD = "hhead.ly";
+    private static final String FILE_HEADER = "hheader.ly";
+    private static final String FILE_CONTENT = "hcontent.ly";
+    private static final String FILE_FOOTER = "hfooter.ly";
+    private static final String FILE_LABELS = "labels.json";
+
     private final String _root;
     private final Map<String, JSONObject> _sitemap;
     private final Map<String, CMSEndPointPage> _pages;
@@ -116,11 +122,11 @@ public class CMSEndPoint {
     }
 
     private CMSEndPointPage createPage(final String path) throws Exception {
-        final String hhead = _repo.getString(PathUtils.concat(path, "hhead.smrt"));
-        final String hheader = _repo.getString(PathUtils.concat(path, "hheader.smrt"));
-        final String hcontent = _repo.getString(PathUtils.concat(path, "hcontent.smrt"));
-        final String hfooter = _repo.getString(PathUtils.concat(path, "hfooter.smrt"));
-        final JSONObject labels = _repo.getJSONObject(PathUtils.concat(path, "labels.json"));
+        final String hhead = _repo.getString(PathUtils.concat(path, FILE_HEAD));
+        final String hheader = _repo.getString(PathUtils.concat(path, FILE_HEADER));
+        final String hcontent = _repo.getString(PathUtils.concat(path, FILE_CONTENT));
+        final String hfooter = _repo.getString(PathUtils.concat(path, FILE_FOOTER));
+        final JSONObject labels = _repo.getJSONObject(PathUtils.concat(path, FILE_LABELS));
 
         final CMSEndPointPage result = new CMSEndPointPage(path);
         result.setContent(hcontent);

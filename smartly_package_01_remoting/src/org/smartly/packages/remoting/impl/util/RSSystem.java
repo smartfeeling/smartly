@@ -19,12 +19,12 @@ import org.smartly.packages.remoting.impl.RemoteService;
  *
  * @author angelo.geminiani
  */
-public class RestSystem
+public class RSSystem
         extends RemoteService {
 
     public static final String NAME = "system";
 
-    public RestSystem() {
+    public RSSystem() {
         super(NAME);
     }
 

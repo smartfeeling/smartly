@@ -22,6 +22,7 @@
       <entry name="?*.lcf" />
       <entry name="?*.css" />
       <entry name="?*.csv" />
+      <entry name="?*.ly" />
     </wildcardResourcePatterns>
     <annotationProcessing enabled="false" useClasspath="true" />
   </component>

@@ -189,7 +189,7 @@ public class VLCToolbox {
         add(System.NAME, System.class, null, true);
 
         // add Js helper
-        add(Js.NAME, Js.class, null, true);
+        add(Script.NAME, Script.class, null, true);
 
         // add App helper
         add(App.NAME, App.class, null, true);

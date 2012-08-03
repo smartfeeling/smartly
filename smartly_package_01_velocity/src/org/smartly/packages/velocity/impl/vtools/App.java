@@ -22,5 +22,12 @@ public class App implements IVLCTool {
         return Smartly.getLanguages();
     }
 
+    public boolean isDebug() {
+        return Smartly.isDebugMode();
+    }
+
+    public String getLang() {
+        return Smartly.getLang();
+    }
 
 }

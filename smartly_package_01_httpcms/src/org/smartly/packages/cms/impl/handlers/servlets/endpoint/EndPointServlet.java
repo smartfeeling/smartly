@@ -27,6 +27,8 @@ import java.util.*;
 
 /**
  * Servlet for site file parsing.
+ *
+ * This servlet replace SmartlyVHTMLServlet
  */
 public class EndPointServlet
         extends HttpServlet {

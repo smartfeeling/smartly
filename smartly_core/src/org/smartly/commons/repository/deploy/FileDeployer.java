@@ -213,7 +213,7 @@ public abstract class FileDeployer {
                                 final byte[] compressedData = this.compress(binaryData, target.getName());
                                 if (null != compressedData && compressedData.length > 0) {
                                     compressedPath = getMiniFilename(target.getAbsolutePath());
-                                    FileUtils.copy(binaryData, new File(compressedPath));
+                                    FileUtils.copy(compressedData, new File(compressedPath));
                                 }
                             }
 

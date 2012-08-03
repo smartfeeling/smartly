@@ -101,6 +101,13 @@ public class Smartly {
         return getLauncherArgs().containsKey("t") && (Boolean)getLauncherArgs().get("t");
     }
 
+    public static boolean isDebugMode(){
+        return getConfiguration().getBoolean("smartly.debug");
+    }
+
+    public static String getLang(){
+        return getConfiguration().getString("smartly.lang");
+    }
 
     public static String getCharset() {
         return CharEncoding.getDefault();

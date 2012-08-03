@@ -20,7 +20,7 @@ import org.smartly.packages.velocity.SmartlyVelocity;
 public class SmartlyHttpCms extends AbstractPackage
         implements ISmartlySystemPackage {
 
-    public static final String NAME = "smartly_mail";
+    public static final String NAME = "smartly_cms";
 
     public SmartlyHttpCms() {
         super(NAME, 1);
