@@ -343,6 +343,10 @@ public class MongoUser extends MongoObject {
         return MongoUtils.getString(item, LANG);
     }
 
+    public static String getLang(final DBObject item, final String defaultValue) {
+        return MongoUtils.getString(item, LANG, defaultValue);
+    }
+
     public static void setLang(final DBObject item, final String value) {
         MongoUtils.put(item, LANG, value);
     }

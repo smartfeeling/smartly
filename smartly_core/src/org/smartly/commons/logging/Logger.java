@@ -38,6 +38,10 @@ public class Logger {
         return _level.getNumValue() <= level.getNumValue();
     }
 
+    public boolean isDebugEnabled() {
+        return this.isLoggable(Level.FINE);
+    }
+
     public void log(final Level level, final String msg) {
         this.notify(level, msg, null);
     }
@@ -65,7 +69,15 @@ public class Logger {
         this.notify(Level.INFO, FormatUtils.format(msg, args), null);
     }
 
-    public void severe(String msg) {
+    public void error(final String msg) {
+        this.severe(msg);
+    }
+
+    public void error(final String msg, final Throwable t) {
+        this.notify(Level.SEVERE, msg, t);
+    }
+
+    public void severe(final String msg) {
         this.notify(Level.SEVERE, msg, null);
     }
 
@@ -79,6 +91,10 @@ public class Logger {
 
     public void warning(final String msg, final Object... args) {
         this.notify(Level.WARNING, FormatUtils.format(msg, args), null);
+    }
+
+    public void debug(String msg) {
+        this.fine(msg);
     }
 
     public void fine(String msg) {

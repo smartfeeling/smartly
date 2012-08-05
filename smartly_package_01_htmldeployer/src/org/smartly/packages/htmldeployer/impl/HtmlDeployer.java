@@ -8,6 +8,7 @@ import org.smartly.commons.repository.deploy.FileDeployer;
 import org.smartly.commons.util.ConversionUtils;
 import org.smartly.commons.util.FormatUtils;
 import org.smartly.commons.util.StringUtils;
+import org.smartly.packages.htmldeployer.impl.compiler.Compiler;
 import org.smartly.packages.htmldeployer.impl.compressor.Compressor;
 
 public class HtmlDeployer extends FileDeployer {
@@ -19,21 +20,31 @@ public class HtmlDeployer extends FileDeployer {
                         final boolean debugApp,
                         final boolean debugJs) {
         super(startFolder, targetFolder, verbose, debugApp, debugJs);
+        this.init();
     }
 
     public HtmlDeployer(final String targetFolder) {
         super("", targetFolder,
                 verbose(), debugApp(), debugJs());
+        this.init();
     }
 
     public HtmlDeployer() {
         super("", docRoot(),
                 verbose(), debugApp(), debugJs());
+        this.init();
     }
 
     @Override
-    public byte[] beforeDeploy(byte[] data, final String filename) {
-        return data;
+    public byte[] compile(byte[] data, final String filename) {
+        try {
+            final Compiler compiler = new Compiler();
+            return compiler.compileBytes(data, filename);
+        } catch (Throwable t) {
+            super.getLogger().log(Level.SEVERE,
+                    FormatUtils.format("ERROR COMPILING '{0}': {1}", filename, t), t);
+        }
+        return null;
     }
 
     @Override
@@ -52,6 +63,18 @@ public class HtmlDeployer extends FileDeployer {
     //                      p r i v a t e
     // ------------------------------------------------------------------------
 
+    private void init() {
+        // pre-process
+        FileDeployer.getPreProcessorFiles().add(".less");
+        FileDeployer.getPreProcessorFiles().add(".js");
+        FileDeployer.getPreProcessorFiles().add(".css");
+        FileDeployer.getPreProcessorFiles().add(".vm");
+        // compile
+        FileDeployer.getCompileFiles().put(".less", ".css");
+        // compress
+        FileDeployer.getCompressFiles().add(".js");
+        FileDeployer.getCompressFiles().add(".css");
+    }
 
     // ------------------------------------------------------------------------
     //                      S T A T I C

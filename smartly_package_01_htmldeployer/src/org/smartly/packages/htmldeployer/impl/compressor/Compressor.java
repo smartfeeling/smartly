@@ -4,10 +4,12 @@ import compressor.CssCompressor;
 import compressor.JavaScriptCompressor;
 import old.mozilla.javascript.ErrorReporter;
 import old.mozilla.javascript.EvaluatorException;
+import org.lesscss.LessCompiler;
 import org.smartly.Smartly;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
+import org.smartly.commons.util.FileUtils;
 import org.smartly.commons.util.PathUtils;
 
 import java.io.*;
@@ -73,7 +75,7 @@ public class Compressor {
         this._linebreakpos = value;
     }
 
-    public byte[] compressBytes(final byte[] bytes, final String fileName) throws IOException {
+    public byte[] compressBytes(final byte[] bytes, final String fileName) throws Exception {
         final String ext = PathUtils.getFilenameExtension(fileName, true);
         final Reader reader = new InputStreamReader(new ByteArrayInputStream(bytes));
         final Writer out = new StringWriter();
@@ -81,6 +83,8 @@ public class Compressor {
             this.compressJs(reader, out);
         } else if (".css".equalsIgnoreCase(ext)) {
             this.compressCss(reader, out);
+        } else if (".less".equalsIgnoreCase(ext)) {
+            this.compressLess(reader, out);
         } else {
             this.compressCss(reader, out);
         }
@@ -97,7 +101,7 @@ public class Compressor {
         return result;
     }
 
-    public void compress(final String text, final String outputFilename) throws IOException {
+    public void compress(final String text, final String outputFilename) throws Exception {
         final String ext = PathUtils.getFilenameExtension(outputFilename, true);
         final StringReader reader = new StringReader(text);
         Writer out = null;
@@ -107,6 +111,8 @@ public class Compressor {
                 this.compressJs(reader, out);
             } else if (".css".equalsIgnoreCase(ext)) {
                 this.compressCss(reader, out);
+            } else if (".less".equalsIgnoreCase(ext)) {
+                this.compressLess(reader, out);
             } else {
                 this.compressCss(reader, out);
             }
@@ -129,17 +135,23 @@ public class Compressor {
         }
     }
 
-    public void compressJs(final Reader reader, final Writer out) throws IOException {
+    public void compressJs(final Reader reader, final Writer out) throws Exception {
         final JavaScriptCompressor compressor = this.getJsCompressor(reader);
         compressor.compress(out, _linebreakpos, _obfuscate, _verbose,
                 _preserveAllSemicolons, _disableOptimizations);
     }
 
-    public void compressCss(final Reader reader, final Writer out) throws IOException {
+    public void compressCss(final Reader reader, final Writer out) throws Exception {
         final CssCompressor compressor = this.getCssCompressor(reader);
         compressor.compress(out, _linebreakpos);
     }
 
+    public void compressLess(final Reader reader, final Writer out) throws Exception {
+        final LessCompiler less = this.getLessCompiler();
+        final String source = FileUtils.copyToString(reader);
+        final String sout = less.compile(source);
+        out.write(sout);
+    }
     // ------------------------------------------------------------------------
     //                      p r i v a t e
     // ------------------------------------------------------------------------
@@ -182,5 +194,11 @@ public class Compressor {
     private CssCompressor getCssCompressor(final Reader reader) throws IOException {
         final CssCompressor compressor = new CssCompressor(reader);
         return compressor;
+    }
+
+    private LessCompiler getLessCompiler() {
+        final LessCompiler lessCompiler = new LessCompiler();
+
+        return lessCompiler;
     }
 }

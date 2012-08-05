@@ -11,7 +11,7 @@ public class SmartlyHtmlDeployerTest {
 
         HtmlDeployer deployer = new TestDeployer();
         deployer.setOverwrite(true);
-        deployer.getCompilableFiles().add(".html");
+        deployer.getPreProcessorFiles().add(".html");
         deployer.deploy();
     }
 

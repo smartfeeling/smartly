@@ -10,7 +10,7 @@ public class Deployer extends FileDeployer {
     }
 
     @Override
-    public byte[] beforeDeploy(byte[] data, final String filename) {
+    public byte[] compile(byte[] data, final String filename) {
         return data;
     }
 

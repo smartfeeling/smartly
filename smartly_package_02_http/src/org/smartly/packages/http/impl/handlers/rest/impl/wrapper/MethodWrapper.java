@@ -183,15 +183,21 @@ public class MethodWrapper {
             } else {
                 final Annotation[][] aparams = _method.getParameterAnnotations();
                 if (null != aparams && aparams.length > 0) {
-                    urlParams.putAll(formParams); // param fusion
                     final String[] params = new String[aparams.length];
                     Arrays.fill(params, "");
                     for (int i = 0; i < aparams.length; i++) {
                         final Annotation[] ap = aparams[i];
                         for (final Annotation a : ap) {
-                            final String aval = getValue(a);
-                            if (urlParams.containsKey(aval)) {
-                                params[i] = urlParams.get(aval);
+                            if(a instanceof PathParam){
+                                final String key = ((PathParam)a).value(); // getValue(a);
+                                if (urlParams.containsKey(key)) {
+                                    params[i] = urlParams.get(key);
+                                }
+                            } else if (a instanceof FormParam){
+                                final String key = ((FormParam)a).value(); // getValue(a);
+                                if (formParams.containsKey(key)) {
+                                    params[i] = formParams.get(key);
+                                }
                             }
                         }
                     }

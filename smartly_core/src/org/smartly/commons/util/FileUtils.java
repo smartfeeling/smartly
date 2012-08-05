@@ -372,6 +372,30 @@ public abstract class FileUtils {
         return out.getBuffer();
     }
 
+    /**
+     * Shortcut to copy(string.getBytes(encoding), output);
+     * @param output File
+     * @param data  Data to write
+     * @param encoding charset
+     * @throws IOException
+     */
+    public static void writeStringToFile(final File output,
+                                         final String data,
+                                         final String encoding) throws IOException{
+       final byte[] bytes = data.getBytes(encoding);
+        copy(bytes, output);
+    }
+
+    /**
+     * Shortcut to new String(copyToByteArray(file));
+     * @param file File
+     * @return String
+     * @throws IOException
+     */
+    public static String readFileToString(final File file) throws IOException {
+        final byte[] bytes = copyToByteArray(file);
+        return new String(bytes);
+    }
 
     //---------------------------------------------------------------------
     // List methods
@@ -586,6 +610,7 @@ public abstract class FileUtils {
 
         return result;
     }
+
 
 
 }

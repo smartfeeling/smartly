@@ -11,7 +11,7 @@ public class Deployer extends FileDeployer {
     }
 
     @Override
-    public byte[] beforeDeploy(byte[] data, String filename) {
+    public byte[] compile(byte[] data, String filename) {
         return data;
     }
 

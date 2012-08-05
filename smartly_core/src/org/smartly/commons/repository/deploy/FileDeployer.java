@@ -27,10 +27,8 @@ public abstract class FileDeployer {
     //                      Constants
     // ------------------------------------------------------------------------
 
-    public static final String CHARSET = CharEncoding.getDefault();
-
-    public static final String SUFFIX_MIN = ".mini";
-
+    private static final String CHARSET = CharEncoding.getDefault();
+    private static final String SUFFIX_MIN = ".mini";
     private static final String[] EXCLUDE = new String[]{
             ".class"
     };
@@ -39,13 +37,12 @@ public abstract class FileDeployer {
     private static final String DIRECTIVE_VERSION_VALUE = GUID.create();
     private static final String DIRECTIVE_DEBUG_APP = "[RT-DEBUG]";
     private static final String DIRECTIVE_DEBUG_JS = "[RT-DEBUGJS]";
-    private static final String[] DIRECTIVE_FILES = new String[]{".js", ".vm"}; // array of files that support compiler directives
-    private static final String[] COMPRESS_FILES = new String[]{".js", ".css"};
+
     // ------------------------------------------------------------------------
     //                      Variables
     // ------------------------------------------------------------------------
-    private final Set<String> _compilableFiles;
-    private final Map<String, String> _compilableValues;
+
+
     private final List<FileItem> _resources;
     private final String _startFolder;
     private final String _targetFolder;
@@ -66,8 +63,8 @@ public abstract class FileDeployer {
         this.logInfo("Creating FileDeployer '{0}'. "
                 + "Start Folder: '{1}', Target Folder: '{2}'",
                 this.getClass().getSimpleName(), startFolder, targetFolder);
-        _compilableFiles = new HashSet<String>(Arrays.asList(DIRECTIVE_FILES));
-        _compilableValues = new HashMap<String, String>();
+
+
         _resources = new LinkedList<FileItem>();
         _startFolder = startFolder;
         _targetFolder = targetFolder;
@@ -99,14 +96,6 @@ public abstract class FileDeployer {
         _overwriteItems = value;
     }
 
-    public Set<String> getCompilableFiles() {
-        return _compilableFiles;
-    }
-
-    public Map<String, String> getCompilableValues() {
-        return _compilableValues;
-    }
-
     public void deployChildren() {
         this.deploy(_targetFolder, true);
     }
@@ -119,7 +108,7 @@ public abstract class FileDeployer {
      * Deploy content into target
      *
      * @param targetFolder Parent root. i.e. "c:\", "ftp://USERNAME:PASSWORD@host:21/myfolder/mysubfolder"
-     * @param children Deploy only content of startFolder into targetFolder
+     * @param children     Deploy only content of startFolder into targetFolder
      */
     public void deploy(final String targetFolder,
                        final boolean children) {
@@ -137,7 +126,7 @@ public abstract class FileDeployer {
 
     public abstract byte[] compress(final byte[] data, final String filename);
 
-    public abstract byte[] beforeDeploy(final byte[] data, final String filename);
+    public abstract byte[] compile(final byte[] data, final String filename);
 
     // ------------------------------------------------------------------------
     //                      p r i v a t e
@@ -147,10 +136,12 @@ public abstract class FileDeployer {
     }
 
     private void init() {
-        //-- init compilable values --//
-        _compilableValues.put(DIRECTIVE_VERSION, DIRECTIVE_VERSION_VALUE);
-        _compilableValues.put(DIRECTIVE_DEBUG_APP, _debugApp + "");
-        _compilableValues.put(DIRECTIVE_DEBUG_JS, _debugJs + "");
+        //-- init pre-processor values --//
+        _preprocessorValues.put(DIRECTIVE_VERSION, DIRECTIVE_VERSION_VALUE);
+        _preprocessorValues.put(DIRECTIVE_DEBUG_APP, _debugApp + "");
+        _preprocessorValues.put(DIRECTIVE_DEBUG_JS, _debugJs + "");
+
+
     }
 
     private void logStart() {
@@ -174,45 +165,60 @@ public abstract class FileDeployer {
         final String filename = item.getFileName();
         // check if file extension is not excluded
         if (this.isDeployable(filename)) {
-            final String targetPath;
-            if(children){
-                targetPath = PathUtils.merge(targetFolder, PathUtils.splitPathRoot(filename));
+            // targetPath is absolute file name of deployed file
+            String targetPath;
+            if (children) {
+                targetPath = (new File(PathUtils.merge(targetFolder, PathUtils.splitPathRoot(filename)))).getAbsolutePath();
             } else {
-                targetPath = PathUtils.merge(targetFolder, filename);
+                targetPath = (new File(PathUtils.merge(targetFolder, filename))).getAbsolutePath();
             }
-            final File target = new File(targetPath);
-            final boolean exists = target.exists();
+            final String targetName = (new File(targetPath)).getName();
+            final boolean exists = PathUtils.exists(targetPath); //target.exists();
             final boolean overwrite = this.isOverwritable(filename);
-            final boolean compilable = this.isCompilable(filename);
-            final boolean compressible = FileDeployer.isCompressible(filename);
+            final String ext = PathUtils.getFilenameExtension(filename, true);
             String compressedPath = null;
             Exception exc = null;
             int deployed = 0;
             if (!exists || overwrite) {
                 if (!item.isDirectory()) {
                     try {
-                        FileUtils.mkdirs(target.getAbsolutePath());
+                        FileUtils.mkdirs(targetPath);
                         final String packagename = item.getPackageName();
                         final InputStream in = this.read(packagename);
                         if (null != in) {
                             deployed = 1;
                             byte[] binaryData = ByteUtils.getBytes(in);
-                            if (compilable) {
-                                binaryData = this.compile(binaryData);
+
+                            //-- pre-process file  --//
+                            if (getPreProcessorFiles().contains(ext)) {
+                                // pre-process
+                                binaryData = this.preProcess(binaryData);
                             }
 
-                            //-- before deploy event --//
-                            binaryData = this.beforeDeploy(binaryData, target.getName());
+                            //-- compile file  --//
+                            if (getCompileFiles().containsKey(ext)) {
+                                // compile
+                                final byte[] compiledData = this.compile(binaryData, targetName);
+                                if (null != compiledData && compiledData.length > 0) {
+                                    // replace data with compiled data
+                                    binaryData = compiledData;
+                                    final String outExt = FileDeployer.getCompileFiles().get(ext);
+                                    if(StringUtils.hasText(outExt) && !outExt.equalsIgnoreCase(ext)){
+                                        // change target file name
+                                        targetPath = PathUtils.changeFileExtension(targetPath, outExt);
+                                    }
+                                }
+                            }
 
                             //-- deploy file --//
-                            FileUtils.copy(binaryData, target);
+                            FileUtils.copy(binaryData, new File(targetPath));
 
                             //-- compress file --//
-                            if (compressible) {
+                            if (getCompressFiles().contains(ext(targetPath))) {
                                 // creates new minified file
-                                final byte[] compressedData = this.compress(binaryData, target.getName());
+                                final byte[] compressedData = this.compress(binaryData, targetPath);
                                 if (null != compressedData && compressedData.length > 0) {
-                                    compressedPath = getMiniFilename(target.getAbsolutePath());
+                                    compressedPath = getMiniFilename(targetPath);
                                     FileUtils.copy(compressedData, new File(compressedPath));
                                 }
                             }
@@ -258,6 +264,10 @@ public abstract class FileDeployer {
         return message;
     }
 
+    private String ext(final String file){
+       return PathUtils.getFilenameExtension(file, true);
+    }
+
     private boolean isDeployable(final String item) {
         final String ext = PathUtils.getFilenameExtension(item, true);
         return !CollectionUtils.contains(EXCLUDE, ext);
@@ -278,43 +288,23 @@ public abstract class FileDeployer {
         return _overwriteAll;
     }
 
-    private boolean isCompilable(final String filename) {
-        final String ext = PathUtils.getFilenameExtension(filename, true);
-        return _compilableFiles.contains(ext);
-    }
 
     private InputStream read(final String packagename) throws FileNotFoundException {
         return ClassLoaderUtils.getResourceAsStream(packagename);
     }
 
-    private byte[] compile(final byte[] text) throws UnsupportedEncodingException {
+    private byte[] preProcess(final byte[] text) throws UnsupportedEncodingException {
         String result = new String(text);
         if (StringUtils.hasText(result)) {
-            final Set<String> keys = _compilableValues.keySet();
+            final Set<String> keys = _preprocessorValues.keySet();
             for (final String key : keys) {
                 if (result.contains(key)) {
-                    result = StringUtils.replace(result, key, _compilableValues.get(key));
+                    result = StringUtils.replace(result, key, _preprocessorValues.get(key));
                 }
             }
         }
         return result.getBytes(CharEncoding.getDefault());
     }
-
-    /*private String compress(final String sourcePath, final byte[] data) {
-        final String targetPath = getMiniFilename(sourcePath);
-        if (StringUtils.hasText(targetPath)) {
-            try {
-                final Compressor compressor = new Compressor();
-                compressor.compress(new String(data), targetPath);
-                return targetPath;
-            } catch (Throwable t) {
-                this.getLogger().log(Level.SEVERE,
-                        StringUtils.format("PROBLEM COMPRESSING '{0}': {1}", sourcePath, t),
-                        t);
-            }
-        }
-        return "";
-    }*/
 
     private void loadResources(final String startFolder) {
         _resources.clear();
@@ -416,6 +406,26 @@ public abstract class FileDeployer {
     // ------------------------------------------------------------------------
 
     private static final List<FileDeployer> _deployers = Collections.synchronizedList(new LinkedList<FileDeployer>());
+    private static final Map<String, String> _compileFiles = new HashMap<String, String>();
+    private static final Set<String> _compressFiles = new HashSet<String>();
+    private static final Set<String> _preprocessorFiles = new HashSet<String>(); // Arrays.asList(PREPROCESS_FILES)
+    private static final Map<String, String> _preprocessorValues = new HashMap<String, String>();
+
+    public static Set<String> getPreProcessorFiles() {
+        return _preprocessorFiles;
+    }
+
+    public static Map<String, String> getPreprocessorValues() {
+        return _preprocessorValues;
+    }
+
+    public static Set<String> getCompressFiles() {
+        return _compressFiles;
+    }
+
+    public static Map<String, String> getCompileFiles() {
+        return _compileFiles;
+    }
 
     public static void register(final FileDeployer deployer) {
         synchronized (_deployers) {
@@ -435,9 +445,19 @@ public abstract class FileDeployer {
         }
     }
 
+    public static boolean isPreProcessable(final String filename) {
+        final String ext = PathUtils.getFilenameExtension(filename, true);
+        return _preprocessorFiles.contains(ext);
+    }
+
+    public static boolean isCompilable(final String filename) {
+        final String ext = PathUtils.getFilenameExtension(filename, true);
+        return _compileFiles.containsKey(ext);
+    }
+
     public static boolean isCompressible(final String filename) {
         final String ext = PathUtils.getFilenameExtension(filename, true);
-        return CollectionUtils.indexOf(COMPRESS_FILES, ext) > -1;
+        return _compressFiles.contains(ext);
     }
 
     /**
