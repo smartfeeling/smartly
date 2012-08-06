@@ -57,6 +57,15 @@ public class CMSEndPointRepository {
         return null;
     }
 
+    public String getString(final String path, final String defa) {
+        try {
+            return this.read(path);
+        } catch (Throwable t) {
+            this.getLogger().log(Level.SEVERE, null, t);
+        }
+        return null;
+    }
+
     public JSONObject getJSONObject(final String path) {
         try {
             final String json = this.read(path);

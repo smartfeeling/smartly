@@ -84,6 +84,9 @@ public class VLCManager implements IVLCCostants {
     }
 
     private String replaceUnsolvedVariables(final String text) {
+        if(!replaceUnsolved){
+           return text;
+        }
         final StringBuffer sb = new StringBuffer();
         final Pattern p = Pattern.compile(RegExUtils.VELOCITY_VARIABLES);
         final Matcher m = p.matcher(text);
@@ -130,6 +133,7 @@ public class VLCManager implements IVLCCostants {
     // ------------------------------------------------------------------------
     //                      S T A T I C
     // ------------------------------------------------------------------------
+    public static boolean replaceUnsolved = false;
     private static VLCManager _instance;
 
     public static VLCManager getInstance() {

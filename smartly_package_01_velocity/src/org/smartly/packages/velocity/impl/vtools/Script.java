@@ -52,7 +52,8 @@ public class Script {
 
     /**
      * Returns a script that load a javascript library checking for modern browsers.<br/>
-     * Useful for IE support.
+     * Useful for IE support.<br>
+     *     i.e. <code>$script.requireJsCond("/js/lib/zepto/zepto.min.js", "/js/lib/jquery/jquery-1.7.2.min.js")</code>
      * @param modern i.e. "zepto.js"
      * @param legacy i.e. "jquery.js"
      * @return script
