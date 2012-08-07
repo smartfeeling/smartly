@@ -45,6 +45,14 @@ public class MongoCountryService extends AbstractMongoService {
         filter.put(MongoCountry.ENABLED, true);
         return super.find(filter, null, new String[]{MongoCountry.ID}, null);
     }
+
+    public List<DBObject> getEnabled(final String lang) {
+        final DBObject filter = new BasicDBObject();
+        filter.put(MongoCountry.ENABLED, true);
+        final List<DBObject> result = super.find(filter, null, new String[]{MongoCountry.ID}, null);
+        localize(result, lang);
+        return result;
+    }
     // ------------------------------------------------------------------------
     //                      p r i v a t e
     // ------------------------------------------------------------------------
