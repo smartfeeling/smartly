@@ -4,10 +4,7 @@
 package org.smartly.commons.i18n.impl;
 
 import org.smartly.commons.i18n.AbstractI18nBundle;
-import org.smartly.commons.util.ClassLoaderUtils;
 import org.smartly.commons.util.LocaleUtils;
-import org.smartly.commons.util.PathUtils;
-import org.smartly.commons.util.StringUtils;
 
 import java.util.Locale;
 import java.util.Map;
@@ -21,7 +18,6 @@ import java.util.Map;
  */
 public class BaseDictionary extends AbstractI18nBundle {
 
-    private boolean _lookupForFileResource = false;
 
     // --------------------------------------------------------------------
     //               c o n s t r u c t o r
@@ -33,14 +29,6 @@ public class BaseDictionary extends AbstractI18nBundle {
 
     public BaseDictionary() {
         super();
-    }
-
-    // --------------------------------------------------------------------
-    //               p r o p e r t i e s
-    // --------------------------------------------------------------------
-
-    public void setLookupForFileResource(final boolean value) {
-        _lookupForFileResource = value;
     }
 
     // --------------------------------------------------------------------
@@ -61,43 +49,18 @@ public class BaseDictionary extends AbstractI18nBundle {
 
     public String getMessage(final String key, final Locale locale,
                              final Object... args) {
-        return this.validate(
-                super.getMessage(key, locale, getClassLoader(), args));
+        return super.getMessage(key, locale, getClassLoader(), args);
     }
 
     public String getMessage(final String key, final Locale locale,
                              final Map<String, ? extends Object> args) {
-        return this.validate(
-                super.getMessage(key, locale, getClassLoader(), args));
+        return super.getMessage(key, locale, getClassLoader(), args);
     }
-
-
 
     // --------------------------------------------------------------------
     //               p r i v a t e
     // --------------------------------------------------------------------
 
-    private String validate(final String value) {
-        // should check if value is a file resource?
-        if (_lookupForFileResource) {
-            if (StringUtils.hasText(PathUtils.getFilenameExtension(value))) {
-                try {
-                    return this.readFile(value);
-                } catch (Throwable ignored) {
-                }
-            }
-        }
-
-        return value;
-    }
-
-    private String readFile(final String fileName) throws Exception{
-        final String result = ClassLoaderUtils.getResourceAsString(null, this.getClass(), fileName);
-        if(null==result){
-            throw new Exception("not a file");
-        }
-        return result;
-    }
 
     // ------------------------------------------------------------------------
     //                      S T A T I C
