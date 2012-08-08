@@ -2,6 +2,7 @@ package org.smartly.packages.cms.impl.cms.endpoint;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.smartly.Smartly;
 import org.smartly.commons.lang.CharEncoding;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
@@ -38,6 +39,7 @@ public class CMSEndPoint {
     private static final String FILE_CONTENT = "hcontent.ly";
     private static final String FILE_FOOTER = "hfooter.ly";
     private static final String FILE_SCRIPT = "hscript.ly";
+    private static final String FILE_SCRIPT_DBG = "hscript_dbg.ly";
     private static final String FILE_LABELS = "labels.json";
 
     private final String _root;
@@ -128,6 +130,7 @@ public class CMSEndPoint {
         final String hcontent = _repo.getString(PathUtils.concat(path, FILE_CONTENT));
         final String hfooter = _repo.getString(PathUtils.concat(path, FILE_FOOTER));
         final String hscript = _repo.getString(PathUtils.concat(path, FILE_SCRIPT));
+        final String hscriptdbg = _repo.getString(PathUtils.concat(path, FILE_SCRIPT_DBG));
         final JSONObject labels = _repo.getJSONObject(PathUtils.concat(path, FILE_LABELS));
 
         final CMSEndPointPage result = new CMSEndPointPage(path);
@@ -135,7 +138,7 @@ public class CMSEndPoint {
         result.setFooter(hfooter);
         result.setHead(hhead);
         result.setHeader(hheader);
-        result.setScript(hscript);
+        result.setScript(isDebug()?(StringUtils.hasText(hscriptdbg)?hscriptdbg:hscript):hscript);
         result.setLocalizations(labels);
 
         return result;
@@ -169,7 +172,9 @@ public class CMSEndPoint {
     //               S T A T I C
     // --------------------------------------------------------------------
 
-
+    private static boolean isDebug(){
+        return Smartly.isDebugMode();
+    }
 
     private static String getRootFullPath(final Class aclass) {
         final URL url = ClassLoaderUtils.getResource(null, aclass, "");

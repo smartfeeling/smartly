@@ -128,6 +128,6 @@ public class Script {
 
     private static String geRealFileName(final boolean debug, final String filename){
         final String min_name = FileDeployer.getMiniFilename(filename);
-        return debug ? null!=min_name?min_name:filename : filename;
+        return !debug ? null!=min_name?min_name:filename : filename;
     }
 }

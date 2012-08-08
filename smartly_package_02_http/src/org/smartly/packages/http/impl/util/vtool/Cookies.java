@@ -3,11 +3,13 @@ package org.smartly.packages.http.impl.util.vtool;
 
 import org.json.JSONObject;
 import org.smartly.commons.util.JsonWrapper;
+import org.smartly.commons.util.LocaleUtils;
 import org.smartly.packages.velocity.impl.vtools.IVLCTool;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.DecimalFormatSymbols;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -137,27 +139,34 @@ public class Cookies implements IVLCTool {
         JsonWrapper.put(result, "accountid", this.getCookieValue("accountid"));
 
         // lang
+        String lang = getLangCode();
         if (!this.hasCookie("lang")) {
-            this.addCookie("lang", getLangCode());
+            this.addCookie("lang", lang);
+        } else {
+            lang = this.getCookieValue("lang");
         }
         JsonWrapper.put(result, "lang", this.getCookieValue("lang"));
 
-        // currency
-        if (!this.hasCookie("currency")) {
-            this.addCookie("currency", "USD");
-        }
-        JsonWrapper.put(result, "currency", this.getCookieValue("currency"));
-
         // country
+        String country = getCountry(lang);
         if (!this.hasCookie("country")) {
-            this.addCookie("country", "US");
+            this.addCookie("country", country);
+        } else {
+            country = this.getCookieValue("country");
         }
         JsonWrapper.put(result, "country", this.getCookieValue("country"));
 
+        // currency
+        final DecimalFormatSymbols dfs = getDfs(lang, country);
+        //if (!this.hasCookie("currency")) {
+        this.addCookie("currency", dfs.getCurrency().getCurrencyCode());
+        //}
+        JsonWrapper.put(result, "currency", this.getCookieValue("currency"));
+
         // decimalsep
-        if (!this.hasCookie("decimalsep")) {
-            this.addCookie("decimalsep", ".");
-        }
+        //if (!this.hasCookie("decimalsep")) {
+        this.addCookie("decimalsep", "" + dfs.getDecimalSeparator());
+        //}
         JsonWrapper.put(result, "decimalsep", this.getCookieValue("decimalsep"));
 
         // discount
@@ -178,4 +187,13 @@ public class Cookies implements IVLCTool {
     private String getLangCode() {
         return Req.getLang(_request);
     }
+
+    private static String getCountry(final String lang) {
+        return LocaleUtils.getCountry(LocaleUtils.getLocaleFromString(lang)).getCountry();
+    }
+
+    private static DecimalFormatSymbols getDfs(final String lang, final String country) {
+        return LocaleUtils.getDecimalFormatSymbols(LocaleUtils.getLocale(lang, country));
+    }
+
 }
