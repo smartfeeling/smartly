@@ -111,7 +111,7 @@ public class MethodWrapper {
     }
 
 
-    public byte[] execute(final String url, final Map<String, String> formParams) throws IOException {
+    public byte[] execute(final String url, final Map<String, Object> formParams) throws IOException {
         Object result = null;
         try {
             // remove service name, the root
@@ -175,7 +175,7 @@ public class MethodWrapper {
         return true;
     }
 
-    private Object execute(final Map<String, String> urlParams, final Map<String, String> formParams) throws IOException {
+    private Object execute(final Map<String, String> urlParams, final Map<String, Object> formParams) throws IOException {
         Object result = null;
         try {
             if (urlParams.isEmpty() && formParams.isEmpty()) {
@@ -183,20 +183,20 @@ public class MethodWrapper {
             } else {
                 final Annotation[][] aparams = _method.getParameterAnnotations();
                 if (null != aparams && aparams.length > 0) {
-                    final String[] params = new String[aparams.length];
+                    final Object[] params = new Object[aparams.length];
                     Arrays.fill(params, "");
                     for (int i = 0; i < aparams.length; i++) {
                         final Annotation[] ap = aparams[i];
                         for (final Annotation a : ap) {
-                            if(a instanceof PathParam){
-                                final String key = ((PathParam)a).value(); // getValue(a);
+                            if (a instanceof PathParam) {
+                                final String key = ((PathParam) a).value(); // getValue(a);
                                 if (urlParams.containsKey(key)) {
                                     params[i] = urlParams.get(key);
                                 }
-                            } else if (a instanceof FormParam){
-                                final String key = ((FormParam)a).value(); // getValue(a);
+                            } else if (a instanceof FormParam) {
+                                final String key = ((FormParam) a).value(); // getValue(a);
                                 if (formParams.containsKey(key)) {
-                                    params[i] = formParams.get(key);
+                                    params[i] = formParams.get(key).toString();
                                 }
                             }
                         }
@@ -289,18 +289,20 @@ public class MethodWrapper {
     private static Map<String, String> pluckParams(final String path, final String[] path_params) {
         final String[] tokens = StringUtils.split(path, "/");
         final Map<String, String> result = new HashMap<String, String>();
-        for (int i = 0; i < path_params.length; i++) {
-            if (StringUtils.hasText(path_params[i])) {
-                result.put(path_params[i], tokens[i]);
+        if (tokens.length > 0 && tokens.length==path_params.length) {
+            for (int i = 0; i < path_params.length; i++) {
+                if (StringUtils.hasText(path_params[i])) {
+                    result.put(path_params[i], tokens[i]);
+                }
             }
         }
         return result;
     }
 
     private static String getValue(final Annotation annotation) {
-        try{
-            return (String)annotation.annotationType().getMethod("value").invoke(annotation);
-        } catch(Throwable ignored){
+        try {
+            return (String) annotation.annotationType().getMethod("value").invoke(annotation);
+        } catch (Throwable ignored) {
         }
         return "";
     }

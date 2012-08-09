@@ -31,17 +31,25 @@ public class ServiceImplTest {
 
         RESTRegistry.register(SampleRESTServiceImpl.class);
 
-        final String http_method = "GET";
-        final String path = "/test/A/b";
+        String http_method = "GET";
+        String path = "/test/A/b";
 
-        final MethodWrapper mw =  RESTRegistry.getMethod(http_method, path);
+        MethodWrapper mw =  RESTRegistry.getMethod(http_method, path);
         assertNotNull("method not found", mw);
 
         System.out.println(mw.toString());
 
-        final Map<String, String> formParams = new HashMap<String, String>();
-        final byte[] bytes = mw.execute(path, formParams);
-        final String result = new String(bytes);
+        Map<String, Object> formParams = new HashMap<String, Object>();
+        byte[] bytes = mw.execute(path, formParams);
+        String result = new String(bytes);
+        System.out.println("RESPONSE: " + result);
+
+        path = "/test/form";
+        mw =  RESTRegistry.getMethod(http_method, path);
+        formParams = new HashMap<String, Object>();
+        formParams.put("param1", "hello");
+        bytes = mw.execute(path, formParams);
+        result = new String(bytes);
         System.out.println("RESPONSE: " + result);
     }
 

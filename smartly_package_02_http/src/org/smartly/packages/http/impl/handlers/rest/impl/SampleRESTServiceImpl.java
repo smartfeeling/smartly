@@ -3,10 +3,7 @@ package org.smartly.packages.http.impl.handlers.rest.impl;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.smartly.packages.http.impl.handlers.rest.impl.annotations.GET;
-import org.smartly.packages.http.impl.handlers.rest.impl.annotations.Path;
-import org.smartly.packages.http.impl.handlers.rest.impl.annotations.PathParam;
-import org.smartly.packages.http.impl.handlers.rest.impl.annotations.QueryParam;
+import org.smartly.packages.http.impl.handlers.rest.impl.annotations.*;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -42,6 +39,21 @@ public class SampleRESTServiceImpl extends RESTService {
 
         return "passed " + token + "-" + id;
     }
+
+    @GET
+    @Path("/form")
+    public Object formGET(@FormParam("param1") String param){
+
+        return "passed: " + param;
+    }
+
+    @POST
+    @Path("/form")
+    public Object formPOST(@FormParam("param1") String param){
+
+        return "passed: " + param;
+    }
+
 
     // ------------------------------------------------------------------------
     //                      p r i v a t e
