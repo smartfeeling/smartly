@@ -45,6 +45,7 @@ public interface IMongoEntityConstants {
     public static final String CODE_EAN = "eancode";
     public static final String CODE_BAR = "barcode";
     public static final String CODE_ID = "idcode";
+    public static final String CATEGORY = "category";
     public static final String ENABLED = "enabled";
     public static final String REMOVED = "removed";
     public static final String USERNAME = "username";
@@ -116,4 +117,5 @@ public interface IMongoEntityConstants {
     public static final String LONGITUDE = "longitude";
     public static final String ALTITUDE = "altitude";
     public static final String ACCURACY = "accuracy";
+    public static final String SECTOR = "sector";
 }

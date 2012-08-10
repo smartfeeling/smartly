@@ -1,6 +1,7 @@
 package org.smartly.commons.network.api.yahoo.placefinder;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
@@ -91,19 +92,7 @@ public class YahooPlaceFinder {
             params.put("longitude", longitude);
             final String url = FormatUtils.format(REVERSE_GEOCODING, params);
             final String jsonData = URLUtils.getUrlContent(url);
-            if (StringUtils.isJSON(jsonData)) {
-                final JSONObject json = new JSONObject(jsonData);
-                final int err = getErrorCode(json);
-                if (err == 0) {
-                    final JSONArray results = getResults(json);
-                    if (null != results && results.length() > 0) {
-                        return results.optJSONObject(0);
-                    }
-                } else {
-                    throw new Exception(getErrorMessage(json));
-                }
-                return json;
-            }
+            return parseResponse(jsonData);
         } catch (Throwable t) {
             this.getLogger().log(Level.SEVERE, null, t);
         }
@@ -126,26 +115,36 @@ public class YahooPlaceFinder {
             params.put("locale", locale);
             params.put("appid", _appId);
             params.put("address", address);
+            // http://where.yahooapis.com/geocode?locale=it_IT&location=riccione rn 47838 IT&flags=J&appid=APPID
             final String url = FormatUtils.format(GEOCODING, params);
             final String jsonData = URLUtils.getUrlContent(url);
-            if (StringUtils.isJSON(jsonData)) {
-                final JSONObject json = new JSONObject(jsonData);
-                final int err = getErrorCode(json);
-                if (err == 0) {
-                    final JSONArray results = getResults(json);
-                    if (null != results && results.length() > 0) {
-                        return results.optJSONObject(0);
-                    }
-                } else {
-                    throw new Exception(getErrorMessage(json));
-                }
-                return json;
-            }
+            return parseResponse(jsonData);
         } catch (Throwable t) {
             this.getLogger().log(Level.SEVERE, null, t);
         }
         return null;
     }
+
+    public JSONObject coordinates(final String locale, final JSONObject address) {
+        return this.coordinates(locale, getAddress(address, false));
+    }
+
+    public JSONObject coordinates (final String locale, final String address) {
+        try {
+            final Map<String, Object> params = new HashMap<String, Object>();
+            params.put("locale", locale);
+            params.put("appid", _appId);
+            params.put("address", address);
+            // http://where.yahooapis.com/geocode?locale=it_IT&location=riccione rn 47838 IT&flags=JC&appid=APPID
+            final String url = FormatUtils.format(GEOCODING_COORD, params);
+            final String jsonData = URLUtils.getUrlContent(url);
+            return parseResponse(jsonData);
+        } catch (Throwable t) {
+            this.getLogger().log(Level.SEVERE, null, t);
+        }
+        return null;
+    }
+
     // ------------------------------------------------------------------------
     //                      p r i v a t e
     // ------------------------------------------------------------------------
@@ -157,6 +156,29 @@ public class YahooPlaceFinder {
     // --------------------------------------------------------------------
     //               S T A T I C
     // --------------------------------------------------------------------
+
+
+
+    // --------------------------------------------------------------------
+    //               S T A T I C  -  p r i v a t e
+    // --------------------------------------------------------------------
+
+    private static JSONObject parseResponse(final String jsonData) throws Exception {
+        if (StringUtils.isJSON(jsonData)) {
+            final JSONObject json = new JSONObject(jsonData);
+            final int err = getErrorCode(json);
+            if (err == 0) {
+                final JSONArray results = getResults(json);
+                if (null != results && results.length() > 0) {
+                    return results.optJSONObject(0);
+                }
+            } else {
+                throw new Exception(getErrorMessage(json));
+            }
+            return json;
+        }
+        return null;
+    }
 
     private static int getErrorCode(final JSONObject json) {
         return JsonWrapper.getInt(json, FLD_ERROR);

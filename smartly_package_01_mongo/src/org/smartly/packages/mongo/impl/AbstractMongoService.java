@@ -4,6 +4,7 @@
 package org.smartly.packages.mongo.impl;
 
 import com.mongodb.*;
+import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.util.CollectionUtils;
@@ -25,8 +26,9 @@ public abstract class AbstractMongoService {
     // ------------------------------------------------------------------------
     //                      Constants
     // ------------------------------------------------------------------------
-    private static String _ID = IMongoConstants.ID;
-    private static String MODIFIER_INC = "$inc";
+    private static final String _ID = IMongoConstants.ID;
+    private static final String MODIFIER_INC = "$inc";
+    private static final int EARTH_RADIUS_mt = 6378160; // earth radius in mt.
     // ------------------------------------------------------------------------
     //                      variables
     // ------------------------------------------------------------------------
@@ -126,6 +128,12 @@ public abstract class AbstractMongoService {
             return count;
         }
         return 0;
+    }
+
+    public void ensureIndex(final DBObject index) {
+        if (null != _coll) {
+            _coll.ensureIndex(index);
+        }
     }
 
     public void ensureIndex(final String fieldName, final boolean ascending) {
@@ -454,6 +462,45 @@ public abstract class AbstractMongoService {
         }
         return result;
     }
+
+    /**
+     * geoNear is a db command and is used as this.
+     *
+     * @param coord Lon and Lat
+     * @return List
+     */
+    public List<DBObject> geoNear(final double[] coord, final int maxDistance) {
+        if (null != _db && null != _coll) {
+            final BasicDBObject cmd = new BasicDBObject();
+            cmd.put("geoNear", _coll.getName());
+
+            // maxDistance
+            if (maxDistance > 0) {
+                cmd.put("maxDistance", getMaxDistance(maxDistance));
+                cmd.put("distanceMultiplier", EARTH_RADIUS_mt); // result data are in mt.
+            }
+
+            //int coord[] = {50, 50};
+            cmd.put("near", coord);
+
+            cmd.put("num", 10);
+
+            final CommandResult result = _db.command(cmd);
+            // retrieve response from result
+            if (result.ok()) {
+                final Object list = result.get("results");
+                if (list instanceof List) {
+                    return (List) list;
+                }
+            } else {
+                // error
+                final String err = result.getErrorMessage();
+                this.getLogger().log(Level.SEVERE, err);
+            }
+        }
+        return new ArrayList<DBObject>();
+    }
+
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc=" LOCALIZATION ">
@@ -765,4 +812,19 @@ public abstract class AbstractMongoService {
         }
         return null;
     }
+
+    // --------------------------------------------------------------------
+    //                  S T A T I C
+    // --------------------------------------------------------------------
+
+    /**
+     * Returns maxDistance value relative to earth radius
+     *
+     * @param maxDistanceInMeters max distance in meters
+     * @return maxDistance value relative to earth radius
+     */
+    private static double getMaxDistance(final int maxDistanceInMeters) {
+        return maxDistanceInMeters / EARTH_RADIUS_mt;
+    }
+
 }
