@@ -1,7 +1,7 @@
 package org.smartly.commons.i18n.impl;
 
 
-import org.smartly.commons.i18n.AbstractI18nBundle;
+import org.smartly.commons.i18n.resourcebundle.AbstractI18nBundle;
 import org.smartly.commons.util.FormatUtils;
 import org.smartly.commons.util.LocaleUtils;
 import org.smartly.commons.util.StringUtils;
@@ -10,19 +10,38 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class ChainDictionary extends BaseDictionary {
+public class ChainDictionary
+        extends BaseDictionary {
 
-    private final AbstractI18nBundle _parentDictionary;
+    private static final String NAME = "base";
+
+    private final AbstractI18nBundle _super;
     private final Map<String, Map<String, String>> _dictionaries;
 
     public ChainDictionary() {
-        _parentDictionary = this.getSuperclassInstance();
+        _super = this.getSuperclassInstance();
         _dictionaries = new HashMap<String, Map<String, String>>();
     }
 
-    @Override
+    public String getName(){
+        return NAME;
+    }
+
+    public boolean hasNext(){
+        return null!= _super;
+    }
+
+    public AbstractI18nBundle next(){
+        return _super;
+    }
+
+    // --------------------------------------------------------------------
+    //               p u b l i c
+    // --------------------------------------------------------------------
+
     public String getMessage(final String key,
-                             final Locale locale, final ClassLoader classloader,
+                             final Locale locale,
+                             final ClassLoader classloader,
                              final Object... args) {
         // retrieve a dictionary
         final Map<String, String> dic = this.getDictionary(locale);
@@ -35,7 +54,7 @@ public class ChainDictionary extends BaseDictionary {
         }
         // try parent bundle
         if (!StringUtils.hasText(result)) {
-            result = _parentDictionary.getMessage(key, locale, classloader);
+            result = _super.getMessage(key, locale, classloader);
             dic.put(key, result);
         }
         // return formatted result
@@ -49,9 +68,9 @@ public class ChainDictionary extends BaseDictionary {
         return "";
     }
 
-    @Override
     public String getMessage(final String key,
-                             final Locale locale, final ClassLoader classloader,
+                             final Locale locale,
+                             final ClassLoader classloader,
                              final Map<String, ?> args) {
         // retrieve a dictionary
         final Map<String, String> dic = this.getDictionary(locale);
@@ -64,7 +83,7 @@ public class ChainDictionary extends BaseDictionary {
         }
         // try parent bundle
         if (!StringUtils.hasText(result)) {
-            result = _parentDictionary.getMessage(key, locale, classloader);
+            result = _super.getMessage(key, locale, classloader);
             dic.put(key, result);
         }
         // return formatted result
@@ -79,28 +98,32 @@ public class ChainDictionary extends BaseDictionary {
     }
 
     @Override
-    public String getMessage(final String key, final Locale locale,
+    public String getMessage(final String key,
+                             final Locale locale,
                              final Object... args) {
         return this.getMessage(key,
                 locale, BaseDictionary.getClassLoader(), args);
     }
 
     @Override
-    public String getMessage(final String key, final String slocale,
+    public String getMessage(final String key,
+                             final String slocale,
                              final Object... args) {
         final Locale locale = LocaleUtils.getLocaleFromString(slocale);
         return this.getMessage(key, locale, args);
     }
 
     @Override
-    public String getMessage(final String key, final Locale locale,
+    public String getMessage(final String key,
+                             final Locale locale,
                              final Map<String, ?> args) {
         return this.getMessage(key,
                 locale, BaseDictionary.getClassLoader(), args);
     }
 
     @Override
-    public String getMessage(final String key, final String slocale,
+    public String getMessage(final String key,
+                             final String slocale,
                              final Map<String, ?> args) {
         final Locale locale = LocaleUtils.getLocaleFromString(slocale);
         return this.getMessage(key, locale, args);
@@ -127,6 +150,28 @@ public class ChainDictionary extends BaseDictionary {
         }
         return null!=result?result: getInstance();
     }
+
+    public String lookup(final String key,
+                             final Locale locale,
+                             final ClassLoader classloader) {
+        // retrieve a dictionary
+        final Map<String, String> dic = this.getDictionary(locale);
+        // try dictionary
+        String result = dic.get(key);
+        // try current bundle
+        if (!StringUtils.hasText(result)) {
+            result = super.getMessage(key, locale, classloader);
+            dic.put(key, result);
+        }
+        // try parent bundle
+        if (!StringUtils.hasText(result)) {
+            result = _super.getMessage(key, locale, classloader);
+            dic.put(key, result);
+        }
+
+        return result;
+    }
+
 
     // ------------------------------------------------------------------------
     //                      S T A T I C

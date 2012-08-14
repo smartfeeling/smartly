@@ -2,9 +2,9 @@
  * ClassResourceBundle.java
  *
  */
-package org.smartly.commons.i18n.resourcebundle.impl;
+package org.smartly.commons.i18n.resourcebundle.bundle.impl;
 
-import org.smartly.commons.i18n.resourcebundle.IResourceBundle;
+import org.smartly.commons.i18n.resourcebundle.bundle.IResourceBundle;
 import org.smartly.commons.util.LocaleUtils;
 
 import java.util.Enumeration;

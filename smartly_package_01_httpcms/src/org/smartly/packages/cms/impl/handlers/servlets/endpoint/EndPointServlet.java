@@ -8,7 +8,7 @@ import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.util.*;
 import org.smartly.packages.cms.SmartlyHttpCms;
-import org.smartly.packages.cms.impl.cms.endpoint.CMSEndPoint;
+import org.smartly.packages.cms.impl.cms.endpoint.CMSRouter;
 import org.smartly.packages.cms.impl.cms.endpoint.CMSEndPointPage;
 import org.smartly.packages.http.impl.WebServer;
 import org.smartly.packages.http.impl.util.ServletUtils;
@@ -97,7 +97,7 @@ public class EndPointServlet
     private void handleInternal(final HttpServletRequest request,
                                 final HttpServletResponse response) throws ServletException, IOException {
         final String resourcePath = ServletUtils.getResourcePath(request);
-        final CMSEndPoint cms = SmartlyHttpCms.getCMS();
+        final CMSRouter cms = SmartlyHttpCms.getCMS();
 
         if (cms.contains(resourcePath)) {
             //-- CMS --//

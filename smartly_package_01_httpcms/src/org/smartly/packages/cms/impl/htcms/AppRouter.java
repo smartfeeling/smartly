@@ -1,14 +1,14 @@
 package org.smartly.packages.cms.impl.htcms;
 
 
-import org.smartly.packages.cms.impl.cms.endpoint.CMSEndPoint;
+import org.smartly.packages.cms.impl.cms.endpoint.CMSRouter;
 
 /**
  *
  */
-public class AppEndPoint extends CMSEndPoint {
+public class AppRouter extends CMSRouter {
 
-    public AppEndPoint() {
+    public AppRouter() {
 
     }
 

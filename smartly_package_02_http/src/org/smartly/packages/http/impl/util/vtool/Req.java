@@ -66,8 +66,8 @@ public class Req implements IVLCTool {
      * </table>
      *
      * @return a <code>String</code> containing
-     * the part of the URL from the
-     * protocol name up to the query string
+     *         the part of the URL from the
+     *         protocol name up to the query string
      */
     public String getRequestURI() {
         return _request.getRequestURI();
@@ -86,12 +86,12 @@ public class Req implements IVLCTool {
      * <p>Same as the value of the CGI variable PATH_INFO.
      *
      * @return a <code>String</code>, decoded by the
-     * web container, specifying
-     * extra path information that comes
-     * after the servlet path but before
-     * the query string in the request URL;
-     * or <code>null</code> if the URL does not have
-     * any extra path information
+     *         web container, specifying
+     *         extra path information that comes
+     *         after the servlet path but before
+     *         the query string in the request URL;
+     *         or <code>null</code> if the URL does not have
+     *         any extra path information
      */
     public String getPathInfo() {
         return _request.getPathInfo();
@@ -269,7 +269,7 @@ public class Req implements IVLCTool {
     }
 
     public static String getLang(final HttpServletRequest request) {
-        return getLang(request, Smartly.getConfiguration().getString("smartly.lang"));
+        return getLang(request, Smartly.getLang());
     }
 
     public static String getLang(final HttpServletRequest request, final String defaultLang) {
@@ -279,7 +279,7 @@ public class Req implements IVLCTool {
             final Locale locale = LocaleUtils.getLocaleFromString(tokens[0]);
             return locale.getLanguage();
         }
-        return StringUtils.hasText(defaultLang)?defaultLang:LocaleUtils.getCurrent().getLanguage();
+        return StringUtils.hasText(defaultLang) ? defaultLang : LocaleUtils.getCurrent().getLanguage();
     }
 
     public static Map<String, String> getParameters(final HttpServletRequest request) {

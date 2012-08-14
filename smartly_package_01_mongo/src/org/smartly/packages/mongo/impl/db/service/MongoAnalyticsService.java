@@ -59,7 +59,7 @@ public class MongoAnalyticsService extends AbstractMongoService {
         return super.upsert(item);
     }
 
-    public void insert(final AnalyticsData data) {
+    public void insert(final AnalyticsData data) throws StandardCodedException {
         final String targetid = data.getTargetId();
         final DBObject item = new MongoAnalytics();
         MongoAnalytics.setId(item, targetid);

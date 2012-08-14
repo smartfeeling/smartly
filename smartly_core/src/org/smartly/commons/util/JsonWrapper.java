@@ -821,35 +821,60 @@ public class JsonWrapper {
         }
     }
 
+    public static void provide(final JSONObject item,
+                                     final String path) throws JSONException {
+        if(null!=item){
+            if (path.indexOf(".") > 0) {
+                final String[] tokens = StringUtils.splitAt(1, path, ".");
+                if (!item.has(tokens[0])) {
+                    item.putOnce(tokens[0], new JSONObject());
+                }
+                provide(item.optJSONObject(tokens[0]), tokens[1]);
+            }
+        }
+    }
+
     public static JSONObject put(final JSONObject item,
-                                 final String field, final Object val) {
+                                 final String path,
+                                 final Object val) {
+        return put(item, path, val, false);
+    }
+
+    public static JSONObject put(final JSONObject item,
+                                 final String path,
+                                 final Object val,
+                                 final boolean autocreate) {
         final Object value = (val instanceof JsonWrapper) ? ((JsonWrapper) val).getObject() : val;
         try {
-            if (field.indexOf(".") > 0) {
-                final int len = StringUtils.countOccurrencesOf(field, ".");
-                final String[] tokens = StringUtils.splitAt(len, field, ".");
+            if (path.indexOf(".") > 0) {
+                final int len = StringUtils.countOccurrencesOf(path, ".");
+                final String[] tokens = StringUtils.splitAt(len, path, ".");
                 final Object obj = getValueIfAny(item, tokens[0]);
+                if (null == obj && autocreate) {
+                    provide(item, path);
+                    return put(item, path, val, false);
+                }
                 if (obj instanceof JSONObject) {
-                    JsonWrapper.put((JSONObject) obj, tokens[1], value);
+                    JsonWrapper.put((JSONObject) obj, tokens[1], value, false);
                 } else if (obj instanceof JSONArray) {
                     JsonWrapper.put((JSONArray) obj, value);
                 }
             } else {
-                if (!(value instanceof JSONArray) && item.has(field)) {
-                    final Object obj = item.opt(field);
+                if (!(value instanceof JSONArray) && item.has(path)) {
+                    final Object obj = item.opt(path);
                     if (obj instanceof JSONArray) {
                         ((JSONArray) obj).put(value);
                     } else {
-                        item.putOpt(field, value);
+                        item.putOpt(path, value);
                     }
                 } else {
-                    item.putOpt(field, value);
+                    item.putOpt(path, value);
                 }
             }
         } catch (Throwable t) {
             getLoggerStatic().log(Level.SEVERE, FormatUtils.format(
                     "Error putting '{0}' into property '{1}' of object '{2}': {3}",
-                    value, field, item, t), t);
+                    value, path, item, t), t);
         }
         return item;
     }

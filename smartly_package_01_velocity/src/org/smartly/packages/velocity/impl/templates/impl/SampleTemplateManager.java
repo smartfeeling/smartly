@@ -18,6 +18,10 @@ public class SampleTemplateManager extends VLCTemplateManager {
         //super(super(ConfigurationUtils.getInstance().getLanguageCodes()););
     }
 
+    public String getName(){
+        return "sample";
+    }
+
     // ------------------------------------------------------------------------
     //                      S I N G L E T O N
     // ------------------------------------------------------------------------

@@ -1,9 +1,11 @@
 package org.smartly.packages.http.impl.handlers.rest.impl.wrapper;
 
 
+import org.json.JSONObject;
 import org.smartly.Smartly;
 import org.smartly.commons.cryptograph.MD5;
 import org.smartly.commons.util.ByteUtils;
+import org.smartly.commons.util.JsonWrapper;
 import org.smartly.commons.util.PathUtils;
 import org.smartly.commons.util.StringUtils;
 import org.smartly.packages.http.impl.handlers.rest.impl.IRESTCons;
@@ -14,6 +16,7 @@ import org.smartly.packages.http.impl.util.BinaryData;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
@@ -112,6 +115,10 @@ public class MethodWrapper {
 
 
     public byte[] execute(final String url, final Map<String, Object> formParams) throws IOException {
+        return this.execute(url, new JSONObject(formParams));
+    }
+
+    public byte[] execute(final String url, final JSONObject formParams) throws IOException {
         Object result = null;
         try {
             // remove service name, the root
@@ -121,9 +128,8 @@ public class MethodWrapper {
         } catch (Throwable t) {
             result = t;
         }
-        return this.serialize(_type_output, result);
+        return serialize(_type_output, result);
     }
-
 
     // ------------------------------------------------------------------------
     //                      p r i v a t e
@@ -175,10 +181,10 @@ public class MethodWrapper {
         return true;
     }
 
-    private Object execute(final Map<String, String> urlParams, final Map<String, Object> formParams) throws IOException {
+    private Object execute(final Map<String, String> urlParams, final JSONObject formParams) throws IOException {
         Object result = null;
         try {
-            if (urlParams.isEmpty() && formParams.isEmpty()) {
+            if (urlParams.isEmpty() && formParams.length() == 0) {
                 result = this.execute();
             } else {
                 final Annotation[][] aparams = _method.getParameterAnnotations();
@@ -195,7 +201,7 @@ public class MethodWrapper {
                                 }
                             } else if (a instanceof FormParam) {
                                 final String key = ((FormParam) a).value(); // getValue(a);
-                                if (formParams.containsKey(key)) {
+                                if (formParams.has(key)) {
                                     params[i] = formParams.get(key).toString();
                                 }
                             }
@@ -217,6 +223,8 @@ public class MethodWrapper {
         Object result = null;
         try {
             result = _method.invoke(_instance, args);
+        } catch (InvocationTargetException ite) {
+            result = ite.getTargetException();
         } catch (Throwable t) {
             result = t;
         }
@@ -230,7 +238,7 @@ public class MethodWrapper {
         if (null != data) {
             if (IRESTCons.TYPE_JSON.equalsIgnoreCase(type)) {
                 final JsonBean json = new JsonBean(data);
-                return json.asObject().toString().getBytes(CHARSET);
+                return json.asJSONObject().toString().getBytes(CHARSET);
             } else {
                 if (data instanceof BinaryData) {
                     final BinaryData bin_data = (BinaryData) data;
@@ -244,6 +252,12 @@ public class MethodWrapper {
                 } else {
                     return data.toString().getBytes(CHARSET);
                 }
+            }
+        } else {
+            if (IRESTCons.TYPE_JSON.equalsIgnoreCase(type)) {
+                final JSONObject json = new JSONObject();
+                JsonWrapper.put(json, "response", "_void_");
+                return json.toString().getBytes(CHARSET);
             }
         }
         return "_void_".getBytes(CHARSET);
@@ -289,7 +303,7 @@ public class MethodWrapper {
     private static Map<String, String> pluckParams(final String path, final String[] path_params) {
         final String[] tokens = StringUtils.split(path, "/");
         final Map<String, String> result = new HashMap<String, String>();
-        if (tokens.length > 0 && tokens.length==path_params.length) {
+        if (tokens.length > 0 && tokens.length == path_params.length) {
             for (int i = 0; i < path_params.length; i++) {
                 if (StringUtils.hasText(path_params[i])) {
                     result.put(path_params[i], tokens[i]);

@@ -11,7 +11,7 @@ import org.smartly.commons.util.ExceptionUtils;
 import org.smartly.commons.util.FormatUtils;
 import org.smartly.commons.util.StringUtils;
 import org.smartly.packages.cms.SmartlyHttpCms;
-import org.smartly.packages.cms.impl.cms.endpoint.CMSEndPoint;
+import org.smartly.packages.cms.impl.cms.endpoint.CMSRouter;
 import org.smartly.packages.cms.impl.cms.endpoint.CMSEndPointPage;
 import org.smartly.packages.http.impl.util.ServletUtils;
 import org.smartly.packages.http.impl.util.vtool.Cookies;
@@ -94,7 +94,7 @@ public class SmartlyCMSFilter
     private boolean handle(final HttpServletRequest request,
                            final HttpServletResponse response) throws ServletException, IOException {
         final String resourcePath = ServletUtils.getResourcePath(request);
-        final CMSEndPoint cms = SmartlyHttpCms.getCMS();
+        final CMSRouter cms = SmartlyHttpCms.getCMS();
         if (cms.contains(resourcePath)) {
 
             final CMSEndPointPage page = cms.getPage(resourcePath);

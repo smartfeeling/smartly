@@ -84,6 +84,10 @@ public class Cookies implements IVLCTool {
         return __cookies.containsKey(name);
     }
 
+    public boolean hasAuth(){
+        return null!=_authCookie;
+    }
+
     public JSONObject getAuth() {
         if (null == _authCookie) {
             _authCookie = this.getAuthCookie();
@@ -91,6 +95,9 @@ public class Cookies implements IVLCTool {
         return _authCookie;
     }
 
+    public String getAuthLang(){
+        return this.getAuthCookie().optString("lang");
+    }
 
     // ------------------------------------------------------------------------
     //                      p r i v a t e
@@ -145,7 +152,7 @@ public class Cookies implements IVLCTool {
         } else {
             lang = this.getCookieValue("lang");
         }
-        JsonWrapper.put(result, "lang", this.getCookieValue("lang"));
+        JsonWrapper.put(result, "lang", lang);
 
         // country
         String country = getCountry(lang);
@@ -154,20 +161,20 @@ public class Cookies implements IVLCTool {
         } else {
             country = this.getCookieValue("country");
         }
-        JsonWrapper.put(result, "country", this.getCookieValue("country"));
+        JsonWrapper.put(result, "country", country);
 
         // currency
         final DecimalFormatSymbols dfs = getDfs(lang, country);
         //if (!this.hasCookie("currency")) {
         this.addCookie("currency", dfs.getCurrency().getCurrencyCode());
         //}
-        JsonWrapper.put(result, "currency", this.getCookieValue("currency"));
+        JsonWrapper.put(result, "currency", dfs.getCurrency().getCurrencyCode());
 
         // decimalsep
         //if (!this.hasCookie("decimalsep")) {
         this.addCookie("decimalsep", "" + dfs.getDecimalSeparator());
         //}
-        JsonWrapper.put(result, "decimalsep", this.getCookieValue("decimalsep"));
+        JsonWrapper.put(result, "decimalsep", "" + dfs.getDecimalSeparator());
 
         // discount
         if (!this.hasCookie("discount")) {

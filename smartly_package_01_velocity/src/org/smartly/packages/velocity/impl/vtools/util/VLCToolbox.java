@@ -4,6 +4,7 @@
 package org.smartly.packages.velocity.impl.vtools.util;
 
 import org.apache.velocity.VelocityContext;
+import org.smartly.commons.i18n.*;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.util.BeanUtils;
@@ -16,6 +17,7 @@ import org.smartly.packages.velocity.impl.vtools.Math;
 import org.smartly.packages.velocity.impl.vtools.System;
 
 import java.util.*;
+import java.util.Dictionary;
 
 /**
  * Toolbox is a container of 'static' vtools that are passed to context.<br/>
@@ -194,6 +196,9 @@ public class VLCToolbox {
         // add App helper
         add(App.NAME, App.class, null, true);
 
+        // add Dic helper
+        add(org.smartly.commons.i18n.Dictionary.NAME, org.smartly.commons.i18n.Dictionary.class, null, true);
+
         // more vtools can be added using add command
     }
 
@@ -235,10 +240,10 @@ public class VLCToolbox {
         return __instance;
     }
 
-    private static String getName(final Object instance){
-        final String result = (String)BeanUtils.getValueIfAny(instance, "name");
-        if(StringUtils.hasText(result)){
-             return result;
+    private static String getName(final Object instance) {
+        final String result = (String) BeanUtils.getValueIfAny(instance, "name");
+        if (StringUtils.hasText(result)) {
+            return result;
         }
         LoggingUtils.getLogger(VLCToolbox.class).log(Level.SEVERE, FormatUtils.format("INVALID TOOL IN TOOLBOX. Missing 'name' property, so a default name 'undefined' will be assigned: {0}", instance));
         return "undefined";

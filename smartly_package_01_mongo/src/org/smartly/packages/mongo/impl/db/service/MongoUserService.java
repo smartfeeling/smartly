@@ -15,7 +15,9 @@ import org.smartly.packages.mongo.impl.StandardCodedException;
 import org.smartly.packages.mongo.impl.db.entity.MongoUser;
 import org.smartly.packages.mongo.impl.util.MongoUtils;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -47,6 +49,21 @@ public class MongoUserService
             return user;
         }
         return null;
+    }
+
+    public List<DBObject> getByEmail(final String email) {
+        try {
+            final DBObject query = new BasicDBObject();
+            final Pattern equal = MongoUtils.patternEquals(email); //Pattern.compile("\\A" + email + "\\z", BeeMongoUtils.CASE_INSENSITIVE);
+            query.put(MongoUser.EMAIL, equal);
+            return super.find(query,
+                    new String[]{MongoUser.ID, MongoUser.REALNAME, MongoUser.USERNAME},
+                    new String[]{MongoUser.REALNAME},
+                    null);
+        } catch (Exception ex) {
+            super.getLogger().log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList<DBObject>();
     }
 
     public MongoUser getFirst(final DBObject filter) {

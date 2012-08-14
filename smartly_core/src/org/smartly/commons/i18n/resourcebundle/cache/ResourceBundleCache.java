@@ -3,7 +3,9 @@
  *
  */
 
-package org.smartly.commons.i18n.resourcebundle;
+package org.smartly.commons.i18n.resourcebundle.cache;
+
+import org.smartly.commons.i18n.resourcebundle.bundle.IResourceBundle;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -15,14 +17,14 @@ import java.util.Map;
  *
  * @author
  */
-public class ResourceBundleRepository {
+public class ResourceBundleCache {
 
     private final Map<String, IResourceBundle> _resourceBundleCache;
 
     /**
-     * Creates a new instance of ResourceBundleRepository
+     * Creates a new instance of ResourceBundleCache
      */
-    private ResourceBundleRepository() {
+    private ResourceBundleCache() {
         _resourceBundleCache = Collections.synchronizedMap(new HashMap<String, IResourceBundle>());
     }
 
@@ -69,31 +71,31 @@ public class ResourceBundleRepository {
     //                          S T A T I C
     // ------------------------------------------------------------------------
 
-    private static ResourceBundleRepository _instance;
+    private static ResourceBundleCache _instance;
 
-    public static ResourceBundleRepository getInstance() {
+    public static ResourceBundleCache getInstance() {
         if (null == _instance)
-            _instance = new ResourceBundleRepository();
+            _instance = new ResourceBundleCache();
         return _instance;
     }
 
     public static void clear() {
-        ResourceBundleRepository instance = getInstance();
+        ResourceBundleCache instance = getInstance();
         instance.clearCache();
     }
 
     public static void add(String key, IResourceBundle rb) {
-        ResourceBundleRepository instance = getInstance();
+        ResourceBundleCache instance = getInstance();
         instance.addResourceBundleToCache(key, rb);
     }
 
     public static IResourceBundle get(String key) {
-        ResourceBundleRepository instance = getInstance();
+        ResourceBundleCache instance = getInstance();
         return instance.getResourceBundleFromCache(key);
     }
 
     public static String getLabel(String key, String name) {
-        ResourceBundleRepository instance = getInstance();
+        ResourceBundleCache instance = getInstance();
         return instance.getResourceFromCache(key, name);
     }
 

@@ -1,8 +1,9 @@
 /*
  * 
  */
-package org.smartly.commons.i18n;
+package org.smartly.commons.i18n.resourcebundle;
 
+import org.smartly.commons.i18n.resourcebundle.bundle.ResourceBundleManager;
 import org.smartly.commons.util.ClassLoaderUtils;
 import org.smartly.commons.util.FormatUtils;
 import org.smartly.commons.util.PathUtils;
@@ -18,10 +19,14 @@ import java.util.Properties;
  *
  * @author
  */
-public class AbstractI18nBundle {
+public abstract class AbstractI18nBundle {
 
     private final Class _refereeClass;
     private boolean _lookupForFileResource = false;
+
+    // --------------------------------------------------------------------
+    //               c o n s t r u c t o r
+    // --------------------------------------------------------------------
 
     public AbstractI18nBundle() {
         _refereeClass = this.getClass();
@@ -29,8 +34,8 @@ public class AbstractI18nBundle {
 
     public AbstractI18nBundle(final Class refereeClass) {
         _refereeClass = refereeClass;
-
     }
+
     // --------------------------------------------------------------------
     //               p r o p e r t i e s
     // --------------------------------------------------------------------
@@ -45,32 +50,11 @@ public class AbstractI18nBundle {
 
     public String getMessage(final String key,
                              final Locale locale,
-                             final ClassLoader classloader,
-                             final Object... args) {
-        final String msg = this.validate(ResourceBundleManager.getString(_refereeClass,
+                             final ClassLoader classloader) {
+        return this.validate(ResourceBundleManager.getString(_refereeClass,
                 key,
                 null != locale ? locale : Locale.ENGLISH,
                 classloader));
-        if (null != args && args.length > 0) {
-            return String.format(msg, args);
-        } else {
-            return msg;
-        }
-    }
-
-    public String getMessage(final String key,
-                             final Locale locale,
-                             final ClassLoader classloader,
-                             final Map<String, ? extends Object> args) {
-        final String msg = this.validate(ResourceBundleManager.getString(_refereeClass,
-                key,
-                null != locale ? locale : Locale.ENGLISH,
-                classloader));
-        if (null != args && args.size() > 0) {
-            return FormatUtils.format(msg, args);
-        } else {
-            return msg;
-        }
     }
 
     public Properties getProperties(final Locale locale,
@@ -84,6 +68,8 @@ public class AbstractI18nBundle {
             return new Properties();
         }
     }
+
+    public abstract String getName();
 
     // --------------------------------------------------------------------
     //               p r i v a t e

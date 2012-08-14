@@ -4,11 +4,10 @@
  */
 package org.smartly.commons.i18n.utils;
 
-import org.smartly.commons.i18n.resourcebundle.IResourceBundle;
-import org.smartly.commons.i18n.resourcebundle.ResourceBundleRepository;
-import org.smartly.commons.i18n.resourcebundle.impl.ClassResourceBundle;
-import org.smartly.commons.i18n.resourcebundle.impl.FileResourceBundle;
-import org.smartly.commons.util.PathUtils;
+import org.smartly.commons.i18n.resourcebundle.bundle.IResourceBundle;
+import org.smartly.commons.i18n.resourcebundle.cache.ResourceBundleCache;
+import org.smartly.commons.i18n.resourcebundle.bundle.impl.ClassResourceBundle;
+import org.smartly.commons.i18n.resourcebundle.bundle.impl.FileResourceBundle;
 
 import java.util.Locale;
 
@@ -23,16 +22,16 @@ public abstract class I18nUtils {
         final String key = I18nUtils.buildResourceBundleKey(baseName, locale);
 
         // search rb in repository
-        IResourceBundle result = ResourceBundleRepository.get(key);
+        IResourceBundle result = ResourceBundleCache.get(key);
         // create rb and add to repository
         if (null == result) {
             result = new ClassResourceBundle(baseName, locale, classloader);
             if (result.isActive()) {
-                ResourceBundleRepository.add(key, result);
+                ResourceBundleCache.add(key, result);
             } else {
                 result = new FileResourceBundle(baseName, locale);
                 if (result.isActive())
-                    ResourceBundleRepository.add(key, result);
+                    ResourceBundleCache.add(key, result);
             }
         }
 

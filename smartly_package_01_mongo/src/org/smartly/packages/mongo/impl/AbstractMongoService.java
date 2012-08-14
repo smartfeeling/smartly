@@ -165,9 +165,12 @@ public abstract class AbstractMongoService {
      *
      * @param item document to save
      */
-    public void insert(final DBObject item) {
+    public void insert(final DBObject item) throws StandardCodedException {
         if (null != _coll) {
-            _coll.insert(item);
+            final WriteResult result = _coll.insert(item);
+            if (StringUtils.hasText(result.getError())) {
+                throw this.getError418(result.getError());
+            }
         }
     }
 

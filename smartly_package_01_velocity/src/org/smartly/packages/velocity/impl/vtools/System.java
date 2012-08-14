@@ -193,6 +193,36 @@ public class System
         }
         return obj;
     }
+
+    /**
+     * Return first value not empty.
+     *
+     * @param values Variable array of values
+     * @return first value not empty.
+     */
+    public Object first(final Object... values) {
+        try {
+            for (final Object value : values) {
+                if (null != value && StringUtils.hasText(value.toString())) {
+                    return value;
+                }
+            }
+        } catch (Throwable ignored) {
+        }
+        return "";
+    }
+
+    public Object first(final List values) {
+        try {
+            for (final Object value : values) {
+                if (null != value && StringUtils.hasText(value.toString())) {
+                    return value;
+                }
+            }
+        } catch (Throwable ignored) {
+        }
+        return "";
+    }
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc=" COLLECTION UTILS (isEmpty, size...)">
@@ -292,6 +322,7 @@ public class System
     public String concat(final Object... args) {
         return StringUtils.concatArgs(args);
     }
+
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc=" GET BEAN VALUE (get, getList, getInt, getString, getImage, ...)">
@@ -489,23 +520,23 @@ public class System
         return StringUtils.split(string, delim);
     }
 
-    public Object getFirst(final Object array){
-        if(null!=array){
-            if(array.getClass().isArray()){
-                return CollectionUtils.getFirst((Object[])array);
-            } else if (array instanceof Collection){
-                return CollectionUtils.getFirst((Collection)array);
+    public Object getFirst(final Object array) {
+        if (null != array) {
+            if (array.getClass().isArray()) {
+                return CollectionUtils.getFirst((Object[]) array);
+            } else if (array instanceof Collection) {
+                return CollectionUtils.getFirst((Collection) array);
             }
         }
         return null;
     }
 
-    public Object getLast(final Object array){
-        if(null!=array){
-            if(array.getClass().isArray()){
-                return CollectionUtils.getLast((Object[])array);
-            } else if (array instanceof Collection){
-                return CollectionUtils.getLast((Collection)array);
+    public Object getLast(final Object array) {
+        if (null != array) {
+            if (array.getClass().isArray()) {
+                return CollectionUtils.getLast((Object[]) array);
+            } else if (array instanceof Collection) {
+                return CollectionUtils.getLast((Collection) array);
             }
         }
         return null;

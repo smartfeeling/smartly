@@ -99,18 +99,23 @@ public final class JsonBean {
         return null;
     }
 
-    public JSONObject asJSONObject() {
-        final Object result = this.asObject();
-        if (result instanceof JSONObject) {
-            return (JSONObject) result;
-        }
-        return null;
-    }
-
-    public List<JSONObject> asJSONObjectList() {
-        final Object result = this.asObject();
-        if (result instanceof List) {
-            return (List<JSONObject>) result;
+    /**
+     * Returns JSONObjects List or JSONObject
+     * @return JSONObjects List or JSONObject
+     */
+    public Object asJSONObject() {
+        final Object object = this.asObject();
+        if (object instanceof JSONObject) {
+            return (JSONObject) object;
+        } else if (object instanceof List) {
+            return (List<JSONObject>) object;
+        } else if (object instanceof Exception) {
+            try {
+                final JSONObject json = new JSONObject();
+                json.putOnce("error", object.toString());
+                return json;
+            } catch (Throwable ignored) {
+            }
         }
         return null;
     }

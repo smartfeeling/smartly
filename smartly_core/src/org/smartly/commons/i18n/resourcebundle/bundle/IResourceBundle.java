@@ -2,7 +2,7 @@
  * IResourceBundle.java
  */
 
-package org.smartly.commons.i18n.resourcebundle;
+package org.smartly.commons.i18n.resourcebundle.bundle;
 
 import java.util.Properties;
 

@@ -22,7 +22,7 @@ import java.util.jar.JarFile;
  */
 public class CMSEndPointRepository {
 
-    public static final String CHARSET = CMSEndPoint.CHARSET;
+    public static final String CHARSET = CMSRouter.CHARSET;
 
     private final String _root;
     private final List<FileItem> _resources;

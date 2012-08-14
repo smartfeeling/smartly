@@ -1,7 +1,6 @@
-package org.smartly.commons.i18n;
+package org.smartly.commons.i18n.resourcebundle.bundle;
 
 
-import org.smartly.commons.i18n.resourcebundle.IResourceBundle;
 import org.smartly.commons.i18n.utils.I18nUtils;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;

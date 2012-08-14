@@ -30,7 +30,7 @@ import java.util.Set;
  * Register a CMS manager calling  SmartlyHttp.registerCMSEndPoint(<code>cms-instance</code>)
  * in "ready" method of your AbstractPackage implementation.
  */
-public class CMSEndPoint {
+public class CMSRouter {
 
     public static final String CHARSET = CharEncoding.getDefault();
 
@@ -48,7 +48,7 @@ public class CMSEndPoint {
     private final Map<String, String> _templates;
     private CMSEndPointRepository _repo;
 
-    public CMSEndPoint() {
+    public CMSRouter() {
         _root = getRootFullPath(this.getClass());
         _sitemap = new HashMap<String, JSONObject>();
         _pages = new HashMap<String, CMSEndPointPage>();

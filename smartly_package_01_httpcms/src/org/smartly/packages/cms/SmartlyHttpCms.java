@@ -9,7 +9,7 @@ import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.packages.AbstractPackage;
 import org.smartly.packages.ISmartlySystemPackage;
 import org.smartly.packages.cms.config.Deployer;
-import org.smartly.packages.cms.impl.cms.endpoint.CMSEndPoint;
+import org.smartly.packages.cms.impl.cms.endpoint.CMSRouter;
 import org.smartly.packages.http.SmartlyHttp;
 import org.smartly.packages.mongo.SmartlyMongo;
 import org.smartly.packages.velocity.SmartlyVelocity;
@@ -62,23 +62,23 @@ public class SmartlyHttpCms extends AbstractPackage
 
     private static JsonRepository __config;
 
-    private static CMSEndPoint __cms;
+    private static CMSRouter __cms;
 
     static {
         LoggingRepository.getInstance().setLogFileName(SmartlyHttpCms.class, "./smartly_cms.log");
     }
 
     public static Logger getCMSLogger() {
-        return LoggingUtils.getLogger(CMSEndPoint.class);
+        return LoggingUtils.getLogger(CMSRouter.class);
     }
 
-    public static void registerCMSEndPoint(final CMSEndPoint cms) {
+    public static void registerCMSEndPoint(final CMSRouter cms) {
         __cms = cms;
     }
 
-    public static CMSEndPoint getCMS() {
+    public static CMSRouter getCMS() {
         if (null == __cms) {
-            __cms = new CMSEndPoint();
+            __cms = new CMSRouter();
         }
         return __cms;
     }

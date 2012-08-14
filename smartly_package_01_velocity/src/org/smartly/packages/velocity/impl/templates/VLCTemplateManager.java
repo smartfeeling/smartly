@@ -5,7 +5,7 @@ package org.smartly.packages.velocity.impl.templates;
 
 
 import org.smartly.Smartly;
-import org.smartly.commons.i18n.AbstractI18nBundle;
+import org.smartly.commons.i18n.resourcebundle.AbstractI18nBundle;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
