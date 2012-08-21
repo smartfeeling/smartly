@@ -27,14 +27,28 @@ public class Req implements IVLCTool {
     private final String _resourcePath;
     private final HttpServletRequest _request;
     private final HttpServletResponse _response;
+    private final Map<String, String> _externalParams;
 
     private String _langCode;
     private String _userAgent;
 
-    public Req(final String resourcePath, final HttpServletRequest httprequest, final HttpServletResponse httpresponse) {
+    public Req(final String resourcePath,
+               final HttpServletRequest httprequest,
+               final HttpServletResponse httpresponse) {
         _resourcePath = resourcePath;
         _request = httprequest;
         _response = httpresponse;
+        _externalParams = null;
+    }
+
+    public Req(final String resourcePath,
+               final Map<String, String> externalParams,
+               final HttpServletRequest httprequest,
+               final HttpServletResponse httpresponse) {
+        _resourcePath = resourcePath;
+        _request = httprequest;
+        _response = httpresponse;
+        _externalParams = externalParams;
     }
 
     @Override
@@ -108,15 +122,20 @@ public class Req implements IVLCTool {
     }
 
     public String getParam(final String name, final String def) {
-        final Object param = this.getRawParam(name);
-        if (null != param) {
-            if (param.getClass().isArray()) {
-                final Object[] array = (Object[]) param;
-                return array[0].toString();
+        if (null != _externalParams && _externalParams.containsKey(name)) {
+            final String param = _externalParams.get(name);
+            return null != param ? param : def;
+        } else {
+            final Object param = this.getRawParam(name);
+            if (null != param) {
+                if (param.getClass().isArray()) {
+                    final Object[] array = (Object[]) param;
+                    return array[0].toString();
+                }
+                return param.toString();
             }
-            return param.toString();
+            return def;
         }
-        return def;
     }
 
     public int getInt(final String paramName) {

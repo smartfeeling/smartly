@@ -8,8 +8,8 @@ import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.util.*;
 import org.smartly.packages.cms.SmartlyHttpCms;
-import org.smartly.packages.cms.impl.cms.endpoint.CMSRouter;
 import org.smartly.packages.cms.impl.cms.endpoint.CMSEndPointPage;
+import org.smartly.packages.cms.impl.cms.endpoint.CMSRouter;
 import org.smartly.packages.http.impl.WebServer;
 import org.smartly.packages.http.impl.util.ServletUtils;
 import org.smartly.packages.http.impl.util.vtool.Cookies;
@@ -27,7 +27,7 @@ import java.util.*;
 
 /**
  * Servlet for site file parsing.
- *
+ * <p/>
  * This servlet replace SmartlyVHTMLServlet
  */
 public class EndPointServlet
@@ -42,11 +42,9 @@ public class EndPointServlet
     private WebServer _server;
 
     public EndPointServlet() {
-
     }
 
     public EndPointServlet(final Object params) {
-
     }
 
     // --------------------------------------------------------------------
@@ -103,6 +101,7 @@ public class EndPointServlet
             //-- CMS --//
             final CMSEndPointPage page = cms.getPage(resourcePath);
             final String template = cms.getPageTemplate(resourcePath);
+            final Map<String, String> params = cms.getUrlParams(resourcePath);
 
             if (null == page || !StringUtils.hasText(template)) {
                 ServletUtils.notFound404(response);
@@ -110,7 +109,7 @@ public class EndPointServlet
             }
 
             // eval template
-            final byte[] output = this.merge(template, page, request, response);
+            final byte[] output = this.merge(template, page, params, request, response);
 
             // write body
             ServletUtils.writeResponse(response, DateUtils.now().getTime(), MIME_HTML, output);
@@ -138,6 +137,7 @@ public class EndPointServlet
 
     private byte[] merge(final String templateText,
                          final CMSEndPointPage page,
+                         final Map<String, String> restParams,
                          final HttpServletRequest request,
                          final HttpServletResponse response) {
         try {
@@ -152,7 +152,7 @@ public class EndPointServlet
 
             // execution context
             final VelocityContext context = new VelocityContext(sessionContext, this.createInnerContext(
-                    page.getUrl(), request, response));
+                    page.getUrl(), restParams, request, response));
 
             // creates new context page
             final CMSEndPointPage ctxPage = new CMSEndPointPage(page, engine, context);
@@ -192,7 +192,7 @@ public class EndPointServlet
 
             // execution context
             final VelocityContext context = new VelocityContext(sessionContext, this.createInnerContext(
-                    resource.getName(), request, response));
+                    resource.getName(), null, request, response));
 
             //-- eval velocity template --//
             final String text = new String(ByteUtils.getBytes(resource.getInputStream()), Smartly.getCharset());
@@ -214,12 +214,13 @@ public class EndPointServlet
     }
 
     private VelocityContext createInnerContext(final String url,
+                                               final Map<String, String> restParams,
                                                final HttpServletRequest request,
                                                final HttpServletResponse response) {
         final VelocityContext result = new VelocityContext(VLCToolbox.getInstance().getToolsContext());
 
         //-- "$req" tool --//
-        result.put(Req.NAME, new Req(url, request, response));
+        result.put(Req.NAME, new Req(url, restParams, request, response));
 
         //-- "$cookies" tool --//
         result.put(Cookies.NAME, new Cookies(request, response));

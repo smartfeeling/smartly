@@ -56,6 +56,19 @@ public class MongoUserService
             final DBObject query = new BasicDBObject();
             final Pattern equal = MongoUtils.patternEquals(email); //Pattern.compile("\\A" + email + "\\z", BeeMongoUtils.CASE_INSENSITIVE);
             query.put(MongoUser.EMAIL, equal);
+            return super.find(query);
+        } catch (Exception ex) {
+            super.getLogger().log(Level.SEVERE, null, ex);
+        }
+        return new ArrayList<DBObject>();
+    }
+
+
+    public List<DBObject> getByEmailExcerpt(final String email) {
+        try {
+            final DBObject query = new BasicDBObject();
+            final Pattern equal = MongoUtils.patternEquals(email); //Pattern.compile("\\A" + email + "\\z", BeeMongoUtils.CASE_INSENSITIVE);
+            query.put(MongoUser.EMAIL, equal);
             return super.find(query,
                     new String[]{MongoUser.ID, MongoUser.REALNAME, MongoUser.USERNAME},
                     new String[]{MongoUser.REALNAME},

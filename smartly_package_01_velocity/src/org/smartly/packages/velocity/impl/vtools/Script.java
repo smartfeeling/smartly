@@ -20,6 +20,11 @@ public class Script {
 
     }
 
+    public String resource(final String filename){
+        final boolean debug = isDebug();
+        return geRealFileName(debug, filename);
+    }
+
     public String require(final String filename) {
         return require(isDebug(), filename);
     }

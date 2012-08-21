@@ -6,18 +6,16 @@ import org.smartly.Smartly;
 import org.smartly.commons.lang.CharEncoding;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
-import org.smartly.commons.logging.LoggingRepository;
-import org.smartly.commons.logging.util.LoggingUtils;
-import org.smartly.commons.util.*;
+import org.smartly.commons.util.ClassLoaderUtils;
+import org.smartly.commons.util.JsonWrapper;
+import org.smartly.commons.util.PathUtils;
+import org.smartly.commons.util.StringUtils;
 import org.smartly.packages.cms.SmartlyHttpCms;
 import org.smartly.packages.http.SmartlyHttp;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * CMS Manager.
@@ -46,13 +44,17 @@ public class CMSRouter {
     private final Map<String, JSONObject> _sitemap;
     private final Map<String, CMSEndPointPage> _pages;
     private final Map<String, String> _templates;
+    private final List<CMSUrl> _urls;
     private CMSEndPointRepository _repo;
+    private boolean _restful;
 
     public CMSRouter() {
+        _restful = false;
         _root = getRootFullPath(this.getClass());
         _sitemap = new HashMap<String, JSONObject>();
         _pages = new HashMap<String, CMSEndPointPage>();
         _templates = new HashMap<String, String>();
+        _urls = new ArrayList<CMSUrl>();
         _repo = new CMSEndPointRepository(_root);
 
         final JSONObject sitemap = _repo.getJSONObject("sitemap.json");
@@ -64,19 +66,46 @@ public class CMSRouter {
     }
 
     public boolean contains(final String path) {
-        return _sitemap.containsKey(path);
+        if (!_restful) {
+            return _sitemap.containsKey(path);
+        } else {
+            return null != this.getUrl(path);
+        }
     }
 
     public CMSEndPointPage getPage(final String path) {
-        return _pages.get(path);
+        if (!_restful) {
+            return _pages.get(path);
+        } else {
+            final CMSUrl url = this.getUrl(path);
+            return null != url ? _pages.get(url.getPath()) : null;
+        }
     }
 
     public String getPageTemplate(final String path) {
-        final JSONObject page = _sitemap.get(path);
-        final String templateUrl = JsonWrapper.getString(page, "template");
-        return _templates.get(templateUrl);
+        final String key;
+        if (!_restful) {
+            key = path;
+        } else {
+            final CMSUrl url = this.getUrl(path);
+            key = null != url ? url.getPath() : "";
+        }
+        if (StringUtils.hasText(key)) {
+            final JSONObject page = _sitemap.get(key);
+            final String templateUrl = JsonWrapper.getString(page, "template");
+            return _templates.get(templateUrl);
+        }
+        return "";
     }
 
+    public Map<String, String> getUrlParams(final String path){
+       if(!_restful){
+          return null;
+       } else {
+           final CMSUrl url = this.getUrl(path);
+           return null!=url?url.getParams(path):null;
+       }
+    }
 
     // ------------------------------------------------------------------------
     //                      p r i v a t e
@@ -103,10 +132,8 @@ public class CMSRouter {
                         final String tpl = this.readTemplate(templatePath);
 
                         // add urls
-                        for (final String url : urls) {
-                            _sitemap.put(url, page);
-                            _pages.put(url, sp);
-                        }
+                        this.initSitemapAndPages(urls, page, sp);
+
                         // add template
                         _templates.put(templatePath, tpl);
                     } catch (Throwable t) {
@@ -115,9 +142,35 @@ public class CMSRouter {
                 }
             }
         }
-        
+
         //-- add CMS endpoints to Http Module --//
         SmartlyHttp.registerCMSPaths(_sitemap.keySet());
+    }
+
+    private void initSitemapAndPages(final String[] paths,
+                                     final JSONObject smPage,
+                                     final CMSEndPointPage epPage) {
+        // add urls
+        for (final String path : paths) {
+            final CMSUrl url = new CMSUrl(path);
+            if (!_urls.contains(url)) {
+                _urls.add(url);
+            }
+            if(url.hasParams()){
+                _restful=true;
+            }
+            _sitemap.put(path, smPage);
+            _pages.put(path, epPage);
+        }
+    }
+
+    private CMSUrl getUrl(final String path) {
+        for (final CMSUrl url : _urls) {
+            if (url.match(path)) {
+                return url;
+            }
+        }
+        return null;
     }
 
     private String readTemplate(final String path) throws IOException {
@@ -138,7 +191,7 @@ public class CMSRouter {
         result.setFooter(hfooter);
         result.setHead(hhead);
         result.setHeader(hheader);
-        result.setScript(isDebug()?(StringUtils.hasText(hscriptdbg)?hscriptdbg:hscript):hscript);
+        result.setScript(isDebug() ? (StringUtils.hasText(hscriptdbg) ? hscriptdbg : hscript) : hscript);
         result.setLocalizations(labels);
 
         return result;
@@ -172,7 +225,7 @@ public class CMSRouter {
     //               S T A T I C
     // --------------------------------------------------------------------
 
-    private static boolean isDebug(){
+    private static boolean isDebug() {
         return Smartly.isDebugMode();
     }
 
