@@ -292,6 +292,7 @@ public class MongoUtils implements IMongoConstants {
     }
 
     //-- LIST --//
+
     public static List getList(final DBObject object,
                                final String fieldName) {
         return getList(object, fieldName, new ArrayList());
@@ -303,8 +304,14 @@ public class MongoUtils implements IMongoConstants {
         if (null != object) {
             if (object.containsField(fieldName)) {
                 final Object result = object.get(fieldName);
-                if (result instanceof List) {
-                    return (List) result;
+                if(null!=result){
+                    if (result instanceof List) {
+                        return (List) result;
+                    } else {
+                        final List<Object> list = new ArrayList<Object>();
+                        list.add(result);
+                        return list;
+                    }
                 }
             } else {
                 // add missing field
@@ -314,6 +321,13 @@ public class MongoUtils implements IMongoConstants {
         return defaultValue;
     }
     // </editor-fold>
+
+    public static void remove(final DBObject object,
+                               final String fieldName) {
+        if(object instanceof BasicDBObject){
+             ((BasicDBObject)object).removeField(fieldName);
+        }
+    }
 
     public static int inc(final DBObject object,
                           final String fieldName, final int value) {
@@ -337,6 +351,26 @@ public class MongoUtils implements IMongoConstants {
     }
 
     // <editor-fold defaultstate="collapsed" desc=" merge, clone ">
+
+    /**
+     * Update target object with source values.
+     * @param source Source values
+     * @param target Target object
+     * @param excludeProperties Properties to exclude
+     */
+    public static void update(final DBObject source,
+                              final DBObject target,
+                             final String[] excludeProperties) {
+        if (null != source && null != target) {
+            final Set<String> keys = source.keySet();
+            for (final String key : keys) {
+                if (!CollectionUtils.contains(excludeProperties, key)) {
+                    put(target, key, get(source, key));
+                }
+            }
+        }
+    }
+
     public static void merge(final Object source, final Object target,
                              final String... excludeProperties) throws Exception {
         if (null != source && null != target) {
@@ -379,7 +413,8 @@ public class MongoUtils implements IMongoConstants {
     }
 
     public static void mergeKey(final String key,
-                                final Object source, final DBObject target) throws Exception {
+                                final Object source,
+                                final DBObject target) throws Exception {
         if (source instanceof DBObject) {
             mergeKey(key, (DBObject) source, target);
         } else {
@@ -416,7 +451,8 @@ public class MongoUtils implements IMongoConstants {
      * @param target
      */
     public static void mergeKey(final String key,
-                                final DBObject source, final DBObject target) {
+                                final DBObject source,
+                                final DBObject target) {
         final Object svalue = source.get(key);
         final Object tvalue = target.get(key);
         if (null == tvalue || null == svalue) {

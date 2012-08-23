@@ -55,6 +55,15 @@ public class Script {
         return "";
     }
 
+    public String requireJs(final String filenameDebug, final String filenameMini) {
+        try {
+            final String name = isDebug()?filenameDebug:filenameMini;
+            return FormatUtils.format("<script type=\"text/javascript\" src=\"{0}\"></script>", name);
+        } catch (Throwable ignored) {
+        }
+        return "";
+    }
+
     /**
      * Returns a script that load a javascript library checking for modern browsers.<br/>
      * Useful for IE support.<br>
