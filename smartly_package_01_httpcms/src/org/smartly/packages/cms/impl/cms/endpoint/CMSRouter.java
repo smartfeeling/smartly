@@ -98,7 +98,7 @@ public class CMSRouter {
         return "";
     }
 
-    public Map<String, String> getUrlParams(final String path){
+    public Map<String, String> getRestParams(final String path){
        if(!_restful){
           return null;
        } else {

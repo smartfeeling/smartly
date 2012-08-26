@@ -2,6 +2,7 @@ package org.smartly.packages.http.impl.handlers.rest.impl.wrapper;
 
 
 import org.json.JSONObject;
+import org.smartly.IConstants;
 import org.smartly.Smartly;
 import org.smartly.commons.cryptograph.MD5;
 import org.smartly.commons.util.ByteUtils;
@@ -235,7 +236,7 @@ public class MethodWrapper {
     // --------------------------------------------------------------------
 
     private static byte[] serialize(final String type, final Object data) throws IOException {
-        if (null != data) {
+        if (!StringUtils.isNULL(data)) {
             if (IRESTCons.TYPE_JSON.equalsIgnoreCase(type)) {
                 final JsonBean json = new JsonBean(data);
                 return json.asJSONObject().toString().getBytes(CHARSET);
@@ -256,11 +257,11 @@ public class MethodWrapper {
         } else {
             if (IRESTCons.TYPE_JSON.equalsIgnoreCase(type)) {
                 final JSONObject json = new JSONObject();
-                JsonWrapper.put(json, "response", "_void_");
+                JsonWrapper.put(json, "response", IConstants.NULL);
                 return json.toString().getBytes(CHARSET);
             }
         }
-        return "_void_".getBytes(CHARSET);
+        return IConstants.NULL.getBytes(CHARSET);
     }
 
     private static String getPathId(final String path) {

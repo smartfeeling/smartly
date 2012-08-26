@@ -16,8 +16,10 @@ public interface IMongoEntityConstants {
     public static final String DEF_TODATE = "30000101";
     public static final String ID = IMongoConstants.ID;
     public static final String CREATIONDATE = IMongoConstants.CREATIONDATE;
+    public static String VALUE = IMongoConstants.VALUE;
     //-- collections --//
-    public static final String VALUES = "values";
+    public static String VALUES = IMongoConstants.VALUES;
+    public static String KEYWORDS = IMongoConstants.KEYWORDS;
     public static final String PARAMETERS = "parameters";
     public static final String PRODUCTS = "products";
     public static final String PRODUCT_LINKS = "productlinks";
@@ -55,7 +57,6 @@ public interface IMongoEntityConstants {
     public static final String NAME = "name";
     public static final String DESCRIPTION = "description";
     public static final String LABEL = "label";
-    public static final String VALUE = "value";
     public static final String IMAGE = "image";
     public static final String POSITION = "position";
     public static final String PARENT_ID = "parentid";

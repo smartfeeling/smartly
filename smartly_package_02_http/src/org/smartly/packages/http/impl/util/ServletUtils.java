@@ -29,6 +29,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URLDecoder;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -167,6 +168,32 @@ public class ServletUtils {
         }
     }
 
+    public static Map<String, String> getUrlParams(final HttpServletRequest request) throws MalformedURLException {
+        final Map<String, String> params = new HashMap<String, String>();
+        getUrlParams(params, request);
+        return params;
+    }
+
+    public static void getUrlParams(final Map<String, String> params,
+                                    final HttpServletRequest request) throws MalformedURLException {
+        final Map<String, String[]> paramsMap = request.getParameterMap();
+        final Set<String> names = paramsMap.keySet();
+        for (final String name : names) {
+            final String[] value = paramsMap.get(name);
+            if (null != value && value.length > 0) {
+                if (value.length == 1) {
+                    params.put(name, value[0]);
+                } else {
+                    final JSONArray array = new JSONArray();
+                    for (final String v : value) {
+                        array.put(v);
+                    }
+                    params.put(name, array.toString());
+                }
+            }
+        }
+    }
+
     public static String getResourcePath(final HttpServletRequest request) throws MalformedURLException {
         String servletPath;
         String pathInfo;
@@ -269,8 +296,8 @@ public class ServletUtils {
      */
     private static String toJsonPath(final String key) {
         final String result = key.replaceAll("\\[", ".").replaceAll("]", "");
-        if(result.endsWith(".")){
-            return result.substring(0, result.length()-1);
+        if (result.endsWith(".")) {
+            return result.substring(0, result.length() - 1);
         }
         return result;
     }

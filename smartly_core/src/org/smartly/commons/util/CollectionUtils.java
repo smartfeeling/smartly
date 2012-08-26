@@ -730,6 +730,20 @@ public abstract class CollectionUtils {
         return -1;
     }
 
+    public static Map merge(final Map... args) {
+        Map result = null;
+        for(final Map map:args){
+            if(null!=map){
+                if(null==result){
+                   result = map;
+                } else {
+                    result.putAll(map);
+                }
+            }
+        }
+        return result;
+    }
+
     /**
      * Combine a variable number of Arrays, returning a single array containing
      * all (not null) values of passed arrays.

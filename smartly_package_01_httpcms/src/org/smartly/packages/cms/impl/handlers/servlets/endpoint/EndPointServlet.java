@@ -35,6 +35,8 @@ public class EndPointServlet
 
     public static String PATH = "/*";
     private static final String MIME_HTML = "text/html";
+    private static final String SP_VELOCITY_CONTEXT = "velocity-context";
+    private static final String SP_URL_PARAMS = "url-params";
 
     private static final Set<String> _extensions = new HashSet<String>(Arrays.asList(new String[]{".vhtml"}));
 
@@ -101,7 +103,8 @@ public class EndPointServlet
             //-- CMS --//
             final CMSEndPointPage page = cms.getPage(resourcePath);
             final String template = cms.getPageTemplate(resourcePath);
-            final Map<String, String> params = cms.getUrlParams(resourcePath);
+            final Map<String, String> url_params = CollectionUtils.merge(cms.getRestParams(resourcePath),
+                    ServletUtils.getUrlParams(request));
 
             if (null == page || !StringUtils.hasText(template)) {
                 ServletUtils.notFound404(response);
@@ -109,7 +112,7 @@ public class EndPointServlet
             }
 
             // eval template
-            final byte[] output = this.merge(template, page, params, request, response);
+            final byte[] output = this.merge(template, page, url_params, request, response);
 
             // write body
             ServletUtils.writeResponse(response, DateUtils.now().getTime(), MIME_HTML, output);
@@ -137,22 +140,32 @@ public class EndPointServlet
 
     private byte[] merge(final String templateText,
                          final CMSEndPointPage page,
-                         final Map<String, String> restParams,
+                         final Map<String, String> urlParams,
                          final HttpServletRequest request,
                          final HttpServletResponse response) {
         try {
             // session context
             final HttpSession session = request.getSession(true);
             if (session.isNew()) {
-                session.setAttribute("velocity-context", new HashMap<String, Object>());
+                session.setAttribute(SP_VELOCITY_CONTEXT, new HashMap<String, Object>());
             }
 
-            final Map<String, Object> sessionContext = (Map<String, Object>) session.getAttribute("velocity-context");
+            // store url parameters in session.
+            // url params are used in .vhtml internal components
+            if (null != urlParams && !urlParams.isEmpty()) {
+                session.setAttribute(SP_URL_PARAMS, urlParams);
+            } else {
+                session.removeAttribute(SP_URL_PARAMS);
+            }
+
+
+            // retrieve data from session
+            final Map<String, Object> sessionContext = (Map<String, Object>) session.getAttribute(SP_VELOCITY_CONTEXT);
             final VelocityEngine engine = getEngine();
 
             // execution context
             final VelocityContext context = new VelocityContext(sessionContext, this.createInnerContext(
-                    page.getUrl(), restParams, request, response));
+                    page.getUrl(), urlParams, request, response));
 
             // creates new context page
             final CMSEndPointPage ctxPage = new CMSEndPointPage(page, engine, context);
@@ -184,15 +197,17 @@ public class EndPointServlet
             // session context
             final HttpSession session = request.getSession(true);
             if (session.isNew()) {
-                session.setAttribute("velocity-context", new HashMap<String, Object>());
+                session.setAttribute(SP_VELOCITY_CONTEXT, new HashMap<String, Object>());
             }
 
-            final Map<String, Object> sessionContext = (Map<String, Object>) session.getAttribute("velocity-context");
+            final Map<String, String> urlParams = (Map<String, String>) session.getAttribute(SP_URL_PARAMS);
+
+            final Map<String, Object> sessionContext = (Map<String, Object>) session.getAttribute(SP_VELOCITY_CONTEXT);
             final VelocityEngine engine = getEngine();
 
             // execution context
             final VelocityContext context = new VelocityContext(sessionContext, this.createInnerContext(
-                    resource.getName(), null, request, response));
+                    resource.getName(), urlParams, request, response));
 
             //-- eval velocity template --//
             final String text = new String(ByteUtils.getBytes(resource.getInputStream()), Smartly.getCharset());
