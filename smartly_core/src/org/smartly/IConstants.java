@@ -28,4 +28,12 @@ public interface IConstants {
 
     public static final String DEF_LANG = "en";
     public static final String DEF_COUNTRY = "US";
+
+    //-- Content-Type --//
+    public static final String TYPE_JSON = "application/json";
+    public static final String TYPE_PNG = "image/png";
+    public static final String TYPE_TEXT = "text/plain;charset=UTF-8";
+    public static final String TYPE_HTML = "text/html;charset=UTF-8";
+    public static final String TYPE_ZIP = "application/zip";
+    public static final String TYPE_XML = "application/xml";
 }
