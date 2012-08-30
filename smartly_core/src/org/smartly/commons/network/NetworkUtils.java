@@ -228,7 +228,7 @@ public class NetworkUtils {
 
     private static Proxy getDefaultProxy() {
         Proxy result = Proxy.NO_PROXY;
-        System.setProperty("java.net.useSystemProxies", "true");
+        System.setProperty("java.net.useSystemProxies", "true"); // this should be called in main method of stand alone application
         List list = null;
         try {
             list = ProxySelector.getDefault().select(new URI("http://foo/bar"));

@@ -100,7 +100,8 @@ public class YahooPlaceFinder {
     }
 
     public JSONObject geocoding(final String locale, final JSONObject address) {
-        return this.geocoding(locale, getAddress(address, false));
+        final String text_address = getAddress(address, false);
+        return this.geocoding(locale, text_address);
     }
 
     /**
@@ -117,7 +118,7 @@ public class YahooPlaceFinder {
             params.put("address", address);
             // http://where.yahooapis.com/geocode?locale=it_IT&location=riccione rn 47838 IT&flags=J&appid=APPID
             final String url = FormatUtils.format(GEOCODING, params);
-            final String jsonData = URLUtils.getUrlContent(url);
+            final String jsonData = URLUtils.getUrlContent(url, 5000, URLUtils.TYPE_JSON);
             return parseResponse(jsonData);
         } catch (Throwable t) {
             this.getLogger().log(Level.SEVERE, null, t);
@@ -171,6 +172,16 @@ public class YahooPlaceFinder {
                 final JSONArray results = getResults(json);
                 if (null != results && results.length() > 0) {
                     return results.optJSONObject(0);
+                } else {
+                    // system error
+                    final String sys_err = JsonWrapper.getString(json, "error");
+                    if(StringUtils.hasText(sys_err)){
+                        final String cause = JsonWrapper.getString(json, "error_message");
+                        if(StringUtils.hasText(cause)){
+                            throw new Exception("[" + cause + "] - " + sys_err);
+                        }
+                        throw new Exception(sys_err);
+                    }
                 }
             } else {
                 throw new Exception(getErrorMessage(json));
@@ -226,6 +237,6 @@ public class YahooPlaceFinder {
             }
         }
 
-        return sb.toString();
+        return sb.toString().replaceAll(" ", "+");
     }
 }

@@ -37,6 +37,9 @@ abstract class AbstractLauncher {
     private boolean _initialized;
 
     protected AbstractLauncher(final String[] args) {
+        // set default proxy for outgoing communications
+        System.setProperty("java.net.useSystemProxies", "true");
+
         _args = args;
         _argsMap = new HashMap<String, Object>();
         _initialized = false;
