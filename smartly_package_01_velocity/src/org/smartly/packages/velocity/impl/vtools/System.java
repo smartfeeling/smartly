@@ -151,6 +151,11 @@ public class System
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc=" NULL AND TYPE CHECK (isNull, isEmpty, isZero, notNull, notNullList...)">
+
+    public boolean equals(final Object obj1, final Object obj2){
+        return StringUtils.equals(obj1, obj2);
+    }
+
     public boolean isNull(final Object obj) {
         return StringUtils.isNULL(obj);
     }
