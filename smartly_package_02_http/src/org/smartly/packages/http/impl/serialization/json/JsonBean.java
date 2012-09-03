@@ -5,6 +5,7 @@ package org.smartly.packages.http.impl.serialization.json;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.smartly.commons.util.BeanUtils;
 import org.smartly.commons.util.StringUtils;
 import org.smartly.packages.http.impl.serialization.json.serializer.BeanSerializer;
 import org.smartly.packages.http.impl.serialization.json.utils.JsonBeanUtils;
@@ -76,11 +77,16 @@ public final class JsonBean {
                             // object
                             return new JSONObject(object);
                         } else if (object.startsWith("[")) {
-                            final LinkedList<JSONObject> result = new LinkedList<JSONObject>();
+                            final LinkedList<Object> result = new LinkedList<Object>();
                             final JSONArray array = new JSONArray(object);
                             final int len = array.length();
                             for (int i = 0; i < len; i++) {
-                                result.add(array.optJSONObject(i));
+                                final Object val = array.opt(i);
+                                if(val instanceof String || BeanUtils.PrimitiveClasses.isPrimitive(val.getClass())){
+                                    result.add("\"".concat(val.toString()).concat("\""));
+                                } else{
+                                    result.add(val);
+                                }
                             }
                             return result;
                         } else {
@@ -108,7 +114,7 @@ public final class JsonBean {
         if (object instanceof JSONObject) {
             return (JSONObject) object;
         } else if (object instanceof List) {
-            return (List<JSONObject>) object;
+            return (List) object;
         } else if (object instanceof Exception) {
             try {
                 final JSONObject json = new JSONObject();

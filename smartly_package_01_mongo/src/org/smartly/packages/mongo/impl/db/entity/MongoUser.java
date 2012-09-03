@@ -352,7 +352,8 @@ public class MongoUser extends MongoObject {
     }
 
     public static String getCountryId(final DBObject item) {
-        return MongoUtils.getString(item, COUNTRY_ID);
+        final String result = MongoUtils.getString(item, COUNTRY_ID);
+        return StringUtils.hasText(result)?result:MongoUtils.getString(item, "countryid");
     }
 
     public static void setCountryId(final DBObject item, final String value) {
