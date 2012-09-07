@@ -53,10 +53,10 @@ public class CMSEndPointPage {
     }
 
     public String getContent() {
-        if (null!=_content && null!=_vcontext && null!=_vengine && isVhtml(_content)) {
+        if (null != _content && null != _vcontext && null != _vengine && isVhtml(_content)) {
             return merge(_url, _content, _vengine, _vcontext);
         }
-        return null!=_content?_content:"";
+        return null != _content ? _content : "";
     }
 
     public void setContent(String value) {
@@ -64,10 +64,10 @@ public class CMSEndPointPage {
     }
 
     public String getScript() {
-        if (null!=_script && null!=_vcontext && null!=_vengine && isVhtml(_script)) {
+        if (null != _script && null != _vcontext && null != _vengine && isVhtml(_script)) {
             return merge(_url, _script, _vengine, _vcontext);
         }
-        return null!=_script?_script:"";
+        return null != _script ? _script : "";
     }
 
     public void setScript(String value) {
@@ -75,10 +75,10 @@ public class CMSEndPointPage {
     }
 
     public String getFooter() {
-        if (null!=_footer && null!=_vcontext && null!=_vengine && isVhtml(_footer)) {
+        if (null != _footer && null != _vcontext && null != _vengine && isVhtml(_footer)) {
             return merge(_url, _footer, _vengine, _vcontext);
         }
-        return null!=_footer?_footer:"";
+        return null != _footer ? _footer : "";
     }
 
     public void setFooter(String _footer) {
@@ -86,10 +86,10 @@ public class CMSEndPointPage {
     }
 
     public String getHead() {
-        if (null!=_head && null!=_vcontext && null!=_vengine && isVhtml(_head)) {
+        if (null != _head && null != _vcontext && null != _vengine && isVhtml(_head)) {
             return merge(_url, _head, _vengine, _vcontext);
         }
-        return null!=_head?_head:"";
+        return null != _head ? _head : "";
     }
 
     public void setHead(String _head) {
@@ -97,10 +97,10 @@ public class CMSEndPointPage {
     }
 
     public String getHeader() {
-        if (null!=_header && null!=_vcontext && null!=_vengine && isVhtml(_header)) {
+        if (null != _header && null != _vcontext && null != _vengine && isVhtml(_header)) {
             return merge(_url, _header, _vengine, _vcontext);
         }
-        return null!=_header?_header:"";
+        return null != _header ? _header : "";
     }
 
     public void setHeader(String _header) {
@@ -132,7 +132,9 @@ public class CMSEndPointPage {
     // --------------------------------------------------------------------
 
     private static boolean isVhtml(final String text) {
-        return StringUtils.hasText(text) && text.length() > VHTML_DIRECTIVE.length() && text.substring(0, VHTML_DIRECTIVE.length()).equalsIgnoreCase(VHTML_DIRECTIVE);
+        return StringUtils.hasText(text)
+                && text.length() > VHTML_DIRECTIVE.length()
+                && text.substring(0, VHTML_DIRECTIVE.length()).equalsIgnoreCase(VHTML_DIRECTIVE);
     }
 
     private static String merge(final String url,

@@ -466,13 +466,20 @@ public abstract class AbstractMongoService {
         return result;
     }
 
+    public List<DBObject> geoNear(final Double[] coord,
+                                  final int maxDistance) {
+        final double[] dc = new double[]{coord[0], coord[1]};
+        return geoNear(dc, maxDistance);
+    }
+
     /**
      * geoNear is a db command and is used as this.
      *
      * @param coord Lon and Lat
      * @return List
      */
-    public List<DBObject> geoNear(final double[] coord, final int maxDistance) {
+    public List<DBObject> geoNear(final double[] coord,
+                                  final int maxDistance) {
         if (null != _db && null != _coll) {
             final BasicDBObject cmd = new BasicDBObject();
             cmd.put("geoNear", _coll.getName());
