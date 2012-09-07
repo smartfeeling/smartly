@@ -592,6 +592,13 @@ public class MongoUtils implements IMongoConstants {
         return query;
     }
 
+    public static DBObject queryIn(final String field,
+                                         final Object[] array) {
+        // { field : { $in : array } }
+        final DBObject in = new BasicDBObject(OP_IN, array);
+        return new BasicDBObject(field, in);
+    }
+
     /**
      * Return a query object to search a value "like"
      *

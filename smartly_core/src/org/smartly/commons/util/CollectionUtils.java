@@ -599,6 +599,10 @@ public abstract class CollectionUtils {
         return indexOf(list, fieldName, fieldValue) > -1;
     }
 
+    public static boolean contains(final Collection list, Object value) {
+        return null != list && list.size()>0 && list.contains(value);
+    }
+
     public static boolean contains(Class[] array, Class value) {
         return null != array && indexOf(array, value) >= 0;
     }
