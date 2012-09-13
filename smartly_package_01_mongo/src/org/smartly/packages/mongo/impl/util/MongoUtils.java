@@ -187,7 +187,6 @@ public class MongoUtils implements IMongoConstants {
         return !CollectionUtils.isEmpty(value);
     }
 
-    // <editor-fold defaultstate="collapsed" desc=" get with convertions (getBoolean, getString,..)">
     public static Object get(final DBObject object,
                              final String fieldName) {
         return get(object, fieldName, null);
@@ -320,7 +319,6 @@ public class MongoUtils implements IMongoConstants {
         }
         return defaultValue;
     }
-    // </editor-fold>
 
     public static void remove(final DBObject object,
                                final String fieldName) {

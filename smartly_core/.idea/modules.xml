@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/smartly_core.iml" filepath="$PROJECT_DIR$/smartly_core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../smartly_package_01_htmlasset/smartly_package_01_htmlasset.iml" filepath="$PROJECT_DIR$/../smartly_package_01_htmlasset/smartly_package_01_htmlasset.iml" />
       <module fileurl="file://$PROJECT_DIR$/../smartly_package_01_htmldeployer/smartly_package_01_htmldeployer.iml" filepath="$PROJECT_DIR$/../smartly_package_01_htmldeployer/smartly_package_01_htmldeployer.iml" />
       <module fileurl="file://$PROJECT_DIR$/../smartly_package_01_htmlparser/smartly_package_01_htmlparser.iml" filepath="$PROJECT_DIR$/../smartly_package_01_htmlparser/smartly_package_01_htmlparser.iml" />
       <module fileurl="file://$PROJECT_DIR$/../smartly_package_01_httpcms/smartly_package_01_httpcms.iml" filepath="$PROJECT_DIR$/../smartly_package_01_httpcms/smartly_package_01_httpcms.iml" />

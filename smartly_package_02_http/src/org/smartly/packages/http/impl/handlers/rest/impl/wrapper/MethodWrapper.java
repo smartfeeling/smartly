@@ -5,10 +5,7 @@ import org.json.JSONObject;
 import org.smartly.IConstants;
 import org.smartly.Smartly;
 import org.smartly.commons.cryptograph.MD5;
-import org.smartly.commons.util.ByteUtils;
-import org.smartly.commons.util.JsonWrapper;
-import org.smartly.commons.util.PathUtils;
-import org.smartly.commons.util.StringUtils;
+import org.smartly.commons.util.*;
 import org.smartly.packages.http.impl.handlers.rest.impl.IRESTCons;
 import org.smartly.packages.http.impl.handlers.rest.impl.annotations.*;
 import org.smartly.packages.http.impl.serialization.json.JsonBean;
@@ -35,11 +32,15 @@ public class MethodWrapper {
     private String[] _path_params; // array of {param} in path
     private String _type_output;
 
-    public MethodWrapper(final Object instance, final Method m) {
-        _instance = instance;
-        _method = m;
-        _type_output = IRESTCons.TYPE_JSON;
-        this.init(_method);
+    public MethodWrapper(final Object instance, final Method m) throws Exception {
+        try {
+            _instance = instance;
+            _method = m;
+            _type_output = IRESTCons.TYPE_JSON;
+            this.init(_method);
+        } catch (Throwable t) {
+            throw new Exception(FormatUtils.format("Error wrapping method '{0}': {1}", m.getName(), t), t);
+        }
     }
 
     @Override
@@ -238,7 +239,7 @@ public class MethodWrapper {
     private static byte[] serialize(final String type, final Object data) throws IOException {
         if (!StringUtils.isNULL(data)) {
             if (IRESTCons.TYPE_JSON.equalsIgnoreCase(type)) {
-                if(StringUtils.isJSON(data)){
+                if (StringUtils.isJSON(data)) {
                     final JsonBean json = new JsonBean(data);
                     return json.asJSONObject().toString().getBytes(CHARSET);
                 } else {
@@ -266,7 +267,7 @@ public class MethodWrapper {
         return IConstants.NULL.getBytes(CHARSET);
     }
 
-    private static String wrapStringToJson(final String text){
+    private static String wrapStringToJson(final String text) {
         final JSONObject json = new JSONObject();
         JsonWrapper.put(json, "response", text);
         return json.toString();
