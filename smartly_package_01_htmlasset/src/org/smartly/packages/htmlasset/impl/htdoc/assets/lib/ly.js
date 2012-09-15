@@ -4,15 +4,17 @@
     //                      initialization
     // ------------------------------------------------------------------------
 
-    try {
-        if ((typeof window['console']) === 'undefined' || (typeof window['console'].log) === 'undefined' || !window['console'] || !window['console'].log) {
-            window['console'] = window['console'] || {};
-            window['console'].log = window['console'].error = window['console'].warn = window['console'].info = function () {
-                // alert(arguments[0]);
-            };
-        }
-    } catch (ignored) {
-        // explorer fails if console is not referenced
+    // Avoid `console` errors in browsers that lack a console.
+    if (!(window.console && window.console.log)) {
+        (function () {
+            var noop = function () {};
+            var methods = ['assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error', 'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log', 'markTimeline', 'profile', 'profileEnd', 'markTimeline', 'table', 'time', 'timeEnd', 'timeStamp', 'trace', 'warn'];
+            var length = methods.length;
+            var console = window.console = {};
+            while (length--) {
+                console[methods[length]] = noop;
+            }
+        }());
     }
 
     // ------------------------------------------------------------------------
@@ -237,7 +239,7 @@
     }
 
     function isNull(arg) {
-        return (_.isNull(arg) || arg === 'NULL' || arg['response'] === 'NULL');
+        return (_.isNull(arg) || arg === 'NULL' || arg=='' || arg['response'] === 'NULL');
     }
 
     function hasText(text) {
@@ -250,6 +252,7 @@
         }
         return '';
     }
+
     // ------------------------------------------------------------------------
     //                      Utils Objects
     // ------------------------------------------------------------------------
@@ -513,7 +516,7 @@
                     if (_.isBoolean(newvalue)) {
                         $el.val(!!newvalue)
                     } else {
-                        if(el.isInput($el)) {
+                        if (el.isInput($el)) {
                             $el.val(newvalue || '');
                         } else {
                             $el.html(newvalue || '');
@@ -561,11 +564,11 @@
          * @param options  {type:"GET", url:"/rest..", "data":{}, "success": function, "error":function}
          * @private
          */
-        ajax: function _ajax(options) {
+        ajax:function _ajax(options) {
             var type = options['type'] || 'GET'
                 , url = options['url']
                 , data = options['data']
-                , ctx = options['context']||this
+                , ctx = options['context'] || this
                 , fn_success = options['success']
                 , fn_error = options['error']
                 ;
@@ -581,7 +584,7 @@
                     },
 
                     error:function (jqXHR, textStatus, errorThrown) {
-                        if(!!fn_error){
+                        if (!!fn_error) {
                             ly.call(fn_error, ctx, [response]);
                         } else {
                             ly.console.error('"' + errorThrown['message'] + '" caused from:' + jqXHR['responseText']);
@@ -593,7 +596,6 @@
     };
 
 
-
     // ------------------------------------------------------------------------
     //                      g u i
     // ------------------------------------------------------------------------
@@ -602,7 +604,7 @@
         this['cid'] = _.uniqueId('comp-');
         this['parent'] = null;
         this['options'] = options;
-        this['template'] = !!options ? options['template'] || '' : '';
+        this['_template'] = !!options ? options['template'] || '' : '';
         this['model'] = !!options ? options['model'] || null : null;
         this['view'] = !!options ? options['view'] || null : null;
 
@@ -613,20 +615,31 @@
         return _.bind(func, this);
     };
 
+    Gui.prototype.template = function (text) {
+        return _.template(text, this);
+    };
+
     Gui.prototype.appendTo = function (selector, callback) {
         var self = this;
         self['parent'] = $(selector);
-        if (self['template'].indexOf('/') === 0) {
-            ajax(self['template'], function (markup) {
+        if (self['_template'].indexOf('/') === 0) {
+            ajax(self['_template'], function (markup) {
                 _attach(self, markup, callback);
             });
         } else {
-            _attach(self, self['template'], callback);
+            _attach(self, self['_template'], callback);
         }
     };
 
     Gui.prototype.children = function (selector) {
         return !!selector ? $('#' + this['cid']).find(selector) : $('#' + this['cid']).find();
+    };
+
+    Gui.prototype.attributes = function (attributes) {
+        if(!!attributes && null!=this['model']){
+            this['model'].set(attributes, {silent:true});
+        }
+        return (null != this['model']) ? this['model'].attributes:null;
     };
 
     Gui.prototype.hasModel = function () {
@@ -656,12 +669,12 @@
     };
     //-- private --//
 
-    function _getElement(key){
-       var $el = $('#' + key);
-       return !!$el[0]?$el:$('[data-id="'+key+'"]');
+    function _getElement(key) {
+        var $el = $('#' + key);
+        return !!$el[0] ? $el : $('[data-id="' + key + '"]');
     }
 
-    function _setValue(self, key, value){
+    function _setValue(self, key, value) {
         var item = {};
         item[key] = value;
         el.value(_getElement(key), value);
