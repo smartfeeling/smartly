@@ -7,7 +7,8 @@
     // Avoid `console` errors in browsers that lack a console.
     if (!(window.console && window.console.log)) {
         (function () {
-            var noop = function () {};
+            var noop = function () {
+            };
             var methods = ['assert', 'clear', 'count', 'debug', 'dir', 'dirxml', 'error', 'exception', 'group', 'groupCollapsed', 'groupEnd', 'info', 'log', 'markTimeline', 'profile', 'profileEnd', 'markTimeline', 'table', 'time', 'timeEnd', 'timeStamp', 'trace', 'warn'];
             var length = methods.length;
             var console = window.console = {};
@@ -239,7 +240,7 @@
     }
 
     function isNull(arg) {
-        return (_.isNull(arg) || arg === 'NULL' || arg=='' || arg['response'] === 'NULL');
+        return (_.isNull(arg) || arg === 'NULL' || arg == '' || arg['response'] === 'NULL');
     }
 
     function hasText(text) {
@@ -545,6 +546,7 @@
         click:function (selector, callback, context, delay) {
             var $el = $(selector);
             if (_.isFunction(callback)) {
+                $el.unbind('click');
                 $el.on('click', function () {
                     _.debounce(_.bind(callback, context || $el, $el), delay || 1000, true)();
                     return false;
@@ -631,15 +633,23 @@
         }
     };
 
+    Gui.prototype.detach = function (remove) {
+        if (!!remove) {
+            _remove(this);
+        } else {
+            _detach(this);
+        }
+    };
+
     Gui.prototype.children = function (selector) {
         return !!selector ? $('#' + this['cid']).find(selector) : $('#' + this['cid']).find();
     };
 
     Gui.prototype.attributes = function (attributes) {
-        if(!!attributes && null!=this['model']){
+        if (!!attributes && null != this['model']) {
             this['model'].set(attributes, {silent:true});
         }
-        return (null != this['model']) ? this['model'].attributes:null;
+        return (null != this['model']) ? this['model'].attributes : null;
     };
 
     Gui.prototype.hasModel = function () {
@@ -687,7 +697,9 @@
         _initModel(self);
 
         //-- load template --//
-        self['parent'].append(_.template(markup, {cid:self['cid'], model:self['model']}));
+        var $markup = $(_.template(markup, {cid:self['cid'], model:self['model']}));
+        self['parent'].append($markup);
+        self['_component'] = $markup;
 
         //-- init view --//
         _initView(self);
@@ -698,6 +710,18 @@
         // callback function if any
         if (_.isFunction(callback)) {
             callback.call(self);
+        }
+    }
+
+    function _detach(self) {
+        if (!!self['_component']) {
+            self['_component'].detach();
+        }
+    }
+
+    function _remove(self) {
+        if (!!self['_component']) {
+            self['_component'].remove();
         }
     }
 
