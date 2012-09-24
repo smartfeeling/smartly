@@ -548,7 +548,8 @@
             if (_.isFunction(callback)) {
                 $el.unbind('click');
                 $el.on('click', function () {
-                    _.debounce(_.bind(callback, context || $el, $el), delay || 1000, true)();
+                    var $self = $(this);
+                    _.debounce(_.bind(callback, context || $self, $self), delay || 1000, true)();
                     return false;
                 });
             }
