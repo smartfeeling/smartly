@@ -320,11 +320,12 @@ public class MongoUtils implements IMongoConstants {
         return defaultValue;
     }
 
-    public static void remove(final DBObject object,
+    public static Object remove(final DBObject object,
                                final String fieldName) {
         if(object instanceof BasicDBObject){
-             ((BasicDBObject)object).removeField(fieldName);
+             return ((BasicDBObject)object).removeField(fieldName);
         }
+        return null;
     }
 
     public static int inc(final DBObject object,

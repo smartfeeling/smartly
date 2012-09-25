@@ -196,6 +196,7 @@ public abstract class AbstractMongoService {
         }
     }
 
+
     /**
      * Update existing document also with partial data.
      *
