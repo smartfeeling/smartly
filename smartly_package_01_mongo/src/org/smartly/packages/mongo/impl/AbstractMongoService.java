@@ -29,6 +29,7 @@ public abstract class AbstractMongoService {
     private static final String _ID = IMongoConstants.ID;
     private static final String MODIFIER_INC = "$inc";
     private static final int EARTH_RADIUS_mt = 6378160; // earth radius in mt.
+    private static final String LOCALE_BASE_FIELD = "base"; // used in embedded localizations. i.e. "description":{"base":"hello", "it":"ciao"}
     // ------------------------------------------------------------------------
     //                      variables
     // ------------------------------------------------------------------------
@@ -590,19 +591,13 @@ public abstract class AbstractMongoService {
      * @param fields Array of field names to localize. i.e. {"name", "description"}
      */
     public final void localize(final DBObject item,
-                               final String lang, final String[] fields) {
+                               final String lang,
+                               final String[] fields) {
         if (null != item && StringUtils.hasText(lang)) {
             try {
-                final Object id = getId(item);
                 final MongoTranslationManager srvc = this.getTranslationManager();
                 for (final String field : fields) {
-                    final Object value = srvc.get(id, field, lang);
-                    if (!StringUtils.isNULL(value)) {
-                        item.put(field, value);
-                    } else {
-                        // value is not replaced
-                        // this.getLogger().info(StringUtils.format( "value not replaced for '{0}'. Keep original '{1}'", field, item.get(field)));
-                    }
+                    localize(srvc, item, lang, field);
                 }
             } catch (Throwable ex) {
             }
@@ -838,4 +833,66 @@ public abstract class AbstractMongoService {
         return maxDistanceInMeters / EARTH_RADIUS_mt;
     }
 
+    private static void localize(final MongoTranslationManager translator,
+                                 final DBObject item,
+                                 final String lang,
+                                 final String field) {
+        final Object id = MongoUtils.getId(item);
+        if (field.indexOf(".") == -1) {
+            // standard field name
+            final DBObject value = MongoUtils.getDBObject(item, field);
+            if(null!=value){
+                // EMBEDDED TRANSLATIONS
+                localize(item, lang, field, value);
+            } else {
+                final Object translated = translator.get(id, field, lang);
+                if (!StringUtils.isNULL(translated)) {
+                    item.put(field, translated);
+                } else {
+                    // value is not replaced
+                    // this.getLogger().info(StringUtils.format( "value not replaced for '{0}'. Keep original '{1}'", field, item.get(field)));
+                }
+            }
+        } else {
+            // path (i.e. 'types.description') [ONLY FOR EMBEDDED]
+            localizePath(item, lang, field);
+        }
+    }
+
+    private static void localizePath(final DBObject item,
+                                     final String lang,
+                                     final String path) {
+        final String[] tokens = StringUtils.split(path, ".");
+        if (tokens.length > 1) {
+            final String[] a = CollectionUtils.removeTokenFromArray(tokens, tokens.length - 1);
+            final String new_path = CollectionUtils.toDelimitedString(a, ".");
+            final Object propertyBean = MongoUtils.getByPath(item, new_path);
+            final String fieldName = CollectionUtils.getLast(tokens);
+            if (propertyBean instanceof List) {
+                final List list = (List) propertyBean;
+                for(final Object obj:list){
+                    if(obj instanceof DBObject){
+                        final DBObject dbo = (DBObject) obj;
+                        final DBObject translation = MongoUtils.getDBObject(dbo, fieldName);
+                        localize(dbo, lang, fieldName, translation);
+                    }
+                }
+            }else if (propertyBean instanceof DBObject){
+                final DBObject dbo = (DBObject) propertyBean;
+                final DBObject translation = MongoUtils.getDBObject(dbo, fieldName);
+                localize(dbo, lang, fieldName, translation);
+            }
+        }
+    }
+
+    private static void localize(final DBObject item,
+                                 final String lang,
+                                 final String field,
+                                 final DBObject translation) {
+        if (translation.containsField(lang)) {
+            item.put(field, translation.get(lang));
+        } else if (translation.containsField(LOCALE_BASE_FIELD)) {
+            item.put(field, translation.get(LOCALE_BASE_FIELD));
+        }
+    }
 }

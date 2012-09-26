@@ -23,6 +23,8 @@ public abstract class BeanUtils {
             "$proxy"
     };
 
+    private static final String[] ID_FIELDS = new String[]{"_id", "id", "uid", "index", "name"};
+
     /**
      * All primitive classes
      */
@@ -619,8 +621,7 @@ public abstract class BeanUtils {
                     }
                 } else {
                     // try with some standard field names
-                    final String[] fields = new String[]{"_id", "id", "uid", "index", "name"};
-                    for (final String fname : fields) {
+                    for (final String fname : ID_FIELDS) {
                         final Object value = getSimplePropertyValue(item, fname);
                         if (CompareUtils.equals(value, fieldValue)) {
                             return item;
@@ -645,8 +646,7 @@ public abstract class BeanUtils {
                     }
                 } else {
                     // try with some standard field names
-                    final String[] fields = new String[]{"_id", "id", "uid", "index", "name"};
-                    for (final String fname : fields) {
+                    for (final String fname : ID_FIELDS) {
                         final Object value = getSimplePropertyValue(item, fname);
                         if (CompareUtils.equals(value, fieldValue)) {
                             return item;
@@ -677,8 +677,7 @@ public abstract class BeanUtils {
                     }
                 } else {
                     // try with some standard field names
-                    final String[] fields = new String[]{"_id", "id", "uid", "index", "name"};
-                    for (final String fname : fields) {
+                    for (final String fname : ID_FIELDS) {
                         try {
                             final Object value = getSimplePropertyValue(item, fname);
                             if (CompareUtils.equals(value, fieldValue)) {
@@ -720,7 +719,8 @@ public abstract class BeanUtils {
     }
 
     private static boolean setPropertyValue(final Object instance,
-                                            final String path, final Object value)
+                                            final String path,
+                                            final Object value)
             throws IllegalAccessException, InvocationTargetException {
         Object propertyBean = instance;
         String fieldName = path;

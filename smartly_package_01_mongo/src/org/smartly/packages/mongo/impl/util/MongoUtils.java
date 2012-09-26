@@ -13,6 +13,7 @@ import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.util.*;
 import org.smartly.packages.mongo.impl.IMongoConstants;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -25,6 +26,9 @@ public class MongoUtils implements IMongoConstants {
 
     private static String SEP = "-";
     private static String LIST = "list"; // actionscript list tag
+
+    private static final String[] ID_FIELDS = new String[]{"_id", "id", "uid", "index", "name"};
+
 
     private MongoUtils() {
     }
@@ -108,13 +112,13 @@ public class MongoUtils implements IMongoConstants {
         while (keys.hasNext()) {
             final String key = keys.next();
             final Object value = jsonObject.opt(key);
-            if(null!=value){
-                if(value instanceof JSONObject){
+            if (null != value) {
+                if (value instanceof JSONObject) {
                     final DBObject item = parseObject((JSONObject) value);
                     if (null != item) {
                         result.put(key, item);
                     }
-                } else if (value instanceof JSONArray){
+                } else if (value instanceof JSONArray) {
                     final DBObject item = parseObject((JSONArray) value);
                     if (null != item) {
                         result.put(key, item);
@@ -185,6 +189,35 @@ public class MongoUtils implements IMongoConstants {
      */
     public static boolean isValidJSONValue(final Object value) {
         return !CollectionUtils.isEmpty(value);
+    }
+
+    //-- getter and setter --//
+
+    /**
+     * Return value of a complex DBObjects navigating its properties.
+     *
+     * @param instance BasicDBObject, BasicDBList. i.e. "items
+     *                 => [{"_id":"H","value":"1500"},{"_id":"W","value":"500"}]"
+     * @param path     Propeties path. i.e. "items.H.value"
+     * @return
+     */
+    public static Object getByPath(final DBObject instance,
+                                   final String path) {
+        try {
+            return getPathValue(instance, path);
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
+    public static Object putByPath(final DBObject instance,
+                                   final String path,
+                                   final Object value) {
+        try {
+            return setPathValue(instance, path, value);
+        } catch (Exception e) {
+        }
+        return null;
     }
 
     public static Object get(final DBObject object,
@@ -303,7 +336,7 @@ public class MongoUtils implements IMongoConstants {
         if (null != object) {
             if (object.containsField(fieldName)) {
                 final Object result = object.get(fieldName);
-                if(null!=result){
+                if (null != result) {
                     if (result instanceof List) {
                         return (List) result;
                     } else {
@@ -321,9 +354,9 @@ public class MongoUtils implements IMongoConstants {
     }
 
     public static Object remove(final DBObject object,
-                               final String fieldName) {
-        if(object instanceof BasicDBObject){
-             return ((BasicDBObject)object).removeField(fieldName);
+                                final String fieldName) {
+        if (object instanceof BasicDBObject) {
+            return ((BasicDBObject) object).removeField(fieldName);
         }
         return null;
     }
@@ -353,13 +386,14 @@ public class MongoUtils implements IMongoConstants {
 
     /**
      * Update target object with source values.
-     * @param source Source values
-     * @param target Target object
+     *
+     * @param source            Source values
+     * @param target            Target object
      * @param excludeProperties Properties to exclude
      */
     public static void update(final DBObject source,
                               final DBObject target,
-                             final String[] excludeProperties) {
+                              final String[] excludeProperties) {
         if (null != source && null != target) {
             final Set<String> keys = source.keySet();
             for (final String key : keys) {
@@ -592,7 +626,7 @@ public class MongoUtils implements IMongoConstants {
     }
 
     public static DBObject queryIn(final String field,
-                                         final Object[] array) {
+                                   final Object[] array) {
         // { field : { $in : array } }
         final DBObject in = new BasicDBObject(OP_IN, array);
         return new BasicDBObject(field, in);
@@ -964,4 +998,74 @@ public class MongoUtils implements IMongoConstants {
             target.put(key, sourcevalue);
         }
     }
+
+    private static Object getPathValue(final DBObject instance,
+                                       final String path)
+            throws IllegalAccessException, InvocationTargetException {
+        Object result = null;
+        if (StringUtils.hasText(path)) {
+            final String[] tokens = StringUtils.split(path, ".");
+            result = instance;
+            for (final String token : tokens) {
+                if (null != result) {
+                    if (result instanceof BasicDBList) {
+                        result = getPathValue((BasicDBList) result, token);
+                    } else if (result instanceof BasicDBObject) {
+                        result = ((BasicDBObject) result).get(token);
+                    } else {
+                        result = BeanUtils.getValueIfAny(result, token);
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    private static Object getPathValue(final BasicDBList list,
+                                       final String idValue) {
+        for (final Object item : list) {
+            if (null != item && item instanceof DBObject) {
+                final DBObject dbitem = (DBObject) item;
+                for (final String fname : ID_FIELDS) {
+                    final Object value = dbitem.get(fname);
+                    if (CompareUtils.equals(value, idValue)) {
+                        return item;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private static Object setPathValue(final DBObject instance,
+                                       final String path,
+                                       final Object value)
+            throws IllegalAccessException, InvocationTargetException {
+        Object result = null;
+        Object propertyBean = instance;
+        String fieldName = path;
+        if (StringUtils.hasText(path)) {
+            final String[] tokens = StringUtils.split(path, ".");
+            if (tokens.length > 1) {
+                final String[] a = CollectionUtils.removeTokenFromArray(tokens, tokens.length - 1);
+                final String new_path = CollectionUtils.toDelimitedString(a, ".");
+                propertyBean = getPathValue(instance, new_path);
+                fieldName = CollectionUtils.getLast(tokens);
+            }
+        }
+        if (null != propertyBean) {
+            if (propertyBean instanceof DBObject) {
+                result = ((DBObject) propertyBean).get(fieldName);
+                ((DBObject) propertyBean).put(fieldName, value);
+            } else {
+                result = BeanUtils.getValueIfAny(propertyBean, fieldName);
+                BeanUtils.setValueIfAny(propertyBean, fieldName, value);
+            }
+        }
+
+        return result;
+    }
+
 }

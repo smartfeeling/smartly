@@ -46,30 +46,15 @@ public class MongoTranslationManager {
     // ------------------------------------------------------------------------
 
     public final Object get(final Object entityid,
-                            final String fieldName, final String lang) {
+                            final String fieldName,
+                            final String lang) {
         Object result = null;
         try {
-            final String id = MongoTranslation.getCompoundId(entityid,
-                    fieldName);
+            final String id = MongoTranslation.getCompoundId(entityid, fieldName);
             result = this.get(lang, id);
         } catch (Throwable t) {
         }
         return result;
-    }
-
-    public final Object getAsString(final Object entityid,
-                                    final String fieldName, final String lang) {
-        final Object result = this.get(entityid, fieldName, lang);
-        return StringUtils.toString(result, null);
-    }
-
-    public final List getAsList(final Object entityid,
-                                final String fieldName, final String lang) {
-        final Object result = this.get(entityid, fieldName, lang);
-        if (result instanceof List) {
-            return (List) result;
-        }
-        return null;
     }
 
     public final List<String> getTranslatedFieldIds(final String lang,
