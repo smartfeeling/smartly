@@ -445,6 +445,26 @@ public class MongoUtils implements IMongoConstants {
         }
     }
 
+    /**
+     * Add default properties to target if missing.
+     * @param defaults source
+     * @param target
+     * @param excludeProperties
+     */
+    public static void defaults(final DBObject defaults,
+                                final DBObject target,
+                                final String[] excludeProperties) {
+        if (null != defaults && null != target) {
+            final Set<String> keys = defaults.keySet();
+            for (final String key : keys) {
+                if (!CollectionUtils.contains(excludeProperties, key)
+                        && !target.containsField(key)) {
+                    mergeKey(key, defaults, target);
+                }
+            }
+        }
+    }
+
     public static void mergeKey(final String key,
                                 final Object source,
                                 final DBObject target) throws Exception {

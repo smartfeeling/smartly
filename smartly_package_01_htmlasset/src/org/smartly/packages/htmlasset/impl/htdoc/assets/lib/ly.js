@@ -240,7 +240,9 @@
     }
 
     function isNull(arg) {
-        return (_.isNull(arg) || arg === 'NULL' || arg == '' || arg['response'] === 'NULL');
+        return _.isArray(arg)
+            ?(arg.length>0?isNull(arg[0]):true)
+            :(_.isNull(arg) || arg === 'NULL' || arg == '' || arg['response'] === 'NULL');
     }
 
     function hasText(text) {
