@@ -347,6 +347,13 @@ public class JsonWrapper {
         }
     }
 
+    public Object remove(final String key){
+        if(this.isJSONObject()){
+            return _object.remove(key);
+        }
+        return null;
+    }
+
     //-- JSONArray --//
 
     public boolean isNull(final int index) {
@@ -500,6 +507,7 @@ public class JsonWrapper {
             }
         }
     }
+
 
     // ------------------------------------------------------------------------
     //                      p r i v a t e
@@ -918,6 +926,14 @@ public class JsonWrapper {
         } catch (Exception ex) {
         }
         return item;
+    }
+
+    public static Object remove(final JSONObject item, final String key){
+          return item.remove(key);
+    }
+
+    public static Object remove(final JSONArray item, final int index){
+        return item.remove(index);
     }
 
     public static Object get(final JSONObject item,
