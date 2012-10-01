@@ -4,6 +4,7 @@ public interface IConstants {
 
     public static final String SYSPROP_HOME = "smartly.home";
     public static final String SYSPROP_CHARSET = "smartly.charset";
+    public static final String SYSPROP_USE_PROXIES = "smartly.useSystemProxies";
 
     /**
      * Line separator. i.e. "\n" *
