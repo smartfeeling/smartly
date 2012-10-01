@@ -59,6 +59,8 @@ public class Smartly {
 
         // notify all packages Smartly is ready.
         _packageLoader.ready();
+
+
     }
 
     // ------------------------------------------------------------------------

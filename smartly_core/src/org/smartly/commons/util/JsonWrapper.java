@@ -116,6 +116,20 @@ public class JsonWrapper {
         return 0;
     }
 
+    public void clear() {
+        if (null != _array) {
+            while (_array.length() > 0) {
+                _array.remove(0);
+            }
+        }
+        if (null != _object) {
+            final Iterator i = _object.keys();
+            while (i.hasNext()) {
+                _object.remove((String) i.next());
+            }
+        }
+    }
+
     //-- special methods to retrieve values navigating object --//
 
     public Object deep(final String path) {
@@ -325,6 +339,10 @@ public class JsonWrapper {
         }
     }
 
+    public JSONObject putDeep(final String path, final Object obj)  {
+        return JsonWrapper.put(_object, path, obj, true);
+    }
+
     public void putOnce(final String key, final Object obj) throws JSONException {
         if (this.isJSONObject()) {
             _object.putOnce(key, obj);
@@ -347,8 +365,8 @@ public class JsonWrapper {
         }
     }
 
-    public Object remove(final String key){
-        if(this.isJSONObject()){
+    public Object remove(final String key) {
+        if (this.isJSONObject()) {
             return _object.remove(key);
         }
         return null;
@@ -830,8 +848,8 @@ public class JsonWrapper {
     }
 
     public static void provide(final JSONObject item,
-                                     final String path) throws JSONException {
-        if(null!=item){
+                               final String path) throws JSONException {
+        if (null != item) {
             if (path.indexOf(".") > 0) {
                 final String[] tokens = StringUtils.splitAt(1, path, ".");
                 if (!item.has(tokens[0])) {
@@ -928,11 +946,11 @@ public class JsonWrapper {
         return item;
     }
 
-    public static Object remove(final JSONObject item, final String key){
-          return item.remove(key);
+    public static Object remove(final JSONObject item, final String key) {
+        return item.remove(key);
     }
 
-    public static Object remove(final JSONArray item, final int index){
+    public static Object remove(final JSONArray item, final int index) {
         return item.remove(index);
     }
 
@@ -1146,4 +1164,6 @@ public class JsonWrapper {
 
         return result;
     }
+
+
 }

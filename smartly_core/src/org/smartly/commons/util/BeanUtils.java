@@ -725,8 +725,7 @@ public abstract class BeanUtils {
         Object propertyBean = instance;
         String fieldName = path;
         if (StringUtils.hasText(path)) {
-            final String[] tokens = StringUtils.split(
-                    path, ".");
+            final String[] tokens = StringUtils.split( path, "." );
             if (tokens.length > 1) {
                 final String[] a = CollectionUtils.removeTokenFromArray(tokens,
                         tokens.length - 1);
