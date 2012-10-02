@@ -19,25 +19,25 @@ public class DateWrapper {
     public static final int STYLE_SHORT = DateFormat.SHORT;
     public static final int STYLE_MEDIUM = DateFormat.MEDIUM;
     public static final int STYLE_LONG = DateFormat.LONG;
-    
+
     public static final String[] PATTERNS = new String[]{
-        "yyyyMMdd", // 20130105
-        "EEE, d MMM yyyy HH:mm:ss Z", // Tue, 5 Jan 2013 21:47:38 +0200
-        "EEE, d MMM yyyy HH:mm:ss", // Tue, 5 Jan 2013 21:47:38
-        "EEE, d-MMM-yyyy HH:mm:ss z", // Tue, 5-Jan-2013 21:47:38 GMT
-        "EEE, d-MMM-yyyy HH:mm:ss", // Tue, 5-Jan-2013 21:47:38 GMT
-        "EEE, d MM yyyy HH:mm:ss Z", // Tue, 5 06 2013 21:47:38 +0200
-        "EEE, d MM yyyy HH:mm:ss", // Tue, 5 06 2013 21:47:38
-        "EEE, d-MM-yyyy HH:mm:ss z", // Tue, 5-06-2013 21:47:38 GMT
-        "EEE, d-MM-yyyy HH:mm:ss", // Tue, 5-06-2013 21:47:38
-        "EEE, dd MMM yyyy HH:mm:ss Z", // Tue, 05 Jan 2013 21:47:38 +0200
-        "EEE, dd MMM yyyy HH:mm:ss", // Tue, 05 Jan 2013 21:47:38
-        "EEE, dd-MMM-yyyy HH:mm:ss z", // Tue, 05-Jan-2013 21:47:38 GMT
-        "EEE, dd-MMM-yyyy HH:mm:ss", // Tue, 05-Jan-2013 21:47:38 GMT
-        "EEE, dd MM yyyy HH:mm:ss Z", // Tue, 05 06 2013 21:47:38 +0200
-        "EEE, dd MM yyyy HH:mm:ss", // Tue, 05 06 2013 21:47:38
-        "EEE, dd-MM-yyyy HH:mm:ss z", // Tue, 05-06-2013 21:47:38 GMT
-        "EEE, dd-MM-yyyy HH:mm:ss" // Tue, 05-06-2013 21:47:38
+            "yyyyMMdd", // 20130105
+            "EEE, d MMM yyyy HH:mm:ss Z", // Tue, 5 Jan 2013 21:47:38 +0200
+            "EEE, d MMM yyyy HH:mm:ss", // Tue, 5 Jan 2013 21:47:38
+            "EEE, d-MMM-yyyy HH:mm:ss z", // Tue, 5-Jan-2013 21:47:38 GMT
+            "EEE, d-MMM-yyyy HH:mm:ss", // Tue, 5-Jan-2013 21:47:38 GMT
+            "EEE, d MM yyyy HH:mm:ss Z", // Tue, 5 06 2013 21:47:38 +0200
+            "EEE, d MM yyyy HH:mm:ss", // Tue, 5 06 2013 21:47:38
+            "EEE, d-MM-yyyy HH:mm:ss z", // Tue, 5-06-2013 21:47:38 GMT
+            "EEE, d-MM-yyyy HH:mm:ss", // Tue, 5-06-2013 21:47:38
+            "EEE, dd MMM yyyy HH:mm:ss Z", // Tue, 05 Jan 2013 21:47:38 +0200
+            "EEE, dd MMM yyyy HH:mm:ss", // Tue, 05 Jan 2013 21:47:38
+            "EEE, dd-MMM-yyyy HH:mm:ss z", // Tue, 05-Jan-2013 21:47:38 GMT
+            "EEE, dd-MMM-yyyy HH:mm:ss", // Tue, 05-Jan-2013 21:47:38 GMT
+            "EEE, dd MM yyyy HH:mm:ss Z", // Tue, 05 06 2013 21:47:38 +0200
+            "EEE, dd MM yyyy HH:mm:ss", // Tue, 05 06 2013 21:47:38
+            "EEE, dd-MM-yyyy HH:mm:ss z", // Tue, 05-06-2013 21:47:38 GMT
+            "EEE, dd-MM-yyyy HH:mm:ss" // Tue, 05-06-2013 21:47:38
     };
     public static final String DATEFORMAT_DEFAULT = PATTERNS[0];
     public static final String DATEFORMAT_GENERAL = PATTERNS[1];
@@ -56,6 +56,7 @@ public class DateWrapper {
     // ------------------------------------------------------------------------
     //                      Constructor
     // ------------------------------------------------------------------------
+
     /**
      * Create a DecodedDate Object.
      */
@@ -65,7 +66,8 @@ public class DateWrapper {
 
     /**
      * Create a DecodedDate Object.
-     * @param date Date 
+     *
+     * @param date Date
      */
     public DateWrapper(final Date date) {
         init(date);
@@ -73,7 +75,8 @@ public class DateWrapper {
 
     /**
      * Create a DecodedDate Object.
-     * @param dateTime 
+     *
+     * @param dateTime
      */
     public DateWrapper(final long dateTime) {
         Date dt = new Date(dateTime);
@@ -82,8 +85,8 @@ public class DateWrapper {
 
     /**
      * Create a DecodedDate Object.
-     * 
-     * @param date Date
+     *
+     * @param date    Date
      * @param pattern es: "dd/MM/yy", "MM/dd/yy", "yyyyMMdd"
      * @throws Exception
      */
@@ -107,7 +110,8 @@ public class DateWrapper {
 
     /**
      * Create an instance of Date decoder.
-     * @param date Date
+     *
+     * @param date      Date
      * @param dateStyle Date style in DateFormat codification (FULL = 0, LONG = 1, MEDIUM = 2, SHORT = 3).
      * @throws Exception
      */
@@ -124,7 +128,6 @@ public class DateWrapper {
     }
 
     /**
-     *
      * @param date
      * @param dateStyle
      * @param locale
@@ -188,11 +191,11 @@ public class DateWrapper {
     // ------------------------------------------------------------------------
     //                      Public
     // ------------------------------------------------------------------------
-    
+
     public Calendar getCalendar() {
         return _calendar;
     }
-    
+
     public Date getDateTime() {
         return _calendar.getTime();
     }
@@ -302,6 +305,7 @@ public class DateWrapper {
 
     /**
      * Return a formatted date using "yyyyMMdd" pattern.
+     *
      * @return Date or Time formatted. i.e.: "20070121"
      */
     @Override
@@ -312,6 +316,7 @@ public class DateWrapper {
 
     /**
      * Return a formatted date
+     *
      * @param dateFormat es: "dd/MM/yy", "MM/dd/yy", "yyyyMMdd", "HH:mm:ss", "hh.mm.ss"
      * @return Date or Time formatted.
      */
@@ -322,8 +327,9 @@ public class DateWrapper {
 
     /**
      * Return a formatted date
+     *
      * @param dateFormat e.g.: "dd/MM/yy", "MM/dd/yy", "yyyyMMdd", "HH:mm:ss", "hh.mm.ss"
-     * @param locale e.g.: Locale.UK
+     * @param locale     e.g.: Locale.UK
      * @return Date or Time formatted.
      */
     public String toString(String dateFormat, Locale locale) {
@@ -333,6 +339,7 @@ public class DateWrapper {
 
     /**
      * Return a formatted date
+     *
      * @param locale Locale to format the date to.
      * @return Date or Time formatted.
      */
@@ -343,9 +350,10 @@ public class DateWrapper {
 
     /**
      * Return a formatted date
-     * @param style Ex: the given formatting style.
-     * For example, SHORT for "M/d/yy" in the US locale.
-     * (DateFormat.SHORT, DateFormat.LONG, DateFormat.MEDIUM, DateFormat.FULL)
+     *
+     * @param style  Ex: the given formatting style.
+     *               For example, SHORT for "M/d/yy" in the US locale.
+     *               (DateFormat.SHORT, DateFormat.LONG, DateFormat.MEDIUM, DateFormat.FULL)
      * @param locale Locale to format the date to.
      * @return Formatted date
      */
@@ -420,9 +428,8 @@ public class DateWrapper {
             } catch (Throwable ignored) {
             }
         }
-        
+
         return null;
     }
-
 
 }
