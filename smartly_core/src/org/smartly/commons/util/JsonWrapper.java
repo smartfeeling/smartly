@@ -244,6 +244,24 @@ public class JsonWrapper {
         return 0L;
     }
 
+    public Date getDate(final String key) throws JSONException {
+        if (this.isJSONObject()) {
+            final String date = _object.getString(key);
+            final DateWrapper dw = DateWrapper.parse(date);
+            return null!=dw?dw.getDateTime():DateUtils.zero();
+        }
+        return DateUtils.zero();
+    }
+
+    public Date getDate(final String key, final Locale locale) throws JSONException {
+        if (this.isJSONObject()) {
+            final String date = _object.getString(key);
+            final DateWrapper dw = DateWrapper.parse(date, locale);
+            return null!=dw?dw.getDateTime():DateUtils.zero();
+        }
+        return DateUtils.zero();
+    }
+
     public JSONArray getJSONArray(final String key) throws JSONException {
         if (this.isJSONObject()) {
             return _object.getJSONArray(key);
@@ -1043,6 +1061,29 @@ public class JsonWrapper {
             return defValue;
         }
         return ConversionUtils.toBoolean(value, defValue);
+    }
+
+    public static Date getDate(final Object item,
+                               final String field) throws JSONException {
+        final Object value = getValueIfAny(item, field);
+        if (value instanceof String) {
+            final String date = (String)value;
+            final DateWrapper dw = DateWrapper.parse(date);
+            return null!=dw?dw.getDateTime():DateUtils.zero();
+        }
+        return DateUtils.zero();
+    }
+
+    public static Date getDate(final Object item,
+                               final String field,
+                               final Locale locale) throws JSONException {
+        final Object value = getValueIfAny(item, field);
+        if (value instanceof String) {
+            final String date = (String)value;
+            final DateWrapper dw = DateWrapper.parse(date, locale);
+            return null!=dw?dw.getDateTime():DateUtils.zero();
+        }
+        return DateUtils.zero();
     }
 
     public static JSONArray getArray(final Object item,
