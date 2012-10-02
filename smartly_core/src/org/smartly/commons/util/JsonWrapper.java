@@ -585,6 +585,8 @@ public class JsonWrapper {
             for (final Object key : keys) {
                 result.put(item.get(key));
             }
+        } else if (object instanceof Collection) {
+            result.put((Collection)object);
         }
 
         return result;
