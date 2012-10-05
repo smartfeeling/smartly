@@ -840,7 +840,7 @@ public abstract class AbstractMongoService {
         final Object id = MongoUtils.getId(item);
         if (field.indexOf(".") == -1) {
             // standard field name
-            final DBObject value = MongoUtils.getDBObject(item, field);
+            final DBObject value = MongoUtils.getDBObject(item, field, null);
             if(null!=value){
                 // EMBEDDED TRANSLATIONS
                 localize(item, lang, field, value);
