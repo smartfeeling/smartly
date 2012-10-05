@@ -158,7 +158,7 @@ abstract class AbstractLauncher {
             final boolean use_proxy = (Boolean)parser.getOptionValue(proxyOpt, false);
             _argsMap.put("p", use_proxy);
             System.setProperty("java.net.useSystemProxies", use_proxy+""); // java.net property
-            System.setProperty(IConstants.SYSPROP_HOME, use_proxy+""); // smartly property
+            System.setProperty(IConstants.SYSPROP_USE_PROXIES, use_proxy+""); // smartly property
         }
     }
     // ------------------------------------------------------------------------
