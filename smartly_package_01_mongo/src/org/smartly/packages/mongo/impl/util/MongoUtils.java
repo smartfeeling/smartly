@@ -61,6 +61,11 @@ public class MongoUtils implements IMongoConstants {
         return createUUID();
     }
 
+
+    public static boolean isEmpty(final DBObject object) {
+        return !(null != object && object.keySet().size()>0);
+    }
+
     public static Object hasId(final DBObject object) {
         return null != getId(object);
     }

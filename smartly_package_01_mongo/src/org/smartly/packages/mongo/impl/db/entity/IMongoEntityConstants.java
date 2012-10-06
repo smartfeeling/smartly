@@ -34,8 +34,8 @@ public interface IMongoEntityConstants {
     public static final String LANG = "lang"; // it, en
     public static final String COLL = "coll";
     public static final String COUNTRY = "country";
-    public static final String COUNTRY_ID = "countryId";  // IT, US
-    public static final String COUNTRY_NAME = "countryName";  // Italy
+    public static final String COUNTRY_ID = "countryid";  // IT, US
+    public static final String COUNTRY_NAME = "countryname";  // Italy
     public static final String COUNTRIES = "countries";  // IT, US
     public static final String CURRENCY_SYMBOL = "currencysymbol";
     public static final String CURRENCY_NAME = "currencyname";
