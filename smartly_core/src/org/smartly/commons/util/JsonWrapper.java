@@ -116,6 +116,10 @@ public class JsonWrapper {
         return 0;
     }
 
+    public List<Object> values(){
+        return toList(this.getObject());
+    }
+
     public void clear() {
         if (null != _array) {
             while (_array.length() > 0) {
@@ -202,6 +206,17 @@ public class JsonWrapper {
         return false;
     }
 
+    public Set<String> keys() {
+        final Set<String> keys = new HashSet<String>();
+        if (this.isJSONObject()) {
+            final Iterator<String> iter = _object.keys();
+            while (iter.hasNext()) {
+                keys.add(iter.next());
+            }
+        }
+        return keys;
+    }
+
     public Object get(final String key) throws JSONException {
         if (this.isJSONObject()) {
             return _object.get(key);
@@ -248,7 +263,7 @@ public class JsonWrapper {
         if (this.isJSONObject()) {
             final String date = _object.getString(key);
             final DateWrapper dw = DateWrapper.parse(date);
-            return null!=dw?dw.getDateTime():DateUtils.zero();
+            return null != dw ? dw.getDateTime() : DateUtils.zero();
         }
         return DateUtils.zero();
     }
@@ -257,7 +272,7 @@ public class JsonWrapper {
         if (this.isJSONObject()) {
             final String date = _object.getString(key);
             final DateWrapper dw = DateWrapper.parse(date, locale);
-            return null!=dw?dw.getDateTime():DateUtils.zero();
+            return null != dw ? dw.getDateTime() : DateUtils.zero();
         }
         return DateUtils.zero();
     }
@@ -357,7 +372,7 @@ public class JsonWrapper {
         }
     }
 
-    public JSONObject putDeep(final String path, final Object obj)  {
+    public JSONObject putDeep(final String path, final Object obj) {
         return JsonWrapper.put(_object, path, obj, true);
     }
 
@@ -604,7 +619,7 @@ public class JsonWrapper {
                 result.put(item.get(key));
             }
         } else if (object instanceof Collection) {
-            result.put((Collection)object);
+            result.put((Collection) object);
         }
 
         return result;
@@ -1067,9 +1082,9 @@ public class JsonWrapper {
                                final String field) throws JSONException {
         final Object value = getValueIfAny(item, field);
         if (value instanceof String) {
-            final String date = (String)value;
+            final String date = (String) value;
             final DateWrapper dw = DateWrapper.parse(date);
-            return null!=dw?dw.getDateTime():DateUtils.zero();
+            return null != dw ? dw.getDateTime() : DateUtils.zero();
         }
         return DateUtils.zero();
     }
@@ -1079,9 +1094,9 @@ public class JsonWrapper {
                                final Locale locale) throws JSONException {
         final Object value = getValueIfAny(item, field);
         if (value instanceof String) {
-            final String date = (String)value;
+            final String date = (String) value;
             final DateWrapper dw = DateWrapper.parse(date, locale);
-            return null!=dw?dw.getDateTime():DateUtils.zero();
+            return null != dw ? dw.getDateTime() : DateUtils.zero();
         }
         return DateUtils.zero();
     }

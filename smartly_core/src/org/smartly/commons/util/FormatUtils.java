@@ -279,6 +279,11 @@ public class FormatUtils {
         return formatDate(dateToFormat, DateFormat.MEDIUM, locale);
     }
 
+    public static String formatDate(final long dateToFormat, final Locale locale) {
+        final Date date = new Date(dateToFormat);
+        return formatDate(date, locale);
+    }
+
     public static String formatDate(final Date dateToFormat, final Locale locale,
                                     final boolean includetime) {
         return formatDate(dateToFormat, DateFormat.MEDIUM, locale, includetime);
