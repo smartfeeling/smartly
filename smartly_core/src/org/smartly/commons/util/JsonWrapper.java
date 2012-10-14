@@ -10,9 +10,9 @@ import org.smartly.commons.logging.util.LoggingUtils;
 import java.util.*;
 
 /**
- * User: angelo.geminiani
+ * Wrapper for generic JSON objects and arrays.
  */
-public class JsonWrapper {
+public final class JsonWrapper implements Cloneable {
 
     private JSONObject _object;
     private JSONArray _array;
@@ -76,6 +76,11 @@ public class JsonWrapper {
             return _object.toString();
         }
         return "";
+    }
+
+    @Override
+    public JsonWrapper clone() {
+       return new JsonWrapper(this.toString());
     }
 
     // ------------------------------------------------------------------------

@@ -250,6 +250,12 @@ public final class StringUtils {
         return null != result ? result : new String[]{toSplit};
     }
 
+    /**
+     * Split string into an array of 2 elements.
+     * @param toSplit String to split. i.e. "this.is.a.string"
+     * @param delimiter  Delimiter. i.e. "."
+     * @return Array of 2 elements. i.e. ["this.is.a", "string"]
+     */
     public static String[] splitLast(final String toSplit,
                                      final String delimiter) {
         final String[] result = _splitLastOrFirst(toSplit, delimiter, true);
