@@ -373,6 +373,8 @@ public final class JsonWrapper implements Cloneable {
                 _object.put(key, (Double) obj);
             } else if (obj instanceof Long) {
                 _object.put(key, (Long) obj);
+            } else {
+                _object.putOpt(key, obj);
             }
         }
     }
