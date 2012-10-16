@@ -525,9 +525,9 @@
                         $el.val(!!newvalue)
                     } else {
                         if (el.isInput($el)) {
-                            $el.val(newvalue || '');
+                            $el.val(newvalue);
                         } else {
-                            $el.html(newvalue || '');
+                            $el.html(newvalue);
                         }
                     }
                 }
@@ -830,12 +830,12 @@
         var changes = changed['changes'] || model['changed'];
         _.each(changes, function (value, key, list) {
             try {
-                if (!!value) {
+                if (null!=value) {
                     // update view
                     el.value('#' + key, model.get(key));
 
                     // trigger change event
-                    _trigger(self, 'change', self, model, key, model.get(key));
+                    _trigger(self, 'change', model, key, model.get(key));
                 }
             } catch (err) {
                 console.error(err);
