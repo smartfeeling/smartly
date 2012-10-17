@@ -858,7 +858,9 @@ public final class JsonWrapper implements Cloneable {
      * @return
      */
     public static JSONObject extend(final JSONObject target,
-                                    final JSONObject source, final boolean overwrite, final Object nullValue) {
+                                    final JSONObject source,
+                                    final boolean overwrite,
+                                    final Object nullValue) {
         final Iterator keys = source.keys();
         while (keys.hasNext()) {
             try {
