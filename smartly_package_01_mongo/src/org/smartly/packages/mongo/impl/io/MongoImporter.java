@@ -53,12 +53,16 @@ public class MongoImporter {
     //                      p u b l i c
     // ------------------------------------------------------------------------
     public List<DBObject> importFromFile(final String filepath) throws Exception {
+        return this.importFromFile(filepath);
+    }
+    public List<DBObject> importFromFile(final String filepath,
+                                         final ImporterIterator iterator) throws Exception {
         List<DBObject> result = null;
         if (isCSVFile(filepath)) {
             final CSVFileReader reader = new CSVFileReader(filepath);
             try {
                 final List<Map<String, String>> data = reader.readAllAsMap(true);
-                result = this.doImport(data);
+                result = this.doImport(data, iterator);
             } catch (Throwable t) {
             }
             reader.close();
@@ -66,25 +70,30 @@ public class MongoImporter {
             final String json = FileUtils.copyToString(new FileReader(filepath));
             final JsonWrapper jsw = JsonWrapper.wrap(json);
             if(jsw.isJSONArray()){
-                result = this.doImport(jsw.getJSONArray());
+                result = this.doImport(jsw.getJSONArray(), iterator);
             }
         }
         return null != result ? result : new ArrayList<DBObject>();
     }
 
     public List<DBObject> importFromString(final String text) throws Exception {
+       return this.importFromString(text, null);
+    }
+
+    public List<DBObject> importFromString(final String text,
+                                           final ImporterIterator iterator) throws Exception {
         List<DBObject> result = null;
         if(StringUtils.isJSONArray(text)){
             final JsonWrapper jsw = JsonWrapper.wrap(text);
             if(jsw.isJSONArray()){
-                result = this.doImport(jsw.getJSONArray());
+                result = this.doImport(jsw.getJSONArray(), iterator);
             }
         } else {
             final CSVReader reader = new CSVReader();
             reader.setReader(new StringReader(text));
             try {
                 final List<Map<String, String>> data = reader.readAllAsMap(true);
-                result = this.doImport(data);
+                result = this.doImport(data, iterator);
             } catch (Throwable t) {
             }
             reader.close();
@@ -94,14 +103,19 @@ public class MongoImporter {
     }
 
     public List<DBObject> importFromResource(final String resourceName) throws Exception {
+          return this.importFromResource(resourceName, null);
+    }
+
+    public List<DBObject> importFromResource(final String resourceName,
+                                             final ImporterIterator iterator) throws Exception {
         List<DBObject> result = null;
 
         if (isCSVFile(resourceName)) {
             final List<Map<String, String>> data = readCSV(resourceName);
-            result = this.doImport(data);
+            result = this.doImport(data, iterator);
         } else if (isJSONFile(resourceName)) {
             final JSONArray data = readJSONArray(resourceName);
-            result = this.doImport(data);
+            result = this.doImport(data, iterator);
         }
 
         return null != result ? result : new ArrayList<DBObject>();
@@ -110,17 +124,22 @@ public class MongoImporter {
     // ------------------------------------------------------------------------
     //                      p r i v a t e
     // ------------------------------------------------------------------------
-    private List<DBObject> doImport(final List<Map<String, String>> data) throws StandardCodedException {
+    private List<DBObject> doImport(final List<Map<String, String>> data,
+                                    final ImporterIterator iterator) throws StandardCodedException {
         final List<DBObject> result = new LinkedList<DBObject>();
         for (final Map<String, String> item : data) {
             final DBObject dbo = new BasicDBObject(item);
+            if(null!=iterator){
+                iterator.importing(dbo);
+            }
             _srvc.upsert(dbo);
             result.add(dbo);
         }
         return result;
     }
 
-    private List<DBObject> doImport(final JSONArray list) throws Exception {
+    private List<DBObject> doImport(final JSONArray list,
+                                    final ImporterIterator iterator) throws Exception {
         final List<DBObject> result = new LinkedList<DBObject>();
         for (int i = 0; i < list.length(); i++) {
             final JSONObject jso = list.getJSONObject(i);
@@ -131,6 +150,9 @@ public class MongoImporter {
                 if (obj instanceof List) {
                     localizations = (List) obj;
                 }
+            }
+            if(null!=iterator){
+                iterator.importing(dbo);
             }
             _srvc.upsert(dbo);
 
@@ -182,5 +204,13 @@ public class MongoImporter {
 
     private static boolean isCSVFile(final String name){
         return PathUtils.getFilenameExtension(name, true).equalsIgnoreCase(".csv");
+    }
+
+    // --------------------------------------------------------------------
+    //                          EMBEDDED
+    // --------------------------------------------------------------------
+
+    public interface ImporterIterator {
+        void importing(DBObject item);
     }
 }
