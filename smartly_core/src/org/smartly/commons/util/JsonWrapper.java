@@ -80,7 +80,7 @@ public final class JsonWrapper implements Cloneable {
 
     @Override
     public JsonWrapper clone() {
-       return new JsonWrapper(this.toString());
+        return new JsonWrapper(this.toString());
     }
 
     // ------------------------------------------------------------------------
@@ -121,7 +121,7 @@ public final class JsonWrapper implements Cloneable {
         return 0;
     }
 
-    public List<Object> values(){
+    public List<Object> values() {
         return toList(this.getObject());
     }
 
@@ -148,6 +148,16 @@ public final class JsonWrapper implements Cloneable {
             return BeanUtils.getValueIfAny(_array, path);
         }
         return null;
+    }
+
+    public JSONArray deepJSONArray(final String path) {
+        final Object result = this.deep(path);
+        return result instanceof JSONArray ? (JSONArray) result : null;
+    }
+
+    public JSONObject deepJSONObject(final String path) {
+        final Object result = this.deep(path);
+        return result instanceof JSONObject ? (JSONObject) result : null;
     }
 
     public String deepString(final String path) {
