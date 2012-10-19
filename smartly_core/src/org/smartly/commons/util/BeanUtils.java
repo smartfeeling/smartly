@@ -194,7 +194,8 @@ public abstract class BeanUtils {
     }
 
     public static boolean hasValue(final Object instance,
-                                   final String path, final Object value) {
+                                   final String path,
+                                   final Object value) {
         try {
             return getValue(instance, path).equals(value);
         } catch (Exception e) {
@@ -203,15 +204,17 @@ public abstract class BeanUtils {
     }
 
     public static boolean setValue(final Object instance,
-                                   final String fieldName, final Object value)
+                                   final String path,
+                                   final Object value)
             throws IllegalAccessException, InvocationTargetException {
-        return setPropertyValue(instance, fieldName, value);
+        return setPropertyValue(instance, path, value);
     }
 
     public static boolean setValueIfAny(final Object instance,
-                                        final String fieldName, final Object value) {
+                                        final String path,
+                                        final Object value) {
         try {
-            return setPropertyValue(instance, fieldName, value);
+            return setPropertyValue(instance, path, value);
         } catch (Throwable ignored) {
         }
         return false;

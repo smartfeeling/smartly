@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 /**
  * Singleton helper for velocity engine.
  *
- * @author
+ * @author Gian Angelo Geminiani
  */
 public class VLCManager implements IVLCCostants {
 

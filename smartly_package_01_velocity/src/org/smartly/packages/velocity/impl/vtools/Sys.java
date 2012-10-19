@@ -21,7 +21,7 @@ import java.util.*;
 /**
  *
  */
-public class System
+public class Sys
         implements IVLCTool {
 
     // ------------------------------------------------------------------------
@@ -33,7 +33,7 @@ public class System
     // ------------------------------------------------------------------------
     //                      Constructor
     // ------------------------------------------------------------------------
-    public System() {
+    public Sys() {
     }
 
     @Override
@@ -152,7 +152,7 @@ public class System
 
     //<editor-fold defaultstate="collapsed" desc=" NULL AND TYPE CHECK (isNull, isEmpty, isZero, notNull, notNullList...)">
 
-    public boolean equals(final Object obj1, final Object obj2){
+    public boolean equals(final Object obj1, final Object obj2) {
         return StringUtils.equals(obj1, obj2);
     }
 
@@ -293,6 +293,10 @@ public class System
         return CollectionUtils.toList(item);
     }
 
+    public JSONArray toJSONArray(final Object item){
+        return JsonWrapper.toJSONArray(item);
+    }
+
     /**
      * Return new array containig all common fields in both arrays, list or
      * maps. You can compare 2
@@ -372,7 +376,8 @@ public class System
         return this.getString(object, fieldName, "");
     }
 
-    public String getString(final Object object, final String fieldName,
+    public String getString(final Object object,
+                            final String fieldName,
                             final String defaultValue) {
         final Object value = this.get(object, fieldName);
         if (null != value) {
@@ -452,18 +457,25 @@ public class System
      * instance will be returned
      *
      * @param object
-     * @param fieldName
+     * @param path
      * @return List
      */
-    public List getList(final Object object, final String fieldName) {
+    public List getList(final Object object, final String path) {
         List result = null;
         try {
-            final Object item = BeanUtils.getValue(object, fieldName);
+            final Object item = BeanUtils.getValue(object, path);
             result = this.toList(item);
         } catch (Throwable t) {
         }
         return result;
     }
+
+    public void put(final Object object,
+                    final String path,
+                    final Object value) {
+        BeanUtils.setValueIfAny(object, path, value);
+    }
+
     //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc=" PATH (getFilename, ...)">
@@ -638,10 +650,10 @@ public class System
     // ------------------------------------------------------------------------
     public class Counter {
 
-        private final System _sys;
+        private final Sys _sys;
         private int _count = 0;
 
-        public Counter(final System sys, final int start) {
+        public Counter(final Sys sys, final int start) {
             _sys = sys;
             _count = start;
         }

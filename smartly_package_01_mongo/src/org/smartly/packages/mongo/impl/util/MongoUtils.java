@@ -209,7 +209,7 @@ public class MongoUtils implements IMongoConstants {
     public static Object getByPath(final DBObject instance,
                                    final String path) {
         try {
-            return getPathValue(instance, path);
+            return getDeepValue(instance, path);
         } catch (Exception e) {
         }
         return null;
@@ -1024,7 +1024,7 @@ public class MongoUtils implements IMongoConstants {
         }
     }
 
-    private static Object getPathValue(final DBObject instance,
+    private static Object getDeepValue(final DBObject instance,
                                        final String path)
             throws IllegalAccessException, InvocationTargetException {
         Object result = null;
@@ -1076,7 +1076,7 @@ public class MongoUtils implements IMongoConstants {
             if (tokens.length > 1) {
                 final String[] a = CollectionUtils.removeTokenFromArray(tokens, tokens.length - 1);
                 final String new_path = CollectionUtils.toDelimitedString(a, ".");
-                propertyBean = getPathValue(instance, new_path);
+                propertyBean = getDeepValue(instance, new_path);
                 fieldName = CollectionUtils.getLast(tokens);
             }
         }

@@ -252,8 +252,9 @@ public final class StringUtils {
 
     /**
      * Split string into an array of 2 elements.
-     * @param toSplit String to split. i.e. "this.is.a.string"
-     * @param delimiter  Delimiter. i.e. "."
+     *
+     * @param toSplit   String to split. i.e. "this.is.a.string"
+     * @param delimiter Delimiter. i.e. "."
      * @return Array of 2 elements. i.e. ["this.is.a", "string"]
      */
     public static String[] splitLast(final String toSplit,
@@ -757,12 +758,12 @@ public final class StringUtils {
      * @return Boolean value.
      */
     public static boolean isNULL(final Object value) {
-        if (value instanceof String) {
-            final String svalue = (String) value;
-            return !StringUtils.hasText(svalue)
-                    || svalue.equalsIgnoreCase(IConstants.NULL);
+        if (null == value) {
+            return true;
         }
-        return null == value;
+        final String svalue = value.toString();
+        return !StringUtils.hasText(svalue)
+                || svalue.equalsIgnoreCase(IConstants.NULL);
     }
 
     /**

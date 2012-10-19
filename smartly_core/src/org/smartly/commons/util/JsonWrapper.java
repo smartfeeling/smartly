@@ -623,22 +623,28 @@ public final class JsonWrapper implements Cloneable {
      */
     public static JSONArray toJSONArray(final Object object) {
         final JSONArray result = new JSONArray();
-        if (object instanceof JSONObject) {
-            final JSONObject item = (JSONObject) object;
-            final Iterator keys = item.keys();
-            while (keys.hasNext()) {
-                result.put(item.opt(keys.next().toString()));
+        if(null!=object){
+            if (object instanceof JSONObject) {
+                final JSONObject item = (JSONObject) object;
+                final Iterator keys = item.keys();
+                while (keys.hasNext()) {
+                    result.put(item.opt(keys.next().toString()));
+                }
+            } else if (object instanceof Map) {
+                final Map item = (Map) object;
+                final Set keys = item.keySet();
+                for (final Object key : keys) {
+                    result.put(item.get(key));
+                }
+            } else if (object instanceof Collection) {
+                result.put((Collection) object);
+            }  else if (object.getClass().isArray()){
+                final Object[] array = (Object[])object;
+                for(final Object value:array){
+                    result.put(value);
+                }
             }
-        } else if (object instanceof Map) {
-            final Map item = (Map) object;
-            final Set keys = item.keySet();
-            for (final Object key : keys) {
-                result.put(item.get(key));
-            }
-        } else if (object instanceof Collection) {
-            result.put((Collection) object);
         }
-
         return result;
     }
 

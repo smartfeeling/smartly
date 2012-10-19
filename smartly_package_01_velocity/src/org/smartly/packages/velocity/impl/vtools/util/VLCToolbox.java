@@ -4,7 +4,6 @@
 package org.smartly.packages.velocity.impl.vtools.util;
 
 import org.apache.velocity.VelocityContext;
-import org.smartly.commons.i18n.*;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.util.BeanUtils;
@@ -14,10 +13,9 @@ import org.smartly.commons.util.StringUtils;
 import org.smartly.packages.velocity.impl.vtools.*;
 import org.smartly.packages.velocity.impl.vtools.Formatter;
 import org.smartly.packages.velocity.impl.vtools.Math;
-import org.smartly.packages.velocity.impl.vtools.System;
+import org.smartly.packages.velocity.impl.vtools.Sys;
 
 import java.util.*;
-import java.util.Dictionary;
 
 /**
  * Toolbox is a container of 'static' vtools that are passed to context.<br/>
@@ -188,7 +186,7 @@ public class VLCToolbox {
         add(Math.NAME, Math.class, null, true);
 
         // add System helper
-        add(System.NAME, System.class, null, true);
+        add(Sys.NAME, Sys.class, null, true);
 
         // add Js helper
         add(Script.NAME, Script.class, null, true);
