@@ -244,7 +244,7 @@
             if (null == arg)return true;
             return _.isArray(arg)
                 ? (arg.length > 0 ? isNull(arg[0]) : true)
-                : (_.isObject(arg)? _.size(arg) === 0: (arg === 'NULL' || arg == '' || arg['response'] === 'NULL'));
+                : (_.isObject(arg) ? _.size(arg) === 0 : (arg === 'NULL' || arg == '' || arg['response'] === 'NULL'));
         } catch (err) {
             ly.console.error(err);
         }
@@ -300,6 +300,50 @@
             }
         };
     }
+
+    /**
+     * Deep extend objects
+     * @param obj
+     * @return {*}
+     */
+    function deepExtend(obj) {
+        var parentRE = /#{\s*?_\s*?}/,
+            slice = Array.prototype.slice,
+            hasOwnProperty = Object.prototype.hasOwnProperty;
+
+        _.each(slice.call(arguments, 1), function (source) {
+            for (var prop in source) {
+                if (hasOwnProperty.call(source, prop)) {
+                    if (_.isUndefined(obj[prop])) {
+                        obj[prop] = source[prop];
+                    } else if (_.isString(source[prop]) && parentRE.test(source[prop])) {
+                        if (_.isString(obj[prop])) {
+                            obj[prop] = source[prop].replace(parentRE, obj[prop]);
+                        }
+                    } else if (_.isArray(obj[prop]) || _.isArray(source[prop])) {
+                        if (!_.isArray(obj[prop]) || !_.isArray(source[prop])) {
+                            throw 'Error: Trying to combine an array with a non-array (' + prop + ')';
+                        } else {
+                            obj[prop] = _.reject(deepExtend(obj[prop], source[prop]), function (item) {
+                                return _.isNull(item);
+                            });
+                        }
+                    } else if (_.isObject(obj[prop]) || _.isObject(source[prop])) {
+                        if (!_.isObject(obj[prop]) || !_.isObject(source[prop])) {
+                            throw 'Error: Trying to combine an object with a non-object (' + prop + ')';
+                        } else {
+                            obj[prop] = deepExtend(obj[prop], source[prop]);
+                        }
+                    } else {
+                        obj[prop] = source[prop];
+                    }
+                }
+            }
+        });
+        return obj;
+    }
+
+    ;
 
     // ------------------------------------------------------------------------
     //                      Inheritance
@@ -830,7 +874,7 @@
         var changes = changed['changes'] || model['changed'];
         _.each(changes, function (value, key, list) {
             try {
-                if (null!=value) {
+                if (null != value) {
                     // update view
                     el.value('#' + key, model.get(key));
 
@@ -901,6 +945,7 @@
     //-- object utils --//
     exports.provide = provide;
     exports.value = value;
+    exports.deepExtend = deepExtend;
 
     //-- inheritance --//
     exports.inherits = inherits;

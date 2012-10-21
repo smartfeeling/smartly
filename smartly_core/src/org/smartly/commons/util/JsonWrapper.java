@@ -121,6 +121,10 @@ public final class JsonWrapper implements Cloneable {
         return 0;
     }
 
+    public boolean isEmpty(){
+        return this.length()==0;
+    }
+
     public List<Object> values() {
         return toList(this.getObject());
     }
@@ -215,10 +219,7 @@ public final class JsonWrapper implements Cloneable {
     }
 
     public boolean has(final String key) {
-        if (this.isJSONObject()) {
-            return _object.has(key);
-        }
-        return false;
+        return JsonWrapper.has(_object, key);
     }
 
     public Set<String> keys() {
@@ -597,6 +598,33 @@ public final class JsonWrapper implements Cloneable {
         return new JsonWrapper(json);
     }
 
+    public static JsonWrapper wrap(final Map map) {
+        try {
+            final JSONObject json = toJSONObject(map);
+            return new JsonWrapper(json);
+        } catch (Throwable ignored) {
+        }
+        return new JsonWrapper(new JSONObject());
+    }
+
+    public static JsonWrapper wrap(final Collection collection) {
+        try {
+            final JSONArray json = toJSONArray(collection);
+            return new JsonWrapper(json);
+        } catch (Throwable ignored) {
+        }
+        return new JsonWrapper(new JSONObject());
+    }
+
+    public static boolean isEmpty(final Object item){
+        if(item instanceof JSONObject){
+            return ((JSONObject)item).length() == 0;
+        } else if (item instanceof JSONArray){
+            return ((JSONArray)item).length() == 0;
+        }
+        return true;
+    }
+
     public static List<JSONObject> parseList(final String jsonArray) {
         final JSONArray array = JsonWrapper.wrap(jsonArray).getJSONArray();
         return toListOfJSONObject(array);
@@ -623,7 +651,7 @@ public final class JsonWrapper implements Cloneable {
      */
     public static JSONArray toJSONArray(final Object object) {
         final JSONArray result = new JSONArray();
-        if(null!=object){
+        if (null != object) {
             if (object instanceof JSONObject) {
                 final JSONObject item = (JSONObject) object;
                 final Iterator keys = item.keys();
@@ -637,10 +665,13 @@ public final class JsonWrapper implements Cloneable {
                     result.put(item.get(key));
                 }
             } else if (object instanceof Collection) {
-                result.put((Collection) object);
-            }  else if (object.getClass().isArray()){
-                final Object[] array = (Object[])object;
-                for(final Object value:array){
+                final Collection list = (Collection) object;
+                for (final Object item : list) {
+                    result.put(item);
+                }
+            } else if (object.getClass().isArray()) {
+                final Object[] array = (Object[]) object;
+                for (final Object value : array) {
                     result.put(value);
                 }
             }
@@ -1014,6 +1045,18 @@ public final class JsonWrapper implements Cloneable {
         return item.remove(index);
     }
 
+    public static boolean has(final Object object, final String path) {
+        if ((object instanceof JSONObject) && StringUtils.hasText(path)) {
+            if(!path.contains(".")){
+                return ((JSONObject)object).has(path);
+            }
+            final String[] tokens = StringUtils.splitLast(path, ".");
+            final JSONObject json = getJSON(object, tokens[0]);
+            return null!=json ? json.has(path):false;
+        }
+        return false;
+    }
+
     public static Object get(final JSONObject item,
                              final String field) {
         return getValueIfAny(item, field);
@@ -1025,7 +1068,8 @@ public final class JsonWrapper implements Cloneable {
     }
 
     public static JSONObject getJSON(final Object item,
-                                     final String field, final JSONObject defVal) {
+                                     final String field,
+                                     final JSONObject defVal) {
         final Object value = getValueIfAny(item, field);
         if (value instanceof JSONObject) {
             return (JSONObject) value;

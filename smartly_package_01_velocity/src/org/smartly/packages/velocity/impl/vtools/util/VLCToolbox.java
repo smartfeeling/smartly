@@ -197,6 +197,9 @@ public class VLCToolbox {
         // add Dic helper
         add(org.smartly.commons.i18n.Dictionary.NAME, org.smartly.commons.i18n.Dictionary.class, null, true);
 
+        // add JSON helper
+        add(JSON.NAME, JSON.class, null, true);
+
         // more vtools can be added using add command
     }
 
