@@ -340,27 +340,30 @@ public class Sys
      * Return value of a field in passed object. Never NULL object.
      *
      * @param object    Object instance to return value from passed fieldName
-     * @param fieldName Name of field to return value
+     * @param path Name of field to return value
      * @return Value of fieldName or empty string
      */
-    public Object get(final Object object, final String fieldName) {
-        try {
-            final Object result = BeanUtils.getValue(object, fieldName);
-            if (null != result) {
-                return result;
-            }
-        } catch (Throwable t) {
-        }
-        return "";
+    public Object get(final Object object,
+                      final String path) {
+        return this.get(object, path, "");
     }
 
-    public Object get(final Object object, final String fieldName, final Object def) {
+    public Object get(final Object object,
+                      final String path,
+                      final Object def) {
         try {
-            final Object result = BeanUtils.getValue(object, fieldName);
-            if (null != result) {
-                return result;
+            if(object instanceof JsonWrapper){
+                final Object result = ((JsonWrapper)object).deep(path);
+                if (null != result) {
+                    return result;
+                }
+            } else {
+                final Object result = BeanUtils.getValue(object, path);
+                if (null != result) {
+                    return result;
+                }
             }
-        } catch (Throwable t) {
+        } catch (Throwable ignored) {
         }
         return def;
     }
@@ -463,7 +466,7 @@ public class Sys
     public List getList(final Object object, final String path) {
         List result = null;
         try {
-            final Object item = BeanUtils.getValue(object, path);
+            final Object item = this.get(object, path);
             result = this.toList(item);
         } catch (Throwable t) {
         }
@@ -473,7 +476,11 @@ public class Sys
     public void put(final Object object,
                     final String path,
                     final Object value) {
-        BeanUtils.setValueIfAny(object, path, value);
+        if(object instanceof JsonWrapper){
+            ((JsonWrapper)object).putDeep(path, value);
+        } else {
+            BeanUtils.setValueIfAny(object, path, value);
+        }
     }
 
     //</editor-fold>
