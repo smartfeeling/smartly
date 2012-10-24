@@ -484,10 +484,20 @@ public class FormatUtils {
     public static String formatNumber(final Object value,
                                       final Locale locale) {
         final String pattern = "#,##0.0###;(#,##0.0###)";
+
         return formatNumber(value, pattern, locale);
     }
 
-    public static String formatNumber(final Object value, final String pattern,
+    public static String formatNumber(final Object value,
+                                      final Locale locale,
+                                      final int minDecimals) {
+        final String pattern = getPattern(minDecimals);
+
+        return formatNumber(value, pattern, locale);
+    }
+
+    public static String formatNumber(final Object value,
+                                      final String pattern,
                                       final Locale locale) {
         String result = null;
         try {
@@ -512,6 +522,13 @@ public class FormatUtils {
     private static String getPattern(final String pattern) {
         // pattern "n,nn0.nn;(n,nn0.nn)" become "#,##0.##;(#,##0.##)"
         return pattern.replace('n', '#');
+    }
+
+    private static String getPattern(final int minDecimals) {
+        final int pos = 4-(minDecimals>4?4:minDecimals);
+        String d = StringUtils.fillString("", "#", pos);
+        d=StringUtils.fillString(d, "0", 4);
+        return "#,##0.".concat(d).concat(";(#,##0.").concat(d).concat(")");
     }
 
 }
