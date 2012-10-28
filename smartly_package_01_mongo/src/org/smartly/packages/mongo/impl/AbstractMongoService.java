@@ -7,10 +7,7 @@ import com.mongodb.*;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
-import org.smartly.commons.util.CollectionUtils;
-import org.smartly.commons.util.ExceptionUtils;
-import org.smartly.commons.util.FormatUtils;
-import org.smartly.commons.util.StringUtils;
+import org.smartly.commons.util.*;
 import org.smartly.packages.mongo.impl.i18n.MongoTranslationManager;
 import org.smartly.packages.mongo.impl.util.MongoUtils;
 
@@ -453,6 +450,9 @@ public abstract class AbstractMongoService {
             final int count = MongoUtils.queryIsOR(filter)
                     ? this.count(filter, false)
                     : this.count(cursor, true);
+            final int pageCount = MathUtils.paging(limit, count);
+            final int pageNr = skip>0?skip/limit+1:1;
+
             //final int count = null != cursor ? cursor.count() : 0;
             final List<DBObject> list = null != cursor
                     ? cursor.toArray()
@@ -460,6 +460,8 @@ public abstract class AbstractMongoService {
 
             result.setItems(list);
             result.setCount(count);
+            result.setPageCount(pageCount);
+            result.setPageNr(pageNr);
         } finally {
             if (null != cursor) {
                 cursor.close();

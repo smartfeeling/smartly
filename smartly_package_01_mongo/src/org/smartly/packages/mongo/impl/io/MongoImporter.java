@@ -3,9 +3,9 @@
  */
 package org.smartly.packages.mongo.impl.io;
 
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBObject;
+import com.mongodb.*;
+import org.bson.BSONObject;
+import org.bson.io.OutputBuffer;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.smartly.commons.csv.CSVFileReader;

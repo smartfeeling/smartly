@@ -423,6 +423,14 @@ public class Sys
         return 0;
     }
 
+    public boolean getBoolean(final Object object, final String fieldName) {
+        final Object value = this.get(object, fieldName);
+        if (null != value) {
+            return ConversionUtils.toBoolean(value);
+        }
+        return false;
+    }
+
     /**
      * Return long value of a field in passed object. Never NULL object.
      *

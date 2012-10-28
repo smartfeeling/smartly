@@ -75,7 +75,9 @@ public abstract class MathUtils {
 
     /**
      * Calculate number of pages to contain items.<br/>
-     * i.e. pageSize=10, items=9, result=1. pageSize=10, items=11, result=2.
+     * i.e.
+     * pageSize=10, items=9, result=1.
+     * pageSize=10, items=11, result=2.
      * @param pageSize Max number of items for each page.
      * @param items Number of items to store in pages.
      * @return Number of pages. i.e. pageSize=10, items=9, result=1. pageSize=10, items=11, result=2.

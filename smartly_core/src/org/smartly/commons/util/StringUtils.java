@@ -761,7 +761,7 @@ public final class StringUtils {
         if (null == value) {
             return true;
         }
-        final String svalue = value.toString();
+        final String svalue = value.toString().trim();
         return !StringUtils.hasText(svalue)
                 || svalue.equalsIgnoreCase(IConstants.NULL);
     }
