@@ -336,6 +336,11 @@ public class Sys
 
     //<editor-fold defaultstate="collapsed" desc=" GET BEAN VALUE (get, getList, getInt, getString, getImage, ...)">
 
+    public boolean has(final Object object,
+                      final String path) {
+        return null!=this.get(object, path, null);
+    }
+
     /**
      * Return value of a field in passed object. Never NULL object.
      *
