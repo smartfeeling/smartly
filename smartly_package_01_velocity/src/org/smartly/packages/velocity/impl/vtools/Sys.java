@@ -459,11 +459,15 @@ public class Sys
      * @return Value of fieldName or ZERO
      */
     public double getDouble(final Object object, final String fieldName) {
+        return this.getDouble(object, fieldName, 0d);
+    }
+
+    public double getDouble(final Object object, final String fieldName, final double def) {
         final Object value = this.get(object, fieldName);
         if (null != value) {
-            return ConversionUtils.toDouble(value, -1, 0d);
+            return ConversionUtils.toDouble(value, -1, def);
         }
-        return 0d;
+        return def;
     }
 
     /**
