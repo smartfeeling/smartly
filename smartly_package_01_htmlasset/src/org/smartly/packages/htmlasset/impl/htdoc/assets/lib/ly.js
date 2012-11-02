@@ -243,7 +243,7 @@
         try {
             if (null == arg)return true;
             return _.isArray(arg)
-                ? (arg.length > 0 ? arg.length===1 && isNull(arg[0]) : true)
+                ? (arg.length > 0 ? arg.length === 1 && isNull(arg[0]) : true)
                 : (_.isObject(arg) ? _.size(arg) === 0 : (arg === 'NULL' || arg == '' || arg['response'] === 'NULL'));
         } catch (err) {
             ly.console.error(err);
@@ -343,7 +343,10 @@
         return obj;
     }
 
-    ;
+    function createModel(object) {
+        object = _.isObject(object) ? object : {};
+        return new (Backbone.Model.extend(object))();
+    }
 
     // ------------------------------------------------------------------------
     //                      Inheritance
@@ -745,19 +748,24 @@
     }
 
     function _attach(self, markup, callback) {
-        //-- init model --//
-        _initModel(self);
+        try {
+            //-- init model --//
+            _initModel(self);
 
-        //-- load template --//
-        var $markup = $(_.template(markup, {cid:self['cid'], model:self['model']}));
-        self['parent'].append($markup);
-        self['_component'] = $markup;
+            //-- load template --//
+            var $markup = $(_.template(markup, {cid:self['cid'], model:self['model']}));
+            self['parent'].append($markup);
+            self['_component'] = $markup;
 
-        //-- init view --//
-        _initView(self);
+            //-- init view --//
+            _initView(self);
 
-        // trigger 'init'
-        _trigger(self, 'init', self);
+            // trigger 'init'
+            _trigger(self, 'init', self);
+        } catch (err) {
+            // probably markup if corrupted
+            console.error(err);
+        }
 
         // callback function if any
         if (_.isFunction(callback)) {
@@ -946,6 +954,9 @@
     exports.provide = provide;
     exports.value = value;
     exports.deepExtend = deepExtend;
+
+    //-- Backbone --//
+    exports.createModel = createModel;
 
     //-- inheritance --//
     exports.inherits = inherits;
