@@ -188,6 +188,9 @@ public class VLCToolbox {
         // add System helper
         add(Sys.NAME, Sys.class, null, true);
 
+        // add Console helper
+        add(Console.NAME, Console.class, null, true);
+
         // add Js helper
         add(Script.NAME, Script.class, null, true);
 

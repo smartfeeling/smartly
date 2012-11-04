@@ -4,6 +4,7 @@
  */
 package org.smartly.commons.util;
 
+import java.math.BigDecimal;
 import java.util.Random;
 
 /**
@@ -27,6 +28,46 @@ public abstract class RandomUtils {
      */
     public static double rnd(double min, double max) {
         return (Math.floor(Math.random() * (max - min + 1)) + min);
+    }
+
+    /**
+     * This returns a random {@link Number} within the
+     * specified range.  The returned value will be
+     * greater than or equal to the first number
+     * and less than the second number.  If both arguments
+     * are whole numbers then the returned number will
+     * also be, otherwise a {@link Double} will
+     * be returned.
+     *
+     * @param num1 the first number
+     * @param num2 the second number
+     * @return a pseudo-random {@link Number} greater than
+     *         or equal to the first number and less than
+     *         the second
+     * @see java.lang.Math#random()
+     */
+    public static Number rnd(final Object num1, final Object num2) {
+        Number n1 = toNumber(num1);
+        Number n2 = toNumber(num2);
+        if (n1 == null || n2 == null) {
+            return null;
+        }
+
+        double diff = n2.doubleValue() - n1.doubleValue();
+        // multiply the difference by a pseudo-random double from
+        // 0.0 to 1.0, round to the nearest int, and add the first
+        // value to the random int and return as an Integer
+        double random = (diff * java.lang.Math.random()) + n1.doubleValue();
+
+        // check if either of the args were floating points
+        String in = n1.toString() + n2.toString();
+        if (in.indexOf('.') < 0) {
+            // args were whole numbers, so return the same
+            return MathUtils.matchType(n1, n2, java.lang.Math.floor(random));
+        }
+        // one of the args was a floating point,
+        // so don't floor the result
+        return new Double(random);
     }
 
     /**
@@ -350,4 +391,14 @@ public abstract class RandomUtils {
         }
         return false;
     }
+
+    private static BigDecimal toNumber(final Object value) {
+        try {
+            return new BigDecimal(value.toString());
+        } catch (Throwable ignored) {
+        }
+        return BigDecimal.ZERO;
+    }
+
+
 }

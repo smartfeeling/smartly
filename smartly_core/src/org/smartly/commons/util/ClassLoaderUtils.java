@@ -22,24 +22,57 @@ public class ClassLoaderUtils {
     //               p u b l i c
     // --------------------------------------------------------------------
 
+    /**
+     * Load a given resource.
+     * <p/>
+     * This method will try to load the resource using the following methods (in order):
+     * <ul>
+     * <li>Thread.currentThread().getContextClassLoader().getResource(name)</li>
+     * <li>{@link ClassLoaderUtils}.class.getClassLoader().getResource(name)</li>
+     * <li>{@link ClassLoaderUtils}.class.getResource(name)</li>
+     * <li>caller.getClass().getResource(name) or, if caller is a Class,
+     * caller.getResource(name)</li>
+     * </ul>
+     *
+     * @param name   The name of the resource to load
+     * @param caller The instance or {@link Class} calling this method
+     */
+    public static URL getResource(final String name, final Object caller) {
+        URL url = getThreadContextLoader().getResource(name);
+        if (url == null) {
+            url = getClassLoader().getResource(name);
+            if (url == null) {
+                url = ClassLoaderUtils.class.getResource(name);
+                if (url == null && caller != null) {
+                    Class callingClass = caller.getClass();
+                    if (callingClass == Class.class) {
+                        callingClass = (Class) caller;
+                    }
+                    url = callingClass.getResource(name);
+                }
+            }
+        }
+        return url;
+    }
+
     public static Class forName(final String className) throws ClassNotFoundException {
-        return lookupForName(className, Thread.currentThread().getContextClassLoader());
+        return lookupForName(className, getThreadContextLoader());
     }
 
     //-- resource Methods --//
 
     public static InputStream getResourceAsStream(final String resourcePath) {
-        final ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        final ClassLoader cl = getThreadContextLoader();
         return cl.getResourceAsStream(resourcePath);
     }
 
     public static InputStream getResourceAsStream(final ClassLoader classLoader, final String resourcePath) {
-        final ClassLoader cl = null != classLoader ? classLoader : Thread.currentThread().getContextClassLoader();
+        final ClassLoader cl = null != classLoader ? classLoader : getThreadContextLoader();
         return cl.getResourceAsStream(resourcePath);
     }
 
     public static InputStream getResourceAsStream(final ClassLoader classLoader, final Class packageClass, final String resourceName) {
-        final ClassLoader cl = null != classLoader ? classLoader : Thread.currentThread().getContextClassLoader();
+        final ClassLoader cl = null != classLoader ? classLoader : getThreadContextLoader();
         final String packagePath = PathUtils.getPackagePath(packageClass);
         final String resourcePath = PathUtils.join(packagePath, resourceName);
         return cl.getResourceAsStream(resourcePath);
@@ -58,7 +91,7 @@ public class ClassLoaderUtils {
     }
 
     public static URL getResource(final ClassLoader classLoader, final Class packageClass, final String resourceName) {
-        final ClassLoader cl = null != classLoader ? classLoader : Thread.currentThread().getContextClassLoader();
+        final ClassLoader cl = null != classLoader ? classLoader : getThreadContextLoader();
         final String packagePath = PathUtils.getPackagePath(packageClass);
         final String resourcePath = PathUtils.join(packagePath, resourceName);
         return cl.getResource(resourcePath);
@@ -80,6 +113,21 @@ public class ClassLoaderUtils {
                                              final String resourceName,
                                              final String charset) {
         return getString(getResourceAsStream(classLoader, packageClass, resourceName), charset);
+    }
+
+    public static String getString(final InputStream is, final String charset) {
+        if (null != is) {
+            try {
+                return new String(ByteUtils.getBytes(is), charset);
+            } catch (Throwable ignored) {
+            } finally {
+                try {
+                    is.close();
+                } catch (Throwable ignored) {
+                }
+            }
+        }
+        return null;
     }
 
     //-- newInstance Methods --//
@@ -176,10 +224,10 @@ public class ClassLoaderUtils {
     }
 
 
-    public static <T> T optInstance(final String className){
-        try{
-           return (T)newInstance(className);
-        }catch(Throwable ignored){
+    public static <T> T optInstance(final String className) {
+        try {
+            return (T) newInstance(className);
+        } catch (Throwable ignored) {
         }
         return null;
     }
@@ -189,6 +237,22 @@ public class ClassLoaderUtils {
     // --------------------------------------------------------------------
 
     private final static Map<String, Class> _cache = Collections.synchronizedMap(new HashMap<String, Class>());
+
+    private static final ClassLoader getThreadContextLoader() {
+        return Thread.currentThread().getContextClassLoader();
+    }
+
+    private static final ClassLoader getClassLoader() {
+        return ClassLoaderUtils.class.getClassLoader();
+    }
+
+    private static final ClassLoader getCallerLoader(Object caller) {
+        if (caller instanceof Class) {
+            return ((Class) caller).getClassLoader();
+        } else {
+            return caller.getClass().getClassLoader();
+        }
+    }
 
     private static Class lookupForName(final String name,
                                        final ClassLoader classLoader) throws ClassNotFoundException {
@@ -255,25 +319,6 @@ public class ClassLoaderUtils {
         }
         return null;
     }
-
-    public static String getString(final InputStream is, final String charset) {
-        if (null != is) {
-            try {
-                return new String(ByteUtils.getBytes(is), charset);
-            } catch (Throwable ignored) {
-            } finally {
-                try {
-                    is.close();
-                } catch (Throwable ignored) {
-                }
-            }
-        }
-        return null;
-    }
-
-    // --------------------------------------------------------------------
-    //               p r i v a t e
-    // --------------------------------------------------------------------
 
     private static Class[] getTypes(final Object[] objects) {
         final List<Class> result = new LinkedList<Class>();

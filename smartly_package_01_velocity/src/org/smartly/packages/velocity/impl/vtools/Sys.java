@@ -30,10 +30,17 @@ public class Sys
     public static final String NAME = "sys";
     private static final String DEFAULT_IMAGE = "/images/not_found.png";
 
+    // --------------------------------------------------------------------
+    //               Fields
+    // --------------------------------------------------------------------
+
+    private final Console _console;
+
     // ------------------------------------------------------------------------
     //                      Constructor
     // ------------------------------------------------------------------------
     public Sys() {
+        _console = new Console();
     }
 
     @Override
@@ -293,7 +300,7 @@ public class Sys
         return CollectionUtils.toList(item);
     }
 
-    public JSONArray toJSONArray(final Object item){
+    public JSONArray toJSONArray(final Object item) {
         return JsonWrapper.toJSONArray(item);
     }
 
@@ -337,15 +344,15 @@ public class Sys
     //<editor-fold defaultstate="collapsed" desc=" GET BEAN VALUE (get, getList, getInt, getString, getImage, ...)">
 
     public boolean has(final Object object,
-                      final String path) {
-        return null!=this.get(object, path, null);
+                       final String path) {
+        return null != this.get(object, path, null);
     }
 
     /**
      * Return value of a field in passed object. Never NULL object.
      *
-     * @param object    Object instance to return value from passed fieldName
-     * @param path Name of field to return value
+     * @param object Object instance to return value from passed fieldName
+     * @param path   Name of field to return value
      * @return Value of fieldName or empty string
      */
     public Object get(final Object object,
@@ -357,8 +364,8 @@ public class Sys
                       final String path,
                       final Object def) {
         try {
-            if(object instanceof JsonWrapper){
-                final Object result = ((JsonWrapper)object).deep(path);
+            if (object instanceof JsonWrapper) {
+                final Object result = ((JsonWrapper) object).deep(path);
                 if (null != result) {
                     return result;
                 }
@@ -493,8 +500,8 @@ public class Sys
     public void put(final Object object,
                     final String path,
                     final Object value) {
-        if(object instanceof JsonWrapper){
-            ((JsonWrapper)object).putDeep(path, value);
+        if (object instanceof JsonWrapper) {
+            ((JsonWrapper) object).putDeep(path, value);
         } else {
             BeanUtils.setValueIfAny(object, path, value);
         }
@@ -520,28 +527,23 @@ public class Sys
 
     //<editor-fold defaultstate="collapsed" desc=" LOG ">
     public void log(final Object item) {
-        final String msg = FormatUtils.format("{0}", item);
-        this.getLogger().log(Level.INFO, msg);
+        _console.log(item);
     }
 
     public void info(final Object item) {
-        final String msg = FormatUtils.format("{0}", item);
-        this.getLogger().log(Level.INFO, msg);
+        _console.info(item);
     }
 
     public void warn(final Object item) {
-        final String msg = FormatUtils.format("{0}", item);
-        this.getLogger().log(Level.WARNING, msg);
+        _console.warn(item);
     }
 
     public void error(final Object item) {
-        final String msg = FormatUtils.format("{0}", item);
-        this.getLogger().log(Level.SEVERE, msg);
+        _console.error(item);
     }
 
     public void debug(final Object item) {
-        final String msg = FormatUtils.format("{0}", item);
-        this.getLogger().log(Level.FINE, msg);
+        _console.debug(item);
     }
     //</editor-fold>
 
@@ -662,6 +664,25 @@ public class Sys
         return new Counter(this, start);
     }
 
+    /**
+     * Returns array of integers to use in #foreach loops.
+     * i.e.:
+     * #set($iterator=$sys.newIterator(5))
+     * #foreach($i in $iterator)
+     *      ...
+     * #end
+     * @param size
+     * @return
+     */
+    public int[] newIterator(final int size) {
+        final int[] items = new int[size];
+        for (int i = 0; i < size; i++) {
+            items[i] = i;
+        }
+        return items;
+    }
+
+
     // ------------------------------------------------------------------------
     //                      p r i v a t e
     // ------------------------------------------------------------------------
@@ -757,4 +778,6 @@ public class Sys
             return _count;
         }
     }
+
+
 }
