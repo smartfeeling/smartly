@@ -669,25 +669,33 @@ public abstract class BeanUtils {
         for (int i = 0; i < len; i++) {
             final Object item = array.opt(i);
             if (null != item) {
-                if (StringUtils.hasText(fieldName)) {
-                    try {
-                        final Object value = getSimplePropertyValue(item, fieldName);
-                        if (CompareUtils.equals(value, fieldValue)) {
-                            return item;
-                        }
-                    } catch (Throwable t) {
-                        continue;
+                if (isPrimitiveClass(item) || item instanceof String) {
+                    //-- primitive value --//
+                    if (CompareUtils.equals(item, fieldValue)) {
+                        return item;
                     }
                 } else {
-                    // try with some standard field names
-                    for (final String fname : ID_FIELDS) {
+                    //-- lookup on Object --//
+                    if (StringUtils.hasText(fieldName)) {
                         try {
-                            final Object value = getSimplePropertyValue(item, fname);
+                            final Object value = getSimplePropertyValue(item, fieldName);
                             if (CompareUtils.equals(value, fieldValue)) {
                                 return item;
                             }
                         } catch (Throwable t) {
                             continue;
+                        }
+                    } else {
+                        // try with some standard field names
+                        for (final String fname : ID_FIELDS) {
+                            try {
+                                final Object value = getSimplePropertyValue(item, fname);
+                                if (CompareUtils.equals(value, fieldValue)) {
+                                    return item;
+                                }
+                            } catch (Throwable t) {
+                                continue;
+                            }
                         }
                     }
                 }
@@ -728,7 +736,7 @@ public abstract class BeanUtils {
         Object propertyBean = instance;
         String fieldName = path;
         if (StringUtils.hasText(path)) {
-            final String[] tokens = StringUtils.split( path, "." );
+            final String[] tokens = StringUtils.split(path, ".");
             if (tokens.length > 1) {
                 final String[] a = CollectionUtils.removeTokenFromArray(tokens,
                         tokens.length - 1);
