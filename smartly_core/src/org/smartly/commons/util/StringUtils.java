@@ -331,6 +331,10 @@ public final class StringUtils {
         return result.toString();
     }
 
+    public static String concatDot(final Object... args) {
+         return concatArgsEx(".", args);
+    }
+
     /**
      * Append a value separated from comma (",") from other values to a
      * StringBuilder.

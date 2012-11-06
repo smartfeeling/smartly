@@ -607,6 +607,23 @@
                     return false;
                 });
             }
+        },
+
+        keypress:function(selector, key, callback, context, delay){
+
+            var $el = $(selector);
+            if (_.isFunction(callback)) {
+                $el.unbind('keypress');
+                $el.on('keypress', function (evt) {
+                    var $self = $(this);
+                    var evt = (evt) ? evt : ((event) ? event : null);
+
+                    if ((evt.keyCode == key))  {
+                        return callback.apply(context||$self, [evt]);
+                    }
+                    return true;
+                });
+            }
         }
     };
 
