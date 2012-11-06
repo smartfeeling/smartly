@@ -574,7 +574,7 @@ public abstract class MathUtils {
      */
     public static int paging (final int pageSize, final int items){
         int result = 1;
-        if(pageSize<items){
+        if(pageSize>0 && pageSize<items){
             result = items/pageSize;
             if(items % pageSize > 0){
                 result++;

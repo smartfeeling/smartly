@@ -143,6 +143,10 @@ public final class JsonWrapper implements Cloneable {
         }
     }
 
+    public Map<String, Object> flat(){
+        return JsonWrapper.toFlatMap(this.getJSONObject());
+    }
+
     //-- special methods to retrieve values navigating object --//
 
     public Object deep(final String path) {
@@ -694,6 +698,14 @@ public final class JsonWrapper implements Cloneable {
                 final Object value = item.opt(name);
                 result.put(name, null != value ? value : "");
             }
+        }
+        return result;
+    }
+
+    public static Map<String, Object> toFlatMap(final JSONObject item) {
+        final Map<String, Object> result = new LinkedHashMap<String, Object>();
+        if(null!=item){
+            flatMap(result, "", item);
         }
         return result;
     }
@@ -1292,5 +1304,22 @@ public final class JsonWrapper implements Cloneable {
         return result;
     }
 
+    private static void flatMap(final Map<String, Object> map, final String root, final JSONObject item) {
+        final Iterator keys = item.sortedKeys();
+        while (keys.hasNext()) {
+            final String name = keys.next().toString();
+            if (null != name) {
+                final Object value = item.opt(name);
+                if(null!=value){
+                    final String key = StringUtils.concatDot(root, name);
+                    if(value instanceof JSONObject){
+                        flatMap(map, key, (JSONObject)value);
+                    } else {
+                        map.put(key, value);
+                    }
+                }
+            }
+        }
+    }
 
 }

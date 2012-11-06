@@ -311,7 +311,9 @@ public final class StringUtils {
         final StringBuffer result = new StringBuffer();
         if (null != args && args.length > 0) {
             for (final Object arg : args) {
-                result.append(arg);
+                if(!isNULL(arg)){
+                    result.append(arg);
+                }
             }
         }
         return result.toString();
@@ -322,10 +324,12 @@ public final class StringUtils {
         final StringBuffer result = new StringBuffer();
         if (null != args && args.length > 0) {
             for (final Object arg : args) {
-                if (hasText(separator) && result.length() > 0) {
-                    result.append(separator);
+                if(!isNULL(arg)){
+                    if (hasText(separator) && result.length() > 0) {
+                        result.append(separator);
+                    }
+                    result.append(arg);
                 }
-                result.append(arg);
             }
         }
         return result.toString();
