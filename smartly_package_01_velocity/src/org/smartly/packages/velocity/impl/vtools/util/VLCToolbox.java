@@ -11,9 +11,9 @@ import org.smartly.commons.util.ExceptionUtils;
 import org.smartly.commons.util.FormatUtils;
 import org.smartly.commons.util.StringUtils;
 import org.smartly.packages.velocity.impl.vtools.*;
-import org.smartly.packages.velocity.impl.vtools.Formatter;
-import org.smartly.packages.velocity.impl.vtools.Math;
-import org.smartly.packages.velocity.impl.vtools.Sys;
+import org.smartly.packages.velocity.impl.vtools.FmtTool;
+import org.smartly.packages.velocity.impl.vtools.MathTool;
+import org.smartly.packages.velocity.impl.vtools.SysTool;
 
 import java.util.*;
 
@@ -180,28 +180,32 @@ public class VLCToolbox {
     // ------------------------------------------------------------------------
     private void initTools() {
         // add Formatter for date and number
-        add(Formatter.NAME, Formatter.class, null, true);
+        add(FmtTool.NAME, FmtTool.class, null, true);
 
         // add Math helper.
-        add(Math.NAME, Math.class, null, true);
+        add(MathTool.NAME, MathTool.class, null, true);
 
         // add System helper
-        add(Sys.NAME, Sys.class, null, true);
+        add(SysTool.NAME, SysTool.class, null, true);
 
         // add Console helper
-        add(Console.NAME, Console.class, null, true);
+        add(ConsoleTool.NAME, ConsoleTool.class, null, true);
 
         // add Js helper
-        add(Script.NAME, Script.class, null, true);
+        add(ScriptTool.NAME, ScriptTool.class, null, true);
 
         // add App helper
-        add(App.NAME, App.class, null, true);
+        add(AppTool.NAME, AppTool.class, null, true);
 
         // add Dic helper
         add(org.smartly.commons.i18n.Dictionary.NAME, org.smartly.commons.i18n.Dictionary.class, null, true);
 
         // add JSON helper
-        add(JSON.NAME, JSON.class, null, true);
+        add(JSONTool.NAME, JSONTool.class, null, true);
+
+        // add String helper
+        add(StringTool.NAME, StringTool.class, null, true);
+
 
         // more vtools can be added using add command
     }

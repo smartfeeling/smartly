@@ -3,9 +3,8 @@ package org.smartly.packages.velocity.impl.vtools;
 
 import org.smartly.Smartly;
 import org.smartly.commons.jsonrepository.JsonRepository;
-import org.smartly.packages.velocity.impl.vtools.IVLCTool;
 
-public class App implements IVLCTool {
+public class AppTool implements IVLCTool {
 
     public static final String NAME = "app";
 

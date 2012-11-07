@@ -9,7 +9,7 @@ import org.smartly.packages.http.SmartlyHttp;
  * Module: SmartlyHttp
  *
  */
-public class App extends org.smartly.packages.velocity.impl.vtools.App {
+public class AppTool extends org.smartly.packages.velocity.impl.vtools.AppTool {
 
     public final String getAppToken() {
         try {

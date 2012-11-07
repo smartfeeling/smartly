@@ -17,7 +17,7 @@ import java.util.Map;
  *
  *  $console.log("custom_file", "hello")
  */
-public class Console {
+public class ConsoleTool {
 
     // ------------------------------------------------------------------------
     //                      Constants
@@ -30,16 +30,16 @@ public class Console {
     private final String _id;
 
 
-    public Console() {
+    public ConsoleTool() {
         this(DEFAULT_NAME);
     }
 
-    public Console(final String id) {
+    public ConsoleTool(final String id) {
         _id = id;
     }
 
-    public Console create(final String name){
-       return new Console(name);
+    public ConsoleTool create(final String name){
+       return new ConsoleTool(name);
     }
 
     public void log(final Object item) {
@@ -93,16 +93,16 @@ public class Console {
     //               S T A T I C
     // --------------------------------------------------------------------
 
-    private static final Map<String, Console> _loggers;
+    private static final Map<String, ConsoleTool> _loggers;
 
     static {
-        _loggers = new HashMap<String, Console>();
+        _loggers = new HashMap<String, ConsoleTool>();
     }
 
     private static String getKey(final String id) {
         final String key = StringUtils.hasText(id) ? PREFIX.concat(id) : PREFIX.concat(DEFAULT_NAME);
         if (!_loggers.containsKey(key)) {
-            _loggers.put(id, new Console(id));
+            _loggers.put(id, new ConsoleTool(id));
             LoggingRepository.getInstance().setLogFileName(key, "./smartly_".concat(key).concat(".log"));
         }
         return key;

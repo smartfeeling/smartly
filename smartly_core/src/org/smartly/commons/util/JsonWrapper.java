@@ -121,8 +121,8 @@ public final class JsonWrapper implements Cloneable {
         return 0;
     }
 
-    public boolean isEmpty(){
-        return this.length()==0;
+    public boolean isEmpty() {
+        return this.length() == 0;
     }
 
     public List<Object> values() {
@@ -143,7 +143,7 @@ public final class JsonWrapper implements Cloneable {
         }
     }
 
-    public Map<String, Object> flat(){
+    public Map<String, Object> flat() {
         return JsonWrapper.toFlatMap(this.getJSONObject());
     }
 
@@ -620,11 +620,11 @@ public final class JsonWrapper implements Cloneable {
         return new JsonWrapper(new JSONObject());
     }
 
-    public static boolean isEmpty(final Object item){
-        if(item instanceof JSONObject){
-            return ((JSONObject)item).length() == 0;
-        } else if (item instanceof JSONArray){
-            return ((JSONArray)item).length() == 0;
+    public static boolean isEmpty(final Object item) {
+        if (item instanceof JSONObject) {
+            return ((JSONObject) item).length() == 0;
+        } else if (item instanceof JSONArray) {
+            return ((JSONArray) item).length() == 0;
         }
         return true;
     }
@@ -648,12 +648,15 @@ public final class JsonWrapper implements Cloneable {
     }
 
     /**
-     * Returns JSONArray of all properties into JSONObject
+     * Returns JSONArray
      *
-     * @param object
-     * @return
+     * @param object Object to convert
+     * @return JSONArray
      */
     public static JSONArray toJSONArray(final Object object) {
+        if (object instanceof JSONArray) {
+            return (JSONArray) object;
+        }
         final JSONArray result = new JSONArray();
         if (null != object) {
             if (object instanceof JSONObject) {
@@ -704,7 +707,7 @@ public final class JsonWrapper implements Cloneable {
 
     public static Map<String, Object> toFlatMap(final JSONObject item) {
         final Map<String, Object> result = new LinkedHashMap<String, Object>();
-        if(null!=item){
+        if (null != item) {
             flatMap(result, "", item);
         }
         return result;
@@ -1059,12 +1062,12 @@ public final class JsonWrapper implements Cloneable {
 
     public static boolean has(final Object object, final String path) {
         if ((object instanceof JSONObject) && StringUtils.hasText(path)) {
-            if(!path.contains(".")){
-                return ((JSONObject)object).has(path);
+            if (!path.contains(".")) {
+                return ((JSONObject) object).has(path);
             }
             final String[] tokens = StringUtils.splitLast(path, ".");
             final JSONObject json = getJSON(object, tokens[0]);
-            return null!=json ? json.has(path):false;
+            return null != json ? json.has(path) : false;
         }
         return false;
     }
@@ -1310,10 +1313,10 @@ public final class JsonWrapper implements Cloneable {
             final String name = keys.next().toString();
             if (null != name) {
                 final Object value = item.opt(name);
-                if(null!=value){
+                if (null != value) {
                     final String key = StringUtils.concatDot(root, name);
-                    if(value instanceof JSONObject){
-                        flatMap(map, key, (JSONObject)value);
+                    if (value instanceof JSONObject) {
+                        flatMap(map, key, (JSONObject) value);
                     } else {
                         map.put(key, value);
                     }

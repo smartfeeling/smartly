@@ -6,7 +6,6 @@
 package org.smartly.packages.velocity.impl.vtools;
 
 import org.smartly.commons.util.*;
-import org.smartly.packages.velocity.impl.vtools.IVLCTool;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormatSymbols;
@@ -16,15 +15,15 @@ import java.util.Locale;
 /**
  *
  */
-public final class Formatter
+public final class FmtTool
         implements IVLCTool {
 
-    public static final String NAME = "fmt";
+    public static final java.lang.String NAME = "fmt";
     // default locale
     private static final Locale DEFAULT_LOCALE = Locale.US;
-    private static final String DEFAULT_PATTERN = "#,##0.0###;(#,##0.0###)";
+    private static final java.lang.String DEFAULT_PATTERN = "#,##0.0###;(#,##0.0###)";
 
-    public Formatter() {
+    public FmtTool() {
     }
 
     @Override

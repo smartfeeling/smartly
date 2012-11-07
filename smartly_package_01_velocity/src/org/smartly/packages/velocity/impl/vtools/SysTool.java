@@ -8,7 +8,6 @@ package org.smartly.packages.velocity.impl.vtools;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.network.URLUtils;
@@ -21,7 +20,7 @@ import java.util.*;
 /**
  *
  */
-public class Sys
+public class SysTool
         implements IVLCTool {
 
     // ------------------------------------------------------------------------
@@ -34,13 +33,13 @@ public class Sys
     //               Fields
     // --------------------------------------------------------------------
 
-    private final Console _console;
+    private final ConsoleTool _console;
 
     // ------------------------------------------------------------------------
     //                      Constructor
     // ------------------------------------------------------------------------
-    public Sys() {
-        _console = new Console();
+    public SysTool() {
+        _console = new ConsoleTool();
     }
 
     @Override
@@ -695,10 +694,10 @@ public class Sys
     // ------------------------------------------------------------------------
     public class Counter {
 
-        private final Sys _sys;
+        private final SysTool _sys;
         private int _count = 0;
 
-        public Counter(final Sys sys, final int start) {
+        public Counter(final SysTool sys, final int start) {
             _sys = sys;
             _count = start;
         }

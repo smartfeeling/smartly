@@ -11,12 +11,12 @@ import java.util.Collection;
  * Script utilities.
  * This methods are useful in javascript or html files.
  */
-public class Script {
+public class ScriptTool {
 
     public static final String NAME = "script";
 
 
-    public Script() {
+    public ScriptTool() {
 
     }
 

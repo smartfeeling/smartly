@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Tool utility for basic arithmetic operations.
  */
-public class Math
+public class MathTool
         implements IVLCTool {
 
     public static final String NAME = "math";
@@ -24,7 +24,7 @@ public class Math
     /**
      * Creates a new instance of VLCMath
      */
-    public Math() {
+    public MathTool() {
 
     }
 

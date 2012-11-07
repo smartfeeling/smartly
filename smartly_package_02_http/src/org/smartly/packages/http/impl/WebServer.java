@@ -19,7 +19,7 @@ import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.util.*;
 import org.smartly.packages.http.impl.handlers.SmartlyShutdownHandler;
-import org.smartly.packages.http.impl.util.vtool.App;
+import org.smartly.packages.http.impl.util.vtool.AppTool;
 import org.smartly.packages.velocity.impl.VLCManager;
 
 import javax.servlet.DispatcherType;
@@ -76,7 +76,7 @@ public class WebServer extends AbstractHttpServer {
         VLCManager.getInstance().getEngine().setFileResourceLoaderPath(absoluteDocRoot);
 
         //-- APPLICATION TOOL (DON'T override) --//
-        VLCManager.getInstance().getToolbox().add(App.NAME, App.class, null, true);
+        VLCManager.getInstance().getToolbox().add(AppTool.NAME, AppTool.class, null, true);
     }
 
     private static Logger staticLogger() {
