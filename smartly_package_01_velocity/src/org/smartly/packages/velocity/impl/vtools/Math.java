@@ -60,25 +60,14 @@ public class Math
             result = result.add(value);
         }
 
-        return result;
+        return result.doubleValue();
     }
 
-    public BigDecimal sum(final Object... numbers) {
-        BigDecimal result = BigDecimal.ZERO;
-        for (Object number : numbers) {
-            BigDecimal value;
-            if (null != number) {
-                value = ConversionUtils.toBigDecimal(number);
-            } else {
-                value = BigDecimal.ZERO;
-            }
-
-            result = result.add(value);
-        }
-        return result;
+    public Number sum(final Object... numbers) {
+        return MathUtils.add(numbers);
     }
 
-    public double divide(final Object dividend, final Object divisor) {
+    public Double divide(final Object dividend, final Object divisor) {
         final BigDecimal num1 = ConversionUtils.toBigDecimal(dividend);
         final BigDecimal num2 = ConversionUtils.toBigDecimal(divisor);
         final double result = num1.doubleValue() / num2.doubleValue();
@@ -86,20 +75,20 @@ public class Math
         return result;
     }
 
-    public int divideIntValue(final Object dividend, final Object divisor) {
+    public Integer divideIntValue(final Object dividend, final Object divisor) {
         final double result = this.divide(dividend, divisor);
         return this.intValue(result);
     }
 
-    public int divideRoundCeil(final Object dividend, final Object divisor) {
+    public Integer divideRoundCeil(final Object dividend, final Object divisor) {
         final double result = this.divide(dividend, divisor);
         return this.intValue(this.roundCeil(result));
     }
 
-    public BigDecimal multiply(final Object dividend, final Object divisor) {
+    public Double multiply(final Object dividend, final Object divisor) {
         final BigDecimal num1 = ConversionUtils.toBigDecimal(dividend);
         final BigDecimal num2 = ConversionUtils.toBigDecimal(divisor);
-        return num1.multiply(num2);
+        return num1.multiply(num2).doubleValue();
     }
 
     // --------------------------------------------------------------------
