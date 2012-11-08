@@ -157,7 +157,7 @@ public abstract class MathUtils {
         return Integer.valueOf(value);
     }
 
-    public static int max (final int...numbers) {
+    public static int max (final Integer...numbers) {
         int result = 0;
         if(null!=numbers && numbers.length>0){
             for(final int number:numbers){
