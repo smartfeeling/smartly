@@ -335,7 +335,9 @@
                             obj[prop] = deepExtend(obj[prop], source[prop]);
                         }
                     } else {
-                        obj[prop] = source[prop];
+                        if(null!=prop){
+                            obj[prop] = source[prop];
+                        }
                     }
                 }
             }
