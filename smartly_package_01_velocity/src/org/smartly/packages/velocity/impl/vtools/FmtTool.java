@@ -5,12 +5,14 @@
  */
 package org.smartly.packages.velocity.impl.vtools;
 
+import org.json.JSONObject;
 import org.smartly.commons.util.*;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormatSymbols;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  *
@@ -31,9 +33,41 @@ public final class FmtTool
         return NAME;
     }
 
-    /*
-     * Date Utility
-     */
+    // --------------------------------------------------------------------
+    //               S T R I N G
+    // --------------------------------------------------------------------
+
+    public String format(final Object text, final Object... args) {
+        if (null != text) {
+            return FormatUtils.format(text.toString(), args);
+        }
+        return "";
+    }
+
+    public String format(final Object text, final Object args) {
+        if (null != text) {
+            if (args instanceof Map) {
+                final Map map = (Map) args;
+                return FormatUtils.format(text.toString(), map);
+            } else if (args instanceof JsonWrapper){
+                final Map map = ((JsonWrapper) args).toMap();
+                return FormatUtils.format(text.toString(), map);
+            } else if (args instanceof JSONObject){
+                final Map map = JsonWrapper.toMap((JSONObject) args);
+                return FormatUtils.format(text.toString(), map);
+            } else if (args instanceof String && StringUtils.isJSON((String)args)){
+                final Map map = JsonWrapper.wrap((String)args).toMap((JSONObject) args);
+                return FormatUtils.format(text.toString(), map);
+            }
+            return FormatUtils.format(text.toString(), args);
+        }
+        return "";
+    }
+
+    // --------------------------------------------------------------------
+    //               D A T E
+    // --------------------------------------------------------------------
+
     public String formatDate(final Long date) {
         final Date d = new Date(date);
         return this.formatDate(d);
@@ -44,7 +78,7 @@ public final class FmtTool
      *
      * @param inputDate       date as string: e.g. 20120206
      * @param inputDateFormat pattern: eg. yyyyMMdd
-     * @param locale            language e.g. en-US, en_US, en
+     * @param locale          language e.g. en-US, en_US, en
      * @return
      */
     public String formatDate(final String inputDate,

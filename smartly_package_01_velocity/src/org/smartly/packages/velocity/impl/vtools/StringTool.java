@@ -46,6 +46,22 @@ public class StringTool {
         return "";
     }
 
+    public String replaceCR(final Object text, final Object with){
+        return this.replace(text, "\n", with);
+    }
+
+    public String replace(final Object text, final Object what, final Object with){
+        if(text instanceof String){
+            if(null!=what){
+               return StringUtils.replace(text.toString(),
+                       what.toString(),
+                       null!=with?with.toString():"");
+            }
+            return text.toString();
+        }
+        return "";
+    }
+
     // ------------------------------------------------------------------------
     //                      p r i v a t e
     // ------------------------------------------------------------------------

@@ -250,7 +250,7 @@ public class SysTool
             } else if (obj instanceof JSONArray) {
                 return ((JSONArray) obj).length() == 0;
             } else if (obj instanceof String) {
-                return !StringUtils.hasText((String) obj);
+                return StringUtils.isNULL(obj);
             }
             return false;
         }
