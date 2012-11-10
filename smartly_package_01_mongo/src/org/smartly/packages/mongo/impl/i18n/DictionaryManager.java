@@ -3,6 +3,7 @@ package org.smartly.packages.mongo.impl.i18n;
 import com.mongodb.DB;
 import com.mongodb.DBObject;
 import org.smartly.Smartly;
+import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.util.ExceptionUtils;
 import org.smartly.commons.util.FormatUtils;
 import org.smartly.commons.util.StringUtils;
@@ -53,6 +54,8 @@ public final class DictionaryManager {
                     srvc.localize(item, lang, LOCALFIELDS);
                     return MongoUtils.getString(item, IMongoConstants.VALUE);
                 }
+            } else {
+                LoggingUtils.getLogger(DictionaryManager.class).warning("DictionaryManager not initialized!");
             }
             return null;
         } catch (Throwable t) {
