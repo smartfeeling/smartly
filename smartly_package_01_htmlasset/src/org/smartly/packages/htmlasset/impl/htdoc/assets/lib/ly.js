@@ -335,7 +335,7 @@
                             obj[prop] = deepExtend(obj[prop], source[prop]);
                         }
                     } else {
-                        if(null!=prop){
+                        if (null != prop) {
                             obj[prop] = source[prop];
                         }
                     }
@@ -592,6 +592,16 @@
             return $el.attr(attr);
         },
 
+        scrollTo: function (selector, navheight) {
+            var offset = $(selector).offset();
+            var offsetTop = offset.top;
+            var totalScroll = offsetTop - (navheight||0);
+
+            $('body,html').animate({
+                scrollTop:totalScroll
+            }, 500);
+        },
+
         /**
          * Avoid double click
          * @param selector
@@ -611,7 +621,7 @@
             }
         },
 
-        keypress:function(selector, key, callback, context, delay){
+        keypress:function (selector, key, callback, context, delay) {
 
             var $el = $(selector);
             if (_.isFunction(callback)) {
@@ -620,8 +630,8 @@
                     var $self = $(this);
                     var evt = (evt) ? evt : ((event) ? event : null);
 
-                    if ((evt.keyCode == key))  {
-                        return callback.apply(context||$self, [evt]);
+                    if ((evt.keyCode == key)) {
+                        return callback.apply(context || $self, [evt]);
                     }
                     return true;
                 });
