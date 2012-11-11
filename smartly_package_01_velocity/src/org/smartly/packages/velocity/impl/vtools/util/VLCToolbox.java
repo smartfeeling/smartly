@@ -206,6 +206,8 @@ public class VLCToolbox {
         // add String helper
         add(StringTool.NAME, StringTool.class, null, true);
 
+        // add Conversion helper
+        add(ConvertTool.NAME, ConvertTool.class, null, true);
 
         // more vtools can be added using add command
     }

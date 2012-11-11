@@ -592,10 +592,10 @@
             return $el.attr(attr);
         },
 
-        scrollTo: function (selector, navheight) {
+        scrollTo:function (selector, navheight) {
             var offset = $(selector).offset();
             var offsetTop = offset.top;
-            var totalScroll = offsetTop - (navheight||0);
+            var totalScroll = offsetTop - (navheight || 0);
 
             $('body,html').animate({
                 scrollTop:totalScroll
@@ -664,6 +664,7 @@
                     url:url,
                     dataType:'json',
                     data:data,
+                    cache:false, // disabling cache avoid IE caches ajax responses
 
                     success:function (response) {
                         ly.call(fn_success, ctx, [response]);

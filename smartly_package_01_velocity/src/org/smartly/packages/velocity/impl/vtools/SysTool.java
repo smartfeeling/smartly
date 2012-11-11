@@ -8,6 +8,7 @@ package org.smartly.packages.velocity.impl.vtools;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.smartly.IConstants;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.network.URLUtils;
@@ -347,13 +348,28 @@ public class SysTool
         return null != this.get(object, path, null);
     }
 
+
+
     /**
-     * Return value of a field in passed object. Never NULL object.
+     * Return first valid value of a field (array of field names) in passed object.
+     * Never returns NULL object.
      *
      * @param object Object instance to return value from passed fieldName
-     * @param path   Name of field to return value
+     * @param paths   Names of field to return value
      * @return Value of fieldName or empty string
      */
+    public Object getOne(final Object object,
+                      final String...paths) {
+        Object result = null;
+        for(final String path:paths){
+            result = this.get(object, path, null);
+            if(this.isNotNull(result)){
+                break;
+            }
+        }
+        return null!=result?result:"";
+    }
+
     public Object get(final Object object,
                       final String path) {
         return this.get(object, path, "");
