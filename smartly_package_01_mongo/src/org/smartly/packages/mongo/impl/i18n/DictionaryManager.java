@@ -32,8 +32,8 @@ public final class DictionaryManager {
             IMongoConstants.VALUE
     };
 
-    private static String getKey(final String lang, final String collection) {
-        return StringUtils.concatDot(lang, collection);
+    private static String getKey(final String lang, final String collection, final String id) {
+        return StringUtils.concatDot(lang, collection, id);
     }
 
     private static void add(final String key, final String value) {
@@ -64,7 +64,7 @@ public final class DictionaryManager {
     }
 
     private static String getValue(final String lang, final String collection, final String id) {
-        final String key = getKey(lang, collection);
+        final String key = getKey(lang, collection, id);
         try {
             if (!_cache.containsKey(key)) {
                 add(key, getFromDB(lang, collection, id));
