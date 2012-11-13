@@ -1,1 +1,4 @@
-Widgets for bootstrap
+Widgets for bootstrap.
+-----------------------------
+
+This widgets are utils "compound components".
