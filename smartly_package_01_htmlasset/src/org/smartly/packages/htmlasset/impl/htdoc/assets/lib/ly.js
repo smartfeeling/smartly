@@ -593,13 +593,14 @@
         },
 
         scrollTo:function (selector, navheight) {
-            var offset = $(selector).offset();
-            var offsetTop = offset.top;
-            var totalScroll = offsetTop - (navheight || 0);
-
-            $('body,html').animate({
-                scrollTop:totalScroll
-            }, 500);
+            _.debounce(function () {
+                var offset = $(selector).offset();
+                var offsetTop = offset.top;
+                var totalScroll = offsetTop - (navheight || 0);
+                $('body,html').animate({
+                    scrollTop:totalScroll
+                }, 500);
+            }, true, 500);
         },
 
         /**
