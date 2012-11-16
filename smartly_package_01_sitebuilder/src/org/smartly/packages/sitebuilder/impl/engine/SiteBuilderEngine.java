@@ -21,10 +21,11 @@ import org.smartly.packages.sitebuilder.impl.engine.vtool.Db;
 import org.smartly.packages.sitebuilder.impl.engine.vtool.Dic;
 import org.smartly.packages.velocity.impl.VLCManager;
 import org.smartly.packages.velocity.impl.engine.VLCEngine;
-import org.smartly.packages.velocity.impl.vtools.Formatter;
-import org.smartly.packages.velocity.impl.vtools.Js;
-import org.smartly.packages.velocity.impl.vtools.Math;
-import org.smartly.packages.velocity.impl.vtools.System;
+import org.smartly.packages.velocity.impl.vtools.FmtTool;
+import org.smartly.packages.velocity.impl.vtools.MathTool;
+import org.smartly.packages.velocity.impl.vtools.ScriptTool;
+import org.smartly.packages.velocity.impl.vtools.SysTool;
+
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -94,10 +95,10 @@ public class SiteBuilderEngine {
         // context
         final VelocityContext innerContext = new VelocityContext();
         // context smartly
-        innerContext.put(System.NAME, new System());
-        innerContext.put(Js.NAME, new Js());
-        innerContext.put(Formatter.NAME, new Formatter());
-        innerContext.put(Math.NAME, new Math());
+        innerContext.put(SysTool.NAME, new SysTool());
+        innerContext.put(ScriptTool.NAME, new ScriptTool());
+        innerContext.put(FmtTool.NAME, new FmtTool());
+        innerContext.put(MathTool.NAME, new MathTool());
         // context builder
         innerContext.put(Dic.NAME, new Dic(PathUtils.concat(_absoluteTemplatePath, ISiteBuilderConstants.PATH_DIC)));
         innerContext.put(Db.NAME, new Db(PathUtils.concat(_absoluteTemplatePath, ISiteBuilderConstants.PATH_DB)));

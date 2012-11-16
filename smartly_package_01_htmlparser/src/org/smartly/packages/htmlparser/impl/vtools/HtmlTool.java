@@ -9,6 +9,8 @@ import org.smartly.commons.network.URLUtils;
 import org.smartly.commons.util.StringUtils;
 import org.smartly.packages.htmlparser.impl.HtmlParser;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
@@ -17,7 +19,7 @@ import java.util.List;
  *
  * @author angelo.geminiani
  */
-public class Html {
+public class HtmlTool {
 
     public static final String NAME = "html";
 
@@ -33,7 +35,7 @@ public class Html {
     // ------------------------------------------------------------------------
     //                      Constructor
     // ------------------------------------------------------------------------
-    public Html() {
+    public HtmlTool() {
     }
 
     public String getName() {
@@ -49,7 +51,11 @@ public class Html {
     }
 
     public InputStream connect(final String uri) {
-        return URLUtils.getInputStream(uri);
+        try{
+            return URLUtils.getInputStream(uri);
+        }catch(Throwable t){
+            return new ByteArrayInputStream(new byte[0]);
+        }
     }
 
     public HtmlParser open(final String uri) {

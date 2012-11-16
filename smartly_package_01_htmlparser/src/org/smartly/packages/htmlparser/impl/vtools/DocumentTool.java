@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * DOM parser.
  */
-public class Document {
+public class DocumentTool {
 
     public static final String NAME = "document";
 
@@ -35,7 +35,7 @@ public class Document {
     private String _title;
     private String __domain;
 
-    public Document(final String servletPath, final Map<String, String> params) throws Exception {
+    public DocumentTool(final String servletPath, final Map<String, String> params) throws Exception {
         _requestParams = params;
         _servletPath = servletPath;
         _charset = CharEncoding.isSupported(params.get(PARAM_CHARSET)) ? params.get(PARAM_CHARSET) : getDefaultCharset();
@@ -46,7 +46,7 @@ public class Document {
         _path = _url.getPath();
 
         // creates document
-        final InputStream is = URLUtils.getInputStream(_url, 5000);
+        final InputStream is = URLUtils.getInputStream(_url, 5000, URLUtils.TYPE_HTML);
         _document = Jsoup.parse(is, _charset, _url.toString());
         _title = _document.title();
 

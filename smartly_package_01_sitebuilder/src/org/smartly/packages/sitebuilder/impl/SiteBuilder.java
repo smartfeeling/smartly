@@ -2,6 +2,7 @@ package org.smartly.packages.sitebuilder.impl;
 
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
+import org.smartly.commons.repository.deploy.FileDeployer;
 import org.smartly.commons.util.FileUtils;
 import org.smartly.commons.util.PathUtils;
 import org.smartly.packages.sitebuilder.SmartlySiteBuilder;
@@ -30,12 +31,13 @@ public class SiteBuilder {
         if (FileUtils.exists(target)) {
             throw new Exception("Template already Exists: " + templateName);
         }
-        final ModelDeployer deployer = new ModelDeployer(modelName, target);
+
         // add compilable extension
-        deployer.getCompilableFiles().add(".json");
+        FileDeployer.getPreProcessorFiles().add(".json");
         // add compilable directives
-        deployer.getCompilableValues().put(ISiteBuilderConstants.COMPILE_SITE_NAME, templateName);
-        deployer.getCompilableValues().put(ISiteBuilderConstants.COMPILE_DOMAIN, SmartlySiteBuilder.getDomain());
+        FileDeployer.getPreprocessorValues().put(ISiteBuilderConstants.COMPILE_SITE_NAME, templateName);
+        FileDeployer.getPreprocessorValues().put(ISiteBuilderConstants.COMPILE_DOMAIN, SmartlySiteBuilder.getDomain());
+        final ModelDeployer deployer = new ModelDeployer(modelName, target);
 
         deployer.deployChildren();
     }
