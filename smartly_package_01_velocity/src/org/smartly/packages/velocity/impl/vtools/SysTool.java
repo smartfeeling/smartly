@@ -343,12 +343,28 @@ public class SysTool
 
     //<editor-fold defaultstate="collapsed" desc=" GET BEAN VALUE (get, getList, getInt, getString, getImage, ...)">
 
+    public Set<?> keys(final Object object){
+        if(!StringUtils.isNULL(object)){
+           if(object instanceof Map){
+               return ((Map)object).keySet();
+           } else if (object instanceof JSONObject){
+               final Set<Object> result = new HashSet<Object>();
+               final Iterator iter =  ((JSONObject)object).keys();
+               while (iter.hasNext()){
+                   result.add(iter.next());
+               }
+               return result;
+           } else if(object instanceof JsonWrapper){
+               return ((JsonWrapper)object).keys();
+           }
+        }
+        return new HashSet<Object>();
+    }
+
     public boolean has(final Object object,
                        final String path) {
         return null != this.get(object, path, null);
     }
-
-
 
     /**
      * Return first valid value of a field (array of field names) in passed object.
