@@ -250,6 +250,8 @@ public class SysTool
                 return ((JSONObject) obj).length() == 0;
             } else if (obj instanceof JSONArray) {
                 return ((JSONArray) obj).length() == 0;
+            }else if (obj instanceof JsonWrapper) {
+                return ((JsonWrapper) obj).length() == 0;
             } else if (obj instanceof String) {
                 return StringUtils.isNULL(obj);
             }
