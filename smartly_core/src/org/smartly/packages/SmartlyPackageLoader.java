@@ -115,6 +115,29 @@ public class SmartlyPackageLoader {
         }
     }
 
+    public void unload(){
+        if (!CollectionUtils.isEmpty(_sortList)) {
+            for (final AbstractPackage item : _sortList) {
+                try {
+                    //-- Modal package is last --//
+                    if (!item.equals(_modalPackage)) {
+                        item.unload();
+                    }
+                } catch (Throwable t) {
+                    this.getLogger().log(Level.SEVERE,
+                            FormatUtils.format("ERROR CALLING METHOD 'unload()' FROM PACKAGE '{0}': {1}",
+                                    item.getId(), ExceptionUtils.getRealMessage(t)));
+                }
+            }
+            if (null != _modalPackage) {
+                this.getLogger().log(Level.INFO, FormatUtils.format(
+                        "Smartly stopped [{0}]::{1} as MODAL.",
+                        _modalPackage.getId(), _modalPackage.getClass().getName()));
+                _modalPackage.unload();
+            }
+        }
+    }
+
     // ------------------------------------------------------------------------
     //                      p r i v a t e
     // ------------------------------------------------------------------------

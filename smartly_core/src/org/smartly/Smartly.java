@@ -23,7 +23,7 @@ public class Smartly {
 
     }
 
-    public void setLauncherArgs(final Map<String, Object> args){
+    public void setLauncherArgs(final Map<String, Object> args) {
         _launcherArgs = args;
     }
 
@@ -60,7 +60,8 @@ public class Smartly {
         // notify all packages Smartly is ready.
         _packageLoader.ready();
 
-
+        //-- add shutdown hook --//
+        Runtime.getRuntime().addShutdownHook(new SmartlyShutdownHook(_packageLoader));
     }
 
     // ------------------------------------------------------------------------
@@ -84,8 +85,8 @@ public class Smartly {
         return __home;
     }
 
-    public static boolean hasPackage(final String name){
-        return null!=_packages?_packages.contains(name):false;
+    public static boolean hasPackage(final String name) {
+        return null != _packages ? _packages.contains(name) : false;
     }
 
     public static ClassLoader getClassLoader() {
@@ -95,19 +96,19 @@ public class Smartly {
         return __classLoader;
     }
 
-    public static Map<String, Object> getLauncherArgs(){
+    public static Map<String, Object> getLauncherArgs() {
         return _launcherArgs;
     }
 
-    public static boolean isTestUnitMode(){
-        return getLauncherArgs().containsKey("t") && (Boolean)getLauncherArgs().get("t");
+    public static boolean isTestUnitMode() {
+        return getLauncherArgs().containsKey("t") && (Boolean) getLauncherArgs().get("t");
     }
 
-    public static boolean isDebugMode(){
+    public static boolean isDebugMode() {
         return getConfiguration().getBoolean("smartly.debug");
     }
 
-    public static String getLang(){
+    public static String getLang() {
         return getConfiguration().getString("smartly.lang");
     }
 
@@ -120,7 +121,7 @@ public class Smartly {
     }
 
     public static JsonRepository getConfiguration(final boolean live) throws Exception {
-        return live ? new JsonRepository(PathUtils.getAbsolutePath(IConstants.PATH_CONFIGFILES)) :_configuration;
+        return live ? new JsonRepository(PathUtils.getAbsolutePath(IConstants.PATH_CONFIGFILES)) : _configuration;
     }
 
     public static String getConfigurationPath() {
@@ -150,7 +151,6 @@ public class Smartly {
     public static void register(final FileDeployer deployer) {
         FileDeployer.register(deployer);
     }
-
 
 
 }

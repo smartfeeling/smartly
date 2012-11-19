@@ -182,5 +182,10 @@ public abstract class AbstractPackage
      */
     public abstract void ready();
 
-
+    /**
+     * Exit point for package
+     */
+    public void unload() {
+        this.getLogger().debug("EXITING " + this.getClass().getSimpleName());
+    }
 }

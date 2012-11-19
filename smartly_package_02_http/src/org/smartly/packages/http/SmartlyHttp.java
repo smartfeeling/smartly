@@ -56,6 +56,11 @@ public class SmartlyHttp
         this.init();
     }
 
+    @Override
+    public void unload() {
+        this.getLogger().info("EXITING " + this.getClass().getSimpleName());
+    }
+
     // --------------------------------------------------------------------
     //               p r i v a t e
     // --------------------------------------------------------------------

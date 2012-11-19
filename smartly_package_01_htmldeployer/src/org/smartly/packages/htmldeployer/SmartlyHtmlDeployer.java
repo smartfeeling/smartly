@@ -34,4 +34,9 @@ public class SmartlyHtmlDeployer extends AbstractPackage
 
     }
 
+    @Override
+    public void unload() {
+        System.out.println("EXITING....");
+    }
+
 }

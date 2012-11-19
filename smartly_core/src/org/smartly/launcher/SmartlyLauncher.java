@@ -3,7 +3,7 @@ package org.smartly.launcher;
 import org.smartly.packages.SmartlyPackageLoader;
 
 /**
- * User: angelo.geminiani
+ * Basic Launcher implementation.
  */
 public class SmartlyLauncher
         extends AbstractLauncher {
