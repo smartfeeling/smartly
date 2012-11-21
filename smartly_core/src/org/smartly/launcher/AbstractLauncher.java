@@ -65,7 +65,7 @@ abstract class AbstractLauncher {
         return _args;
     }
 
-    public final Map<String, Object> getArgsMap(){
+    public final Map<String, Object> getArgsMap() {
         return _argsMap;
     }
 
@@ -151,14 +151,14 @@ abstract class AbstractLauncher {
                 _argsMap.put("c", charset);
             }
 
-            final boolean test = (Boolean)parser.getOptionValue(testOpt, false);
+            final boolean test = (Boolean) parser.getOptionValue(testOpt, false);
             _argsMap.put("t", test);
 
             // set default proxy for outgoing communications
-            final boolean use_proxy = (Boolean)parser.getOptionValue(proxyOpt, false);
+            final boolean use_proxy = (Boolean) parser.getOptionValue(proxyOpt, false);
             _argsMap.put("p", use_proxy);
-            System.setProperty("java.net.useSystemProxies", use_proxy+""); // java.net property
-            System.setProperty(IConstants.SYSPROP_USE_PROXIES, use_proxy+""); // smartly property
+            System.setProperty("java.net.useSystemProxies", use_proxy + ""); // java.net property
+            System.setProperty(IConstants.SYSPROP_USE_PROXIES, use_proxy + ""); // smartly property
         }
     }
     // ------------------------------------------------------------------------

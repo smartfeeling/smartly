@@ -38,7 +38,7 @@ public class Smartly {
     private void init(final SmartlyPackageLoader packageLoader) throws Exception {
 
         // Run Smartly configuration deployer
-        (new Deployer(PathUtils.getAbsolutePath(IConstants.PATH_CONFIGFILES))).deploy();
+        (new Deployer(PathUtils.getAbsolutePath(IConstants.PATH_CONFIGFILES), isSilent())).deploy();
 
         //-- init package loader --//
         _packageLoader = packageLoader;
@@ -71,9 +71,17 @@ public class Smartly {
     private static String __home;
     private static ClassLoader __classLoader;
     private static String[] __langCodes;
+    private static SmartlyLogger __logger;
     private static JsonRepository _configuration;
     private static Set<String> _packages; // loaded packages
     private static Map<String, Object> _launcherArgs;
+
+    public static SmartlyLogger getLogger() {
+        if (null == __logger) {
+            __logger = new SmartlyLogger(isSilent());
+        }
+        return __logger;
+    }
 
     public static String getHome() {
         if (null == __home) {
@@ -106,6 +114,14 @@ public class Smartly {
 
     public static boolean isDebugMode() {
         return getConfiguration().getBoolean("smartly.debug");
+    }
+
+    public static boolean isSilent() {
+        try {
+            return getConfiguration(true).getBoolean("smartly.silent");
+        } catch (Throwable ignored) {
+        }
+        return false;
     }
 
     public static String getLang() {

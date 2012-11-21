@@ -48,7 +48,8 @@ public abstract class FileDeployer {
     private final String _targetFolder;
     private boolean _overwriteAll;
     private String[] _overwriteItems;
-    private final boolean _verbose;
+    private final boolean _silent;  // completly silent
+    private final boolean _verbose; // log details
     private final boolean _debugApp;
     private final boolean _debugJs;
 
@@ -57,6 +58,15 @@ public abstract class FileDeployer {
     // ------------------------------------------------------------------------
     public FileDeployer(final String startFolder,
                         final String targetFolder,
+                        final boolean verbose,
+                        final boolean debugApp,
+                        final boolean debugJs) {
+          this(startFolder, targetFolder, false, verbose, debugApp, debugJs);
+    }
+
+    public FileDeployer(final String startFolder,
+                        final String targetFolder,
+                        final boolean silent,
                         final boolean verbose,
                         final boolean debugApp,
                         final boolean debugJs) {
@@ -70,6 +80,7 @@ public abstract class FileDeployer {
         _targetFolder = targetFolder;
         _overwriteAll = false;
         _overwriteItems = new String[0];
+        _silent = silent;
         _verbose = verbose;
         _debugApp = debugApp;
         _debugJs = debugJs;
@@ -145,12 +156,14 @@ public abstract class FileDeployer {
     }
 
     private void logStart() {
-        this.getLogger().log(Level.INFO, FormatUtils.format(
-                "FILE DEPLOYER: Running FileDeployer: {0}\n" +
-                        "\t Target Path: {1}, \n" +
-                        "\t Overwrite Target: {2}",
-                this.getClass().getSimpleName(),
-                _targetFolder, _overwriteAll));
+        if(!_silent){
+            this.getLogger().log(Level.INFO, FormatUtils.format(
+                    "FILE DEPLOYER: Running FileDeployer: {0}\n" +
+                            "\t Target Path: {1}, \n" +
+                            "\t Overwrite Target: {2}",
+                    this.getClass().getName(),
+                    _targetFolder, _overwriteAll));
+        }
     }
 
     private void logInfo(final String text, final Object... args) {

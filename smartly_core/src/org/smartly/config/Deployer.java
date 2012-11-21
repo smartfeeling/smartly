@@ -5,9 +5,9 @@ import org.smartly.commons.repository.deploy.FileDeployer;
 
 public class Deployer extends FileDeployer {
 
-    public Deployer(final String targetFolder) {
+    public Deployer(final String targetFolder, final boolean silent) {
         super("", targetFolder,
-                false, false, false);
+                silent, false, false, false);
     }
 
     @Override

@@ -3,9 +3,6 @@ package org.smartly.packages;
 
 import org.smartly.IConstants;
 import org.smartly.Smartly;
-import org.smartly.commons.logging.Level;
-import org.smartly.commons.logging.Logger;
-import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.repository.FileRepository;
 import org.smartly.commons.repository.Resource;
 import org.smartly.commons.repository.deploy.FileDeployer;
@@ -34,7 +31,7 @@ public class SmartlyPackageLoader {
         FileUtils.mkdirs(_root);
     }
 
-    public Set<String> getPackageNames(){
+    public Set<String> getPackageNames() {
         return _packages.keySet();
     }
 
@@ -55,7 +52,7 @@ public class SmartlyPackageLoader {
                             final String msg = FormatUtils.format("Modal Package already registered. Only one modal " +
                                     "package is allowed. '{0}->{1}' will not be registered.",
                                     key, instance.getClass().getCanonicalName());
-                            this.getLogger().log(Level.WARNING, msg);
+                            this.warning(msg);
                             return;
                         }
                         _modalPackage = instance;
@@ -63,7 +60,7 @@ public class SmartlyPackageLoader {
                     _packages.put(key, instance);
                     // ensure directory exists
                     this.ensureExists(instance);
-                    this.getLogger().info(FormatUtils.format("REGISTERED MODULE: {0}", key));
+                    this.info(FormatUtils.format("REGISTERED MODULE: {0}", key));
                 } else {
                     final AbstractPackage existing = _packages.get(key);
                     if (!existing.getClass().getCanonicalName().equalsIgnoreCase(instance.getClass().getCanonicalName())) {
@@ -71,7 +68,7 @@ public class SmartlyPackageLoader {
                                 "Package '{0}' already exists and is of type '{1}'. Package ID must be unique. " +
                                 "You are trying to register another package with same ID but of type '{2}'.",
                                 key, existing.getClass().getCanonicalName(), instance.getClass().getCanonicalName());
-                        this.getLogger().log(Level.WARNING, msg);
+                        this.warning(msg);
                     }
                 }
             }
@@ -101,13 +98,12 @@ public class SmartlyPackageLoader {
                         item.ready();
                     }
                 } catch (Throwable t) {
-                    this.getLogger().log(Level.SEVERE,
-                            FormatUtils.format("ERROR CALLING METHOD 'ready()' FROM PACKAGE '{0}': {1}",
-                                    item.getId(), ExceptionUtils.getRealMessage(t)));
+                    this.severe(FormatUtils.format("ERROR CALLING METHOD 'ready()' FROM PACKAGE '{0}': {1}",
+                            item.getId(), ExceptionUtils.getRealMessage(t)));
                 }
             }
             if (null != _modalPackage) {
-                this.getLogger().log(Level.INFO, FormatUtils.format(
+                this.info(FormatUtils.format(
                         "Smartly started [{0}]::{1} as MODAL.",
                         _modalPackage.getId(), _modalPackage.getClass().getName()));
                 _modalPackage.ready();
@@ -115,7 +111,7 @@ public class SmartlyPackageLoader {
         }
     }
 
-    public void unload(){
+    public void unload() {
         if (!CollectionUtils.isEmpty(_sortList)) {
             for (final AbstractPackage item : _sortList) {
                 try {
@@ -124,13 +120,12 @@ public class SmartlyPackageLoader {
                         item.unload();
                     }
                 } catch (Throwable t) {
-                    this.getLogger().log(Level.SEVERE,
-                            FormatUtils.format("ERROR CALLING METHOD 'unload()' FROM PACKAGE '{0}': {1}",
-                                    item.getId(), ExceptionUtils.getRealMessage(t)));
+                    this.severe(FormatUtils.format("ERROR CALLING METHOD 'unload()' FROM PACKAGE '{0}': {1}",
+                            item.getId(), ExceptionUtils.getRealMessage(t)));
                 }
             }
             if (null != _modalPackage) {
-                this.getLogger().log(Level.INFO, FormatUtils.format(
+                this.info(FormatUtils.format(
                         "Smartly stopped [{0}]::{1} as MODAL.",
                         _modalPackage.getId(), _modalPackage.getClass().getName()));
                 _modalPackage.unload();
@@ -142,8 +137,21 @@ public class SmartlyPackageLoader {
     //                      p r i v a t e
     // ------------------------------------------------------------------------
 
-    private Logger getLogger() {
-        return LoggingUtils.getLogger(this);
+
+    private void info(final String message) {
+        Smartly.getLogger().info(this, message);
+    }
+
+    private void warning(final String message) {
+        Smartly.getLogger().warning(this, message);
+    }
+
+    private void severe(final String message) {
+        Smartly.getLogger().severe(this, message);
+    }
+
+    private void severe(final String message, final Throwable error) {
+        Smartly.getLogger().severe(this, message, error);
     }
 
     private void loadPackages() throws IOException {
@@ -166,14 +174,12 @@ public class SmartlyPackageLoader {
                 final String msg = FormatUtils.format(
                         "Unable to load Package '{0}': Missing 'main' attribute.",
                         name);
-                this.getLogger().severe(msg);
+                this.severe(msg);
             } else {
                 this.registerPackageLauncher(name, main);
             }
         } catch (Throwable t) {
-            this.getLogger().log(Level.SEVERE,
-                    FormatUtils.format("Unmanaged Exception loading Packages: '{0}'", t),
-                    t);
+            this.severe(FormatUtils.format("Unmanaged Exception loading Packages: '{0}'", t), t);
         }
     }
 
@@ -186,8 +192,8 @@ public class SmartlyPackageLoader {
             final AbstractPackage launcher = (AbstractPackage) clazz.newInstance();
             this.register(launcher);
         } catch (Throwable t) {
-            this.getLogger().log(Level.SEVERE,
-                    FormatUtils.format("Exception loading Package '{0}' from class '{1}': '{2}'", name, className, t),
+            this.severe(FormatUtils.format("Exception loading Package '{0}' from class '{1}': '{2}'",
+                    name, className, t),
                     t);
         }
     }
@@ -203,12 +209,12 @@ public class SmartlyPackageLoader {
         for (final AbstractPackage item : list) {
             try {
                 item.load();
-                this.getLogger().info(FormatUtils.format("STARTED MODULE: {0}", item.getId()));
+                this.info(FormatUtils.format("STARTED MODULE: {0}", item.getId()));
                 // flush deployers
                 FileDeployer.deployAll();
             } catch (Throwable t) {
                 final String msg = FormatUtils.format("Error running Package '{0}': '{1}'", item.getId(), t);
-                this.getLogger().log(Level.SEVERE, msg, t);
+                this.severe(msg, t);
             }
         }
     }
@@ -223,7 +229,7 @@ public class SmartlyPackageLoader {
                 this.copyDefault(packageJson, pkg);
             }
         } catch (Throwable t) {
-            this.getLogger().log(Level.SEVERE, null, t);
+            this.severe(null, t);
         }
     }
 
@@ -232,7 +238,7 @@ public class SmartlyPackageLoader {
         final String path = PathUtils.getPackagePath(this.getClass());
         final String filePath = PathUtils.join(path, packageJson.getName());
         final InputStream is = cl.getResourceAsStream(filePath);
-        if(null!=is){
+        if (null != is) {
             final byte[] content = ByteUtils.getBytes(is);
 
             //format content with class data
@@ -249,7 +255,7 @@ public class SmartlyPackageLoader {
 
             FileUtils.copy(json.getBytes(), packageJson);
         } else {
-            this.getLogger().warning(FormatUtils.format("RESOURCE '{0}' not found. " +
+            this.warning(FormatUtils.format("RESOURCE '{0}' not found. " +
                     "Ensure you included it in your package distribution " +
                     "(i.e. check IDE settings for Compiler Options.)", filePath));
         }
