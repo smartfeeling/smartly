@@ -75,6 +75,8 @@ public class SmartlyHttp
 
             //-- the web server --//
             this.startWebserver(absoluteDocRoot, configuration);
+        } else {
+            super.getLogger().warning("Web Server not enabled! Check configuration file.");
         }
     }
 
@@ -85,7 +87,6 @@ public class SmartlyHttp
 
             final WebServer server = new WebServer(docRoot, configuration);
             server.start();
-
         } catch (Throwable t) {
             super.getLogger().log(Level.SEVERE, null, t);
         }

@@ -4,6 +4,8 @@ package org.smartly.packages;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.smartly.Smartly;
+import org.smartly.commons.logging.Logger;
+import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.util.JsonWrapper;
 
 import java.util.Arrays;
@@ -183,4 +185,9 @@ public abstract class AbstractPackage
     public void unload() {
         Smartly.getLogger().debug(this, "EXITING " + this.getClass().getSimpleName());
     }
+
+    public Logger getLogger(){
+        return LoggingUtils.getLogger(this);
+    }
+
 }
