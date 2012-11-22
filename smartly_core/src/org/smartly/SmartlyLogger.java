@@ -37,6 +37,12 @@ public class SmartlyLogger {
         }
     }
 
+    public void warning(final Object sender, final Throwable error) {
+        if (!_silent) {
+            this.getLogger(sender).log(Level.WARNING, null, error);
+        }
+    }
+
     public void severe(final Object sender, final String message) {
         this.getLogger(sender).log(Level.SEVERE, message);
     }

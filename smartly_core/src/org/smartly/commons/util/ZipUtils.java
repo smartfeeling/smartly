@@ -68,18 +68,20 @@ public class ZipUtils {
         zip(out, fileNames, includepaths, pathtoremove);
     }
 
-    public static void unzip(final String filename) throws IOException {
+    public static void unzip(final String source, final String target) throws IOException {
+        final String targetFolder = PathUtils.isDirectory(target) ? target : PathUtils.getParent(target);
         final char sep = File.separatorChar;
         byte[] buff = new byte[1024];
         int m;
         int n;
         // for each file in zip
-        ZipFile zip = new ZipFile(filename);
-        Enumeration e = zip.entries();
+        final ZipFile zip = new ZipFile(source);
+        final Enumeration e = zip.entries();
         while (e.hasMoreElements()) {
             // get filename using local separator
             final ZipEntry entry = (ZipEntry) e.nextElement();
-            final StringBuilder fixed = new StringBuilder(entry.getName());
+            final String entryName = PathUtils.concat(targetFolder, entry.getName());
+            final StringBuilder fixed = new StringBuilder(entryName);
             for (int i = 0; i < fixed.length(); ++i) {
                 if (fixed.charAt(i) == '/') {
                     fixed.setCharAt(i, sep);
@@ -92,16 +94,22 @@ public class ZipUtils {
                 file.mkdirs();
                 continue;
             }
-            String dir = file.getParent();
+            final String dir = file.getParent();
             if (dir != null) {
                 new File(dir).mkdirs();
             }
             // unzip file
             //System.out.println("unzipping: " + file);
-            OutputStream out = new FileOutputStream(file);
-            InputStream in = zip.getInputStream(entry);
-            while ((n = in.read(buff, 0, buff.length)) != -1) {
-                out.write(buff, 0, n);
+            final OutputStream out = new FileOutputStream(file);
+            final InputStream in = zip.getInputStream(entry);
+            try {
+                while ((n = in.read(buff, 0, buff.length)) != -1) {
+                    out.write(buff, 0, n);
+                }
+            } finally {
+                out.flush();
+                out.close();
+                in.close();
             }
         }
     }

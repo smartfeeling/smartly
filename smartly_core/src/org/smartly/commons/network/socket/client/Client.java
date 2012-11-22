@@ -1,11 +1,15 @@
 package org.smartly.commons.network.socket.client;
 
+import org.smartly.commons.network.NetworkUtils;
 import org.smartly.commons.network.socket.server.Server;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.net.Socket;
+import java.net.SocketAddress;
 
 /**
  * Socket Client
@@ -25,7 +29,10 @@ public class Client {
             } catch (Throwable ignored) {
             }
         }
-        _socket = new Socket(host, port);
+        final SocketAddress address = new InetSocketAddress(host, port);
+        final Proxy proxy = Proxy.NO_PROXY; //NetworkUtils.getProxy();
+        _socket = new Socket(proxy);
+        _socket.connect(address, 3000);
     }
 
     public Object send(final Object request) throws Exception {
@@ -74,5 +81,16 @@ public class Client {
         cli.close();
 
         return response;
+    }
+
+    public static boolean ping(final String server, final int port) {
+        try {
+            final Client cli = new Client();
+            cli.connect(server, port);
+            cli.close();
+            return true;
+        } catch (Throwable ignored) {
+            return false;
+        }
     }
 }

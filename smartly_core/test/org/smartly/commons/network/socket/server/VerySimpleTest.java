@@ -11,7 +11,7 @@ public class VerySimpleTest extends TestCase {
     private Server _server;
 
     public void setUp() throws Exception {
-        //_server = Server.startServer(_handler);
+        _server = Server.startServer(_handler);
     }
 
     public void tearDown() {
