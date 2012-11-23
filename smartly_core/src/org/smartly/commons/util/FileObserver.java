@@ -66,8 +66,12 @@ public abstract class FileObserver {
         _keys = new HashSet<WatchKey>();
     }
 
-    protected void finalize() {
-        stopWatching();
+    protected void finalize() throws Throwable {
+        try {
+            stopWatching();
+        } finally {
+            super.finalize();
+        }
     }
 
     @Override
@@ -81,13 +85,13 @@ public abstract class FileObserver {
         result.append("verbose: ").append(_verbose);
         // events
         result.append("events: [");
-        if((_mask&EVENT_CREATE)==EVENT_CREATE){
-           result.append(this.eventToString(EVENT_CREATE));
+        if ((_mask & EVENT_CREATE) == EVENT_CREATE) {
+            result.append(this.eventToString(EVENT_CREATE));
         }
-        if((_mask&EVENT_DELETE)==EVENT_DELETE){
+        if ((_mask & EVENT_DELETE) == EVENT_DELETE) {
             result.append(this.eventToString(EVENT_DELETE));
         }
-        if((_mask&EVENT_MODIFY)==EVENT_MODIFY){
+        if ((_mask & EVENT_MODIFY) == EVENT_MODIFY) {
             result.append(this.eventToString(EVENT_MODIFY));
         }
         result.append("]");

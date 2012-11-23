@@ -6,6 +6,8 @@ package org.smartly.packages.http.impl.handlers.rest.impl;
 import org.smartly.Smartly;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
+import org.smartly.commons.mutex.Mutex;
+import org.smartly.commons.mutex.MutexPool;
 import org.smartly.commons.util.StringUtils;
 import org.smartly.packages.remoting.SmartlyRemoting;
 
@@ -19,13 +21,27 @@ import java.net.URLDecoder;
  */
 public abstract class RESTService {
 
+    private final MutexPool _mutexPool;
+
     private String _token; // security Token
 
     // ------------------------------------------------------------------------
     //                      Constructor
     // ------------------------------------------------------------------------
 
-    // ------------------------------------------------------------------------
+    public RESTService() {
+        _mutexPool = new MutexPool();
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        try {
+            _mutexPool.close();
+        } finally {
+            super.finalize();
+        }
+    }
+// ------------------------------------------------------------------------
     //                      Public
     // ------------------------------------------------------------------------
 
@@ -44,6 +60,10 @@ public abstract class RESTService {
             return this.validateToken(_token);
         }
         return false;
+    }
+
+    public final Mutex getMutex(final Object key) {
+        return _mutexPool.get(key);
     }
 
     // ------------------------------------------------------------------------
