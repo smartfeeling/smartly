@@ -8,6 +8,8 @@ import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
 
 import java.io.*;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.zip.CRC32;
 import java.util.zip.CheckedInputStream;
@@ -60,6 +62,38 @@ public abstract class FileUtils {
             }
         }
         return fileName;
+    }
+
+    public static void delete(final String path) throws IOException {
+        final File file = new File(path);
+        if (file.exists()) {
+            if (file.isFile()) {
+                file.delete();
+            } else {
+                final Path root = Paths.get(path);
+                Files.walkFileTree(root, new SimpleFileVisitor<Path>() {
+                    @Override
+                    public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs)
+                            throws IOException {
+                        Files.delete(file);
+                        return FileVisitResult.CONTINUE;
+                    }
+
+                    @Override
+                    public FileVisitResult preVisitDirectory(final Path file, final BasicFileAttributes attrs)
+                            throws IOException {
+                        if (!file.toString().equalsIgnoreCase(root.toString())) {
+                            delete(file.toString());
+                        }
+                        return FileVisitResult.CONTINUE;
+                    }
+                });
+                try{
+                  file.delete();
+                }catch(Throwable ignored){
+                }
+            }
+        }
     }
 
     public static boolean exists(final String fileName) {
@@ -374,20 +408,22 @@ public abstract class FileUtils {
 
     /**
      * Shortcut to copy(string.getBytes(encoding), output);
-     * @param output File
-     * @param data  Data to write
+     *
+     * @param output   File
+     * @param data     Data to write
      * @param encoding charset
      * @throws IOException
      */
     public static void writeStringToFile(final File output,
                                          final String data,
-                                         final String encoding) throws IOException{
-       final byte[] bytes = data.getBytes(encoding);
+                                         final String encoding) throws IOException {
+        final byte[] bytes = data.getBytes(encoding);
         copy(bytes, output);
     }
 
     /**
      * Shortcut to new String(copyToByteArray(file));
+     *
      * @param file File
      * @return String
      * @throws IOException
@@ -610,7 +646,6 @@ public abstract class FileUtils {
 
         return result;
     }
-
 
 
 }

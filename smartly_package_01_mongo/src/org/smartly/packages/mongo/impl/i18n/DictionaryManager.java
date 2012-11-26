@@ -63,7 +63,9 @@ public final class DictionaryManager {
         }
     }
 
-    private static String getValue(final String lang, final String collection, final String id) {
+    private static String getValue(final String lang,
+                                   final String collection,
+                                   final String id) {
         final String key = getKey(lang, collection, id);
         try {
             if (!_cache.containsKey(key)) {

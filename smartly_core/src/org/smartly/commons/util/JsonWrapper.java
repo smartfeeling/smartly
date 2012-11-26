@@ -201,7 +201,7 @@ public final class JsonWrapper implements Cloneable {
 
     public int deepInteger(final String path, final int def) {
         final Object result = this.deep(path);
-        return result instanceof Integer ? Integer.parseInt(result.toString()) : def;
+        return result instanceof Number ? Integer.parseInt(result.toString()) : def;
     }
 
     public long deepLong(final String path) {
@@ -210,16 +210,17 @@ public final class JsonWrapper implements Cloneable {
 
     public long deepLong(final String path, final long def) {
         final Object result = this.deep(path);
-        return result instanceof Long ? Long.parseLong(result.toString()) : def;
+        return result instanceof Number ? Long.parseLong(result.toString()) : def;
     }
 
     public double deepDouble(final String path) {
-        return this.deepDouble(path, 0.0);
+        final Double result = this.deepDouble(path, 0.0);
+        return result;
     }
 
     public double deepDouble(final String path, final double def) {
         final Object result = this.deep(path);
-        return result instanceof Long ? Double.parseDouble(result.toString()) : def;
+        return result instanceof Number ? Double.parseDouble(result.toString()) : def;
     }
 
     //-- JSONObject --//

@@ -31,6 +31,7 @@ abstract class AbstractLauncher {
 
     private final String[] _args;
     private final Map<String, Object> _argsMap;
+    private String[] _argsRemain;
     private boolean _smartlyLauncher;
     private Class _runnerClass;
     private Object _runnerInstance;
@@ -46,7 +47,8 @@ abstract class AbstractLauncher {
             _runnerClass = loader.loadClass(CLASSPATH_SMARTLY);
             _runnerInstance = _runnerClass.newInstance();
             // try inject args to runner
-            BeanUtils.setValueIfAny(_runnerInstance, "launcherArgs", _argsMap);
+            BeanUtils.setValueIfAny(_runnerInstance, "mappedArgs", _argsMap);
+            BeanUtils.setValueIfAny(_runnerInstance, "remainArgs", _argsRemain);
         } catch (Exception x) {
             System.err.println("Uncaught exception: ");
             x.printStackTrace();
@@ -159,6 +161,14 @@ abstract class AbstractLauncher {
             _argsMap.put("p", use_proxy);
             System.setProperty("java.net.useSystemProxies", use_proxy + ""); // java.net property
             System.setProperty(IConstants.SYSPROP_USE_PROXIES, use_proxy + ""); // smartly property
+
+            //-- remaining --//
+            _argsRemain = parser.getRemainingArgs();
+            if(null!= _argsRemain && _argsRemain.length>0){
+                for(int i=0;i< _argsRemain.length;i++){
+                    _argsMap.put("param_" + i, _argsRemain[i]);
+                }
+            }
         }
     }
     // ------------------------------------------------------------------------

@@ -7,12 +7,11 @@ import org.smartly.commons.logging.util.LoggingUtils;
 import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.nio.file.*;
-
-import static java.nio.file.StandardWatchEventKinds.*;
-import static java.nio.file.LinkOption.*;
-
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.*;
+
+import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
+import static java.nio.file.StandardWatchEventKinds.*;
 
 /**
  * Simple file observer.
@@ -198,13 +197,13 @@ public abstract class FileObserver {
 
         private final WatchService _watcher;
         private final Map<WatchKey, Path> _keys;
-        private final HashMap<String, WeakReference<FileObserver>> _observers;
+        private final Map<String, WeakReference<FileObserver>> _observers;
 
         public ObserverThread() throws IOException {
             super("FileObserver");
             super.setPriority(Thread.NORM_PRIORITY);
             super.setDaemon(true);
-            _observers = new HashMap<String, WeakReference<FileObserver>>();
+            _observers = Collections.synchronizedMap(new HashMap<String, WeakReference<FileObserver>>());
             _watcher = FileSystems.getDefault().newWatchService();
             _keys = new HashMap<WatchKey, Path>();
         }
@@ -262,13 +261,11 @@ public abstract class FileObserver {
             try {
                 while (!super.isInterrupted()) {
                     Thread.sleep(200);
-                    synchronized (_observers) {
-                        final Collection<WeakReference<FileObserver>> references = _observers.values();
-                        for (final WeakReference reference : references) {
-                            final FileObserver observer = (FileObserver) reference.get();
-                            if (null != observer) {
-                                this.watch(observer);
-                            }
+                    final Collection<WeakReference<FileObserver>> references = _observers.values();
+                    for (final WeakReference reference : references) {
+                        final FileObserver observer = (FileObserver) reference.get();
+                        if (null != observer) {
+                            this.watch(observer);
                         }
                     }
                 }

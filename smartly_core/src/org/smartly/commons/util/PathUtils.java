@@ -928,7 +928,7 @@ public abstract class PathUtils
      * Short cut to File.exists() method
      */
     public static boolean exists(String path) {
-        File file = new File(path);
+        final File file = new File(path);
         return file.exists();
     }
 

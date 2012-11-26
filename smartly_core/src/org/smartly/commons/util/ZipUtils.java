@@ -112,6 +112,7 @@ public class ZipUtils {
                 in.close();
             }
         }
+        zip.close();
     }
 
     public static StringBuilder list(final String filename) throws IOException {

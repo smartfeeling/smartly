@@ -23,8 +23,17 @@ public class Smartly {
 
     }
 
-    public void setLauncherArgs(final Map<String, Object> args) {
-        _launcherArgs = args;
+    /**
+     * Set with reflection from AbstractLauncher
+     * BeanUtils.setValueIfAny(_runnerInstance, "mappedArgs", _argsMap);
+     * @param mappedArgs
+     */
+    public void setMappedArgs(final Map<String, Object> mappedArgs) {
+        _launcherArgs = mappedArgs;
+    }
+
+    public void setRemainArgs(final String[] remainingArgs) {
+        _launcherRemainingArgs = remainingArgs;
     }
 
     public void run(final SmartlyPackageLoader packageLoader) throws Exception {
@@ -75,6 +84,7 @@ public class Smartly {
     private static JsonRepository _configuration;
     private static Set<String> _packages; // loaded packages
     private static Map<String, Object> _launcherArgs;
+    private static String[] _launcherRemainingArgs;
 
     public static SmartlyLogger getLogger() {
         if (null == __logger) {
@@ -106,6 +116,10 @@ public class Smartly {
 
     public static Map<String, Object> getLauncherArgs() {
         return _launcherArgs;
+    }
+
+    public static String[] getLauncherRemainArgs() {
+        return _launcherRemainingArgs;
     }
 
     public static boolean isTestUnitMode() {
