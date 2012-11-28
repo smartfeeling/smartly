@@ -78,6 +78,19 @@ public final class JsonWrapper implements Cloneable {
         return "";
     }
 
+    public String toString(final int indentFactor) {
+        try {
+            if (this.isJSONArray()) {
+                return _array.toString(indentFactor);
+            }
+            if (this.isJSONObject()) {
+                return _object.toString(indentFactor);
+            }
+        } catch (Throwable ignored) {
+        }
+        return this.toString();
+    }
+
     @Override
     public JsonWrapper clone() {
         return new JsonWrapper(this.toString());
