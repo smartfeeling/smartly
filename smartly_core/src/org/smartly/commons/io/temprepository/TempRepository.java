@@ -26,7 +26,6 @@ public class TempRepository {
     private final String _path_registry;
     private final JsonWrapper _registry;
     private FileObserver _dirObserver;
-    private FileObserver _registryObserver;
     private Thread _registryThread;
 
     public TempRepository(final String root) throws IOException {
@@ -53,6 +52,13 @@ public class TempRepository {
         return _root;
     }
 
+    public void setDuration(final long ms) {
+        _registry.putSilent(REGISTRY_LIFE_MS, ms);
+        if (_registry.optLong(REGISTRY_CHECK_MS) < ms) {
+            _registry.putSilent(REGISTRY_CHECK_MS, ms);
+        }
+    }
+
     public void interrupt() {
         this.stopThreads();
 
@@ -63,7 +69,7 @@ public class TempRepository {
     }
 
     /**
-     * Created only for test porpoise.
+     * Created only for test purpose.
      */
     public void join() throws InterruptedException {
         if (null != _registryThread) {
@@ -110,10 +116,6 @@ public class TempRepository {
         } catch (Throwable ignored) {
         }
         try {
-            this.startRegistryObserver();
-        } catch (Throwable ignored) {
-        }
-        try {
             this.startRegistryThread();
         } catch (Throwable ignored) {
         }
@@ -123,12 +125,6 @@ public class TempRepository {
         try {
             _dirObserver.interrupt();
             _dirObserver = null;
-        } catch (Throwable ignored) {
-        }
-
-        try {
-            _registryObserver.interrupt();
-            _registryObserver = null;
         } catch (Throwable ignored) {
         }
 
@@ -145,48 +141,32 @@ public class TempRepository {
             _dirObserver.interrupt();
             _dirObserver = null;
         }
-        _dirObserver = new FileObserver(_root, true, false, FileObserver.EVENT_CREATE) {
+        _dirObserver = new FileObserver(_root, true, false,
+                FileObserver.EVENT_CREATE | FileObserver.EVENT_MODIFY) {
             @Override
             protected void onEvent(final int event, final String path) {
                 try {
-                    addToRegistry(path);
-                } catch (Throwable t) {
-                    final String msg = FormatUtils.format("Error adding '{0}' to temp repository: {1}", path, t);
-                    getLogger().severe(msg);
-                    //-- problem with registry. stop everything --//
-                    _dirObserver.interrupt();
-                }
-            }
-        };
-        _dirObserver.startWatching();
-    }
-
-    private void startRegistryObserver() throws IOException {
-        //-- file observer initialization --//
-        if (null != _registryObserver) {
-            _registryObserver.interrupt();
-            _registryObserver = null;
-        }
-        _registryObserver = new FileObserver(_path_registry, false, false, FileObserver.EVENT_MODIFY) {
-            @Override
-            protected void onEvent(final int event, final String path) {
-                try {
-                    // reload registry
-                    synchronized (_registry) {
-                        final String text = loadRegistry(_path_registry);
-                        if (StringUtils.isJSONObject(text)) {
-                            _registry.parse(text);
+                    if (_path_registry.equalsIgnoreCase(path)) {
+                        // reload registry
+                        synchronized (_registry) {
+                            final String text = loadRegistry(_path_registry);
+                            if (StringUtils.isJSONObject(text)) {
+                                _registry.parse(text);
+                            }
                         }
+                    } else {
+                        // add new item to registry
+                        addToRegistry(path);
                     }
                 } catch (Throwable t) {
                     final String msg = FormatUtils.format("Error adding '{0}' to temp repository: {1}", path, t);
                     getLogger().severe(msg);
                     //-- problem with registry. stop everything --//
-                    _registryObserver.interrupt();
+                    this.interrupt();
                 }
             }
         };
-        _registryObserver.startWatching();
+        _dirObserver.startWatching();
     }
 
     private void startRegistryThread() {
@@ -221,15 +201,9 @@ public class TempRepository {
     }
 
     private void saveRegistry() throws IOException {
-        if (null != _registryObserver) {
-            _registryObserver.pause();
-        }
         FileUtils.writeStringToFile(new File(_path_registry),
                 _registry.toString(1),
                 Smartly.getCharset());
-        if (null != _registryObserver) {
-            _registryObserver.resume();
-        }
     }
 
     private void addToRegistry(final String path) throws IOException {

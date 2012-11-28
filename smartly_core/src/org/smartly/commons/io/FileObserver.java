@@ -134,6 +134,10 @@ public abstract class FileObserver {
         return _path;
     }
 
+    public final Path getObservedPath() {
+        return _observedPath;
+    }
+
     public final boolean isPaused() {
         return _paused;
     }
@@ -158,12 +162,12 @@ public abstract class FileObserver {
     }
 
     public final String startWatching() throws IOException {
-        return getObserverThread().startWatching(_observedPath, this);
+        return getObserverThread().startWatching(this);
     }
 
     public final void stopWatching() {
         try {
-            getObserverThread().stopWatching(_observedPath);
+            getObserverThread().stopWatching(this);
         } catch (Throwable ignored) {
         }
     }
@@ -247,9 +251,9 @@ public abstract class FileObserver {
             this.observe();
         }
 
-        public String startWatching(final Path path,
-                                    final FileObserver observer) throws IOException {
-            final String key = this.getKey(path);
+        public String startWatching(final FileObserver observer) throws IOException {
+            final Path path = observer.getObservedPath();
+            final String key = this.getKey(observer);
             synchronized (_observers) {
                 if (!_observers.containsKey(key)) {
                     //-- register watch --//
@@ -266,8 +270,8 @@ public abstract class FileObserver {
             return key;
         }
 
-        public void stopWatching(final Path path) {
-            final String key = this.getKey(path);
+        public void stopWatching(final FileObserver observer) {
+            final String key = this.getKey(observer);
             synchronized (_observers) {
                 if (_observers.containsKey(key)) {
                     //-- remove observer from main loop --//
@@ -324,7 +328,8 @@ public abstract class FileObserver {
             }
         }
 
-        private String getKey(final Path path) {
+        private String getKey(final FileObserver observer) {
+            final Path path = observer.getObservedPath();
             return path.toString();
         }
 

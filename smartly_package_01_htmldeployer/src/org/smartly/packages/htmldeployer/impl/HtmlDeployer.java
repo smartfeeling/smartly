@@ -3,10 +3,11 @@ package org.smartly.packages.htmldeployer.impl;
 
 import org.smartly.Smartly;
 import org.smartly.commons.io.jsonrepository.JsonRepository;
-import org.smartly.commons.logging.Level;
 import org.smartly.commons.io.repository.deploy.FileDeployer;
+import org.smartly.commons.logging.Level;
 import org.smartly.commons.util.ConversionUtils;
 import org.smartly.commons.util.FormatUtils;
+import org.smartly.commons.util.PathUtils;
 import org.smartly.commons.util.StringUtils;
 import org.smartly.packages.htmldeployer.impl.compiler.Compiler;
 import org.smartly.packages.htmldeployer.impl.compressor.Compressor;
@@ -88,18 +89,6 @@ public class HtmlDeployer extends FileDeployer {
         return null;
     }
 
-    private static String docRoot() {
-        final JsonRepository config = getConfiguration();
-        if (null != config) {
-            final String path = config.getString("http.webserver.root");
-            if (!StringUtils.hasText(path)) {
-                return null;
-            }
-            return Smartly.getAbsolutePath(path);
-        }
-        return "";
-    }
-
     private static boolean verbose() {
         final JsonRepository config = getConfiguration();
         if (null != config) {
@@ -122,6 +111,22 @@ public class HtmlDeployer extends FileDeployer {
             return ConversionUtils.toBoolean(config.get("htmldeployer.debugJs"));
         }
         return false;
+    }
+
+    public static String docRoot() {
+        final JsonRepository config = getConfiguration();
+        if (null != config) {
+            final String path = config.getString("http.webserver.root");
+            if (!StringUtils.hasText(path)) {
+                return null;
+            }
+            return Smartly.getAbsolutePath(path);
+        }
+        return "";
+    }
+
+    public static String docRoot(final String subFolder) {
+        return PathUtils.merge(docRoot(), subFolder);
     }
 
 }
