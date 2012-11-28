@@ -1,12 +1,12 @@
-package org.smartly.commons.repository.deploy;
+package org.smartly.commons.io.repository.deploy;
 
 import org.smartly.commons.cryptograph.GUID;
+import org.smartly.commons.io.repository.FileRepository;
 import org.smartly.commons.lang.CharEncoding;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
-import org.smartly.commons.repository.FileRepository;
-import org.smartly.commons.repository.Resource;
+import org.smartly.commons.io.repository.Resource;
 import org.smartly.commons.util.*;
 
 import java.io.*;

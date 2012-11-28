@@ -1,4 +1,4 @@
-package org.smartly.commons.repository.deploy;
+package org.smartly.commons.io.repository.deploy;
 
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;

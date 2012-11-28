@@ -2,7 +2,7 @@ package org.smartly.packages.velocity.impl.vtools;
 
 
 import org.smartly.Smartly;
-import org.smartly.commons.jsonrepository.JsonRepository;
+import org.smartly.commons.io.jsonrepository.JsonRepository;
 
 public class AppTool implements IVLCTool {
 

@@ -1,9 +1,9 @@
 package org.smartly;
 
 import org.json.JSONObject;
-import org.smartly.commons.jsonrepository.JsonRepository;
+import org.smartly.commons.io.jsonrepository.JsonRepository;
 import org.smartly.commons.lang.CharEncoding;
-import org.smartly.commons.repository.deploy.FileDeployer;
+import org.smartly.commons.io.repository.deploy.FileDeployer;
 import org.smartly.commons.util.JsonWrapper;
 import org.smartly.commons.util.PathUtils;
 import org.smartly.commons.util.StringUtils;
@@ -91,6 +91,10 @@ public class Smartly {
             __logger = new SmartlyLogger(isSilent());
         }
         return __logger;
+    }
+
+    public static SmartlyLogger getLogger(final Object sender) {
+        return new SmartlyLogger(sender, isSilent());
     }
 
     public static String getHome() {

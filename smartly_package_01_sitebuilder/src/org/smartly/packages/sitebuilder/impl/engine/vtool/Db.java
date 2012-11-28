@@ -1,7 +1,7 @@
 package org.smartly.packages.sitebuilder.impl.engine.vtool;
 
 import org.json.JSONObject;
-import org.smartly.commons.jsonrepository.JsonRepository;
+import org.smartly.commons.io.jsonrepository.JsonRepository;
 import org.smartly.packages.velocity.impl.vtools.IVLCTool;
 
 import java.util.List;

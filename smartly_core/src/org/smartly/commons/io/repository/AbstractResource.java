@@ -1,4 +1,4 @@
-package org.smartly.commons.repository;
+package org.smartly.commons.io.repository;
 
 import org.smartly.commons.util.FileUtils;
 

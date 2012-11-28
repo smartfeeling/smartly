@@ -2,7 +2,7 @@ package org.smartly.packages.sitebuilder.impl;
 
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
-import org.smartly.commons.repository.deploy.FileDeployer;
+import org.smartly.commons.io.repository.deploy.FileDeployer;
 import org.smartly.commons.util.FileUtils;
 import org.smartly.commons.util.PathUtils;
 import org.smartly.packages.sitebuilder.SmartlySiteBuilder;

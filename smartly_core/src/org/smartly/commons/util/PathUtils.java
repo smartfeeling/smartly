@@ -158,7 +158,7 @@ public abstract class PathUtils
             return false;
         } else {
             final File file = new File(path);
-            return file.isFile();
+            return file.isDirectory();
         }
     }
 

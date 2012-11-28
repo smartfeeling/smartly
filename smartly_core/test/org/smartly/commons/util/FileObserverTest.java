@@ -1,6 +1,7 @@
 package org.smartly.commons.util;
 
 import org.junit.Test;
+import org.smartly.commons.io.FileObserver;
 
 /**
  *

@@ -1,6 +1,6 @@
 package org.smartly.packages.sitebuilder.impl.engine.vtool;
 
-import org.smartly.commons.jsonrepository.JsonRepository;
+import org.smartly.commons.io.jsonrepository.JsonRepository;
 import org.smartly.packages.velocity.impl.vtools.IVLCTool;
 
 public class Dic implements IVLCTool {

@@ -1,5 +1,5 @@
 
-package org.smartly.commons.repository;
+package org.smartly.commons.io.repository;
 
 import java.io.IOException;
 import java.io.InputStream;

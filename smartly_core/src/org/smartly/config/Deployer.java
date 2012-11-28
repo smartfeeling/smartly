@@ -1,7 +1,7 @@
 package org.smartly.config;
 
 
-import org.smartly.commons.repository.deploy.FileDeployer;
+import org.smartly.commons.io.repository.deploy.FileDeployer;
 
 public class Deployer extends FileDeployer {
 

@@ -2,7 +2,7 @@ package org.smartly.packages.cms;
 
 
 import org.smartly.Smartly;
-import org.smartly.commons.jsonrepository.JsonRepository;
+import org.smartly.commons.io.jsonrepository.JsonRepository;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.LoggingRepository;
 import org.smartly.commons.logging.util.LoggingUtils;

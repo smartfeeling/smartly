@@ -3,7 +3,7 @@ package org.smartly.packages.http;
 
 import org.json.JSONObject;
 import org.smartly.Smartly;
-import org.smartly.commons.jsonrepository.JsonRepository;
+import org.smartly.commons.io.jsonrepository.JsonRepository;
 import org.smartly.commons.lang.CharEncoding;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.util.FileUtils;

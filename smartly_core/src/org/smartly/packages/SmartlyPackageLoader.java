@@ -3,9 +3,9 @@ package org.smartly.packages;
 
 import org.smartly.IConstants;
 import org.smartly.Smartly;
-import org.smartly.commons.repository.FileRepository;
-import org.smartly.commons.repository.Resource;
-import org.smartly.commons.repository.deploy.FileDeployer;
+import org.smartly.commons.io.repository.FileRepository;
+import org.smartly.commons.io.repository.Resource;
+import org.smartly.commons.io.repository.deploy.FileDeployer;
 import org.smartly.commons.util.*;
 
 import java.io.File;

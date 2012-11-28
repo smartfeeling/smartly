@@ -1,8 +1,10 @@
-package org.smartly.commons.util;
+package org.smartly.commons.io;
 
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
+import org.smartly.commons.util.FormatUtils;
+import org.smartly.commons.util.PathUtils;
 
 import java.io.IOException;
 import java.lang.ref.WeakReference;
@@ -38,11 +40,15 @@ public abstract class FileObserver {
 
 
     // instance
-    private final Path _path;
+    private final String _path;
+    private final boolean _isDirectory;
+    private final Path _observedPath;
     private final boolean _recursive;
     private final boolean _verbose;
     private final int _mask;
     private final Set<WatchKey> _keys;
+
+    private boolean _paused;
 
     public FileObserver(final String path) {
         this(path, false, false, ALL_EVENTS);
@@ -58,9 +64,17 @@ public abstract class FileObserver {
                         final boolean recursive,
                         final boolean verbose,
                         final int mask) {
+        _paused = false;
         _recursive = recursive;
         _verbose = verbose;
-        _path = Paths.get(path);
+        _path = PathUtils.toUnixPath(path);
+        if (PathUtils.isDirectory(_path)) {
+            _observedPath = Paths.get(_path);
+            _isDirectory = true;
+        } else {
+            _observedPath = Paths.get(PathUtils.getParent(_path));
+            _isDirectory = false;
+        }
         _mask = mask;
         _keys = new HashSet<WatchKey>();
     }
@@ -78,6 +92,8 @@ public abstract class FileObserver {
         final StringBuilder result = new StringBuilder();
         result.append(this.getClass().getName()).append("{");
         result.append("path: ").append(_path);
+        result.append(", ");
+        result.append("observed_path: ").append(_observedPath);
         result.append(", ");
         result.append("recursive: ").append(_recursive);
         result.append(", ");
@@ -98,6 +114,10 @@ public abstract class FileObserver {
         return result.toString();
     }
 
+    public final boolean isDirectory() {
+        return _isDirectory;
+    }
+
     public final boolean isRecursive() {
         return _recursive;
     }
@@ -108,6 +128,22 @@ public abstract class FileObserver {
 
     public final int getMask() {
         return _mask;
+    }
+
+    public final String getPath() {
+        return _path;
+    }
+
+    public final boolean isPaused() {
+        return _paused;
+    }
+
+    public final void pause() {
+        _paused = true;
+    }
+
+    public final void resume() {
+        _paused = false;
     }
 
     public final String eventToString(final int event) {
@@ -121,13 +157,13 @@ public abstract class FileObserver {
         return "UNKNOWN";
     }
 
-    public String startWatching() throws IOException {
-        return getObserverThread().startWatching(_path, _mask, this);
+    public final String startWatching() throws IOException {
+        return getObserverThread().startWatching(_observedPath, this);
     }
 
-    public void stopWatching() {
+    public final void stopWatching() {
         try {
-            getObserverThread().stopWatching(_path);
+            getObserverThread().stopWatching(_observedPath);
         } catch (Throwable ignored) {
         }
     }
@@ -135,14 +171,14 @@ public abstract class FileObserver {
     /**
      * Join main thread until interrupt is called
      */
-    public void join() {
+    public final void join() {
         try {
             joinObserverThread();
         } catch (Throwable ignored) {
         }
     }
 
-    public void interrupt() {
+    public final void interrupt() {
         interruptObserverThread();
     }
 
@@ -194,7 +230,6 @@ public abstract class FileObserver {
     }
 
     private static class ObserverThread extends Thread {
-
         private final WatchService _watcher;
         private final Map<WatchKey, Path> _keys;
         private final Map<String, WeakReference<FileObserver>> _observers;
@@ -213,7 +248,6 @@ public abstract class FileObserver {
         }
 
         public String startWatching(final Path path,
-                                    final int mask,
                                     final FileObserver observer) throws IOException {
             final String key = this.getKey(path);
             synchronized (_observers) {
@@ -341,11 +375,18 @@ public abstract class FileObserver {
                 }
 
                 //-- call onEvent --//
-                try {
-                    observer.onEvent(this.convert(event), child.toString());
-                } catch (Throwable throwable) {
-                    this.error(observer, "Unhandled throwable " + throwable.toString() +
-                            " (returned by observer " + observer + ")", throwable);
+                if (!observer.isPaused()) {
+                    try {
+                        final String childPath = PathUtils.toUnixPath(child.toString());
+                        if (observer.isDirectory()) {
+                            observer.onEvent(this.convert(event), childPath);
+                        } else if (observer.getPath().equalsIgnoreCase(childPath)) {
+                            observer.onEvent(this.convert(event), childPath);
+                        }
+                    } catch (Throwable throwable) {
+                        this.error(observer, "Unhandled throwable " + throwable.toString() +
+                                " (returned by observer " + observer + ")", throwable);
+                    }
                 }
             }
 

@@ -3,9 +3,9 @@ package org.smartly.packages.cms.impl.cms.endpoint;
 import org.json.JSONObject;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
-import org.smartly.commons.repository.FileRepository;
-import org.smartly.commons.repository.Resource;
-import org.smartly.commons.repository.deploy.FileItem;
+import org.smartly.commons.io.repository.FileRepository;
+import org.smartly.commons.io.repository.Resource;
+import org.smartly.commons.io.repository.deploy.FileItem;
 import org.smartly.commons.util.*;
 import org.smartly.packages.cms.SmartlyHttpCms;
 

@@ -2,7 +2,7 @@ package org.smartly.packages.mail;
 
 
 import org.smartly.Smartly;
-import org.smartly.commons.jsonrepository.JsonRepository;
+import org.smartly.commons.io.jsonrepository.JsonRepository;
 import org.smartly.packages.AbstractPackage;
 import org.smartly.packages.ISmartlySystemPackage;
 import org.smartly.packages.mail.config.Deployer;

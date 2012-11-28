@@ -18,21 +18,7 @@ public final class JsonWrapper implements Cloneable {
     private JSONArray _array;
 
     public JsonWrapper(final String text) {
-        try {
-            if (StringUtils.isJSONObject(text)) {
-                _array = null;
-                _object = new JSONObject(text);
-            } else if (StringUtils.isJSONArray(text)) {
-                _array = new JSONArray(text);
-                _object = null;
-            } else {
-                _array = null;
-                _object = new JSONObject();
-            }
-        } catch (Throwable t) {
-            _array = null;
-            _object = new JSONObject();
-        }
+        this.parse(text);
     }
 
     public JsonWrapper(final JSONObject object) {
@@ -99,6 +85,25 @@ public final class JsonWrapper implements Cloneable {
     // ------------------------------------------------------------------------
     //                      p u b l i c
     // ------------------------------------------------------------------------
+
+    public JsonWrapper parse(final String text){
+        try {
+            if (StringUtils.isJSONObject(text)) {
+                _array = null;
+                _object = new JSONObject(text);
+            } else if (StringUtils.isJSONArray(text)) {
+                _array = new JSONArray(text);
+                _object = null;
+            } else {
+                _array = null;
+                _object = new JSONObject();
+            }
+        } catch (Throwable t) {
+            _array = null;
+            _object = new JSONObject();
+        }
+        return this;
+    }
 
     public Map toMap() {
         if (this.isJSONArray()) {

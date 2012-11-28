@@ -1,7 +1,7 @@
 package org.smartly.packages.velocity.impl.vtools;
 
 import org.smartly.Smartly;
-import org.smartly.commons.repository.deploy.FileDeployer;
+import org.smartly.commons.io.repository.deploy.FileDeployer;
 import org.smartly.commons.util.FormatUtils;
 import org.smartly.commons.util.PathUtils;
 

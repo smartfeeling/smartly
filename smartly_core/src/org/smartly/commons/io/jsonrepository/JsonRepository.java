@@ -1,4 +1,4 @@
-package org.smartly.commons.jsonrepository;
+package org.smartly.commons.io.jsonrepository;
 
 
 import org.json.JSONArray;
