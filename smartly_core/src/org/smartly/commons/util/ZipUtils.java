@@ -245,9 +245,10 @@ public class ZipUtils {
         return res;
     }
 
-    private static void zip(final ZipOutputStream out, final String[] files,
-                            boolean includepath, final String pathtoremove)
-            throws IOException {
+    private static void zip(final ZipOutputStream out,
+                            final String[] files,
+                            boolean includepath,
+                            final String pathtoremove) throws IOException {
         InputStream in;
         int n;
         final byte[] buff = new byte[1024];
@@ -271,12 +272,14 @@ public class ZipUtils {
                             out.closeEntry();
                         }
                     } catch (Throwable t) {
+                        getLogger().log(Level.SEVERE, null, t);
                     }
                     try {
                         if (null != in) {
                             in.close();
                         }
                     } catch (Throwable t) {
+                        getLogger().log(Level.SEVERE, null, t);
                     }
                 }
             }
@@ -289,7 +292,8 @@ public class ZipUtils {
         }
     }
 
-    private static String getPath(final File file, boolean includepath,
+    private static String getPath(final File file,
+                                  boolean includepath,
                                   final String pathtoremove) {
         if (includepath) {
             return file.getPath();
