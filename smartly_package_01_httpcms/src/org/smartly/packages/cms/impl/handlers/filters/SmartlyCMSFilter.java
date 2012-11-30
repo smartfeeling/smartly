@@ -17,7 +17,7 @@ import org.smartly.packages.http.impl.util.ServletUtils;
 import org.smartly.packages.http.impl.util.vtool.Cookies;
 import org.smartly.packages.http.impl.util.vtool.Req;
 import org.smartly.packages.velocity.impl.VLCManager;
-import org.smartly.packages.velocity.impl.vtools.util.VLCToolbox;
+import org.smartly.packages.velocity.impl.vtools.toolbox.VLCToolbox;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;

@@ -8,13 +8,12 @@ package org.smartly.packages.velocity.impl.vtools;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.smartly.IConstants;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.network.URLUtils;
 import org.smartly.commons.util.*;
 import org.smartly.packages.velocity.impl.util.URLEncodeUtils;
-import org.smartly.packages.velocity.impl.vtools.util.VLCObject;
+import org.smartly.packages.velocity.impl.vtools.lang.VLCObject;
 
 import java.util.*;
 

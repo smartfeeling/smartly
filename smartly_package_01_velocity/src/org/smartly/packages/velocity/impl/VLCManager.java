@@ -9,7 +9,7 @@ import org.apache.velocity.app.VelocityEngine;
 import org.smartly.commons.lang.CharEncoding;
 import org.smartly.commons.util.RegExUtils;
 import org.smartly.packages.velocity.impl.engine.VLCEngine;
-import org.smartly.packages.velocity.impl.vtools.util.VLCToolbox;
+import org.smartly.packages.velocity.impl.vtools.toolbox.VLCToolbox;
 
 import java.io.StringWriter;
 import java.util.Map;

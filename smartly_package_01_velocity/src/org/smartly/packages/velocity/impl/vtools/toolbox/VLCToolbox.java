@@ -1,7 +1,7 @@
 /*
  * 
  */
-package org.smartly.packages.velocity.impl.vtools.util;
+package org.smartly.packages.velocity.impl.vtools.toolbox;
 
 import org.apache.velocity.VelocityContext;
 import org.smartly.commons.logging.Level;

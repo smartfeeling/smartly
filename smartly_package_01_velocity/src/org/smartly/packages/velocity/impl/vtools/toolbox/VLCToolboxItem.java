@@ -1,7 +1,7 @@
 /*
  * 
  */
-package org.smartly.packages.velocity.impl.vtools.util;
+package org.smartly.packages.velocity.impl.vtools.toolbox;
 
 import org.smartly.commons.util.ClassLoaderUtils;
 import org.smartly.commons.util.CollectionUtils;

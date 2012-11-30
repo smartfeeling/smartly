@@ -2,7 +2,6 @@ package org.smartly.packages.http.impl.handlers.servlets;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
-import org.eclipse.jetty.http.HttpStatus;
 import org.eclipse.jetty.util.resource.Resource;
 import org.smartly.Smartly;
 import org.smartly.commons.logging.Level;
@@ -13,7 +12,7 @@ import org.smartly.packages.http.impl.util.ServletUtils;
 import org.smartly.packages.http.impl.util.vtool.Cookies;
 import org.smartly.packages.http.impl.util.vtool.Req;
 import org.smartly.packages.velocity.impl.VLCManager;
-import org.smartly.packages.velocity.impl.vtools.util.VLCToolbox;
+import org.smartly.packages.velocity.impl.vtools.toolbox.VLCToolbox;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

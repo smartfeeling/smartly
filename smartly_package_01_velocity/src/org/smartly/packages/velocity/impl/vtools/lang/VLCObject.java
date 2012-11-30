@@ -1,7 +1,7 @@
 /*
  * 
  */
-package org.smartly.packages.velocity.impl.vtools.util;
+package org.smartly.packages.velocity.impl.vtools.lang;
 
 import org.smartly.commons.util.ConversionUtils;
 import org.smartly.commons.util.StringUtils;

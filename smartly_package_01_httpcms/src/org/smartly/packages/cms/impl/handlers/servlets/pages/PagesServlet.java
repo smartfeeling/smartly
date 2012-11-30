@@ -7,9 +7,6 @@ import org.eclipse.jetty.util.resource.Resource;
 import org.smartly.Smartly;
 import org.smartly.packages.cms.SmartlyHttpCms;
 import org.smartly.packages.cms.impl.cms.page.mongodb.entities.CMSPageEntity;
-import org.smartly.packages.cms.impl.cms.page.mongodb.entities.CMSPageEntity;
-import org.smartly.packages.cms.impl.cms.page.mongodb.entities.CMSPageEntity;
-import org.smartly.packages.cms.impl.cms.page.mongodb.services.CMSPageEntityService;
 import org.smartly.packages.cms.impl.cms.page.mongodb.services.CMSPageEntityService;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
@@ -20,7 +17,7 @@ import org.smartly.packages.http.impl.util.ServletUtils;
 import org.smartly.packages.http.impl.util.vtool.Cookies;
 import org.smartly.packages.http.impl.util.vtool.Req;
 import org.smartly.packages.velocity.impl.VLCManager;
-import org.smartly.packages.velocity.impl.vtools.util.VLCToolbox;
+import org.smartly.packages.velocity.impl.vtools.toolbox.VLCToolbox;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

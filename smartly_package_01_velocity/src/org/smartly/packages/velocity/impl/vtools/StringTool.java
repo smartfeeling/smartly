@@ -1,6 +1,7 @@
 package org.smartly.packages.velocity.impl.vtools;
 
 import org.smartly.commons.util.StringUtils;
+import org.smartly.packages.velocity.impl.vtools.lang.VLCString;
 
 /**
  * String utilities
@@ -14,6 +15,10 @@ public class StringTool {
 
 
     public StringTool() {
+    }
+
+    public VLCString newString(){
+        return new VLCString();
     }
 
     public String concat(final Object...args){
