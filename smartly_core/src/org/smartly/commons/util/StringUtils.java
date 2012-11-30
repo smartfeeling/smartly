@@ -1130,6 +1130,17 @@ public final class StringUtils {
         return sbuf.toString();
     }
 
+    public static String replaceDuplicates(final String text,
+                                           final String[] symbols) {
+        String result = text;
+        for(final String symbol:symbols){
+            while (result.indexOf(symbol + symbol) > -1) {
+                result = result.replace(symbol + symbol, symbol);
+            }
+        }
+        return result;
+    }
+
     /**
      * Replace all duplicates characters with a single character.<br> i.e. :
      * <code>"c:\\folder\\file" -> "c:\folder\file"</code><br> i.e. :
@@ -1157,7 +1168,8 @@ public final class StringUtils {
      * @return cleaned from duplicates string
      */
     public static String replaceDuplicates(final String text,
-                                           final String symbol, final String[] exclusions) {
+                                           final String symbol,
+                                           final String[] exclusions) {
         final StringBuilder result = new StringBuilder();
         final String exclusionRegEx = getExclusionRegEx(text, exclusions);
         if (StringUtils.hasText(exclusionRegEx)) {
