@@ -30,7 +30,7 @@ import static java.nio.file.StandardWatchEventKinds.*;
  * Event type constants are used to describe the possible changes in the event mask as well as what actually
  * happened in event callbacks.
  */
-public abstract class FileObserver {
+public class FileObserver {
 
     public static final int EVENT_MODIFY = 0x00000002; /* File was modified */
     public static final int EVENT_CREATE = 0x00000100; /* Subfile was created */
@@ -47,23 +47,27 @@ public abstract class FileObserver {
     private final boolean _verbose;
     private final int _mask;
     private final Set<WatchKey> _keys;
+    private final IFileObserverListener _listener;
 
     private boolean _paused;
 
-    public FileObserver(final String path) {
-        this(path, false, false, ALL_EVENTS);
-    }
-
     public FileObserver(final String path,
-                        final boolean recursive,
-                        final boolean verbose) {
-        this(path, recursive, verbose, ALL_EVENTS);
+                        final IFileObserverListener listener) {
+        this(path, false, false, ALL_EVENTS, listener);
     }
 
     public FileObserver(final String path,
                         final boolean recursive,
                         final boolean verbose,
-                        final int mask) {
+                        final IFileObserverListener listener) {
+        this(path, recursive, verbose, ALL_EVENTS, listener);
+    }
+
+    public FileObserver(final String path,
+                        final boolean recursive,
+                        final boolean verbose,
+                        final int mask,
+                        final IFileObserverListener listener) {
         _paused = false;
         _recursive = recursive;
         _verbose = verbose;
@@ -77,6 +81,7 @@ public abstract class FileObserver {
         }
         _mask = mask;
         _keys = new HashSet<WatchKey>();
+        _listener = listener;
     }
 
     protected void finalize() throws Throwable {
@@ -101,13 +106,13 @@ public abstract class FileObserver {
         // events
         result.append("events: [");
         if ((_mask & EVENT_CREATE) == EVENT_CREATE) {
-            result.append(this.eventToString(EVENT_CREATE));
+            result.append(eventToString(EVENT_CREATE));
         }
         if ((_mask & EVENT_DELETE) == EVENT_DELETE) {
-            result.append(this.eventToString(EVENT_DELETE));
+            result.append(eventToString(EVENT_DELETE));
         }
         if ((_mask & EVENT_MODIFY) == EVENT_MODIFY) {
-            result.append(this.eventToString(EVENT_MODIFY));
+            result.append(eventToString(EVENT_MODIFY));
         }
         result.append("]");
         result.append("}");
@@ -150,16 +155,6 @@ public abstract class FileObserver {
         _paused = false;
     }
 
-    public final String eventToString(final int event) {
-        if (EVENT_CREATE == event) {
-            return "CREATE";
-        } else if (EVENT_DELETE == event) {
-            return "DELETE";
-        } else if (EVENT_MODIFY == event) {
-            return "MODIFY";
-        }
-        return "UNKNOWN";
-    }
 
     public final String startWatching() throws IOException {
         return getObserverThread().startWatching(this);
@@ -186,11 +181,15 @@ public abstract class FileObserver {
         interruptObserverThread();
     }
 
-    protected abstract void onEvent(int event, final String path);
-
     // --------------------------------------------------------------------
     //               p r i v a t e
     // --------------------------------------------------------------------
+
+    private void onEvent(int event, final String path) {
+        if (null != _listener) {
+            _listener.onEvent(event, path);
+        }
+    }
 
     private void addKey(final WatchKey key) {
         _keys.add(key);
@@ -203,6 +202,17 @@ public abstract class FileObserver {
     // --------------------------------------------------------------------
     //               S T A T I C
     // --------------------------------------------------------------------
+
+    public static final String eventToString(final int event) {
+        if (EVENT_CREATE == event) {
+            return "CREATE";
+        } else if (EVENT_DELETE == event) {
+            return "DELETE";
+        } else if (EVENT_MODIFY == event) {
+            return "MODIFY";
+        }
+        return "UNKNOWN";
+    }
 
     @SuppressWarnings("unchecked")
     static <T> WatchEvent<T> cast(WatchEvent<?> event) {

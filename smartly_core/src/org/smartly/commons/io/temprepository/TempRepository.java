@@ -1,6 +1,7 @@
 package org.smartly.commons.io.temprepository;
 
 import org.smartly.commons.io.FileObserver;
+import org.smartly.commons.io.IFileObserverListener;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.util.FileUtils;
@@ -12,7 +13,7 @@ import java.io.IOException;
 /**
  *
  */
-public class TempRepository {
+public class TempRepository implements IFileObserverListener{
 
     private static final String REGISTRY = "registry.json";
 
@@ -128,44 +129,40 @@ public class TempRepository {
             _dirObserver.interrupt();
             _dirObserver = null;
         }
-        _dirObserver = new FileObserver(_root, true, false, FileObserver.ALL_EVENTS) {
-            @Override
-            protected void onEvent(final int event, final String path) {
-                try {
-                    if (event == FileObserver.EVENT_CREATE) {
-                        // CREATE
-                        if (!_path_registry.equalsIgnoreCase(path)) {
-                            if(_registry.addItem(path)){
-                                _registry.save();
-                            }
-                        }
-                    } else if (event == FileObserver.EVENT_MODIFY) {
-                        // MODIFY
-                        if (_path_registry.equalsIgnoreCase(path)) {
-                            _registry.reload();
-                        }
-                    } else if (event == FileObserver.EVENT_DELETE) {
-                        if (!_path_registry.equalsIgnoreCase(path)) {
-                            if(_registry.removeItem(path)){
-                                _registry.save();
-                            }
-                        } else {
-                            _registry.clear();
-                            _registry.save();
-                        }
-                    }
-                } catch (Throwable t) {
-                    final String msg = FormatUtils.format("Error adding '{0}' to temp repository: {1}", path, t);
-                    getLogger().severe(msg);
-                    //-- problem with registry. stop everything --//
-                    this.interrupt();
-                }
-            }
-        };
+        _dirObserver = new FileObserver(_root, true, false, FileObserver.ALL_EVENTS, this);
         _dirObserver.startWatching();
     }
 
-
-
-
+    @Override
+    public void onEvent(int event, String path) {
+        try {
+            if (event == FileObserver.EVENT_CREATE) {
+                // CREATE
+                if (!_path_registry.equalsIgnoreCase(path)) {
+                    if(_registry.addItem(path)){
+                        _registry.save();
+                    }
+                }
+            } else if (event == FileObserver.EVENT_MODIFY) {
+                // MODIFY
+                if (_path_registry.equalsIgnoreCase(path)) {
+                    _registry.reload();
+                }
+            } else if (event == FileObserver.EVENT_DELETE) {
+                if (!_path_registry.equalsIgnoreCase(path)) {
+                    if(_registry.removeItem(path)){
+                        _registry.save();
+                    }
+                } else {
+                    _registry.clear();
+                    _registry.save();
+                }
+            }
+        } catch (Throwable t) {
+            final String msg = FormatUtils.format("Error adding '{0}' to temp repository: {1}", path, t);
+            getLogger().severe(msg);
+            //-- problem with registry. stop everything --//
+            this.interrupt();
+        }
+    }
 }
