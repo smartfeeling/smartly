@@ -118,11 +118,15 @@ public abstract class PathUtils
         if (path == null) {
             return null;
         }
-        int sepIndex = path.lastIndexOf(EXTENSION_SEPARATOR);
+        final int sepIndex = path.lastIndexOf(FOLDER_SEPARATOR);
+        final int dotIndex = path.lastIndexOf(EXTENSION_SEPARATOR);
+        if (sepIndex > -1 && dotIndex < sepIndex) {
+            return null;
+        }
         if (includeDot) {
-            return (sepIndex != -1 ? path.substring(sepIndex) : null);
+            return (dotIndex != -1 ? path.substring(dotIndex) : null);
         } else {
-            return (sepIndex != -1 ? path.substring(sepIndex + 1) : null);
+            return (dotIndex != -1 ? path.substring(dotIndex + 1) : null);
         }
     }
 
@@ -748,7 +752,7 @@ public abstract class PathUtils
                     }
                 } else if (!token.equalsIgnoreCase(".")) {
                     // add token
-                    list.add(i==tokens.length-1?token : token + "/");
+                    list.add(i == tokens.length - 1 ? token : token + "/");
                 }
             }
         }
@@ -764,7 +768,7 @@ public abstract class PathUtils
      * @param path2
      * @return Concatenated path.
      */
-    public static String concat (final String path1, final String path2) {
+    public static String concat(final String path1, final String path2) {
         if (StringUtils.hasText(path1)) {
             if (!path1.endsWith(FOLDER_SEPARATOR)
                     && !path2.startsWith(FOLDER_SEPARATOR)) {
@@ -853,7 +857,7 @@ public abstract class PathUtils
      * </p>
      *
      * @param subtractPath Path to remove from inPath
-     * @param fullPath       Original path
+     * @param fullPath     Original path
      * @return Resultant path
      */
     public static String subtract(String subtractPath, String fullPath) {

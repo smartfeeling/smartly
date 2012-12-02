@@ -6,9 +6,7 @@ import org.smartly.Smartly;
 import org.smartly.commons.cmdline.CmdLineParser;
 import org.smartly.commons.lang.CharEncoding;
 import org.smartly.commons.logging.LoggingRepository;
-import org.smartly.commons.util.BeanUtils;
-import org.smartly.commons.util.FileUtils;
-import org.smartly.commons.util.PathUtils;
+import org.smartly.commons.util.*;
 import org.smartly.packages.SmartlyPackageLoader;
 
 import java.io.File;
@@ -21,6 +19,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 abstract class AbstractLauncher {
+
+    // launcher args variables.
+    private static final String APPDIR = "APPDIR"; // user.dir
+    private static final String USERHOME = "USERHOME"; // user.home
 
     private static final String DEFAULT_CLASSPATH = "lib/**";
     private static final String SYSPROP_CLASSPATH = "smartly.classpath";
@@ -112,11 +114,12 @@ abstract class AbstractLauncher {
 
         // read args
         this.parseArgs(args);
+        // creates directories
+        this.initDirs();
 
         final File home = getSmartlyHome();
         final ClassLoader loader = createClassLoader(home);
 
-        this.initDirs();
 
         return loader;
     }
@@ -141,8 +144,13 @@ abstract class AbstractLauncher {
 
             parser.parse(args);
 
-            final String workspace = (String) parser.getOptionValue(workspaceOpt);
+            String workspace = (String) parser.getOptionValue(workspaceOpt);
             if (null != workspace) {
+                if (workspace.contains(APPDIR)) {
+                    workspace = this.replaceInPath(workspace, APPDIR, IConstants.USER_DIR);
+                } else if (workspace.contains(USERHOME)) {
+                    workspace = this.replaceInPath(workspace, USERHOME, IConstants.USER_HOME);
+                }
                 System.setProperty(IConstants.SYSPROP_HOME, workspace);
                 _argsMap.put("w", workspace);
             }
@@ -164,12 +172,17 @@ abstract class AbstractLauncher {
 
             //-- remaining --//
             _argsRemain = parser.getRemainingArgs();
-            if(null!= _argsRemain && _argsRemain.length>0){
-                for(int i=0;i< _argsRemain.length;i++){
+            if (null != _argsRemain && _argsRemain.length > 0) {
+                for (int i = 0; i < _argsRemain.length; i++) {
                     _argsMap.put("param_" + i, _argsRemain[i]);
                 }
             }
         }
+    }
+
+    private String replaceInPath(final String path, final String what, final String with) {
+        final String result = StringUtils.replace(path, what, with);
+        return PathUtils.toUnixPath(result);
     }
     // ------------------------------------------------------------------------
     //                      S T A T I C
@@ -213,11 +226,11 @@ abstract class AbstractLauncher {
             throws IOException {
         // check if home directory is set via system property
         String smartlyHome = System.getProperty(IConstants.SYSPROP_HOME);
-        if (smartlyHome == null) {
+        if (!StringUtils.hasText(smartlyHome)) {
             smartlyHome = System.getenv(ENVPROP_HOME);
         }
 
-        if (smartlyHome == null) {
+        if (!StringUtils.hasText(smartlyHome)) {
 
             URL launcherUrl = findUrl(SmartlyLauncher.class.getClassLoader());
             if (launcherUrl == null) {
@@ -241,7 +254,7 @@ abstract class AbstractLauncher {
             }
 
             if (!jarUrl.startsWith("jar:") || !jarUrl.contains("!")) {
-                smartlyHome = System.getProperty("user.dir");
+                smartlyHome = IConstants.USER_DIR; //System.getProperty("user.dir");
                 System.err.println("Warning: smartly.home system property is not set ");
                 System.err.println("         and not started from launcher.jar. Using ");
                 System.err.println("         current working directory as install dir.");
@@ -251,7 +264,7 @@ abstract class AbstractLauncher {
                 launcherUrl = new URL(jarUrl);
                 smartlyHome = new File(launcherUrl.getPath()).getParent();
                 if (smartlyHome == null) {
-                    smartlyHome = ".";
+                    smartlyHome = IConstants.USER_DIR;
                 }
             }
         }

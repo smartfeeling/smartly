@@ -6,6 +6,9 @@ public interface IConstants {
     public static final String SYSPROP_CHARSET = "smartly.charset";
     public static final String SYSPROP_USE_PROXIES = "smartly.useSystemProxies";
 
+    public static final String USER_DIR = System.getProperty("user.dir");   // application directory
+    public static final String USER_HOME = System.getProperty("user.home"); // user home directory
+
     /**
      * Line separator. i.e. "\n" *
      */
