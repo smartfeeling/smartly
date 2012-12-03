@@ -787,6 +787,26 @@ public final class StringUtils {
                 : false;
     }
 
+    /**
+     * Trim and remove duplicates \n inside text
+     * @param text
+     * @return
+     */
+    public static String trimTokens (final String text){
+        final StringBuilder result = new StringBuilder();
+        final StringTokenizer tokenizer = new StringTokenizer(text, "\n");
+        while(tokenizer.hasMoreTokens()){
+            final String token = tokenizer.nextToken().trim();
+            if(StringUtils.hasText(token)){
+                if(result.length()>0){
+                    result.append("\n");
+                }
+                result.append(token);
+            }
+        }
+        return result.toString();
+    }
+
     public static String trim(final String str) {
         if (str == null) {
             return null;
