@@ -44,10 +44,16 @@ public class ServiceWrapper {
 
     private void init(final Class aclass) throws Exception {
         final Path path = (Path) aclass.getAnnotation(Path.class);
+        if(null==path){
+            // missing Path annotation
+            final String msg = FormatUtils.format("MISSING 'Path' ANNOTATION! Class '{0}' has any 'Path' annotation.",
+                    aclass.getName());
+            throw  new Exception(msg);
+        }
         _path = path.value();
 
         //-- methods --//
-        final Method[] methods = aclass.getDeclaredMethods();
+        final Method[] methods = aclass.getMethods();
         for (final Method m : methods) {
             if (isValid(m)) {
                 final MethodWrapper mw = new MethodWrapper(_instance, m);
