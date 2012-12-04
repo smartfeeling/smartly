@@ -131,7 +131,7 @@ public class FormatUtils {
      */
     public static String formatTemplate(final String text,
                                         final String prefix, final String suffix,
-                                        final Map<String, ? extends Object> contextData) {
+                                        final Map<String, ?> contextData) {
         if (null == text) {
             return null;
         }
