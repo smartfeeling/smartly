@@ -600,7 +600,11 @@
                 $('body,html').animate({
                     scrollTop:totalScroll
                 }, 500);
-            }, true, 500);
+            }, true, 500)();
+        },
+
+        scrollTop:function () {
+            this.scrollTo('html');
         },
 
         /**
