@@ -17,6 +17,12 @@ import java.util.Set;
 
 public class Smartly {
 
+    private static final String SMARTLY = "smartly";
+    private static final String SMARTLY_APP_ID = SMARTLY.concat(".app_id");
+    private static final String SMARTLY_DEBUG = SMARTLY.concat(".debug");
+    private static final String SMARTLY_SILENT = SMARTLY.concat(".silent");
+    private static final String SMARTLY_LANG = SMARTLY.concat(".lang");
+
     private SmartlyPackageLoader _packageLoader;
 
     public Smartly() {
@@ -130,20 +136,24 @@ public class Smartly {
         return getLauncherArgs().containsKey("t") && (Boolean) getLauncherArgs().get("t");
     }
 
+    public static String getAppId() {
+        return getConfiguration().getString(SMARTLY_APP_ID);
+    }
+
     public static boolean isDebugMode() {
-        return getConfiguration().getBoolean("smartly.debug");
+        return getConfiguration().getBoolean(SMARTLY_DEBUG);
     }
 
     public static boolean isSilent() {
         try {
-            return getConfiguration(true).getBoolean("smartly.silent");
+            return getConfiguration(true).getBoolean(SMARTLY_SILENT);
         } catch (Throwable ignored) {
         }
         return false;
     }
 
     public static String getLang() {
-        return getConfiguration().getString("smartly.lang");
+        return getConfiguration().getString(SMARTLY_LANG);
     }
 
     public static String getCharset() {

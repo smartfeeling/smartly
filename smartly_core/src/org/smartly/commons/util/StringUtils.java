@@ -311,7 +311,7 @@ public final class StringUtils {
         final StringBuffer result = new StringBuffer();
         if (null != args && args.length > 0) {
             for (final Object arg : args) {
-                if(!isNULL(arg)){
+                if (!isNULL(arg)) {
                     result.append(arg);
                 }
             }
@@ -324,7 +324,7 @@ public final class StringUtils {
         final StringBuffer result = new StringBuffer();
         if (null != args && args.length > 0) {
             for (final Object arg : args) {
-                if(!isNULL(arg)){
+                if (!isNULL(arg)) {
                     if (hasText(separator) && result.length() > 0) {
                         result.append(separator);
                     }
@@ -336,7 +336,7 @@ public final class StringUtils {
     }
 
     public static String concatDot(final Object... args) {
-         return concatArgsEx(".", args);
+        return concatArgsEx(".", args);
     }
 
     /**
@@ -737,6 +737,18 @@ public final class StringUtils {
         return false;
     }
 
+    public static boolean hasTextAll(final String... args) {
+        if (null != args) {
+            for (final String str : args) {
+                if (!StringUtils.hasText(str)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Validate a JSON string
      *
@@ -789,16 +801,17 @@ public final class StringUtils {
 
     /**
      * Trim and remove duplicates \n inside text
+     *
      * @param text
      * @return
      */
-    public static String trimTokens (final String text){
+    public static String trimTokens(final String text) {
         final StringBuilder result = new StringBuilder();
         final StringTokenizer tokenizer = new StringTokenizer(text, "\n");
-        while(tokenizer.hasMoreTokens()){
+        while (tokenizer.hasMoreTokens()) {
             final String token = tokenizer.nextToken().trim();
-            if(StringUtils.hasText(token)){
-                if(result.length()>0){
+            if (StringUtils.hasText(token)) {
+                if (result.length() > 0) {
                     result.append("\n");
                 }
                 result.append(token);
@@ -1153,7 +1166,7 @@ public final class StringUtils {
     public static String replaceDuplicates(final String text,
                                            final String[] symbols) {
         String result = text;
-        for(final String symbol:symbols){
+        for (final String symbol : symbols) {
             while (result.indexOf(symbol + symbol) > -1) {
                 result = result.replace(symbol + symbol, symbol);
             }
