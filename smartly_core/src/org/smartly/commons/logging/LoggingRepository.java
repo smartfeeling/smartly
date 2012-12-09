@@ -122,9 +122,14 @@ public final class LoggingRepository {
      * @param fileName File Name. i.e. "./memory.log"
      */
     public void setLogFileName(final String key, final String fileName) {
+        final String name = PathUtils.getFilename(fileName, true);
+        final String absoluteFileName = PathUtils.join(_root, name);
+        this.setAbsoluteLogFileName(key, absoluteFileName);
+    }
+
+    public void setAbsoluteLogFileName(final String key, final String absoluteFileName) {
         synchronized (_customPaths) {
-            final String name = PathUtils.getFilename(fileName, true);
-            _customPaths.put(key, PathUtils.join(_root, name));
+            _customPaths.put(key, absoluteFileName);
         }
         synchronized (_data) {
             this.createLogItems(key);
