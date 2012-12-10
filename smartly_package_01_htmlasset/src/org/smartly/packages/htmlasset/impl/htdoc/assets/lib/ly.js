@@ -23,7 +23,7 @@
     // ------------------------------------------------------------------------
 
     var console = {
-        log:function () {
+        log: function () {
             try {
                 if (window['console'] && window['console'].log) {
                     if (typeof window['console'].log === "function") {
@@ -36,7 +36,7 @@
             }
         },
 
-        info:function () {
+        info: function () {
             try {
                 if (window['console'] && window['console'].info) {
                     if (typeof window['console'].info === "function") {
@@ -49,7 +49,7 @@
             }
         },
 
-        warn:function () {
+        warn: function () {
             try {
                 if (window['console'] && (typeof window['console'].warn) != "undefined") {
                     if (typeof window['console'].warn === "function") {
@@ -62,7 +62,7 @@
             }
         },
 
-        error:function () {
+        error: function () {
             try {
                 if (window['console'] && window['console'].error) {
                     if (typeof window['console'].error === "function") {
@@ -236,12 +236,12 @@
      * @return {string}
      */
     function template(text, data) {
-        return _.template(text, data, {interpolate:/\{(.+?)\}/g});
+        return _.template(text, data, {interpolate: /\{(.+?)\}/g});
     }
 
     function isNull(arg) {
         try {
-            if (null == arg || 'NULL'==arg) return true;
+            if (null == arg || 'NULL' == arg) return true;
             return _.isArray(arg)
                 ? (arg.length > 0 ? arg.length === 1 && isNull(arg[0]) : true)
                 : (_.isObject(arg) ? _.size(arg) === 0 : (arg === 'NULL' || arg == '' || arg['response'] === 'NULL'));
@@ -291,7 +291,7 @@
     function provide(path) {
         value(window, path);
         return {
-            exports:function () {
+            exports: function () {
                 if (arguments.length === 1) {
                     value(window, path, arguments[0]);
                 } else if (arguments.length === 2) {
@@ -502,7 +502,7 @@
 
     var cookie = {
 
-        get:function (name) {
+        get: function (name) {
             try {
                 var result = "",
                     nameEQ = name + "=",
@@ -522,7 +522,7 @@
             }
         },
 
-        set:function (name, value, days) {
+        set: function (name, value, days) {
             try {
                 var expires = "", date = null;
                 if (days) {
@@ -544,7 +544,7 @@
 
     var el = {
 
-        isInput:function (selector) {
+        isInput: function (selector) {
             var $el = $(selector)
                 , result = true;
             $el.each(function () {
@@ -558,7 +558,7 @@
             return result;
         },
 
-        value:function (selector, newvalue) {
+        value: function (selector, newvalue) {
             var $el = $(selector)
                 , is_checkbox = $el.attr('type') === 'checkbox'
                 ;
@@ -584,7 +584,7 @@
             return is_checkbox ? $el.is(':checked') : $el.val();
         },
 
-        attr:function (selector, attr, newvalue) {
+        attr: function (selector, attr, newvalue) {
             var $el = $(selector);
             if (null != newvalue) {
                 $el.attr(attr, newvalue);
@@ -592,18 +592,18 @@
             return $el.attr(attr);
         },
 
-        scrollTo:function (selector, navheight) {
+        scrollTo: function (selector, navheight) {
             _.debounce(function () {
                 var offset = $(selector).offset();
                 var offsetTop = offset.top;
                 var totalScroll = offsetTop - (navheight || 0);
                 $('body,html').animate({
-                    scrollTop:totalScroll
+                    scrollTop: totalScroll
                 }, 500);
             }, true, 500)();
         },
 
-        scrollTop:function () {
+        scrollTop: function () {
             this.scrollTo('html');
         },
 
@@ -614,7 +614,7 @@
          * @param context
          * @param delay
          */
-        click:function (selector, callback, context, delay) {
+        click: function (selector, callback, context, delay) {
             var $el = $(selector);
             if (_.isFunction(callback)) {
                 $el.unbind('click');
@@ -626,7 +626,7 @@
             }
         },
 
-        keypress:function (selector, key, callback, context, delay) {
+        keypress: function (selector, key, callback, context, delay) {
 
             var $el = $(selector);
             if (_.isFunction(callback)) {
@@ -655,7 +655,7 @@
          * @param options  {type:"GET", url:"/rest..", "data":{}, "success": function, "error":function}
          * @private
          */
-        ajax:function _ajax(options) {
+        ajax: function _ajax(options) {
             var type = options['type'] || 'GET'
                 , url = options['url']
                 , data = options['data']
@@ -665,17 +665,17 @@
                 ;
             if (!!url) {
                 $.ajax({
-                    type:type,
-                    url:url,
-                    dataType:'json',
-                    data:data,
-                    cache:false, // disabling cache avoid IE caches ajax responses
+                    type: type,
+                    url: url,
+                    dataType: 'json',
+                    data: data,
+                    cache: false, // disabling cache avoid IE caches ajax responses
 
-                    success:function (response) {
+                    success: function (response) {
                         ly.call(fn_success, ctx, [response]);
                     },
 
-                    error:function (jqXHR, textStatus, errorThrown) {
+                    error: function (jqXHR, textStatus, errorThrown) {
                         if (!!fn_error) {
                             ly.call(fn_error, ctx, [response]);
                         } else {
@@ -737,7 +737,7 @@
 
     Gui.prototype.attributes = function (attributes) {
         if (!!attributes && null != this['model']) {
-            this['model'].set(attributes, {silent:true});
+            this['model'].set(attributes, {silent: true});
         }
         return (null != this['model']) ? this['model'].attributes : null;
     };
@@ -748,6 +748,24 @@
 
     Gui.prototype.hasView = function () {
         return null != this['view'];
+    };
+
+    Gui.prototype.bindModel = function (model) {
+        var self = this;
+        if (model instanceof Backbone.Model) {
+            self['model'] = model;
+        } else if (_.isObject(model)) {
+            self['model'] = new (Backbone.Model.extend(model))();
+        } else {
+            // unsupported model
+            return;
+        }
+
+        self['model'].on('change', function (model, changes) {
+            _changeModel(self, model, changes);
+        });
+
+        _initView(self);
     };
 
     Gui.prototype.set = function (data) {
@@ -778,7 +796,7 @@
         var item = {};
         item[key] = value;
         el.value(_getElement(key), value);
-        self['model'].set(item, {silent:true});
+        self['model'].set(item, {silent: true});
         self['model'].change();
     }
 
@@ -788,7 +806,7 @@
             _initModel(self);
 
             //-- load template --//
-            var $markup = $(_.template(markup, {cid:self['cid'], model:self['model']}));
+            var $markup = $(_.template(markup, {cid: self['cid'], model: self['model']}));
             self['parent'].append($markup);
             self['_component'] = $markup;
 
@@ -831,25 +849,34 @@
     }
 
     function _initView(self) {
+        var cid = self['cid']
+            , model = self['model']
+            , view = self['view'];
         // view
-        if (null != self['view']) {
-            self['view'] = _toView(self, self['view']);
-            var viewEvent = "change ." + self['cid']
+        if (null != view) {
+            self['view'] = _toView(self, view, model);
+            // delegate events for components using cid as class
+            var viewEvent = "change ." + cid
                 , events = {};
             events[viewEvent] = function (e) {
                 _changedViewField(self, self['view'], e);
             };
             self['view'].delegateEvents(events);
-            // load defaults
-            if (!!self['model'] && !!self['model']['defaults']) {
-                _.each(self['model']['defaults'], function (value, key) {
-                    try {
-                        el.value(_getElement(key), self['model']['defaults'][key]);
-                    } catch (err) {
-                        console.error(err);
-                    }
-                });
-            }
+
+            //-- bind model --//
+            _bindModelDefaults(self, model);
+        }
+    }
+
+    function _bindModelDefaults(self, model) {
+        if (!!model && !!model['defaults']) {
+            _.each(model['defaults'], function (value, key) {
+                try {
+                    el.value(_getElement(key), model['defaults'][key]);
+                } catch (err) {
+                    console.error(err);
+                }
+            });
         }
     }
 
@@ -871,17 +898,33 @@
         return model;
     }
 
-    function _toView(self, value) {
+    function _toView(self, value, model) {
         var view = value
-            , options = {el:'#' + self['cid']}
+            , cid = self['cid']
+            , options = {el: '#' + cid}
             ;
         if (_.isBoolean(value)) {
             if (!!self['model']) {
-                options = _.extend(options, {model:_toModel(self, self['model'])});
+                options = _.extend(options, {model: model});
             }
             view = new (Backbone.View.extend(options))();
         } else if (value instanceof Backbone.View) {
             // already assigned
+            if (!_.isEmpty(value['options'])) {
+                // check el
+                if (!value['options']['el']) {
+                    value['options']['el'] = '#' + cid
+                }
+                // check model
+                if (!value['options']['model'] && !!model) {
+                    value['options']['model'] = model;
+                }
+            } else {
+                if (!!self['model']) {
+                    options = _.extend(options, {model: model});
+                }
+                view = new (Backbone.View.extend(options))();
+            }
         } else if (_.isObject(value)) {
             value = _.extend(value, options);
             view = new (Backbone.View.extend(value))();
@@ -890,7 +933,7 @@
     }
 
     function _validate(self, attributes) {
-        return !!self['model'] ? !_.isString(self['model'].validate(attributes)) : true;
+        return !!self['model'] && _.isFunction(self['model'].validate) ? !_.isString(self['model'].validate(attributes)) : true;
     }
 
     function _changedViewField(self, view, e) {
@@ -906,7 +949,7 @@
             if (!valid) {
                 el.value(target, view['model'].get(key));
             } else {
-                view['model'].set(item, {silent:true});
+                view['model'].set(item, {silent: true});
                 view['model'].change();
                 //_trigger(self, 'change', self, view['model'], key, view['model'].get(key));
             }

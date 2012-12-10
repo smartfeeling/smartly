@@ -12,7 +12,6 @@ import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.network.URLUtils;
 import org.smartly.commons.util.*;
-import org.smartly.packages.velocity.impl.util.URLEncodeUtils;
 import org.smartly.packages.velocity.impl.vtools.lang.VLCObject;
 
 import java.util.*;
@@ -34,12 +33,14 @@ public class SysTool
     // --------------------------------------------------------------------
 
     private final ConsoleTool _console;
+    private final ConvertTool _convert;
 
     // ------------------------------------------------------------------------
     //                      Constructor
     // ------------------------------------------------------------------------
     public SysTool() {
         _console = new ConsoleTool();
+        _convert = new ConvertTool();
     }
 
     @Override
@@ -71,63 +72,31 @@ public class SysTool
 
     //<editor-fold defaultstate="collapsed" desc=" HTML (encodeURIComponent, decodeURIComponent)">
     public String encode(final Object data) {
-        return this.encodeURIComponent(data);
+        return _convert.encode(data);
     }
 
     public String encodeURIComponent(final Object data) {
-        if (null != data) {
-            return URLEncodeUtils.encodeURI(data.toString());
-        }
-        return "";
+        return _convert.encodeURIComponent(data);
     }
 
     public String decode(final Object data) {
-        return this.decodeURIComponent(data);
+        return _convert.decode(data);
     }
 
     public String decodeURIComponent(final Object data) {
-        if (null != data) {
-            return URLEncodeUtils.decodeURI(data.toString());
-        }
-        return "";
+        return _convert.decodeURIComponent(data);
     }
 
     public String encodeHTML(final Object data) {
-        if (null != data) {
-            return URLEncodeUtils.encodeHTML(data.toString(), null);
-        }
-        return "";
+        return _convert.encodeHTML(data);
     }
 
     public String decodeHTML(final Object data) {
-        if (null != data) {
-            return URLEncodeUtils.decodeHTML(data.toString());
-        }
-        return "";
+        return _convert.decodeHTML(data);
     }
 
     public String toHTML(final String text) {
-        final StringBuilder result = new StringBuilder();
-        if (StringUtils.hasText(text)) {
-            final String[] lines = StringUtils.split(text, "\n");
-            for (final String line : lines) {
-                if (result.length() > 0) {
-                    result.append("<br/>");
-                    result.append("\n");
-                }
-                // split for a title
-                final String[] tokens = StringUtils.splitFirst(line, ":");
-                if (tokens.length > 1) {
-                    result.append("<span style='font-weight:bold;'>");
-                    result.append(tokens[0]).append(":&nbsp;");
-                    result.append("</span>");
-                    result.append(tokens[1]);
-                } else {
-                    result.append(line);
-                }
-            }
-        }
-        return result.toString();
+        return _convert.toHTML(text);
     }
 
     //</editor-fold>
@@ -249,7 +218,7 @@ public class SysTool
                 return ((JSONObject) obj).length() == 0;
             } else if (obj instanceof JSONArray) {
                 return ((JSONArray) obj).length() == 0;
-            }else if (obj instanceof JsonWrapper) {
+            } else if (obj instanceof JsonWrapper) {
                 return ((JsonWrapper) obj).length() == 0;
             } else if (obj instanceof String) {
                 return StringUtils.isNULL(obj);
@@ -344,20 +313,20 @@ public class SysTool
 
     //<editor-fold defaultstate="collapsed" desc=" GET BEAN VALUE (get, getList, getInt, getString, getImage, ...)">
 
-    public Set<?> keys(final Object object){
-        if(!StringUtils.isNULL(object)){
-           if(object instanceof Map){
-               return ((Map)object).keySet();
-           } else if (object instanceof JSONObject){
-               final Set<Object> result = new HashSet<Object>();
-               final Iterator iter =  ((JSONObject)object).keys();
-               while (iter.hasNext()){
-                   result.add(iter.next());
-               }
-               return result;
-           } else if(object instanceof JsonWrapper){
-               return ((JsonWrapper)object).keys();
-           }
+    public Set<?> keys(final Object object) {
+        if (!StringUtils.isNULL(object)) {
+            if (object instanceof Map) {
+                return ((Map) object).keySet();
+            } else if (object instanceof JSONObject) {
+                final Set<Object> result = new HashSet<Object>();
+                final Iterator iter = ((JSONObject) object).keys();
+                while (iter.hasNext()) {
+                    result.add(iter.next());
+                }
+                return result;
+            } else if (object instanceof JsonWrapper) {
+                return ((JsonWrapper) object).keys();
+            }
         }
         return new HashSet<Object>();
     }
@@ -372,19 +341,19 @@ public class SysTool
      * Never returns NULL object.
      *
      * @param object Object instance to return value from passed fieldName
-     * @param paths   Names of field to return value
+     * @param paths  Names of field to return value
      * @return Value of fieldName or empty string
      */
     public Object getOne(final Object object,
-                      final String...paths) {
+                         final String... paths) {
         Object result = null;
-        for(final String path:paths){
+        for (final String path : paths) {
             result = this.get(object, path, null);
-            if(this.isNotNull(result)){
+            if (this.isNotNull(result)) {
                 break;
             }
         }
-        return null!=result?result:"";
+        return null != result ? result : "";
     }
 
     public Object get(final Object object,
@@ -701,8 +670,9 @@ public class SysTool
      * i.e.:
      * #set($iterator=$sys.newIterator(5))
      * #foreach($i in $iterator)
-     *      ...
+     * ...
      * #end
+     *
      * @param size
      * @return
      */
