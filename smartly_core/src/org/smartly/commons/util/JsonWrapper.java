@@ -105,7 +105,7 @@ public final class JsonWrapper implements Cloneable {
         return this;
     }
 
-    public Map toMap() {
+    public Map<String, Object> toMap() {
         if (this.isJSONArray()) {
             return JsonWrapper.toMap(this.getJSONArray());
         } else if (this.isJSONObject()) {
