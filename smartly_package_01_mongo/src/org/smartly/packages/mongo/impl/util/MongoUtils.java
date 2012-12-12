@@ -410,7 +410,7 @@ public class MongoUtils implements IMongoConstants {
     }
 
     public static void merge(final Object source, final Object target,
-                             final String... excludeProperties) throws Exception {
+                             final String... excludeProperties) {
         if (null != source && null != target) {
             if (source instanceof DBObject && target instanceof DBObject) {
                 merge((DBObject) source, (DBObject) target);
@@ -421,7 +421,7 @@ public class MongoUtils implements IMongoConstants {
     }
 
     public static void merge(final Object source, final DBObject target,
-                             final String[] excludeProperties) throws Exception {
+                             final String[] excludeProperties) {
         if (null != source && null != target) {
             final String[] keys = BeanUtils.getPropertyNames(source.getClass());
             for (final String key : keys) {
@@ -472,11 +472,11 @@ public class MongoUtils implements IMongoConstants {
 
     public static void mergeKey(final String key,
                                 final Object source,
-                                final DBObject target) throws Exception {
+                                final DBObject target)  {
         if (source instanceof DBObject) {
             mergeKey(key, (DBObject) source, target);
         } else {
-            final Object svalue = BeanUtils.getValue(source, key);
+            final Object svalue = BeanUtils.getValueIfAny(source, key);
             final Object tvalue = target.get(key);
             if (null == tvalue || null == svalue) {
                 // add new value to target
@@ -536,7 +536,7 @@ public class MongoUtils implements IMongoConstants {
     }
 
     public static DBObject clone(final DBObject source,
-                                 final String[] excludeProperties) {
+                                 final String[] excludeProperties) throws Exception {
         final DBObject target = new BasicDBObject();
         merge(source, target, excludeProperties);
         return target;
@@ -605,6 +605,10 @@ public class MongoUtils implements IMongoConstants {
         return false;
     }
 
+    public static DBObject queryEquals(final String field,
+                                       final Object value) {
+         return queryEquals(field, value, CASE_INSENSITIVE);
+    }
     /**
      * { x : "a" }<br/>
      * { x : { $in : [ null ] } }<br/>
@@ -615,7 +619,8 @@ public class MongoUtils implements IMongoConstants {
      * @return
      */
     public static DBObject queryEquals(final String field,
-                                       final Object value) {
+                                       final Object value,
+                                       final int flags) {
         final DBObject query;
         if (null == value) {
             // {"z" : {"$in" : [null], "$exists" : true}}
@@ -633,7 +638,8 @@ public class MongoUtils implements IMongoConstants {
             //condition.put(OP_EXISTS, true);
             query.put(field, condition);
         } else {
-            query = new BasicDBObject(field, value);
+            final Pattern pattern = patternEquals(value.toString(), flags);
+            query = new BasicDBObject(field, pattern);
         }
         return query;
     }
