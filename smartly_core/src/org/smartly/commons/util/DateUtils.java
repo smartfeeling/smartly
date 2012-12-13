@@ -8,39 +8,59 @@ import java.text.DateFormatSymbols;
 import java.util.*;
 
 /**
- *
  * @author
  */
 public abstract class DateUtils {
 
     // measure unit
-    /** Milliseconds=14 **/
+    /**
+     * Milliseconds=14 *
+     */
     public static final int MILLISECOND = Calendar.MILLISECOND;     // 14
-    /** Seconds=13 **/
+    /**
+     * Seconds=13 *
+     */
     public static final int SECOND = Calendar.SECOND;               // 13
-    /** Minute=12 **/
+    /**
+     * Minute=12 *
+     */
     public static final int MINUTE = Calendar.MINUTE;               // 12
-    /** Hour=11 **/
+    /**
+     * Hour=11 *
+     */
     public static final int HOUR = Calendar.HOUR_OF_DAY;            // 11
-    /** Day=5 **/
+    /**
+     * Day=5 *
+     */
     public static final int DAY = Calendar.DAY_OF_MONTH;            // 5
-    /** MONTH=2 **/
+    /**
+     * MONTH=2 *
+     */
     public static final int MONTH = Calendar.MONTH;                 // 2
-    /** Year=1 **/
+    /**
+     * Year=1 *
+     */
     public static final int YEAR = Calendar.YEAR;                   // 1
-    /** Infinite year (3000) **/
+    /**
+     * Infinite year (3000) *
+     */
     public static final int INFINITE_YEAR = 3000;
-    /** Zero year (1900) **/
+    /**
+     * Zero year (1900) *
+     */
     public static final int ZERO_YEAR = 1900;
-    /** no-working days */
+    /**
+     * no-working days
+     */
     private static final int[] highDays = {Calendar.SUNDAY, Calendar.SATURDAY};
 
     /**
      * Return a date.
-     * @param year Year
-     * @param month Month
-     * @param day Day
-     * @param hour Hour
+     *
+     * @param year    Year
+     * @param month   Month
+     * @param day     Day
+     * @param hour    Hour
      * @param minutes Minutes
      * @param seconds Seconds
      * @return A valid date
@@ -55,6 +75,7 @@ public abstract class DateUtils {
 
     /**
      * Calculate difference in milliseconds from 2 dates.
+     *
      * @param date1 First date
      * @param date2 Second date
      * @return Difference betwwen first date and second date in milliseconds
@@ -67,9 +88,9 @@ public abstract class DateUtils {
     /**
      * Calculate difference from 2 dates.<br>
      * Result is in "measureUnit" measure unit. (Ex: DAY)
-     * 
-     * @param date1 First date
-     * @param date2 Second date
+     *
+     * @param date1       First date
+     * @param date2       Second date
      * @param measureUnit Measure unit. Ex: DateUtility.DAY
      * @return Difference betwwen first date and second date.
      */
@@ -127,12 +148,29 @@ public abstract class DateUtils {
         return calendar.getTime();
     }
 
-    public static Date postponeWorkingDay(final Date date, final int measureUnit, final int amount, final Long[] holidays) {
+    public static Date postponeWorkingDay(final Date date,
+                                          final int measureUnit,
+                                          final int amount,
+                                          final Long[] holidays) {
         Date result = date;
-        for(int i=0;i<amount;i++){
+        for (int i = 0; i < amount; i++) {
             result = postpone(result, measureUnit, 1);
-            if(isWorkingDay(result, holidays)){
-               result = nextWorkingDay(result, holidays).getTime();
+            if (isWorkingDay(result, holidays)) {
+                result = nextWorkingDay(result, holidays).getTime();
+            }
+        }
+        return result;
+    }
+
+    public static Date anticipateWorkingDay(final Date date,
+                                          final int measureUnit,
+                                          final int amount,
+                                          final Long[] holidays) {
+        Date result = date;
+        for (int i = 0; i < amount; i++) {
+            result = postpone(result, measureUnit, -1);
+            if (isWorkingDay(result, holidays)) {
+                result = previousWorkingDay(result, holidays).getTime();
             }
         }
         return result;
@@ -140,7 +178,8 @@ public abstract class DateUtils {
 
     /**
      * Return true if the day is a working day
-     * @param date Date
+     *
+     * @param date     Date
      * @param holidays Array of holidays
      * @return Return true if the day is a working day
      */
@@ -150,23 +189,24 @@ public abstract class DateUtils {
 
     /**
      * Return true if the day is a working day
-     * @param time Long - time in milliseconds
+     *
+     * @param time     Long - time in milliseconds
      * @param holidays Array of holidays
      * @return Return true if the day is a working day
      */
     public static boolean isWorkingDay(final long time, final Long[] holidays) {
         final Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(time);
-        
+
         // check if in holiday
-        if(null!=holidays){
-            for(final long d:holidays){
-                if(time==d){
+        if (null != holidays) {
+            for (final long d : holidays) {
+                if (time == d) {
                     return false;
                 }
             }
         }
-        
+
         // check day of week
         final int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
         for (final int i : highDays) {
@@ -179,21 +219,19 @@ public abstract class DateUtils {
     }
 
     /**
-     * 
-     * @param date 
-     * @return 
+     * @param date
+     * @return
      */
     public static Calendar nextWorkingDay(final Date date, final Long[] holidays) {
         return nextWorkingDay(date.getTime(), holidays);
     }
 
     /**
-     * 
-     * @param time 
-     * @return 
+     * @param time
+     * @return
      */
-    public static Calendar nextWorkingDay(final Long time, 
-            final Long[] holidays) {
+    public static Calendar nextWorkingDay(final Long time,
+                                          final Long[] holidays) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(time);
         // move forward calendar of one day
@@ -204,14 +242,14 @@ public abstract class DateUtils {
         return calendar;
     }
 
+
     /**
-     * 
-     * @param calendar 
+     * @param calendar
      * @param holidays (Optional) Array of holidays
-     * @return 
+     * @return
      */
-    public static Calendar nextWorkingDay(final Calendar calendar, 
-            final Long[] holidays) {
+    public static Calendar nextWorkingDay(final Calendar calendar,
+                                          final Long[] holidays) {
         // move forward calendar of one day
         calendar.add(DAY, 1);
         while (!isWorkingDay(calendar.getTimeInMillis(), holidays)) {
@@ -220,13 +258,29 @@ public abstract class DateUtils {
         return calendar;
     }
 
+    public static Calendar previousWorkingDay(final Date date, final Long[] holidays) {
+        return previousWorkingDay(date.getTime(), holidays);
+    }
+
+    public static Calendar previousWorkingDay(final Long time,
+                                              final Long[] holidays) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time);
+        // move forward calendar of one day
+        calendar.add(DAY, -1);
+        while (!isWorkingDay(calendar.getTimeInMillis(), holidays)) {
+            calendar.add(DAY, -1);
+        }
+        return calendar;
+    }
+
     /**
-     * 
-     * @param calendar 
+     * @param calendar
      * @param holidays (Optional) Array of holidays
-     * @return 
+     * @return
      */
-    public static Calendar previousWorkingDay(final Calendar calendar, final Long[] holidays) {
+    public static Calendar previousWorkingDay(final Calendar calendar,
+                                              final Long[] holidays) {
         // move backward calendar of one day
         calendar.add(DAY, -1);
         while (!isWorkingDay(calendar.getTimeInMillis(), holidays)) {
@@ -236,14 +290,13 @@ public abstract class DateUtils {
     }
 
     /**
-     * 
-     * @param startTime 
-     * @param endTime 
-     * @param holidays (Optional) Array of holidays
-     * @return 
+     * @param startTime
+     * @param endTime
+     * @param holidays  (Optional) Array of holidays
+     * @return
      */
-    public static Long getWorkingDays(final long startTime, final long endTime, 
-            final Long[] holidays) {
+    public static Long getWorkingDays(final long startTime, final long endTime,
+                                      final Long[] holidays) {
         Calendar startCalendar = Calendar.getInstance();
         startCalendar.setTimeInMillis(startTime);
         Calendar endCalendar = Calendar.getInstance();
@@ -252,26 +305,24 @@ public abstract class DateUtils {
     }
 
     /**
-     * 
-     * @param startDate 
-     * @param finalDate 
-     * @param holidays (Optional) Array of holidays
-     * @return 
+     * @param startDate
+     * @param finalDate
+     * @param holidays  (Optional) Array of holidays
+     * @return
      */
-    public static Long getWorkingDays(final Date startDate, final Date finalDate, 
-            final Long[] holidays) {
+    public static Long getWorkingDays(final Date startDate, final Date finalDate,
+                                      final Long[] holidays) {
         return getWorkingDays(startDate.getTime(), finalDate.getTime(), holidays);
     }
 
     /**
-     * 
-     * @param start 
-     * @param end 
+     * @param start
+     * @param end
      * @param holidays (Optional) Array of holidays
-     * @return 
+     * @return
      */
-    public static Long getWorkingDays(Calendar start, Calendar end, 
-            final Long[] holidays) {
+    public static Long getWorkingDays(Calendar start, Calendar end,
+                                      final Long[] holidays) {
         Long result = 0L;
 
         // day of weeks
@@ -299,51 +350,52 @@ public abstract class DateUtils {
 
         return result;
     }
-    
+
     public static Long[] getPeriod(final int startY, final int startM, final int startD,
-            final int endY, final int endM, final int endD) {
+                                   final int endY, final int endM, final int endD) {
         final Calendar start = Calendar.getInstance();
-        start.set(startY, startM-1, startD);
+        start.set(startY, startM - 1, startD);
         final Calendar end = Calendar.getInstance();
-        end.set(endY, endM-1, endD);
-        
+        end.set(endY, endM - 1, endD);
+
         return getPeriod(start, end);
     }
-    
+
     public static Long[] getPeriod(final Date start, final Date end) {
         final Calendar startCal = Calendar.getInstance();
         startCal.setTime(start);
         final Calendar endCal = Calendar.getInstance();
         endCal.setTime(end);
-        
-        return getPeriod(startCal, endCal); 
+
+        return getPeriod(startCal, endCal);
     }
+
     public static Long[] getPeriod(final Calendar startCal, final Calendar endCal) {
         final List<Long> result = new LinkedList<Long>();
         // loop
         int count = 0;
-        while(true){
-            if(startCal.getTime().after(endCal.getTime())){
+        while (true) {
+            if (startCal.getTime().after(endCal.getTime())) {
                 break;
             } else {
                 result.add(startCal.getTimeInMillis());
             }
             startCal.add(DAY, 1);
             count++;
-            if(count>3650){ // 10 years limit
+            if (count > 3650) { // 10 years limit
                 break; // avoid infinite loop 
             }
         }
-        
+
         return result.toArray(new Long[result.size()]);
     }
-    
+
     public static boolean equals(final Date date1, final Date date2) {
         return dateDiff(date1, date2) == 0L;
     }
 
     public static boolean equals(final Date date1, final Date date2,
-            final long tolleranceMs) {
+                                 final long tolleranceMs) {
         return dateDiff(date1, date2) <= tolleranceMs;
     }
 
@@ -405,13 +457,13 @@ public abstract class DateUtils {
         Calendar calendar = Calendar.getInstance();
         return calendar.get(Calendar.SECOND);
     }
-    
+
     public static int getSeconds(final Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         return calendar.get(Calendar.SECOND);
     }
-    
+
     public static int getHourOfDay() {
         Calendar calendar = Calendar.getInstance();
         return calendar.get(Calendar.HOUR_OF_DAY);
@@ -436,13 +488,13 @@ public abstract class DateUtils {
 
     public static int getMonth() {
         Calendar calendar = Calendar.getInstance();
-        return calendar.get(Calendar.MONTH)+1;
+        return calendar.get(Calendar.MONTH) + 1;
     }
 
     public static int getMonth(final Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        return calendar.get(Calendar.MONTH)+1;
+        return calendar.get(Calendar.MONTH) + 1;
     }
 
     public static String getMonthAsString(final Date date) {
@@ -452,19 +504,19 @@ public abstract class DateUtils {
     public static String getMonthAsString(final int month) {
         final DateFormatSymbols dfs = new DateFormatSymbols();
         final String[] months = dfs.getMonths();
-        return months[month-1];
+        return months[month - 1];
     }
 
     public static String getMonthAsString(final Date date,
-            final Locale locale) {
+                                          final Locale locale) {
         return DateUtils.getMonthAsString(DateUtils.getMonth(date), locale);
     }
 
     public static String getMonthAsString(final int month,
-            final Locale locale) {
+                                          final Locale locale) {
         final DateFormatSymbols dfs = new DateFormatSymbols(locale);
         final String[] months = dfs.getMonths();
-        return months[month-1];
+        return months[month - 1];
     }
 
     public static String getShortMonthAsString(final Date date) {
@@ -474,19 +526,19 @@ public abstract class DateUtils {
     public static String getShortMonthAsString(final int month) {
         final DateFormatSymbols dfs = new DateFormatSymbols();
         final String[] months = dfs.getShortMonths();
-        return months[month-1];
+        return months[month - 1];
     }
 
     public static String getShortMonthAsString(final Date date,
-            final Locale locale) {
+                                               final Locale locale) {
         return DateUtils.getShortMonthAsString(DateUtils.getMonth(date), locale);
     }
 
     public static String getShortMonthAsString(final int month,
-            final Locale locale) {
+                                               final Locale locale) {
         final DateFormatSymbols dfs = new DateFormatSymbols(locale);
         final String[] months = dfs.getShortMonths();
-        return months[month-1];
+        return months[month - 1];
     }
 
     public static int getYear() {
@@ -499,11 +551,12 @@ public abstract class DateUtils {
         calendar.setTime(date);
         return calendar.get(Calendar.YEAR);
     }
-    
+
     /**
      * Return maximun number of days in month.
+     *
      * @param date
-     * @return 
+     * @return
      */
     public static int getActualMaximumDayOfMonth(final Date date) {
         Calendar calendar = Calendar.getInstance();
