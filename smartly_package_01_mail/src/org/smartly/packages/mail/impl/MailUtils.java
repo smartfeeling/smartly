@@ -5,9 +5,13 @@
  */
 package org.smartly.packages.mail.impl;
 
+import org.smartly.commons.util.CollectionUtils;
 import org.smartly.commons.util.MimeTypeUtils;
 import org.smartly.commons.util.StringUtils;
 import org.smartly.packages.mail.SmartlyMail;
+
+import java.io.File;
+import java.util.Collection;
 
 
 public final class MailUtils {
@@ -59,6 +63,15 @@ public final class MailUtils {
                                     final String subject,
                                     final String body,
                                     final String mimeType) throws Exception {
+        return sendMailTo(from, addresses, subject, body, mimeType, null);
+    }
+
+    public static Thread sendMailTo(final String from,
+                                    final String[] addresses,
+                                    final String subject,
+                                    final String body,
+                                    final String mimeType,
+                                    final Collection<File> attachments) throws Exception {
         if (null != addresses && addresses.length > 0 && !StringUtils.isNULL(from)) {
             final String smtpHost = SmartlyMail.getHost();
             final int smtpPort = SmartlyMail.getPort();
@@ -74,7 +87,8 @@ public final class MailUtils {
                     addresses,
                     subject,
                     body,
-                    mimeType);
+                    mimeType,
+                    attachments);
         }
         throw new Exception("WRONG PARAMETERS EXCEPTION: Address and Sender cannot be null or empty.");
     }
@@ -104,7 +118,8 @@ public final class MailUtils {
                                    final String[] addresses,
                                    final String subject,
                                    final String content,
-                                   final String mimeType) throws Exception {
+                                   final String mimeType,
+                                   final Collection<File> attachments) throws Exception {
         if (!StringUtils.isNULL(addresses)) {
             //-- creates message --//
             final RunnablePostman sender = new RunnablePostman();
@@ -120,6 +135,11 @@ public final class MailUtils {
             sender.setSubject(subject);
             sender.setMailFormat(mimeType);
             sender.setMessage(content);
+            if (!CollectionUtils.isEmpty(attachments)) {
+                for (final File file : attachments) {
+                    sender.addFileAttachment(file);
+                }
+            }
             final Thread starter = new Thread(sender);
             starter.start();
             return starter;

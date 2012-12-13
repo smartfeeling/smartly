@@ -184,11 +184,11 @@ public class RunnablePostman
         _addresses.clear();
     }
 
-    public void addFileAttachment(String path) {
+    public void addFileAttachment(final String path) {
         _fileAttachments.add(new File(path));
     }
 
-    public void addFileAttachment(File file) {
+    public void addFileAttachment(final File file) {
         _fileAttachments.add(file);
     }
 
