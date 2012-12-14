@@ -419,7 +419,7 @@ public abstract class FileDeployer {
     // ------------------------------------------------------------------------
 
     private static final List<FileDeployer> _deployers = Collections.synchronizedList(new LinkedList<FileDeployer>());
-    private static final Map<String, String> _compileFiles = new HashMap<String, String>();
+    private static final Map<String, String> _compileFiles = new HashMap<String, String>(); // pair: source ext, target ext. i.e. ".less", ".css"
     private static final Set<String> _compressFiles = new HashSet<String>();
     private static final Set<String> _preprocessorFiles = new HashSet<String>(); // Arrays.asList(PREPROCESS_FILES)
     private static final Map<String, String> _preprocessorValues = new HashMap<String, String>();

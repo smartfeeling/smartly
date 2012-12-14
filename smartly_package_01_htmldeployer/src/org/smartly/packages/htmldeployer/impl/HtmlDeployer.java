@@ -9,7 +9,9 @@ import org.smartly.commons.util.ConversionUtils;
 import org.smartly.commons.util.FormatUtils;
 import org.smartly.commons.util.PathUtils;
 import org.smartly.commons.util.StringUtils;
-import org.smartly.packages.htmldeployer.impl.compiler.Compiler;
+import org.smartly.commons.lang.compilers.CompilerRegistry;
+import org.smartly.commons.lang.compilers.ICompiler;
+import org.smartly.packages.htmldeployer.impl.compilers.CompilerLess;
 import org.smartly.packages.htmldeployer.impl.compressor.Compressor;
 
 public class HtmlDeployer extends FileDeployer {
@@ -39,8 +41,14 @@ public class HtmlDeployer extends FileDeployer {
     @Override
     public byte[] compile(byte[] data, final String filename) {
         try {
-            final Compiler compiler = new Compiler();
-            return compiler.compileBytes(data, filename);
+            final String ext = PathUtils.getFilenameExtension(filename, true);
+            final ICompiler compiler = CompilerRegistry.get(ext);
+            if(null!=compiler){
+                return compiler.compile(data);
+            } else {
+                super.getLogger().log(Level.WARNING,
+                        FormatUtils.format("COMPILER NOT FOUND FOR '{0}'", filename));
+            }
         } catch (Throwable t) {
             super.getLogger().log(Level.SEVERE,
                     FormatUtils.format("ERROR COMPILING '{0}': {1}", filename, t), t);
@@ -75,6 +83,9 @@ public class HtmlDeployer extends FileDeployer {
         // compress
         FileDeployer.getCompressFiles().add(".js");
         FileDeployer.getCompressFiles().add(".css");
+
+        //-- add compilers --//
+        CompilerRegistry.register(".less", CompilerLess.class);
     }
 
     // ------------------------------------------------------------------------
