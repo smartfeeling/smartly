@@ -1,20 +1,21 @@
-package org.smartly.packages.htmldeployer.impl.compilers;
+package org.smartly.packages.velocity.impl.compilers;
 
-import org.lesscss.LessCompiler;
 import org.smartly.Smartly;
 import org.smartly.commons.lang.compilers.ICompiler;
+import org.smartly.commons.util.BeanUtils;
+import org.smartly.packages.velocity.impl.VLCManager;
 
 import java.util.Map;
 
 /**
- * LessCompiler Wrapper
+ * Velocity compiler implementing standard Smarty ICompiler interface
  */
-public class CompilerLess implements ICompiler {
+public class CompilerVelocity implements ICompiler {
 
-    private LessCompiler _native;
+    public static final String ARG_FILE = "file";
 
-    public CompilerLess() {
-        _native = new LessCompiler();
+    public CompilerVelocity() {
+
     }
 
     @Override
@@ -25,11 +26,14 @@ public class CompilerLess implements ICompiler {
     @Override
     public byte[] compile(byte[] data, final Map<String, Object> args) throws Exception {
         final String input = new String(data, Smartly.getCharset());
-        return _native.compile(input).getBytes();
+        final String filename = (String) BeanUtils.getValueIfAny(args, ARG_FILE, "UNDEFINED");
+        final String output = VLCManager.getInstance().evaluateText(filename, input, args);
+        return output.getBytes();
     }
 
     // ------------------------------------------------------------------------
     //                      p r i v a t e
     // ------------------------------------------------------------------------
+
 
 }

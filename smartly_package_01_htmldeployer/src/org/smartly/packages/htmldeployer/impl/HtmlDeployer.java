@@ -14,6 +14,8 @@ import org.smartly.commons.lang.compilers.ICompiler;
 import org.smartly.packages.htmldeployer.impl.compilers.CompilerLess;
 import org.smartly.packages.htmldeployer.impl.compressor.Compressor;
 
+import java.util.Map;
+
 public class HtmlDeployer extends FileDeployer {
 
 
@@ -74,15 +76,15 @@ public class HtmlDeployer extends FileDeployer {
 
     private void init() {
         // pre-process
-        FileDeployer.getPreProcessorFiles().add(".less");
-        FileDeployer.getPreProcessorFiles().add(".js");
-        FileDeployer.getPreProcessorFiles().add(".css");
-        FileDeployer.getPreProcessorFiles().add(".vm");
+        this.getSettings().getPreProcessorFiles().add(".less");
+        this.getSettings().getPreProcessorFiles().add(".js");
+        this.getSettings().getPreProcessorFiles().add(".css");
+        this.getSettings().getPreProcessorFiles().add(".vm");
         // compile
-        FileDeployer.getCompileFiles().put(".less", ".css");
+        this.getSettings().getCompileFiles().put(".less", ".css");
         // compress
-        FileDeployer.getCompressFiles().add(".js");
-        FileDeployer.getCompressFiles().add(".css");
+        this.getSettings().getCompressFiles().add(".js");
+        this.getSettings().getCompressFiles().add(".css");
 
         //-- add compilers --//
         CompilerRegistry.register(".less", CompilerLess.class);

@@ -11,8 +11,8 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="smartly_core" />
+    <orderEntry type="library" exported="" name="org.mozilla:rhino:1.7R4" level="application" />
     <orderEntry type="library" name="junit:junit:4.9" level="application" />
-    <orderEntry type="library" name="org.mozilla:rhino:1.7R4" level="application" />
   </component>
 </module>
 

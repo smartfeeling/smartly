@@ -186,11 +186,17 @@ public abstract class BeanUtils {
      */
     public static Object getValueIfAny(final Object instance,
                                        final String path) {
+        return getValueIfAny(instance, path, null);
+    }
+
+    public static Object getValueIfAny(final Object instance,
+                                       final String path,
+                                       final Object defValue) {
         try {
             return getValue(instance, path);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
-        return null;
+        return defValue;
     }
 
     public static boolean hasValue(final Object instance,
@@ -589,23 +595,25 @@ public abstract class BeanUtils {
                                            final String path)
             throws IllegalAccessException, InvocationTargetException {
         Object result = null;
-        if (StringUtils.hasText(path)) {
-            final String[] tokens = StringUtils.split(
-                    path, ".");
-            result = instance;
-            for (final String token : tokens) {
-                if (null != result) {
-                    if (result instanceof JSONArray) {
-                        result = getItemOfArray((JSONArray) result, null, token);
-                    } else if (result.getClass().isArray()) {
-                        result = getItemOfArray((Object[]) result, null, token);
-                    } else if (result instanceof List) {
-                        result = getItemOfList((List) result, null, token);
+        if(null!=instance){
+            if (StringUtils.hasText(path)) {
+                final String[] tokens = StringUtils.split(
+                        path, ".");
+                result = instance;
+                for (final String token : tokens) {
+                    if (null != result) {
+                        if (result instanceof JSONArray) {
+                            result = getItemOfArray((JSONArray) result, null, token);
+                        } else if (result.getClass().isArray()) {
+                            result = getItemOfArray((Object[]) result, null, token);
+                        } else if (result instanceof List) {
+                            result = getItemOfList((List) result, null, token);
+                        } else {
+                            result = getSimplePropertyValue(result, token);
+                        }
                     } else {
-                        result = getSimplePropertyValue(result, token);
+                        break;
                     }
-                } else {
-                    break;
                 }
             }
         }
