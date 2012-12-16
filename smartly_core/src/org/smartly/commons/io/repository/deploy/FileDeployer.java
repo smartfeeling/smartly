@@ -178,7 +178,7 @@ public abstract class FileDeployer {
             // targetPath is absolute file name of deployed file
             String targetPath;
             if (children) {
-                targetPath = (new File(PathUtils.merge(targetFolder, PathUtils.splitPathRoot(filename)))).getAbsolutePath();
+                targetPath = (new File(PathUtils.merge(targetFolder, PathUtils.subtract(_startFolder, filename)))).getAbsolutePath();
             } else {
                 targetPath = (new File(PathUtils.merge(targetFolder, filename))).getAbsolutePath();
             }
@@ -337,7 +337,6 @@ public abstract class FileDeployer {
             for (final String child : children) {
                 result.add(new FileItem(this, root, child));
             }
-
 
             this.logInfo("Created FileDeployer '{0}'. Resources: {1}",
                     this.getClass().getSimpleName(), result.size());

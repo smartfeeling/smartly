@@ -22,7 +22,7 @@ public class FileItem {
                     final String absolutePath) {
         _absolutePath = PathUtils.validateFolderSeparator(absolutePath);
         _root = this.toExternalForm(root, absolutePath);
-        _folder = PathUtils.getParent(PathUtils.subtract(_root, _absolutePath));
+        _folder = this.lookupFolder(_root, _absolutePath);
         try {
             if (!this.isJar(_absolutePath)) {
                 _fileName = PathUtils.subtract(_root, _absolutePath);
@@ -38,6 +38,20 @@ public class FileItem {
         } catch (Throwable t) {
             this.getLogger().log(Level.SEVERE, null, t);
         }
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder result = new StringBuilder();
+        result.append(this.getClass().getName()).append("{");
+        result.append("fileName: ").append(_fileName);
+        result.append(", ");
+        result.append("folder: ").append(_folder);
+        result.append(", ");
+        result.append("root: ").append(_root);
+        result.append("}");
+
+        return result.toString();
     }
 
     public String getFileName() {
@@ -75,6 +89,7 @@ public class FileItem {
     // ------------------------------------------------------------------------
     //                      p r i v a t e
     // ------------------------------------------------------------------------
+
     private Logger getLogger() {
         return LoggingUtils.getLogger(this);
     }
@@ -90,5 +105,9 @@ public class FileItem {
             }
         }
         return root;
+    }
+
+    private String lookupFolder(final String root, final String path){
+        return PathUtils.getParent(PathUtils.subtract(root, path));
     }
 }
