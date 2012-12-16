@@ -28,10 +28,6 @@ public abstract class FileDeployer {
     // ------------------------------------------------------------------------
 
     private static final String CHARSET = CharEncoding.getDefault();
-    private static final String[] EXCLUDE = new String[]{
-            ".class"
-    };
-
     private static final String DIRECTIVE_VERSION = "[RT-VERSION]";
     private static final String DIRECTIVE_VERSION_VALUE = GUID.create();
     private static final String DIRECTIVE_DEBUG_APP = "[RT-DEBUG]";
@@ -42,7 +38,6 @@ public abstract class FileDeployer {
     // ------------------------------------------------------------------------
 
     private final FileDeployerSettings _settings;
-    private final List<FileItem> _resources;
     private final String _startFolder;
     private final String _targetFolder;
     private boolean _overwriteAll;
@@ -74,7 +69,6 @@ public abstract class FileDeployer {
                 this.getClass().getSimpleName(), startFolder, targetFolder);
 
         _settings = new FileDeployerSettings(_globalSettings);
-        _resources = new LinkedList<FileItem>();
         _startFolder = startFolder;
         _targetFolder = targetFolder;
         _overwriteAll = false;
@@ -127,11 +121,12 @@ public abstract class FileDeployer {
      */
     public void deploy(final String targetFolder,
                        final boolean children) {
-        this.loadResources(_startFolder);
+        //-- get resources and start deploy --//
+        final List<FileItem> resources = this.loadResources(_startFolder);
 
         this.logStart();
 
-        for (final FileItem item : _resources) {
+        for (final FileItem item : resources) {
             final String message = this.deploy(targetFolder, item, children);
             if (StringUtils.hasText(message)) {
                 this.logInfo(message);
@@ -173,7 +168,9 @@ public abstract class FileDeployer {
         }
     }
 
-    private String deploy(final String targetFolder, final FileItem item, final boolean children) {
+    private String deploy(final String targetFolder,
+                          final FileItem item,
+                          final boolean children) {
         String message = "";
         final String filename = item.getFileName();
         // check if file extension is not excluded
@@ -282,8 +279,7 @@ public abstract class FileDeployer {
     }
 
     private boolean isDeployable(final String item) {
-        final String ext = PathUtils.getFilenameExtension(item, true);
-        return !CollectionUtils.contains(EXCLUDE, ext);
+        return !_settings.isExcluded(item);
     }
 
     private boolean isOverwritable(final String item) {
@@ -319,8 +315,8 @@ public abstract class FileDeployer {
         return result.getBytes(CharEncoding.getDefault());
     }
 
-    private void loadResources(final String startFolder) {
-        _resources.clear();
+    private List<FileItem> loadResources(final String startFolder) {
+        final List<FileItem> result = new LinkedList<FileItem>();
         try {
             final String root = this.getRootFullPath();
             final String folder = PathUtils.join(root, startFolder);
@@ -329,23 +325,28 @@ public abstract class FileDeployer {
                     + "Folder: '{1}'",
                     root, folder);
 
-            final String[] resources;
+            //-- get children names --//
+            final String[] children;
             if (PathUtils.isJar(folder)) {
-                resources = this.getResourcesFromJar(folder);
+                children = this.getResourcesFromJar(folder);
             } else {
-                resources = this.getResourcesFromRepository(folder);
+                children = this.getResourcesFromRepository(folder);
             }
-            for (final String child : resources) {
-                _resources.add(new FileItem(this, root, child));
+
+            //-- creates resource and add to list --//
+            for (final String child : children) {
+                result.add(new FileItem(this, root, child));
             }
 
 
             this.logInfo("Created FileDeployer '{0}'. Resources: {1}",
-                    this.getClass().getSimpleName(), _resources.size());
+                    this.getClass().getSimpleName(), result.size());
 
         } catch (Throwable t) {
             this.getLogger().severe(FormatUtils.format("Unable to Create FileDeployer: {0}", t));
         }
+
+        return result;
     }
 
     private boolean match(String text, String pattern) {
@@ -425,6 +426,8 @@ public abstract class FileDeployer {
     {
         //-- init pre-processor values --//
         _globalSettings.getPreprocessorValues().put(DIRECTIVE_VERSION, DIRECTIVE_VERSION_VALUE);
+        //-- add exclusions --//
+        _globalSettings.getExcludeFiles().add(".class");
     }
 
     public static FileDeployerSettings getGlobalSettings() {

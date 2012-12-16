@@ -1,6 +1,7 @@
 package org.smartly.commons.io.repository.deploy;
 
 import org.smartly.commons.util.PathUtils;
+import org.smartly.commons.util.StringUtils;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,6 +17,7 @@ public class FileDeployerSettings {
 
     private final Map<String, String> _compileFiles = new HashMap<String, String>(); // pair: source ext, target ext. i.e. ".less", ".css"
     private final Set<String> _compressFiles = new HashSet<String>();
+    private final Set<String> _excludeFiles = new HashSet<String>();
     private final Set<String> _preprocessorFiles = new HashSet<String>(); // Arrays.asList(PREPROCESS_FILES)
     private final Map<String, String> _preprocessorValues = new HashMap<String, String>();
 
@@ -27,6 +29,7 @@ public class FileDeployerSettings {
         if (null != parent) {
             _compileFiles.putAll(parent.getCompileFiles());
             _compressFiles.addAll(parent.getCompressFiles());
+            _excludeFiles.addAll(parent.getExcludeFiles());
             _preprocessorFiles.addAll(parent.getPreProcessorFiles());
             _preprocessorValues.putAll(parent.getPreprocessorValues());
         }
@@ -34,9 +37,14 @@ public class FileDeployerSettings {
 
     public void clear() {
         _compileFiles.clear();
+        _excludeFiles.clear();
         _compressFiles.clear();
         _preprocessorFiles.clear();
         _preprocessorValues.clear();
+    }
+
+    public Set<String> getExcludeFiles() {
+        return _excludeFiles;
     }
 
     public Set<String> getPreProcessorFiles() {
@@ -53,6 +61,13 @@ public class FileDeployerSettings {
 
     public Map<String, String> getCompileFiles() {
         return _compileFiles;
+    }
+
+    public boolean isExcluded(final String file_or_ext) {
+        final String ext = PathUtils.getFilenameExtension(file_or_ext, true);
+        return StringUtils.hasText(ext)
+                ? _excludeFiles.contains(ext) || _excludeFiles.contains(file_or_ext)
+                : _excludeFiles.contains(file_or_ext);
     }
 
     public boolean isPreProcessableFile(final String filename) {

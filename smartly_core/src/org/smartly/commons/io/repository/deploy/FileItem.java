@@ -12,24 +12,27 @@ import org.smartly.commons.util.StringUtils;
 public class FileItem {
 
     private String _fileName;
-    private String _absolutePath;
+    private final String _absolutePath;
     private String _relativePath;
+    private final String _root;
+    private final String _folder;
 
-    public FileItem(final Object parent,
-                    final String dir,
+    public FileItem(final Object deployer,
+                    final String root,
                     final String absolutePath) {
-        final String root = this.getRoot(dir, absolutePath);
         _absolutePath = PathUtils.validateFolderSeparator(absolutePath);
+        _root = this.toExternalForm(root, absolutePath);
+        _folder = PathUtils.getParent(PathUtils.subtract(_root, _absolutePath));
         try {
             if (!this.isJar(_absolutePath)) {
-                _fileName = PathUtils.subtract(root, _absolutePath);
+                _fileName = PathUtils.subtract(_root, _absolutePath);
                 _relativePath = PathUtils.merge(
-                        PathUtils.getPackagePath(parent.getClass()),
+                        PathUtils.getPackagePath(deployer.getClass()),
                         _fileName);
             } else {
                 // root: file:/C:/lib/BEEingX.jar!/org/sf/quickpin/htdocs/
                 // absolute path: jar:file:/C:/lib/BEEingX.jar!/org/sf/bee/app/server/web/htdocs/vtlinfo.vhtml
-                _fileName = PathUtils.subtract(root, _absolutePath);
+                _fileName = PathUtils.subtract(_root, _absolutePath);
                 _relativePath = _absolutePath.substring(_absolutePath.indexOf(".jar!") + 6);
             }
         } catch (Throwable t) {
@@ -41,16 +44,16 @@ public class FileItem {
         return _fileName;
     }
 
-    public void setFileName(String path) {
-        this._fileName = path;
+    public String getRoot() {
+        return _root;
+    }
+
+    public String getFolder() {
+        return _folder;
     }
 
     public String getAbsolutePath() {
         return _absolutePath;
-    }
-
-    public void setAbsolutePath(String absolutePath) {
-        _absolutePath = absolutePath;
     }
 
     public boolean isJar() {
@@ -80,7 +83,7 @@ public class FileItem {
         return PathUtils.isJar(path);
     }
 
-    private String getRoot(final String root, final String absolutePath) {
+    private String toExternalForm(final String root, final String absolutePath) {
         if (this.isJar(absolutePath)) {
             if (!root.startsWith("jar:")) {
                 return "jar:".concat(root);
