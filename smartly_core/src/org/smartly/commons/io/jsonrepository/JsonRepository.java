@@ -78,7 +78,7 @@ public class JsonRepository {
 
     public String getString(final String path, final String def) {
         final Object value = this.get(path);
-        return null != value ? (String) value : "";
+        return null != value ? (String) value : def;
     }
 
     public String[] getStringArray(final String path) {
