@@ -97,6 +97,11 @@ public class ClassLoaderUtils {
         return cl.getResource(resourcePath);
     }
 
+    public static URL getResource(final String resourcePath) {
+        final ClassLoader cl = getThreadContextLoader();
+        return cl.getResource(resourcePath);
+    }
+
     public static String getResourceAsString(final String resourcePath,
                                              final String charset) {
         return getString(getResourceAsStream(resourcePath), charset);
