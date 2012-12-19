@@ -65,6 +65,14 @@ public class HtmlParser {
         return null != _document ? _document.select(cssQuery) : new Elements(0);
     }
 
+    public Element selectFirst(final String cssQuery) {
+        if (null != _document) {
+            final Elements elements = _document.select(cssQuery);
+            return null != elements && !elements.isEmpty() ? elements.first() : null;
+        }
+        return null;
+    }
+
     public String selectAsString(final String cssQuery) {
         final Elements result = this.select(cssQuery);
         return result.outerHtml();
