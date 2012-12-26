@@ -19,6 +19,14 @@ public abstract class SystemUtils {
         return System.getProperty("os.name");
     }
 
+    public static String getOSVersion(){
+        return System.getProperty("os.version");
+    }
+
+    public static String getOSAchitecture(){
+        return System.getProperty("os.arch");
+    }
+
     public static boolean isWindows(){
         if(null==_iswindow){
             final String os = getOperatingSystem();
