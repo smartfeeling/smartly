@@ -182,6 +182,24 @@ public class NetworkUtils {
         return getDefaultProxy();
     }
 
+    public static boolean ping(final String host, final int timeout) {
+        try {
+            final InetAddress address = InetAddress.getByName(host);
+            return address.isReachable(timeout);
+        } catch (Throwable ignored) {
+        }
+        return false;
+    }
+
+    public static boolean hasNetworkAccess() {
+        try {
+            final InetAddress address = InetAddress.getByName("www.google.com");
+            return true;
+        } catch (Throwable ignored) {
+        }
+        return false;
+    }
+
     // ------------------------------------------------------------------------
     //                      p r i v a t e
     // ------------------------------------------------------------------------

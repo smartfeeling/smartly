@@ -14,7 +14,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeoutException;
 
 /**
  * URL shortcut methods.
@@ -39,7 +38,7 @@ public class URLUtils {
     }
 
     public static String getUrlContent(final String uri, final int timeout) {
-       return getUrlContent(uri, timeout, TYPE_HTML);
+        return getUrlContent(uri, timeout, TYPE_HTML);
     }
 
     public static String getUrlContent(final String uri, final int timeout, final String contentType) {
@@ -51,12 +50,12 @@ public class URLUtils {
             } finally {
                 is.close();
             }
-        } catch (IOException t){
+        } catch (IOException t) {
             // file not found or connection timeout
             final String resource;
-            if(TYPE_HTML.equalsIgnoreCase(contentType)){
+            if (TYPE_HTML.equalsIgnoreCase(contentType)) {
                 resource = "error.html";
-            } else if (TYPE_JSON.equalsIgnoreCase(contentType)){
+            } else if (TYPE_JSON.equalsIgnoreCase(contentType)) {
                 resource = "error.json";
             } else {
                 resource = "error.txt";
@@ -91,8 +90,8 @@ public class URLUtils {
     public static InputStream getInputStream(final URL url, final int timeout, final String type) throws IOException {
         final Proxy proxy = NetworkUtils.getProxy();
         final URLConnection conn = url.openConnection(proxy);
-        if(conn instanceof HttpURLConnection){
-           ((HttpURLConnection)conn).setRequestMethod("GET");
+        if (conn instanceof HttpURLConnection) {
+            ((HttpURLConnection) conn).setRequestMethod("GET");
         }
         conn.setConnectTimeout(timeout);
         conn.addRequestProperty("Accept", type);

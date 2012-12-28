@@ -93,4 +93,5 @@
     ly.provide('ly.gui.widgets.Breadcrumbs');
     ly.gui.widgets.Breadcrumbs = Breadcrumbs;
 
+    return ly.gui.widgets.Breadcrumbs;
 })();
