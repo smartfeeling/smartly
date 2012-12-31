@@ -1089,13 +1089,14 @@ public final class JsonWrapper implements Cloneable {
     }
 
     public static boolean has(final Object object, final String path) {
+        // check JSONObject
         if ((object instanceof JSONObject) && StringUtils.hasText(path)) {
             if (!path.contains(".")) {
                 return ((JSONObject) object).has(path);
             }
             final String[] tokens = StringUtils.splitLast(path, ".");
             final JSONObject json = getJSON(object, tokens[0]);
-            return null != json ? json.has(path) : false;
+            return null != json ? json.has(tokens[1]) : false;
         }
         return false;
     }
