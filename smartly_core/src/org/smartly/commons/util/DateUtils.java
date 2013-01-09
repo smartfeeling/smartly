@@ -155,7 +155,7 @@ public abstract class DateUtils {
         Date result = date;
         for (int i = 0; i < amount; i++) {
             result = postpone(result, measureUnit, 1);
-            if (isWorkingDay(result, holidays)) {
+            if (!isWorkingDay(result, holidays)) {
                 result = nextWorkingDay(result, holidays).getTime();
             }
         }
@@ -169,7 +169,7 @@ public abstract class DateUtils {
         Date result = date;
         for (int i = 0; i < amount; i++) {
             result = postpone(result, measureUnit, -1);
-            if (isWorkingDay(result, holidays)) {
+            if (!isWorkingDay(result, holidays)) {
                 result = previousWorkingDay(result, holidays).getTime();
             }
         }
