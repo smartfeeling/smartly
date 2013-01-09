@@ -185,6 +185,21 @@ public final class JsonWrapper implements Cloneable {
         return null;
     }
 
+    public Object deepRemove(final String path) {
+        if(null!=_object){
+            final Object result;
+            if(path.contains(".")){
+                final String[] tokens = StringUtils.splitLast(path, ".");
+                final JSONObject parent = JsonWrapper.getJSON(_object, tokens[0]);
+                result = JsonWrapper.remove(parent, tokens[1]);
+            } else {
+                result = this.remove(path);
+            }
+            return result;
+        }
+        return null;
+    }
+
     public JSONArray deepJSONArray(final String path) {
         final Object result = this.deep(path);
         return result instanceof JSONArray ? (JSONArray) result : null;
