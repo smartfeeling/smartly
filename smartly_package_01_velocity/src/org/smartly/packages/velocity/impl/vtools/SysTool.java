@@ -331,9 +331,44 @@ public class SysTool
         return new HashSet<Object>();
     }
 
+    /**
+     * Search for value in array or property in object.
+     * @param object
+     * @param path
+     * @return
+     */
     public boolean has(final Object object,
-                       final String path) {
-        return null != this.get(object, path, null);
+                       final Object path) {
+        if (null != object) {
+            if (object instanceof Collection) {
+                for (final Object item : (Collection) object) {
+                    if (CompareUtils.equals(path, item)) {
+                        return true;
+                    }
+                }
+            } else if (object instanceof JSONArray) {
+                final JSONArray array = (JSONArray) object;
+                for (int i = 0; i < array.length(); i++) {
+                    final Object item = array.opt(i);
+                    if (CompareUtils.equals(path, item)) {
+                        return true;
+                    }
+                }
+            } else if (object.getClass().isArray()) {
+                final Object[] array = (Object[]) object;
+                for (final Object item : array) {
+                    if (CompareUtils.equals(path, item)) {
+                        return true;
+                    }
+                }
+            } else {
+                if (path instanceof String) {
+                    return null != this.get(object, (String) path, null);
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
