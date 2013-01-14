@@ -14,6 +14,8 @@ import java.util.List;
 public abstract class SystemUtils {
 
     private static Boolean _iswindow = null;
+    private static Boolean _islinux = null;
+    private static Boolean _ismac = null;
 
     public static String getOperatingSystem(){
         return System.getProperty("os.name");
@@ -33,6 +35,22 @@ public abstract class SystemUtils {
             _iswindow = os.toLowerCase().startsWith("win");
         }
         return _iswindow;
+    }
+
+    public static boolean isLinux(){
+        if(null==_islinux){
+            final String os = getOperatingSystem();
+            _islinux = os.toLowerCase().startsWith("linux");
+        }
+        return _islinux;
+    }
+
+    public static boolean isMac(){
+        if(null==_ismac){
+            final String os = getOperatingSystem();
+            _ismac = os.toLowerCase().startsWith("mac");
+        }
+        return _ismac;
     }
 
     public enum FileType {
