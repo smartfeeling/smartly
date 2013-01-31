@@ -130,9 +130,10 @@ public class MongoImporter {
         for (final Map<String, String> item : data) {
             final DBObject dbo = new BasicDBObject(item);
             if(null!=iterator){
-                iterator.importing(dbo);
+                _srvc.upsert(iterator.importing(dbo));
+            } else {
+                _srvc.upsert(dbo);
             }
-            _srvc.upsert(dbo);
             result.add(dbo);
         }
         return result;
@@ -152,9 +153,10 @@ public class MongoImporter {
                 }
             }
             if(null!=iterator){
-                iterator.importing(dbo);
+                _srvc.upsert(iterator.importing(dbo));
+            } else {
+                _srvc.upsert(dbo);
             }
-            _srvc.upsert(dbo);
 
             this.doImportLocalizations(MongoUtils.getId(dbo), localizations);
 
@@ -211,6 +213,6 @@ public class MongoImporter {
     // --------------------------------------------------------------------
 
     public interface ImporterIterator {
-        void importing(DBObject item);
+        DBObject importing(DBObject item);
     }
 }
