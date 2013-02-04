@@ -66,7 +66,7 @@ public class MongoUtils implements IMongoConstants {
         return !(null != object && object.keySet().size()>0);
     }
 
-    public static Object hasId(final DBObject object) {
+    public static boolean hasId(final DBObject object) {
         return null != getId(object);
     }
 
