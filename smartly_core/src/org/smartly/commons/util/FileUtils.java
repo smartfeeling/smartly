@@ -433,6 +433,12 @@ public abstract class FileUtils {
         return new String(bytes);
     }
 
+    public static String readFileToString(final File file,
+                                          final String encoding) throws IOException {
+        final byte[] bytes = copyToByteArray(file);
+        return new String(bytes, encoding);
+    }
+
     //---------------------------------------------------------------------
     // List methods
     //---------------------------------------------------------------------
