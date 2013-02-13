@@ -2,6 +2,7 @@ package org.smartly.commons.util;
 
 
 import org.smartly.commons.lang.CharEncoding;
+import org.smartly.launcher.SmartlyClassLoader;
 
 import java.io.InputStream;
 import java.lang.reflect.Array;
@@ -57,6 +58,10 @@ public class ClassLoaderUtils {
 
     public static Class forName(final String className) throws ClassNotFoundException {
         return lookupForName(className, getThreadContextLoader());
+    }
+
+    public static Class forName(final String className, final ClassLoader loader) throws ClassNotFoundException {
+        return lookupForName(className, loader);
     }
 
     //-- resource Methods --//
