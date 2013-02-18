@@ -227,7 +227,7 @@ public class SFTPClient {
         try {
             final int mode = ChannelSftp.OVERWRITE;
             _channel.get(p1, p2, new SFTPProgressMonitor(), mode);
-            return this.toFile(opt_p2);
+            return this.toFile(p2);
         } catch (Exception e) {
             this.getLogger().log(Level.SEVERE, null, e);
         }
@@ -239,7 +239,7 @@ public class SFTPClient {
         try {
             final int mode = ChannelSftp.RESUME;
             _channel.get(p1, p2, new SFTPProgressMonitor(), mode);
-            return this.toFile(opt_p2);
+            return this.toFile(p2);
         } catch (SftpException e) {
             this.getLogger().log(Level.SEVERE, null, e);
         }
@@ -251,41 +251,47 @@ public class SFTPClient {
         try {
             final int mode = ChannelSftp.APPEND;
             _channel.get(p1, p2, new SFTPProgressMonitor(), mode);
-            return this.toFile(opt_p2);
+            return this.toFile(p2);
         } catch (Exception e) {
             this.getLogger().log(Level.SEVERE, null, e);
         }
         return null;
     }
 
-    public void put(final String p1, final String opt_p2) {
+    public String put(final String p1, final String opt_p2) {
         final String p2 = StringUtils.hasText(opt_p2) ? opt_p2 : ".";
         try {
             final int mode = ChannelSftp.OVERWRITE;
             _channel.put(p1, p2, new SFTPProgressMonitor(), mode);
+            return p2;
         } catch (Exception e) {
             this.getLogger().log(Level.SEVERE, null, e);
         }
+        return null;
     }
 
-    public void putResume(final String p1, final String opt_p2) {
+    public String putResume(final String p1, final String opt_p2) {
         final String p2 = StringUtils.hasText(opt_p2) ? opt_p2 : ".";
         try {
             final int mode = ChannelSftp.RESUME;
             _channel.put(p1, p2, new SFTPProgressMonitor(), mode);
+            return p2;
         } catch (SftpException e) {
             this.getLogger().log(Level.SEVERE, null, e);
         }
+        return null;
     }
 
-    public void putAppend(final String p1, final String opt_p2) {
+    public String putAppend(final String p1, final String opt_p2) {
         final String p2 = StringUtils.hasText(opt_p2) ? opt_p2 : ".";
         try {
             final int mode = ChannelSftp.APPEND;
             _channel.put(p1, p2, new SFTPProgressMonitor(), mode);
+            return p2;
         } catch (Exception e) {
             this.getLogger().log(Level.SEVERE, null, e);
         }
+        return null;
     }
 
     /**
