@@ -216,34 +216,46 @@ public class SFTPClient {
         }
     }
 
-    public void get(final String p1, final String opt_p2) {
+    /**
+     *
+     * @param p1 Source
+     * @param opt_p2 Destination
+     * @return
+     */
+    public File get(final String p1, final String opt_p2) {
         final String p2 = StringUtils.hasText(opt_p2) ? opt_p2 : ".";
         try {
             final int mode = ChannelSftp.OVERWRITE;
             _channel.get(p1, p2, new SFTPProgressMonitor(), mode);
+            return this.toFile(opt_p2);
         } catch (Exception e) {
             this.getLogger().log(Level.SEVERE, null, e);
         }
+        return null;
     }
 
-    public void getResume(final String p1, final String opt_p2) {
+    public File getResume(final String p1, final String opt_p2) {
         final String p2 = StringUtils.hasText(opt_p2) ? opt_p2 : ".";
         try {
             final int mode = ChannelSftp.RESUME;
             _channel.get(p1, p2, new SFTPProgressMonitor(), mode);
+            return this.toFile(opt_p2);
         } catch (SftpException e) {
             this.getLogger().log(Level.SEVERE, null, e);
         }
+        return null;
     }
 
-    public void getAppend(final String p1, final String opt_p2) {
+    public File getAppend(final String p1, final String opt_p2) {
         final String p2 = StringUtils.hasText(opt_p2) ? opt_p2 : ".";
         try {
             final int mode = ChannelSftp.APPEND;
             _channel.get(p1, p2, new SFTPProgressMonitor(), mode);
+            return this.toFile(opt_p2);
         } catch (Exception e) {
             this.getLogger().log(Level.SEVERE, null, e);
         }
+        return null;
     }
 
     public void put(final String p1, final String opt_p2) {
@@ -322,6 +334,11 @@ public class SFTPClient {
 
     private Session getSession() throws JSchException {
         return _jsch.getSession(_username, _host, _port);
+    }
+
+    private File toFile(final String path) {
+        final File result = new File(path);
+        return result.exists() ? result : null;
     }
 
     private void parseCommand(final String cmd, final Vector<String> cmds) throws Exception {
