@@ -96,6 +96,12 @@ public class MongoUserService
     public DBObject signin(final String id_user, final String password) {
         // try with username
         DBObject user = this.getByUsernameAndPassword(id_user, password);
+        // id
+        if (null == user) {
+            // try with email
+            user = this.lookupByIdAndPassword(id_user, password);
+        }
+        // email
         if (null == user) {
             // try with email
             user = this.getByEmailAndPassword(id_user, password);
@@ -266,6 +272,27 @@ public class MongoUserService
         }
         return item;
     }
+
+    private DBObject lookupByIdAndPassword(final String id,
+                                           final String password) {
+        DBObject user = null;
+        try {
+            final DBObject query = new BasicDBObject();
+            final Pattern equal = MongoUtils.patternEquals(id); //Pattern.compile("\\A" + username + "\\z", BeeMongoUtils.CASE_INSENSITIVE);
+            query.put(MongoUser.ID, equal);
+            query.put(MongoUser.PASSWORD, password);
+            // get user
+            user = CollectionUtils.getFirst(super.find(query));
+            if (null == user) {
+                query.put(MongoUser.PASSWORD, MD5.encode(password));
+                user = CollectionUtils.getFirst(super.find(query));
+            }
+        } catch (Exception ex) {
+            super.getLogger().log(Level.SEVERE, null, ex);
+        }
+        return user;
+    }
+
 
     private DBObject lookupByUsernameAndPassword(final String username,
                                                  final String password) {
