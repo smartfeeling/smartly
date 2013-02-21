@@ -3,6 +3,7 @@ package org.smartly.packages.mongo.impl;
 import com.mongodb.DB;
 import org.json.JSONObject;
 import org.smartly.Smartly;
+import org.smartly.SmartlyPathManager;
 import org.smartly.commons.util.FormatUtils;
 
 import java.util.HashMap;
@@ -24,7 +25,7 @@ public class MongoDBConnectionFactory {
 
     private static MongoDBConnection getConn(final String dbName) {
         if (!_connections.containsKey(dbName)) {
-            final JSONObject config = Smartly.getConfiguration().getJSONObject("databases." + dbName);
+            final JSONObject config = SmartlyPathManager.getConfiguration(MongoDBConnectionFactory.class).getJSONObject("databases." + dbName);
             if (null != config) {
                 _connections.put(dbName, new MongoDBConnection(config));
             }

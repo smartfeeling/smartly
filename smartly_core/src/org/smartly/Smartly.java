@@ -168,12 +168,17 @@ public class Smartly {
         return live ? new JsonRepository(PathUtils.getAbsolutePath(IConstants.PATH_CONFIGFILES)) : _configuration;
     }
 
+
     public static String getConfigurationPath() {
-        return getAbsolutePath(IConstants.PATH_CONFIGFILES);
+        return SmartlyPathManager.getConfigurationPath();
+    }
+
+    public static String getConfigurationPath(final Class clazz) {
+        return SmartlyPathManager.getConfigurationPath(clazz);
     }
 
     public static String getAbsolutePath(final String relativePath) {
-        return PathUtils.getAbsolutePath(relativePath);
+        return SmartlyPathManager.getAbsolutePath(relativePath);
     }
 
     public static String getLangCode() {

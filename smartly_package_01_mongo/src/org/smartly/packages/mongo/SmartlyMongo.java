@@ -2,6 +2,7 @@ package org.smartly.packages.mongo;
 
 
 import org.smartly.Smartly;
+import org.smartly.SmartlyPathManager;
 import org.smartly.packages.AbstractPackage;
 import org.smartly.packages.ISmartlySystemPackage;
 import org.smartly.packages.mongo.config.Deployer;
@@ -31,12 +32,14 @@ public class SmartlyMongo extends AbstractPackage
     public void ready() {
 
     }
-// ------------------------------------------------------------------------
+
+    // ------------------------------------------------------------------------
     //                      p r i v a t e
     // ------------------------------------------------------------------------
 
     private void init() {
-        Smartly.register(new Deployer(Smartly.getConfigurationPath()));
+        final String configurationPath = SmartlyPathManager.getConfigurationPath(SmartlyMongo.class);
+        Smartly.register(new Deployer(configurationPath));
     }
 
 }
