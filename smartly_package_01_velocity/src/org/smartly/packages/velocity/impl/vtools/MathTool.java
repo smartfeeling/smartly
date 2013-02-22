@@ -227,6 +227,10 @@ public class MathTool
         return MathUtils.roundFloor(value, decimals);
     }
 
+    // --------------------------------------------------------------------
+    //               MISC
+    // --------------------------------------------------------------------
+
     /**
      * Return integer part of a number
      *
@@ -333,7 +337,7 @@ public class MathTool
      * @param nums the numbers to be searched
      * @return the largest of the numbers or
      *         <code>null</code> if they're invalid
-     * @see MathUtils#max(int...)
+     * @see MathUtils#max(Integer...)
      */
     public Number max(Object... nums) {
         return MathUtils.max(nums);
@@ -350,6 +354,9 @@ public class MathTool
         return MathUtils.min(nums);
     }
 
+    public static double match(final Object value, final Object min, final Object max) {
+        return MathUtils.matchLimit(value, min, max);
+    }
 
     /**
      * @param num the number

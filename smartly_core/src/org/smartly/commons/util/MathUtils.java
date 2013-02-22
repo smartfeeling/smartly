@@ -205,6 +205,19 @@ public abstract class MathUtils {
         return matchType(value, ns);
     }
 
+    public static double matchLimit(final Object value, final Object min, final Object max) {
+        final double nvalue = ConversionUtils.toDouble(value);
+        final double nmin = ConversionUtils.toDouble(min);
+        final double nmax = ConversionUtils.toDouble(max);
+        if(nvalue>=nmin && nvalue<=nmax){
+             return nvalue;
+        } else if (nvalue>nmax){
+             return nmax;
+        } else {
+            return nmin;
+        }
+    }
+
     /**
      * @param num the number
      * @return the absolute value of the number or
