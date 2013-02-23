@@ -12,6 +12,23 @@ import java.util.*;
 
 public final class StringUtils {
 
+    /**
+     * <code>\u000a</code> linefeed LF ('\n').
+     *
+     * @see <a href="http://java.sun.com/docs/books/jls/third_edition/html/lexical.html#101089">JLF: Escape Sequences
+     *      for Character and String Literals</a>
+     */
+    public static final char LF = '\n';
+
+    /**
+     * <code>\u000d</code> carriage return CR ('\r').
+     *
+     * @see <a href="http://java.sun.com/docs/books/jls/third_edition/html/lexical.html#101089">JLF: Escape Sequences
+     *      for Character and String Literals</a>
+     */
+    public static final char CR = '\r';
+
+
     private StringUtils() {
     }
 
