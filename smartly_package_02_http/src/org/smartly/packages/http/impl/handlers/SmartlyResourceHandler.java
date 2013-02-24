@@ -444,7 +444,7 @@ public class SmartlyResourceHandler extends HandlerWrapper {
 
     private boolean isServletPath(final String target) {
         if (null != _server) {
-            final String path = URIUtil.stripPath(target);
+            final String path = this.stripPath(target);
             return _server.getServletPaths().contains(path);
         }
         return false;
@@ -452,5 +452,14 @@ public class SmartlyResourceHandler extends HandlerWrapper {
 
     private boolean isCMSPath(final String target) {
         return SmartlyHttp.getCMSPaths().contains(target);
+    }
+
+    private static String stripPath(String path) {
+        if (path == null)
+            return null;
+        int semi = path.indexOf(';');
+        if (semi < 0)
+            return path;
+        return path.substring(0, semi);
     }
 }
