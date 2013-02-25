@@ -91,6 +91,10 @@ public class MathTool
         return num1.multiply(num2).doubleValue();
     }
 
+    public double sqrt(final Object value){
+        return Math.sqrt(ConversionUtils.toDouble(value));
+    }
+
     // --------------------------------------------------------------------
     //               R A N D O M
     // --------------------------------------------------------------------
