@@ -560,7 +560,7 @@
 
         value: function (selector, newvalue) {
             var $el = $(selector)
-                , is_checkbox = $el.attr('type') === 'checkbox'
+                , is_checkbox = $el.attr('type') === 'checkbox' || $el.attr('type') === 'radio'
                 ;
             if (null != newvalue) {
                 if (is_checkbox) {
