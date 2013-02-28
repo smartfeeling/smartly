@@ -16,6 +16,7 @@ public final class JsonWrapper implements Cloneable {
 
     private JSONObject _object;
     private JSONArray _array;
+    private Throwable _parse_error;
 
     public JsonWrapper(final String text) {
         this.parse(text);
@@ -24,11 +25,13 @@ public final class JsonWrapper implements Cloneable {
     public JsonWrapper(final JSONObject object) {
         _array = null;
         _object = object;
+        _parse_error = null;
     }
 
     public JsonWrapper(final JSONArray array) {
         _array = array;
         _object = null;
+        _parse_error = null;
     }
 
     @Override
@@ -86,7 +89,7 @@ public final class JsonWrapper implements Cloneable {
     //                      p u b l i c
     // ------------------------------------------------------------------------
 
-    public JsonWrapper parse(final String text){
+    public JsonWrapper parse(final String text) {
         try {
             if (StringUtils.isJSONObject(text)) {
                 _array = null;
@@ -98,9 +101,11 @@ public final class JsonWrapper implements Cloneable {
                 _array = null;
                 _object = new JSONObject();
             }
+            _parse_error = null;
         } catch (Throwable t) {
             _array = null;
             _object = new JSONObject();
+            _parse_error = t;
         }
         return this;
     }
@@ -112,6 +117,14 @@ public final class JsonWrapper implements Cloneable {
             return JsonWrapper.toMap(this.getJSONObject());
         }
         return new HashMap();
+    }
+
+    public boolean hasParseError() {
+        return _parse_error != null;
+    }
+
+    public Throwable getParseError() {
+        return _parse_error;
     }
 
     public boolean isNull() {
@@ -186,9 +199,9 @@ public final class JsonWrapper implements Cloneable {
     }
 
     public Object deepRemove(final String path) {
-        if(null!=_object){
+        if (null != _object) {
             final Object result;
-            if(path.contains(".")){
+            if (path.contains(".")) {
                 final String[] tokens = StringUtils.splitLast(path, ".");
                 final JSONObject parent = JsonWrapper.getJSON(_object, tokens[0]);
                 result = JsonWrapper.remove(parent, tokens[1]);
