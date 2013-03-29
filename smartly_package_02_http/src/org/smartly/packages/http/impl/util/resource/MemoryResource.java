@@ -8,6 +8,7 @@ import org.smartly.commons.util.FileUtils;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.channels.ReadableByteChannel;
 
 public class MemoryResource extends Resource {
 
@@ -70,7 +71,7 @@ public class MemoryResource extends Resource {
     }
 
     @Override
-    public OutputStream getOutputStream() throws IOException, SecurityException {
+    public ReadableByteChannel getReadableByteChannel() throws IOException {
         return null;
     }
 

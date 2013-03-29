@@ -1,12 +1,9 @@
 package org.smartly.packages.http.impl;
 
 
-import org.eclipse.jetty.server.Connector;
-import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.HandlerList;
-import org.eclipse.jetty.server.nio.SelectChannelConnector;
-import org.eclipse.jetty.server.ssl.SslSelectChannelConnector;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -30,6 +27,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Web Server Wrapper
+ *
+ * More about Jetty here:
+ * http://git.eclipse.org/c/jetty/org.eclipse.jetty.project.git/tree/examples/embedded/src/main/java/org/eclipse/jetty/embedded/
+ */
 public class WebServer extends AbstractHttpServer {
 
 
@@ -45,7 +48,7 @@ public class WebServer extends AbstractHttpServer {
 
 
             //-- init connectors --//
-            final Connector[] connectors = initConnectors(jettyHome, configuration);
+            final Connector[] connectors = initConnectors(super.getJetty(), jettyHome, configuration);
 
             super.getJetty().setConnectors(connectors);
 
@@ -92,34 +95,54 @@ public class WebServer extends AbstractHttpServer {
         return absolutePath;
     }
 
-    private static Connector[] initConnectors(final String jettyHome, final JSONObject configuration) {
+    private static Connector[] initConnectors(final Server server, final String jettyHome, final JSONObject configuration) {
         final JSONObject connectors = JsonWrapper.getJSON(configuration, "connectors");
         final Iterator<String> keys = connectors.keys();
         final List<Connector> result = new LinkedList<Connector>();
 
+        // http configuration
+        final HttpConfiguration http_config = new HttpConfiguration();
+        http_config.setSecureScheme("https");
+        http_config.setSecurePort(8443);
+        http_config.setOutputBufferSize(32768);
+
         while (keys.hasNext()) {
             final String key = keys.next();
+
             if ("http".equalsIgnoreCase(key)) {
                 final JSONObject connector = JsonWrapper.getJSON(connectors, key);
                 if (null != connector && JsonWrapper.getBoolean(connector, "enabled")) {
-                    final SelectChannelConnector http = new SelectChannelConnector();
-                    http.setName(key);
+
+                    http_config.setRequestHeaderSize(JsonWrapper.getInt(connector, "header_buffer", 8112));
+
+                    final ServerConnector http = new ServerConnector(server, new HttpConnectionFactory(http_config));
                     http.setPort(JsonWrapper.getInt(connector, "port", 8080));
-                    http.setMaxIdleTime(JsonWrapper.getInt(connector, "max_idle", 30000));
-                    http.setRequestHeaderSize(JsonWrapper.getInt(connector, "header_buffer", 8112));
+                    http.setIdleTimeout(JsonWrapper.getInt(connector, "max_idle", 30000));
                     result.add(http);
                 }
             } else if ("ssl".equalsIgnoreCase(key)) {
                 final JSONObject connector = JsonWrapper.getJSON(connectors, key);
                 if (null != connector && JsonWrapper.getBoolean(connector, "enabled")) {
-                    final SslSelectChannelConnector ssl = new SslSelectChannelConnector();
-                    ssl.setName(key);
-                    ssl.setPort(JsonWrapper.getInt(connector, "port", 8443));
+
                     final String keySorePath = mkdirs(PathUtils.join(jettyHome, "/etc/keystore"));
-                    final SslContextFactory cf = ssl.getSslContextFactory();
-                    cf.setKeyStorePath(keySorePath);
-                    cf.setKeyStorePassword(JsonWrapper.getString(connector, "port", "OBF:1vny1zlo1x8e1vnw1vn61x8g1zlu1vn4"));
-                    cf.setKeyManagerPassword(JsonWrapper.getString(connector, "port", "OBF:1u2u1wml1z7s1z7a1wnl1u2g"));
+
+                    // SSL Context Factory for HTTPS and SPDY
+                    SslContextFactory sslContextFactory = new SslContextFactory();
+                    sslContextFactory.setKeyStorePath(keySorePath);
+                    sslContextFactory.setKeyStorePassword("OBF:1vny1zlo1x8e1vnw1vn61x8g1zlu1vn4");
+                    sslContextFactory.setKeyManagerPassword("OBF:1u2u1wml1z7s1z7a1wnl1u2g");
+
+                    // HTTPS Configuration
+                    HttpConfiguration https_config = new HttpConfiguration(http_config);
+                    https_config.addCustomizer(new SecureRequestCustomizer());
+
+                    // HTTPS connector
+                    ServerConnector https = new ServerConnector(server,
+                            new SslConnectionFactory(sslContextFactory,"http/1.1"),
+                            new HttpConnectionFactory(https_config));
+                    https.setPort(JsonWrapper.getInt(connector, "port", 8443));
+
+                    result.add(https);
                 }
             }
         }
