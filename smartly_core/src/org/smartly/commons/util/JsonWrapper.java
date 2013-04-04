@@ -283,7 +283,7 @@ public final class JsonWrapper implements Cloneable {
     }
 
     public Set<String> keys() {
-        final Set<String> keys = new HashSet<String>();
+        final Set<String> keys = new LinkedHashSet<String>();
         if (this.isJSONObject()) {
             final Iterator<String> iter = _object.keys();
             while (iter.hasNext()) {
@@ -770,7 +770,7 @@ public final class JsonWrapper implements Cloneable {
     }
 
     public static Map<String, Object> toMap(final JSONArray jsonarray) {
-        final Map<String, Object> result = new HashMap<String, Object>();
+        final Map<String, Object> result = new LinkedHashMap<String, Object>();
         final int len = jsonarray.length();
         for (int i = 0; i < len; i++) {
             final String key = "param" + i;
@@ -783,7 +783,7 @@ public final class JsonWrapper implements Cloneable {
     }
 
     public static Map<String, String> toMapOfString(final JSONObject json) {
-        final Map<String, String> result = new HashMap<String, String>();
+        final Map<String, String> result = new LinkedHashMap<String, String>();
         final Iterator iterator = json.keys();
         while (iterator.hasNext()) {
             final String key = iterator.next().toString();
@@ -796,7 +796,7 @@ public final class JsonWrapper implements Cloneable {
     }
 
     public static Map<String, String> toMapOfString(final JSONArray jsonarray) {
-        final Map<String, String> result = new HashMap<String, String>();
+        final Map<String, String> result = new LinkedHashMap<String, String>();
         final int len = jsonarray.length();
         for (int i = 0; i < len; i++) {
             final String key = "param" + i;
