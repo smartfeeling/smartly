@@ -3,6 +3,9 @@
  */
 package org.smartly.commons.util;
 
+import org.smartly.commons.logging.Logger;
+import org.smartly.commons.logging.util.LoggingUtils;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
@@ -37,13 +40,15 @@ public abstract class MathUtils {
      * @return the difference of the numbers (subtracted in order) or
      *         <code>null</code> if they're invalid
      */
-    public static Number sub(Object... nums) {
+    public static Number sub(final Object... nums) {
         double value = 0;
-        Number[] ns = new Number[nums.length];
+        final Number[] ns = new Number[nums.length];
         for (int i = 0; i < nums.length; i++) {
             Number n = ConversionUtils.toNumber(nums[i]);
             if (n == null) {
-                return null;
+                //return null;
+                getLogger().warning("You are trying to subtract '{0}' to {1}", nums[i], value);
+                continue; // does not return, but try to subtract next number
             }
             if (i == 0) {
                 value = n.doubleValue();
@@ -649,5 +654,13 @@ public abstract class MathUtils {
 
     public static boolean hasFloatingPoint(final String value) {
         return value.indexOf('.') >= 0;
+    }
+
+    // --------------------------------------------------------------------
+    //              S T A T I C
+    // --------------------------------------------------------------------
+
+    private static Logger getLogger(){
+        return LoggingUtils.getLogger(MathUtils.class);
     }
 }

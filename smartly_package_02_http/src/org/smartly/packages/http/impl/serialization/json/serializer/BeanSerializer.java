@@ -195,7 +195,7 @@ public class BeanSerializer {
                 Object resultValue;
                 try {
                     resultValue = method.invoke(object, new Object[0]);
-                    result.set(name, this.serialize(state, parent, resultValue));
+                    result.put(name, this.serialize(state, parent, resultValue));
                 } catch (Throwable t) {
                     JsonBeanUtils.addError(result, t);
                 }
@@ -228,15 +228,15 @@ public class BeanSerializer {
         if (null != object) {
             try {
                 if (JsonBeanUtils.isNative(object)) {
-                    result.set(key.toString(), object);
+                    result.put(key.toString(), object);
                     //} else if (object instanceof DBObject) {
                     //    result.set(key.toString(), object.toString());
                 } else {
                     if (!state.isProcessed(object)) {
-                        result.set(key,
+                        result.put(key,
                                 this.serialize(state, parent, object));
                     } else {
-                        result.set(key,
+                        result.put(key,
                                 state.getProcessedBean(object).getBeanId());
                     }
                 }

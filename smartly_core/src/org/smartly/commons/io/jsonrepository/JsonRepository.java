@@ -202,7 +202,7 @@ public class JsonRepository {
     private void setValue(final JSONObject object, final String key,
                           final Object value) {
         try {
-            object.set(key, value);
+            object.put(key, value);
         } catch (Throwable t) {
             this.getLogger().log(Level.SEVERE, null, t);
         }

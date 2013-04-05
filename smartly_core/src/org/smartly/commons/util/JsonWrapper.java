@@ -493,63 +493,63 @@ public final class JsonWrapper implements Cloneable {
     }
 
     public Object remove(final int index) {
-        if (this.isJSONArray()) {
+        if (this.isJSONArray() && _array.length()>index) {
             return _array.remove(index);
         }
         return null;
     }
 
     public Object get(final int index) throws JSONException {
-        if (this.isJSONArray()) {
+        if (this.isJSONArray() && _array.length()>index) {
             return _array.get(index);
         }
         return null;
     }
 
     public boolean getBoolean(final int index) throws JSONException {
-        if (this.isJSONArray()) {
+        if (this.isJSONArray() && _array.length()>index) {
             return _array.getBoolean(index);
         }
         return false;
     }
 
     public double getDouble(final int index) throws JSONException {
-        if (this.isJSONArray()) {
+        if (this.isJSONArray() && _array.length()>index) {
             return _array.getDouble(index);
         }
         return 0.0;
     }
 
     public int getInt(final int index) throws JSONException {
-        if (this.isJSONArray()) {
+        if (this.isJSONArray() && _array.length()>index) {
             return _array.getInt(index);
         }
         return 0;
     }
 
     public long getLong(final int index) throws JSONException {
-        if (this.isJSONArray()) {
+        if (this.isJSONArray() && _array.length()>index) {
             return _array.getLong(index);
         }
         return 0L;
     }
 
     public JSONArray getJSONArray(final int index) throws JSONException {
-        if (this.isJSONArray()) {
+        if (this.isJSONArray() && _array.length()>index) {
             return _array.getJSONArray(index);
         }
         return null;
     }
 
     public JSONObject getJSONObject(final int index) throws JSONException {
-        if (this.isJSONArray()) {
+        if (this.isJSONArray() && _array.length()>index) {
             return _array.getJSONObject(index);
         }
         return null;
     }
 
     public Object opt(final int index) {
-        if (this.isJSONArray()) {
+        if (this.isJSONArray() && _array.length()>index) {
             return _array.opt(index);
         }
         return null;
@@ -750,7 +750,7 @@ public final class JsonWrapper implements Cloneable {
      */
     public static Map<String, Object> toMap(final JSONObject item) {
         final Map<String, Object> result = new LinkedHashMap<String, Object>();
-        final Iterator keys = item.sortedKeys();
+        final Iterator keys = item.keys();
         while (keys.hasNext()) {
             final String name = keys.next().toString();
             if (null != name) {
@@ -1365,7 +1365,7 @@ public final class JsonWrapper implements Cloneable {
     }
 
     private static void flatMap(final Map<String, Object> map, final String root, final JSONObject item) {
-        final Iterator keys = item.sortedKeys();
+        final Iterator keys = item.keys();
         while (keys.hasNext()) {
             final String name = keys.next().toString();
             if (null != name) {

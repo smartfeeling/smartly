@@ -31,11 +31,11 @@ public class JsonBeanUtils {
     public static JSONObject addError(final JSONObject json, final Throwable t) {
         try {
             if (null != json && null != t) {
-                json.set(TAG_TYPE, TYPE_ERROR);
-                json.set(TAG_CLASS, t.getClass().getName());
-                json.set(TAG_VALUE, notEmpty(t.toString()));
-                json.set(TAG_MESSAGE, notEmpty(ExceptionUtils.getMessage(t)));
-                json.set(TAG_CAUSE, notEmpty(ExceptionUtils.getRealMessage(t)));
+                json.put(TAG_TYPE, TYPE_ERROR);
+                json.put(TAG_CLASS, t.getClass().getName());
+                json.put(TAG_VALUE, notEmpty(t.toString()));
+                json.put(TAG_MESSAGE, notEmpty(ExceptionUtils.getMessage(t)));
+                json.put(TAG_CAUSE, notEmpty(ExceptionUtils.getRealMessage(t)));
             }
         } catch (Throwable ex) {
         }
@@ -46,11 +46,11 @@ public class JsonBeanUtils {
                                        final String tagClass, final Object serialized) {
         try {
             if (null != json) {
-                json.set(JsonBeanUtils.TAG_CLASS, notEmpty(tagClass));
-                json.set(JsonBeanUtils.TAG_TYPE, JsonBeanUtils.TYPE_OBJECT);
-                json.set(JsonBeanUtils.TAG_VALUE, notEmpty(serialized));
-                json.set(JsonBeanUtils.TAG_MESSAGE, notEmpty(""));
-                json.set(JsonBeanUtils.TAG_CAUSE, notEmpty(""));
+                json.put(JsonBeanUtils.TAG_CLASS, notEmpty(tagClass));
+                json.put(JsonBeanUtils.TAG_TYPE, JsonBeanUtils.TYPE_OBJECT);
+                json.put(JsonBeanUtils.TAG_VALUE, notEmpty(serialized));
+                json.put(JsonBeanUtils.TAG_MESSAGE, notEmpty(""));
+                json.put(JsonBeanUtils.TAG_CAUSE, notEmpty(""));
             }
         } catch (Throwable ex) {
         }
@@ -63,23 +63,23 @@ public class JsonBeanUtils {
                                  final String tagCause) {
         if (null != json) {
             try {
-                json.set(TAG_TYPE, notEmpty(tagType));
+                json.put(TAG_TYPE, notEmpty(tagType));
             } catch (JSONException ex) {
             }
             try {
-                json.set(TAG_CLASS, notEmpty(tagClass));
+                json.put(TAG_CLASS, notEmpty(tagClass));
             } catch (JSONException ex) {
             }
             try {
-                json.set(TAG_VALUE, notEmpty(tagValue));
+                json.put(TAG_VALUE, notEmpty(tagValue));
             } catch (JSONException ex) {
             }
             try {
-                json.set(TAG_MESSAGE, notEmpty(tagMessage));
+                json.put(TAG_MESSAGE, notEmpty(tagMessage));
             } catch (JSONException ex) {
             }
             try {
-                json.set(TAG_CAUSE, notEmpty(tagCause));
+                json.put(TAG_CAUSE, notEmpty(tagCause));
             } catch (JSONException ex) {
             }
         }
