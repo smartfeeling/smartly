@@ -175,6 +175,14 @@ public class MongoImporter {
         for (int i = 0; i < list.length(); i++) {
             final JSONObject jso = list.getJSONObject(i);
             final DBObject dbo = MongoUtils.parseObject(jso);
+            //-- item --//
+            final DBObject item;
+            if (null != iterator) {
+                item = iterator.importing(dbo);
+            } else {
+                item = dbo;
+            }
+            //-- localizations --//
             List localizations = null;
             if (dbo.containsField(FIELD_LOCALIZATIONS)) {
                 final Object obj = MongoUtils.remove(dbo, FIELD_LOCALIZATIONS);
@@ -182,33 +190,37 @@ public class MongoImporter {
                     localizations = (List) obj;
                 }
             }
-            if (null != iterator) {
-                _srvc.upsert(iterator.importing(dbo));
-            } else {
-                _srvc.upsert(dbo);
-            }
+            this.doImportLocalizations(item, localizations);
 
-            this.doImportLocalizations(MongoUtils.getId(dbo), localizations);
+            _srvc.upsert(item);
 
-            result.add(dbo);
+            result.add(item);
         }
         return result;
     }
 
-    private void doImportLocalizations(final Object id, final List localizations) {
+    private void doImportLocalizations(final DBObject item, final List localizations) {
+        final Object id = MongoUtils.getId(item);
         if (null != localizations) {
-            for (final Object item : localizations) {
-                if (item instanceof DBObject) {
-                    final DBObject dbo = (DBObject) item;
+            for (final Object local_item : localizations) {
+                if (local_item instanceof DBObject) {
+                    final DBObject dbo = (DBObject) local_item;
                     final String lang = MongoUtils.getString(dbo, FIELD_LANG);
-                    if (StringUtils.hasText(lang)) {
-                        final Set<String> keys = dbo.keySet();
-                        for (final String key : keys) {
-                            if (!FIELD_LANG.equalsIgnoreCase(key)) {
-                                _srvc.addLocalization(id, lang, key, dbo.get(key));
+                    final Set<String> keys = dbo.keySet();
+                    for (final String key : keys) {
+                        if (!FIELD_LANG.equalsIgnoreCase(key) && dbo.containsField(key)) {
+                            final Object value = dbo.get(key);
+                            if (null != value) {
+                                if (StringUtils.hasText(lang)) {
+                                    _srvc.addLocalization(id, lang, key, value);
+                                } else {
+                                    // default language
+                                    item.put(key, value);
+                                }
                             }
                         }
                     }
+
                 }
             }
         }
