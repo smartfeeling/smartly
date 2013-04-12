@@ -3,11 +3,12 @@
  */
 package org.smartly.packages.mongo.impl.io;
 
-import com.mongodb.*;
-import org.bson.BSONObject;
-import org.bson.io.OutputBuffer;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBObject;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.smartly.IConstants;
 import org.smartly.commons.csv.CSVFileReader;
 import org.smartly.commons.csv.CSVReader;
 import org.smartly.commons.util.*;
@@ -52,9 +53,38 @@ public class MongoImporter {
     // ------------------------------------------------------------------------
     //                      p u b l i c
     // ------------------------------------------------------------------------
+
+    //-- UTILS --//
+
+    /**
+     * Parse an item and search for all paths in values
+     *
+     * @param root Resource root. i.e. "/org/sf/app/package/"
+     * @param item Item to parse for paths in key values
+     */
+    public static void replaceResourcePaths(final String root, final DBObject item) {
+        final Set<String> keys = item.keySet();
+        for (final String key : keys) {
+            final Object value = item.get(key);
+            if (value instanceof String && value.toString().startsWith(IConstants.FOLDER_SEPARATOR)) {
+                final String file = PathUtils.concat(root, value.toString());
+                final String text = ClassLoaderUtils.getResourceAsString(file);
+                if (StringUtils.isJSON(text)) {
+                    item.put(key, MongoUtils.parseObject(text));
+                } else {
+                    item.put(key, text);
+                }
+
+            }
+        }
+    }
+
+    //-- IMPORT --//
+
     public List<DBObject> importFromFile(final String filepath) throws Exception {
         return this.importFromFile(filepath);
     }
+
     public List<DBObject> importFromFile(final String filepath,
                                          final ImporterIterator iterator) throws Exception {
         List<DBObject> result = null;
@@ -66,10 +96,10 @@ public class MongoImporter {
             } catch (Throwable t) {
             }
             reader.close();
-        } else if (isJSONFile(filepath)){
+        } else if (isJSONFile(filepath)) {
             final String json = FileUtils.copyToString(new FileReader(filepath));
             final JsonWrapper jsw = JsonWrapper.wrap(json);
-            if(jsw.isJSONArray()){
+            if (jsw.isJSONArray()) {
                 result = this.doImport(jsw.getJSONArray(), iterator);
             }
         }
@@ -77,15 +107,15 @@ public class MongoImporter {
     }
 
     public List<DBObject> importFromString(final String text) throws Exception {
-       return this.importFromString(text, null);
+        return this.importFromString(text, null);
     }
 
     public List<DBObject> importFromString(final String text,
                                            final ImporterIterator iterator) throws Exception {
         List<DBObject> result = null;
-        if(StringUtils.isJSONArray(text)){
+        if (StringUtils.isJSONArray(text)) {
             final JsonWrapper jsw = JsonWrapper.wrap(text);
-            if(jsw.isJSONArray()){
+            if (jsw.isJSONArray()) {
                 result = this.doImport(jsw.getJSONArray(), iterator);
             }
         } else {
@@ -103,7 +133,7 @@ public class MongoImporter {
     }
 
     public List<DBObject> importFromResource(final String resourceName) throws Exception {
-          return this.importFromResource(resourceName, null);
+        return this.importFromResource(resourceName, null);
     }
 
     public List<DBObject> importFromResource(final String resourceName,
@@ -129,7 +159,7 @@ public class MongoImporter {
         final List<DBObject> result = new LinkedList<DBObject>();
         for (final Map<String, String> item : data) {
             final DBObject dbo = new BasicDBObject(item);
-            if(null!=iterator){
+            if (null != iterator) {
                 _srvc.upsert(iterator.importing(dbo));
             } else {
                 _srvc.upsert(dbo);
@@ -152,7 +182,7 @@ public class MongoImporter {
                     localizations = (List) obj;
                 }
             }
-            if(null!=iterator){
+            if (null != iterator) {
                 _srvc.upsert(iterator.importing(dbo));
             } else {
                 _srvc.upsert(dbo);
@@ -200,11 +230,11 @@ public class MongoImporter {
         return reader.readAllAsMap(true);
     }
 
-    private static boolean isJSONFile(final String name){
+    private static boolean isJSONFile(final String name) {
         return PathUtils.getFilenameExtension(name, true).equalsIgnoreCase(".json");
     }
 
-    private static boolean isCSVFile(final String name){
+    private static boolean isCSVFile(final String name) {
         return PathUtils.getFilenameExtension(name, true).equalsIgnoreCase(".csv");
     }
 
