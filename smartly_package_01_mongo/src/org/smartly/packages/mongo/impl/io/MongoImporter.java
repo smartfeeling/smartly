@@ -3,6 +3,7 @@
  */
 package org.smartly.packages.mongo.impl.io;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBObject;
@@ -12,6 +13,7 @@ import org.smartly.IConstants;
 import org.smartly.commons.csv.CSVFileReader;
 import org.smartly.commons.csv.CSVReader;
 import org.smartly.commons.util.*;
+import org.smartly.packages.mongo.impl.IMongoConstants;
 import org.smartly.packages.mongo.impl.StandardCodedException;
 import org.smartly.packages.mongo.impl.db.GenericMongoService;
 import org.smartly.packages.mongo.impl.util.MongoUtils;
@@ -36,6 +38,8 @@ public class MongoImporter {
     public static final String FIELD_LOCALIZATIONS = "localizations"; //
 
     public static final String FIELD_LANG = "lang";
+
+    public static final String LANG_BASE = IMongoConstants.LANG_BASE;
 
     // ------------------------------------------------------------------------
     //                      variables
@@ -185,12 +189,17 @@ public class MongoImporter {
             //-- localizations --//
             List localizations = null;
             if (dbo.containsField(FIELD_LOCALIZATIONS)) {
-                final Object obj = MongoUtils.remove(dbo, FIELD_LOCALIZATIONS);
+                final Object obj = MongoUtils.remove(item, FIELD_LOCALIZATIONS);
                 if (obj instanceof List) {
                     localizations = (List) obj;
                 }
+                final List languages = this.doImportLocalizations(item, localizations);
+                if (null != languages && languages.size() > 0) {
+                    MongoUtils.put(item, FIELD_LOCALIZATIONS, languages);
+                } else {
+                    MongoUtils.remove(item, FIELD_LOCALIZATIONS);
+                }
             }
-            this.doImportLocalizations(item, localizations);
 
             _srvc.upsert(item);
 
@@ -199,7 +208,8 @@ public class MongoImporter {
         return result;
     }
 
-    private void doImportLocalizations(final DBObject item, final List localizations) {
+    private List doImportLocalizations(final DBObject item, final List localizations) {
+        final BasicDBList languages = new BasicDBList();
         final Object id = MongoUtils.getId(item);
         if (null != localizations) {
             for (final Object local_item : localizations) {
@@ -213,9 +223,11 @@ public class MongoImporter {
                             if (null != value) {
                                 if (StringUtils.hasText(lang)) {
                                     _srvc.addLocalization(id, lang, key, value);
+                                    languages.add(lang);
                                 } else {
                                     // default language
                                     item.put(key, value);
+                                    languages.add(LANG_BASE);
                                 }
                             }
                         }
@@ -224,6 +236,7 @@ public class MongoImporter {
                 }
             }
         }
+        return languages;
     }
 
     // --------------------------------------------------------------------

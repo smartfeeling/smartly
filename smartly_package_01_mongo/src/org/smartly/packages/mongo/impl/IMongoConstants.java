@@ -20,6 +20,8 @@ public interface IMongoConstants {
     public static String VALUES = "values";
     public static String KEYWORDS = "keywords";
 
+    public static final String LANG_BASE = "base";
+
     //-- OPERATORS --//
     public static String OP_GT = "$gt";
     public static String OP_GTE = "$gte";

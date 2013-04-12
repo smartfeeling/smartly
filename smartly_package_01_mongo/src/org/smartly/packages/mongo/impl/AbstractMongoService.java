@@ -26,7 +26,7 @@ public abstract class AbstractMongoService {
     private static final String _ID = IMongoConstants.ID;
     private static final String MODIFIER_INC = "$inc";
     private static final int EARTH_RADIUS_mt = 6378160; // earth radius in mt.
-    private static final String LOCALE_BASE_FIELD = "base"; // used in embedded localizations. i.e. "description":{"base":"hello", "it":"ciao"}
+    private static final String LOCALE_BASE_FIELD = IMongoConstants.LANG_BASE; // used in embedded localizations. i.e. "description":{"base":"hello", "it":"ciao"}
     // ------------------------------------------------------------------------
     //                      variables
     // ------------------------------------------------------------------------
