@@ -223,11 +223,15 @@ public class MongoImporter {
                             if (null != value) {
                                 if (StringUtils.hasText(lang)) {
                                     _srvc.addLocalization(id, lang, key, value);
-                                    languages.add(lang);
+                                    if(!languages.contains(lang)){
+                                        languages.add(lang);
+                                    }
                                 } else {
                                     // default language
                                     item.put(key, value);
-                                    languages.add(LANG_BASE);
+                                    if(!languages.contains(LANG_BASE)){
+                                        languages.add(LANG_BASE);
+                                    }
                                 }
                             }
                         }
