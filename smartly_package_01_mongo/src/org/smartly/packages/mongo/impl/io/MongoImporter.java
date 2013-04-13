@@ -35,9 +35,9 @@ public class MongoImporter {
      * {'lang':'en', 'name':'a name', 'description':'a description'}
      * ]
      */
-    public static final String FIELD_LOCALIZATIONS = "localizations"; //
+    public static final String FIELD_LOCALIZATIONS = IMongoConstants.FIELD_LOCALIZATIONS;
 
-    public static final String FIELD_LANG = "lang";
+    public static final String FIELD_LANG = IMongoConstants.FIELD_LANG;
 
     public static final String LANG_BASE = IMongoConstants.LANG_BASE;
 

@@ -21,6 +21,8 @@ public interface IMongoConstants {
     public static String KEYWORDS = "keywords";
 
     public static final String LANG_BASE = "base";
+    public static final String FIELD_LOCALIZATIONS = "localizations"; //
+    public static final String FIELD_LANG = "lang";
 
     //-- OPERATORS --//
     public static String OP_GT = "$gt";

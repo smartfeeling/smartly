@@ -936,6 +936,37 @@ public abstract class PathUtils
         return file.exists();
     }
 
+    /**
+     * Creates a path based on current date and time.<br/>
+     *
+     * @param detail 0=yyyy/MM/dd, 1=yyyy/, 2=yyyy/MM, 3=yyyy/MM/dd, 4=yyyy/MM/dd/hh, 5=yyyy/MM/dd/hh/mm, 6=yyyy/MM/dd/hh/mm/ss/
+     * @return Path. i.e. "2013/01/25/18"
+     */
+    public static String getDateTimePath(final int detail) {
+        final DateWrapper dt = new DateWrapper(DateUtils.now());
+        final String year = dt.getYear() + FOLDER_SEPARATOR;
+        final String month = dt.getMonth() + FOLDER_SEPARATOR;
+        final String day = dt.getDay() + FOLDER_SEPARATOR;
+        final String hour = dt.getHour() + FOLDER_SEPARATOR;
+        final String min = dt.getMinute() + FOLDER_SEPARATOR;
+        final String sec = dt.getSecond() + FOLDER_SEPARATOR;
+        if (detail == 1) {
+            return FOLDER_SEPARATOR.concat(year);
+        } else if (detail == 2) {
+            return FOLDER_SEPARATOR.concat(year).concat(month);
+        } else if (detail == 3) {
+            return FOLDER_SEPARATOR.concat(year).concat(month).concat(day);
+        } else if (detail == 4) {
+            return FOLDER_SEPARATOR.concat(year).concat(month).concat(day).concat(hour);
+        } else if (detail == 5) {
+            return FOLDER_SEPARATOR.concat(year).concat(month).concat(day).concat(hour).concat(min);
+        } else if (detail == 6) {
+            return FOLDER_SEPARATOR.concat(year).concat(month).concat(day).concat(hour).concat(min).concat(sec);
+        } else {
+            return FOLDER_SEPARATOR.concat(year).concat(month).concat(day);
+        }
+    }
+
     // ------------------------------------------------------------------------
     //                      p r i v a t e
     // ------------------------------------------------------------------------
