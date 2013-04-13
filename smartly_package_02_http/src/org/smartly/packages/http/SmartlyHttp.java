@@ -111,12 +111,12 @@ public class SmartlyHttp
         final StringBuilder result = new StringBuilder();
         final String protocol = "http://";
         final String domain = Smartly.getConfiguration().getString("http.webserver.domain"); //getDomain(item);
-        final int port = Smartly.getConfiguration().getInt("http.webserver.domain.connectors.http.port", 80); //getPort(item);
+        final int port = Smartly.getConfiguration().getInt("http.webserver.connectors.http.port", 80); //getPort(item);
 
         result.append(protocol);
         result.append(domain);
         if (port != 80) {
-            result.append(port);
+            result.append(":").append(port);
         }
 
         final String url;
