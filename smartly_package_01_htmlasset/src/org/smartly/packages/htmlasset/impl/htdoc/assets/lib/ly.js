@@ -248,6 +248,7 @@
         } catch (err) {
             ly.console.error(err);
         }
+        return false;
     }
 
     function hasText(text) {
@@ -831,9 +832,9 @@
             _initModel(self);
 
             //-- load template --//
-            var $markup = $(_.template(markup, {cid: self['cid'], model: self['model']}));
-            self['parent'].append($markup);
-            self['_component'] = $markup;
+            var html = _.template(markup, {cid: self['cid'], model: self['model']});
+            self['parent'].append(html);
+            self['_component'] = $($.parseHTML(html));
 
             //-- init view --//
             _initView(self);
@@ -842,7 +843,7 @@
             _trigger(self, 'init', self);
         } catch (err) {
             // probably markup if corrupted
-            console.error(err);
+            console.error('[ ly.js _attach() ] -> Error attaching component: ' + err);
         }
 
         // callback function if any

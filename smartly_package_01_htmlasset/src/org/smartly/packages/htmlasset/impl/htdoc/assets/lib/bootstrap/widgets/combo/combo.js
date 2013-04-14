@@ -66,9 +66,13 @@
         $self.html('');
         // creates items
         _.forEach(self['_items'], function (item) {
-            var data = {_id:item[field_id], name:item[field_label]};
-            var $item = $(ly.template(template, data));
-            $item.appendTo($self);
+            try{
+                var data = {_id:item[field_id], name:item[field_label]};
+                var html = ly.template(template, data);
+                $self.append(html);
+            } catch(err){
+                console.error('[ combo.js _init() ] -> Error appending combo item: ' + err);
+            }
         });
 
         // handler
