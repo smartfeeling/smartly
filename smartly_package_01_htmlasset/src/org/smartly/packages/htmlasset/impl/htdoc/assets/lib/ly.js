@@ -794,11 +794,11 @@
         _initView(self);
     };
 
-    Gui.prototype.set = function (data) {
+    Gui.prototype.set = function (data, silent) {
         var self = this;
         _.each(data, function (value, key) {
             try {
-                _setValue(self, key, value);
+                _setValue(self, key, value, silent);
             } catch (err) {
                 console.error(err);
             }
@@ -818,12 +818,12 @@
         return !!$el[0] ? $el : $('[data-id="' + key + '"]');
     }
 
-    function _setValue(self, key, value) {
+    function _setValue(self, key, value, silent) {
         var item = {};
         item[key] = value;
         el.value(_getElement(key), value);
-        self['model'].set(item, {silent: true});
-        self['model'].change();
+        self['model'].set(item, {silent: !!silent});
+        // self['model'].change();
     }
 
     function _attach(self, markup, callback) {
@@ -975,8 +975,8 @@
             if (!valid) {
                 el.value(target, view['model'].get(key));
             } else {
-                view['model'].set(item, {silent: true});
-                view['model'].change();
+                view['model'].set(item, {silent: false});
+                // view['model'].change();
                 //_trigger(self, 'change', self, view['model'], key, view['model'].get(key));
             }
         }
