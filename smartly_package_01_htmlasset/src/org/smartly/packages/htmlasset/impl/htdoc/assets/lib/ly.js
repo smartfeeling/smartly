@@ -236,7 +236,8 @@
      * @return {string}
      */
     function template(text, data) {
-        return _.template(text, data, {interpolate: /\{(.+?)\}/g});
+        var tpl = _.template(text, data, {interpolate: /\{(.+?)\}/g});
+        return $.trim(tpl);
     }
 
     function isNull(arg) {
@@ -249,6 +250,11 @@
             ly.console.error(err);
         }
         return false;
+    }
+
+    function isHtml(text) {
+        text = $.trim(text);
+        return ( text.charAt(0) === "<" && text.charAt(text.length - 1) === ">" && text.length >= 3 );
     }
 
     function hasText(text) {
@@ -710,7 +716,8 @@
     };
 
     Gui.prototype.template = function (text) {
-        return _.template(text, this);
+        var tpl = _.template(text, this);
+        return $.trim(tpl);
     };
 
     Gui.prototype.appendTo = function (selector, callback) {
@@ -827,23 +834,28 @@
     }
 
     function _attach(self, markup, callback) {
-        try {
-            //-- init model --//
-            _initModel(self);
+        if (!!markup) {
+            // trim markup
+            markup = $.trim(markup);
+            try {
+                //-- init model --//
+                _initModel(self);
 
-            //-- load template --//
-            var html = _.template(markup, {cid: self['cid'], model: self['model']});
-            self['parent'].append(html);
-            self['_component'] = $($.parseHTML(html));
+                //-- load template --//
+                var html = _.template(markup, {cid: self['cid'], model: self['model']});
+                var $html = isHtml(html) ? $(html) : $($.parseHTML(html));
+                self['parent'].append($html);
+                self['_component'] = $html;
 
-            //-- init view --//
-            _initView(self);
+                //-- init view --//
+                _initView(self);
 
-            // trigger 'init'
-            _trigger(self, 'init', self);
-        } catch (err) {
-            // probably markup if corrupted
-            console.error('[ ly.js _attach() ] -> Error attaching component: ' + err);
+                // trigger 'init'
+                _trigger(self, 'init', self);
+            } catch (err) {
+                // probably markup if corrupted
+                console.error('[ ly.js _attach() ] -> Error attaching component: ' + err);
+            }
         }
 
         // callback function if any
@@ -875,22 +887,26 @@
     }
 
     function _initView(self) {
-        var cid = self['cid']
-            , model = self['model']
-            , view = self['view'];
-        // view
-        if (null != view) {
-            self['view'] = _toView(self, view, model);
-            // delegate events for components using cid as class
-            var viewEvent = "change ." + cid
-                , events = {};
-            events[viewEvent] = function (e) {
-                _changedViewField(self, self['view'], e);
-            };
-            self['view'].delegateEvents(events);
+        try {
+            var cid = self['cid']
+                , model = self['model']
+                , view = self['view'];
+            // view
+            if (null != view) {
+                self['view'] = _toView(self, view, model);
+                // delegate events for components using cid as class
+                var viewEvent = "change ." + cid
+                    , events = {};
+                events[viewEvent] = function (e) {
+                    _changedViewField(self, self['view'], e);
+                };
+                self['view'].delegateEvents(events);
 
-            //-- bind model --//
-            _bindModelDefaults(self, model);
+                //-- bind model --//
+                _bindModelDefaults(self, model);
+            }
+        } catch (err) {
+            console.error('[ ly.js _initView() ]: ' + err);
         }
     }
 
@@ -1001,8 +1017,12 @@
 
 
     function _trigger(self, name) {
-        var args = Array.prototype.slice.call(arguments, 1);
-        self.trigger.apply(self, args);
+        try {
+            var args = Array.prototype.slice.call(arguments, 1);
+            self.trigger.apply(self, args);
+        } catch (err) {
+            console.error('[ ly.js _trigger(' + name + ') ]: ' + err);
+        }
     }
 
     // ------------------------------------------------------------------------
@@ -1051,6 +1071,7 @@
     // exports.format = format;
     exports.template = template;
     exports.isNull = isNull;
+    exports.isHtml = isHtml;
     exports.hasText = hasText;
     exports.replaceAll = replaceAll;
 
