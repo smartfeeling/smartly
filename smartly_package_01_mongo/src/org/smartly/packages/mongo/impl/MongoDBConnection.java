@@ -23,17 +23,20 @@ public class MongoDBConnection {
     private static final String DBNAME = "dbname";
 
     private final JSONObject _settings;
-    private MongoDB _mongo;
     private String _dbname;
     private String _username;
     private String _password;
     private String _host;
     private int _port;
 
+    private MongoDB _mongo;
+
     public MongoDBConnection(final JSONObject settings) {
         _settings = settings;
         try {
+            // load settings
             this.init();
+            // creates database
             _mongo = new MongoDB(_host, _port);
             this.getLogger().log(Level.INFO, FormatUtils.format(
                     "MONGODB initialized on {0}:{1} {2}", _host, _port, _dbname));

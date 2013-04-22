@@ -28,6 +28,7 @@ public class MongoDB {
     private static String COLL_SYSTEMUSERS = IMongoConstants.COLL_SYSTEMUSERS;
     private static String HOST = "localhost";
     private static int PORT = 27017;
+    private static boolean OPT_SAFE = true;
     // ------------------------------------------------------------------------
     //                      variables
     // ------------------------------------------------------------------------
@@ -37,6 +38,7 @@ public class MongoDB {
     // ------------------------------------------------------------------------
     private String _host;
     private int _port;
+    private boolean _safe;
     // ------------------------------------------------------------------------
     //                      constructor
     // ------------------------------------------------------------------------
@@ -44,11 +46,19 @@ public class MongoDB {
     public MongoDB() {
         _host = HOST;
         _port = PORT;
+        _safe = OPT_SAFE;
     }
 
     public MongoDB(final String host, final int port) {
         _host = host;
         _port = port;
+    }
+
+    public MongoDB(final String host, final int port,
+                   final boolean safe) {
+        _host = host;
+        _port = port;
+        _safe = safe;
     }
 
     // ------------------------------------------------------------------------
@@ -268,8 +278,10 @@ public class MongoDB {
             return __mongo;
         }
         //-- creates new mongo --//
+        final MongoOptions options = new MongoOptions();
+        options.setSafe(_safe);
         final ServerAddress address = new ServerAddress(_host, _port);
-        __mongo = new com.mongodb.Mongo(address);
+        __mongo = new com.mongodb.Mongo(address, options);
         return __mongo;
     }
 }
