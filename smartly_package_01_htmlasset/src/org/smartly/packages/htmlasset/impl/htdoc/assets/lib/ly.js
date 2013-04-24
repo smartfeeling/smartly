@@ -257,6 +257,7 @@
         return ( text.charAt(0) === "<" && text.charAt(text.length - 1) === ">" && text.length >= 3 );
     }
 
+
     function hasText(text) {
         return null != text ? (text.toString().trim().length > 0) : false;
     }
@@ -266,6 +267,10 @@
             return text.replace(new RegExp(searchfor, 'g'), replacetext);
         }
         return '';
+    }
+
+    function toBoolean(value) {
+        return !!value ? value != 'false' && value !='0' : false;
     }
 
     // ------------------------------------------------------------------------
@@ -1074,6 +1079,7 @@
     exports.isHtml = isHtml;
     exports.hasText = hasText;
     exports.replaceAll = replaceAll;
+    exports.toBoolean = toBoolean;
 
     //-- object utils --//
     exports.provide = provide;
