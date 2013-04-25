@@ -571,7 +571,7 @@ public abstract class AbstractMongoService {
     public final void localize(final MongoPage page,
                                final String lang, final String[] fields,
                                final boolean onlyExistingFields) {
-        this.localize(MongoPage.getItems(page), lang, fields);
+        this.localize(MongoPage.getItems(page), lang, fields, onlyExistingFields);
     }
 
     /**
