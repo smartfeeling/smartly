@@ -8,5 +8,8 @@
 #set($pagedlist_edit = $dic.get($lang, 'i18n-widgets', 'pagedlist_edit'))
 #set($pagedlist_remove = $dic.get($lang, 'i18n-widgets', 'pagedlist_remove'))
 #set($pagedlist_close = $dic.get($lang, 'i18n-widgets', 'pagedlist_close'))
+#set($pagedlist_confirm = $dic.get($lang, 'i18n-widgets', 'pagedlist_confirm'))
+#set($pagedlist_undo = $dic.get($lang, 'i18n-widgets', 'pagedlist_undo'))
+#set($pagedlist_confirm_remove = $dic.get($lang, 'i18n-widgets', 'pagedlist_confirm_remove'))
 
 

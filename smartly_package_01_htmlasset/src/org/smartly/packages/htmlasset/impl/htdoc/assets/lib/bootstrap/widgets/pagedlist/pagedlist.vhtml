@@ -62,8 +62,15 @@ $script.requireJs('/assets/lib/bootstrap/widgets/pagedlist/pagedlistitem.js')
         <p id="item-description-<%= cid %>">…</p>
     </div>
     <div class="modal-footer">
-        <button id="modal-edit-<%= cid %>" class="btn" aria-hidden="true">$pagedlist_edit</button>
-        <button id="modal-remove-<%= cid %>" class="btn" aria-hidden="true">$pagedlist_remove</button>
-        <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">$pagedlist_close</button>
+        <div id="modal-actions-<%= cid %>">
+            <button id="modal-remove-<%= cid %>" class="btn" aria-hidden="true">$pagedlist_remove</button>
+            <button id="modal-edit-<%= cid %>" class="btn btn-success" aria-hidden="true">$pagedlist_edit</button>
+            <button class="btn btn-primary" data-dismiss="modal" aria-hidden="true">$pagedlist_close</button>
+        </div>
+        <div id="modal-confirm-<%= cid %>" class="hide">
+            <span class="label label-important">$pagedlist_confirm_remove</span>
+            <button id="modal-confirm-remove-<%= cid %>" class="btn" aria-hidden="true">$pagedlist_confirm</button>
+            <button id="modal-undo-<%= cid %>" class="btn btn-primary" aria-hidden="true">$pagedlist_undo</button>
+        </div>
     </div>
 </div>

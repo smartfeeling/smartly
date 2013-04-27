@@ -24,9 +24,13 @@
         , sel_modal = '#modal-<%= cid %>'
         , sel_modal_edit = '#modal-edit-<%= cid %>'
         , sel_modal_remove = '#modal-remove-<%= cid %>'
+        , sel_modal_undo = '#modal-undo-<%= cid %>'
+        , sel_modal_confirm_remove = '#modal-confirm-remove-<%= cid %>'
         , sel_item_name = '#item-name-<%= cid %>'
         , sel_item_description = '#item-description-<%= cid %>'
         , sel_item_image = '#item-image-<%= cid %>'
+        , sel_actions = '#modal-actions-<%= cid %>'
+        , sel_confirm = '#modal-confirm-<%= cid %>'
         ;
 
     function PagedList(options) {
@@ -359,6 +363,8 @@
     function _showModal(item) {
         var self = this;
         var $modal = $(self.template(sel_modal))
+            , $actions = $(self.template(sel_actions))
+            , $confirm = $(self.template(sel_confirm))
             , $name = $(self.template(sel_item_name))
             , $description = $(self.template(sel_item_description))
             , $image = $(self.template(sel_item_image))
@@ -366,6 +372,10 @@
             , $edit = $(self.template(sel_modal_edit))
             , $remove = $(self.template(sel_modal_remove))
             ;
+
+        //-- show buttons --//
+        $actions.show();
+        $confirm.hide();
 
         //-- MODAL --//
         $edit.unbind();
@@ -382,7 +392,7 @@
         if (!!self['_modal_remove']) {
             $remove.show();
             ly.el.click($remove, function(){
-                self.trigger(EVENT_REMOVE, item);
+               self.bindTo(_confirmRemove)(item);
             });
         } else {
             $remove.hide();
@@ -397,6 +407,32 @@
             backdrop: true,
             keyboard: true,
             show: true
+        });
+    }
+
+    function _confirmRemove(item){
+        var self = this;
+        var $actions = $(self.template(sel_actions))
+            , $confirm = $(self.template(sel_confirm))
+            , $undo = $(self.template(sel_modal_undo))
+            , $remove = $(self.template(sel_modal_confirm_remove))
+            ;
+
+        $actions.hide();
+        $confirm.fadeIn();
+
+        ly.el.click($undo, function(){
+            $confirm.hide();
+            $actions.fadeIn();
+        });
+
+        ly.el.click($remove, function(){
+            self.trigger(EVENT_REMOVE, item);
+            $confirm.fadeOut();
+            // close modal with little delay
+            _.delay(function(){
+                 $(self.template(sel_modal)).modal('hide');
+            }, 500);
         });
     }
 
