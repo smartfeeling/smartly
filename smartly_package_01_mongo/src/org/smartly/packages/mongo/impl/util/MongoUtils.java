@@ -479,7 +479,7 @@ public class MongoUtils implements IMongoConstants {
             for (final String key : keys) {
                 if (!CollectionUtils.contains(excludeProperties, key)) {
                     if(deep || !target.containsField(key)){
-                        mergeKey(key, defaults, target);
+                        mergeKey(key, defaults, target, false); // does not overwrite existing primitive values
                     }
                 }
             }
@@ -489,32 +489,7 @@ public class MongoUtils implements IMongoConstants {
     public static void mergeKey(final String key,
                                 final Object source,
                                 final DBObject target)  {
-        if (source instanceof DBObject) {
-            mergeKey(key, (DBObject) source, target);
-        } else {
-            final Object svalue = BeanUtils.getValueIfAny(source, key);
-            final Object tvalue = target.get(key);
-            if (null == tvalue || null == svalue) {
-                // add new value to target
-                target.put(key, svalue);
-            } else {
-                if (svalue instanceof DBObject) {
-                    putValue(target, key, (DBObject) svalue);
-                } else {
-                    // SOURCE is NULL or other Type (String, int, Object...)
-                    // only primitives are allowed
-                    if (BeanUtils.isPrimitiveClass(svalue)) {
-                        if (tvalue instanceof Collection) {
-                            // TARGET is a Collection
-                            ((Collection) tvalue).add(svalue);
-                        } else {
-                            // add new value to target
-                            target.put(key, svalue);
-                        }
-                    }
-                }
-            }
-        }
+        mergeKey(key, source, target, true);
     }
 
     /**
@@ -527,6 +502,47 @@ public class MongoUtils implements IMongoConstants {
     public static void mergeKey(final String key,
                                 final DBObject source,
                                 final DBObject target) {
+        mergeKey(key, source, target, true);
+    }
+
+    public static void mergeKey(final String key,
+                                final Object source,
+                                final DBObject target,
+                                final boolean overwrite)  {
+        if (source instanceof DBObject) {
+            mergeKey(key, (DBObject) source, target);
+        } else {
+            final Object svalue = BeanUtils.getValueIfAny(source, key);
+            final Object tvalue = target.get(key);
+            if (null == tvalue || null == svalue) {
+                // add new value to target
+                target.put(key, svalue);
+            } else {
+                if (svalue instanceof DBObject) {
+                    putValue(target, key, (DBObject) svalue, overwrite);
+                } else {
+                    // SOURCE is NULL or other Type (String, int, Object...)
+                    // only primitives are allowed
+                    if (BeanUtils.isPrimitiveClass(svalue)) {
+                        if (tvalue instanceof Collection) {
+                            // TARGET is a Collection
+                            ((Collection) tvalue).add(svalue);
+                        } else {
+                            // add new value to target
+                            if(overwrite || !target.containsField(key)){
+                                target.put(key, svalue);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public static void mergeKey(final String key,
+                                final DBObject source,
+                                final DBObject target,
+                                final boolean overwrite) {
         final Object svalue = source.get(key);
         final Object tvalue = target.get(key);
         if (null == tvalue || null == svalue) {
@@ -535,9 +551,9 @@ public class MongoUtils implements IMongoConstants {
         } else {
             if (svalue instanceof Collection) {
                 // SOURCE is Collection
-                putValue(target, key, (Collection) svalue);
+                putValue(target, key, (Collection) svalue, overwrite);
             } else if (svalue instanceof DBObject) {
-                putValue(target, key, (DBObject) svalue);
+                putValue(target, key, (DBObject) svalue, overwrite);
             } else {
                 // SOURCE is NULL or other Type (String, int, Object...)
                 if (tvalue instanceof Collection) {
@@ -545,7 +561,9 @@ public class MongoUtils implements IMongoConstants {
                     ((Collection) tvalue).add(svalue);
                 } else {
                     // add new value to target
-                    target.put(key, svalue);
+                    if(overwrite || !target.containsField(key)){
+                        target.put(key, svalue);
+                    }
                 }
             }
         }
@@ -1015,8 +1033,10 @@ public class MongoUtils implements IMongoConstants {
     // ------------------------------------------------------------------------
     //                      p r i v a t e
     // ------------------------------------------------------------------------
-    private static void putValue(final DBObject target, final String key,
-                                 final Collection sourcevalues) {
+    private static void putValue(final DBObject target,
+                                 final String key,
+                                 final Collection sourcevalues,
+                                 final boolean overwrite) {
         final Object tvalue = target.get(key);
         if (tvalue instanceof Collection) {
             final Collection tvaluelist = (Collection) tvalue;
@@ -1024,13 +1044,17 @@ public class MongoUtils implements IMongoConstants {
             CollectionUtils.addAllNoDuplicates(tvaluelist, sourcevalues);
         } else {
             // Source is Collection but target not.
-            sourcevalues.add(tvalue);
-            target.put(key, sourcevalues);
+            if(overwrite || !target.containsField(key)){
+                sourcevalues.add(tvalue);
+                target.put(key, sourcevalues);
+            }
         }
     }
 
-    private static void putValue(final DBObject target, final String key,
-                                 final DBObject sourcevalue) {
+    private static void putValue(final DBObject target,
+                                 final String key,
+                                 final DBObject sourcevalue,
+                                 final boolean overwrite) {
         final Object tvalue = target.get(key);
         if (tvalue instanceof Collection) {
             final Collection tvaluelist = (Collection) tvalue;
@@ -1042,7 +1066,9 @@ public class MongoUtils implements IMongoConstants {
             merge(sourcevalue, (DBObject) tvalue, null);
         } else {
             // TARGET is NULL or other Type (String, int, Object...)
-            target.put(key, sourcevalue);
+            if(overwrite || !target.containsField(key)){
+                target.put(key, sourcevalue);
+            }
         }
     }
 
