@@ -451,7 +451,7 @@ public abstract class AbstractMongoService {
                     ? this.count(filter, false)
                     : this.count(cursor, true);
             final int pageCount = MathUtils.paging(limit, count);
-            final int pageNr = skip>0?skip/limit+1:1;
+            final int pageNr = skip > 0 ? skip / limit + 1 : 1;
 
             //final int count = null != cursor ? cursor.count() : 0;
             final List<DBObject> list = null != cursor
@@ -565,7 +565,13 @@ public abstract class AbstractMongoService {
 
     public final void localize(final MongoPage page,
                                final String lang, final String[] fields) {
-        this.localize(MongoPage.getItems(page), lang, fields);
+        this.localize(MongoPage.getItems(page), lang, fields, false);
+    }
+
+    public final void localize(final MongoPage page,
+                               final String lang, final String[] fields,
+                               final boolean onlyExistingFields) {
+        this.localize(MongoPage.getItems(page), lang, fields, onlyExistingFields);
     }
 
     /**
@@ -578,9 +584,15 @@ public abstract class AbstractMongoService {
      */
     public final void localize(final List<DBObject> list,
                                final String lang, final String[] fields) {
+        this.localize(list, lang, fields, false);
+    }
+
+    public final void localize(final List<DBObject> list,
+                               final String lang, final String[] fields,
+                               final boolean onlyExistingFields) {
         if (!CollectionUtils.isEmpty(list) && StringUtils.hasText(lang)) {
             for (final DBObject item : list) {
-                this.localize(item, lang, fields);
+                this.localize(item, lang, fields, onlyExistingFields);
             }
         }
     }
@@ -595,10 +607,20 @@ public abstract class AbstractMongoService {
     public final void localize(final DBObject item,
                                final String lang,
                                final String[] fields) {
+        this.localize(item, lang, fields, false);
+    }
+
+    public final void localize(final DBObject item,
+                               final String lang,
+                               final String[] fields,
+                               final boolean onlyExistingFields) {
         if (null != item && StringUtils.hasText(lang)) {
             try {
                 final MongoTranslationManager srvc = this.getTranslationManager();
                 for (final String field : fields) {
+                    if (onlyExistingFields && !item.containsField(field)) {
+                        continue;
+                    }
                     localize(srvc, item, lang, field);
                 }
             } catch (Throwable ex) {
@@ -843,7 +865,7 @@ public abstract class AbstractMongoService {
         if (field.indexOf(".") == -1) {
             // standard field name
             final DBObject value = MongoUtils.getDBObject(item, field, null);
-            if(null!=value){
+            if (null != value) {
                 // EMBEDDED TRANSLATIONS
                 localize(item, lang, field, value);
             } else {
@@ -872,14 +894,14 @@ public abstract class AbstractMongoService {
             final String fieldName = CollectionUtils.getLast(tokens);
             if (propertyBean instanceof List) {
                 final List list = (List) propertyBean;
-                for(final Object obj:list){
-                    if(obj instanceof DBObject){
+                for (final Object obj : list) {
+                    if (obj instanceof DBObject) {
                         final DBObject dbo = (DBObject) obj;
                         final DBObject translation = MongoUtils.getDBObject(dbo, fieldName);
                         localize(dbo, lang, fieldName, translation);
                     }
                 }
-            }else if (propertyBean instanceof DBObject){
+            } else if (propertyBean instanceof DBObject) {
                 final DBObject dbo = (DBObject) propertyBean;
                 final DBObject translation = MongoUtils.getDBObject(dbo, fieldName);
                 localize(dbo, lang, fieldName, translation);
