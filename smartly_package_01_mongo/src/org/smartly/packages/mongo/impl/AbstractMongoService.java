@@ -13,6 +13,7 @@ import org.smartly.packages.mongo.impl.util.MongoUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -23,10 +24,12 @@ public abstract class AbstractMongoService {
     // ------------------------------------------------------------------------
     //                      Constants
     // ------------------------------------------------------------------------
+
     private static final String _ID = IMongoConstants.ID;
     private static final String MODIFIER_INC = "$inc";
     private static final int EARTH_RADIUS_mt = 6378160; // earth radius in mt.
     private static final String LOCALE_BASE_FIELD = IMongoConstants.LANG_BASE; // used in embedded localizations. i.e. "description":{"base":"hello", "it":"ciao"}
+    private static final String WILDCHAR = IMongoConstants.WILDCHAR;
     // ------------------------------------------------------------------------
     //                      variables
     // ------------------------------------------------------------------------
@@ -614,10 +617,20 @@ public abstract class AbstractMongoService {
                                final String lang,
                                final String[] fields,
                                final boolean onlyExistingFields) {
-        if (null != item && StringUtils.hasText(lang)) {
+        if (null != fields && fields.length > 0 && null != item && StringUtils.hasText(lang)) {
+            //-- define fields to localize --//
+            final String[] fields_to_localize;
+            if (fields.length == 1 && WILDCHAR.equalsIgnoreCase(fields[0])) {
+                // all fields
+                final Set<String> keys = item.keySet();
+                fields_to_localize = keys.toArray(new String[keys.size()]);
+            } else {
+                fields_to_localize = fields;
+            }
+            //-- loop on fields to localize --//
             try {
                 final MongoTranslationManager srvc = this.getTranslationManager();
-                for (final String field : fields) {
+                for (final String field : fields_to_localize) {
                     if (onlyExistingFields && !item.containsField(field)) {
                         continue;
                     }
