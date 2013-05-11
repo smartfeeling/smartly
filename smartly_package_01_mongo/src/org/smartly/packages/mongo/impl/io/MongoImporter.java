@@ -73,12 +73,13 @@ public class MongoImporter {
             if (value instanceof String && value.toString().startsWith(IConstants.FOLDER_SEPARATOR)) {
                 final String file = PathUtils.concat(root, value.toString());
                 final String text = ClassLoaderUtils.getResourceAsString(file);
-                if (StringUtils.isJSON(text)) {
-                    item.put(key, MongoUtils.parseObject(text));
-                } else {
-                    item.put(key, text);
+                if(StringUtils.hasText(text)){
+                    if (StringUtils.isJSON(text)) {
+                        item.put(key, MongoUtils.parseObject(text));
+                    } else {
+                        item.put(key, text);
+                    }
                 }
-
             }
         }
     }
