@@ -600,7 +600,7 @@ public abstract class CollectionUtils {
     }
 
     public static boolean contains(final Collection list, Object value) {
-        return null != list && list.size()>0 && list.contains(value);
+        return null != list && list.size() > 0 && list.contains(value);
     }
 
     public static boolean contains(Class[] array, Class value) {
@@ -736,10 +736,10 @@ public abstract class CollectionUtils {
 
     public static Map merge(final Map... args) {
         Map result = null;
-        for(final Map map:args){
-            if(null!=map){
-                if(null==result){
-                   result = map;
+        for (final Map map : args) {
+            if (null != map) {
+                if (null == result) {
+                    result = map;
                 } else {
                     result.putAll(map);
                 }
@@ -1082,6 +1082,25 @@ public abstract class CollectionUtils {
      */
     public static boolean isEmpty(final Map map) {
         return CollectionUtils.size(map) == 0;
+    }
+
+    /**
+     * Check if all items of current collection are assignable to passed class
+     *
+     * @param list   Collection to check
+     * @param aclass Class
+     * @return True if all items in collection are assignable to passed class
+     */
+    public static boolean isListOf(final Collection<?> list, final Class aclass) {
+        if (null == list) {
+            return false;
+        }
+        for (final Object item : list) {
+            if (null == item || !BeanUtils.isAssignable(item, aclass)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static int size(final Object[] array) {

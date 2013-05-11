@@ -208,10 +208,18 @@ public class MongoImporter {
         return result;
     }
 
+    /**
+     * Import all translations contained in a field named "localizations".
+     * This method will import all translations into localized collections (ex: "mycoll_it").
+     * Returns a list of String containig all languages inported (i.e. "['base', 'it', 'en']")
+     * @param item Item to localize
+     * @param localizations List of DBObject. "[{'lang':'it', 'name':'Ciao'}, {'lang':'en', 'name':'Hello'}]"
+     * @return Returns a list of String containig all languages inported (i.e. "['base', 'it', 'en']")
+     */
     private List doImportLocalizations(final DBObject item, final List localizations) {
         final BasicDBList languages = new BasicDBList();
         final Object id = MongoUtils.getId(item);
-        if (null != localizations) {
+        if (CollectionUtils.isListOf(localizations, DBObject.class)) {
             for (final Object local_item : localizations) {
                 if (local_item instanceof DBObject) {
                     final DBObject dbo = (DBObject) local_item;
@@ -239,6 +247,8 @@ public class MongoImporter {
 
                 }
             }
+        } else if(CollectionUtils.isListOf(localizations, String.class)) {
+            return localizations;
         }
         return languages;
     }
