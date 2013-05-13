@@ -17,13 +17,15 @@
             view: false
         });
 
-        self['_name'] = !!options ? options['name'] || 'name' : 'name';
-        self['_description'] = !!options ? options['description'] || 'description' : 'description';
-        self['_image'] = !!options ? options['image'] || 'image' : 'image';
-        self['_data'] = !!options ? options['data'] || 'data' : 'data';
+        options = options || {};
+
+        self['_name'] = null != options['name'] ? options['name'] : 'name';
+        self['_description'] = null != options['description'] ? options['description'] : 'description';
+        self['_image'] = null != options['image'] ? options['image'] : 'image';
+        self['_data'] = null != options['data'] ? options['data'] : 'data';
 
         // add Events
-        this.on('init', _init);
+        self.on('init', _init);
     }
 
     ly.inherits(PagedListItem, ly.Gui);
@@ -49,9 +51,9 @@
             , $image = $(self.template(sel_image))
             ;
 
-        $title.html(item[self['_name']]);
-        $description.html(item[self['_description']]);
-        $image.attr('src', item[self['_image']]||IMG_SRC);
+        $title.html(ly.value(item, self['_name']));
+        $description.html(ly.value(item, self['_description']));
+        $image.attr('src', ly.value(item, self['_image'] || IMG_SRC));
 
         //-- handler --//
         $(self.template(sel_self)).on('click', function (e) {

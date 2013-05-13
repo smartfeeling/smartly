@@ -270,7 +270,7 @@
     }
 
     function toBoolean(value) {
-        return !!value ? value != 'false' && value !='0' : false;
+        return !!value ? value != 'false' && value != '0' : false;
     }
 
     // ------------------------------------------------------------------------
@@ -285,19 +285,25 @@
      *  var val = SF.value(object, 'prop1.prop2'); // return value
      **/
     function value(root, path, value) {
-        var segments = path.split('.'),
-            cursor = root || window,
-            segment,
-            i;
+        if (!root) return null;
+        if (_.isFunction(path)) {
+            // path is a function and not a property
+            return path.apply(root, [root]);
+        } else {
+            var segments = path.split('.'),
+                cursor = root || window,
+                segment,
+                i;
 
-        for (i = 0; i < segments.length - 1; ++i) {
-            segment = segments[i];
-            cursor = cursor[segment] = cursor[segment] || {};
+            for (i = 0; i < segments.length - 1; ++i) {
+                segment = segments[i];
+                cursor = cursor[segment] = cursor[segment] || {};
+            }
+            if (null != value) {
+                cursor[segments[i]] = value;
+            }
+            return cursor[segments[i]];
         }
-        if (null != value) {
-            cursor[segments[i]] = value;
-        }
-        return cursor[segments[i]];
     }
 
     function provide(path) {
