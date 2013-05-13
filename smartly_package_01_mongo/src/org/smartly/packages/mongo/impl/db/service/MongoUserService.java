@@ -12,6 +12,7 @@ import org.smartly.commons.cryptograph.MD5;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.util.*;
 import org.smartly.packages.mongo.impl.AbstractMongoService;
+import org.smartly.packages.mongo.impl.IMongoConstants;
 import org.smartly.packages.mongo.impl.MongoPage;
 import org.smartly.packages.mongo.impl.StandardCodedException;
 import org.smartly.packages.mongo.impl.db.entity.MongoUser;
@@ -201,6 +202,20 @@ public class MongoUserService
         final Pattern equal = Pattern.compile("\\A" + email + "\\z", MongoUtils.CASE_INSENSITIVE);
         query.put(MongoUser.EMAIL, equal);
         return super.find(query);
+    }
+
+    public MongoUser createEmpty(final String langCode, final String country) throws Exception {
+        final MongoUser user = new MongoUser(new BasicDBObject(IMongoConstants.ID, MongoUtils.createUUID()));
+        MongoUser.setEnabled(user, true);
+        user.setLang(StringUtils.hasText(langCode)
+                ? langCode
+                : IConstants.DEF_LANG);
+        user.setCountryId(null != country ? country : "IT");
+        // initial username and password
+        user.setUsername("new_user");
+        user.setPassword(RandomUtils.randomNumeric(6));
+
+        return user;
     }
 
     public MongoUser createNew(final String idphone,

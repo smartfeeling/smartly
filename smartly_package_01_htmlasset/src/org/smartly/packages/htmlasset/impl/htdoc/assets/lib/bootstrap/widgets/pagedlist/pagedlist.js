@@ -222,30 +222,38 @@
             return;
         }
 
-        var $items = $(self.template(sel_items))
-            ;
+        // loading....
+        self.bindTo(_toggleLoading)(true);
 
-        // clear body
-        $items.html('');
+        // load with little delay
+        _.delay(function () {
 
-        var count = 0;
-        _.forEach(items, function (item) {
-            if (!ly.isNull(item)) {
-                count++;
-                var comp = new ly.gui.widgets.PagedListItem({
-                    name: self['_item_name'],
-                    description: self['_item_description'],
-                    image: self['_item_image'],
-                    data: item
-                });
-                comp.appendTo($items);
-                comp.on('click', function () {
-                    self.bindTo(_clickItem)(item);
-                });
-            }
-        });
+            var $items = $(self.template(sel_items))
+                ;
 
-        self.bindTo(_toggleLoading)(false, count === 0);
+            // clear body
+            $items.html('');
+
+            var count = 0;
+            _.forEach(items, function (item) {
+                if (!ly.isNull(item)) {
+                    count++;
+                    var comp = new ly.gui.widgets.PagedListItem({
+                        name: self['_item_name'],
+                        description: self['_item_description'],
+                        image: self['_item_image'],
+                        data: item
+                    });
+                    comp.appendTo($items);
+                    comp.on('click', function () {
+                        self.bindTo(_clickItem)(item);
+                    });
+                }
+            });
+
+            self.bindTo(_toggleLoading)(false, count === 0);
+
+        }, 200);
     }
 
     function _clickItem(item) {
@@ -393,6 +401,7 @@
         if (!!self['_modal_edit']) {
             $edit.show();
             ly.el.click($edit, function () {
+                $modal.modal('hide');
                 self.trigger(EVENT_EDIT, item);
             });
         } else {
