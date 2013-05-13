@@ -1,5 +1,8 @@
 (function () {
 
+    lyb.require('/assets/lib/bootstrap/widgets/pagedlist/pagedlist.mini.css');
+    lyb.require('/assets/lib/bootstrap/widgets/pagedlist/pagedlistitem.js');
+
     var EVENT_SELECT = 'select'
         , EVENT_EDIT = 'edit'
         , EVENT_REMOVE = 'remove'
@@ -80,6 +83,7 @@
             self['_modal_edit'] = null != options['modal_edit'] ? !!options['modal_edit'] : true;
             self['_modal_remove'] = null != options['modal_remove'] ? !!options['modal_remove'] : true;
 
+            //-- item attributes --//
             self['_item_name'] = options['item_name'] || 'name';
             self['_item_description'] = options['item_description'] || 'description';
             self['_item_image'] = options['item_image'] || 'image';
