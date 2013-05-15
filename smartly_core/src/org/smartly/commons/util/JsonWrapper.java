@@ -506,6 +506,13 @@ public final class JsonWrapper implements Cloneable {
         return null;
     }
 
+    public String getString(final int index) throws JSONException {
+        if (this.isJSONArray() && _array.length()>index) {
+            return _array.getString(index);
+        }
+        return null;
+    }
+
     public boolean getBoolean(final int index) throws JSONException {
         if (this.isJSONArray() && _array.length()>index) {
             return _array.getBoolean(index);
@@ -551,6 +558,13 @@ public final class JsonWrapper implements Cloneable {
     public Object opt(final int index) {
         if (this.isJSONArray() && _array.length()>index) {
             return _array.opt(index);
+        }
+        return null;
+    }
+
+    public String optString(final int index) {
+        if (this.isJSONArray() && _array.length()>index) {
+            return _array.optString(index);
         }
         return null;
     }
