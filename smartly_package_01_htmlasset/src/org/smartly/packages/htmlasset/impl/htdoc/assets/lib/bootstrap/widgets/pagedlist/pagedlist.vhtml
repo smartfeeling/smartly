@@ -1,7 +1,9 @@
 #parse('/assets/lib/bootstrap/widgets/pagedlist/i18n.vm')
 
+<!-- REMOVE COMMENT FOR DEBUG
 $script.requireCss('/assets/lib/bootstrap/widgets/pagedlist/pagedlist.mini.css')
 $script.requireJs('/assets/lib/bootstrap/widgets/pagedlist/pagedlistitem.js')
+-->
 
 <div class="pagedlist ly_box">
 

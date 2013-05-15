@@ -3,6 +3,7 @@
  */
 package org.smartly.packages.mongo.impl.db.service;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBObject;
@@ -11,6 +12,8 @@ import org.smartly.commons.cryptograph.MD5;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.util.*;
 import org.smartly.packages.mongo.impl.AbstractMongoService;
+import org.smartly.packages.mongo.impl.IMongoConstants;
+import org.smartly.packages.mongo.impl.MongoPage;
 import org.smartly.packages.mongo.impl.StandardCodedException;
 import org.smartly.packages.mongo.impl.db.entity.MongoUser;
 import org.smartly.packages.mongo.impl.util.MongoUtils;
@@ -36,6 +39,30 @@ public class MongoUserService
     // ------------------------------------------------------------------------
     //                      public
     // ------------------------------------------------------------------------
+
+    public MongoPage paged(final int skip,
+                           final int limit,
+                           final String searchText) {
+        final DBObject query = new BasicDBObject();
+        final String[] fieldNames = null;
+        // final int skip = 0;
+        // final int limit = 10;
+        final String[] sortAsc = new String[]{};
+        final String[] sortDes = new String[]{MongoUser.USERNAME};
+
+        if (!StringUtils.isNULL(searchText)) {
+            final BasicDBList conditions = new BasicDBList();
+            conditions.add(MongoUtils.queryEquals(MongoUser.ID, searchText, MongoUtils.CASE_INSENSITIVE));
+            conditions.add(MongoUtils.queryContains(MongoUser.USERNAME, searchText, MongoUtils.CASE_INSENSITIVE));
+            conditions.add(MongoUtils.queryContains(MongoUser.EMAIL, searchText, MongoUtils.CASE_INSENSITIVE));
+            conditions.add(MongoUtils.queryContains(MongoUser.REALNAME, searchText, MongoUtils.CASE_INSENSITIVE));
+            conditions.add(MongoUtils.queryEquals(MongoUser.KEYWORDS, searchText, MongoUtils.CASE_INSENSITIVE));
+
+            query.put(MongoUtils.OP_OR, conditions);
+        }
+        return super.paged(query, fieldNames, skip, limit, sortAsc, sortDes);
+    }
+
     public DBObject getById(final Object id, final boolean onlyEnabled) {
         final DBObject user = super.findById(id);
         if (null != user) {
@@ -175,6 +202,20 @@ public class MongoUserService
         final Pattern equal = Pattern.compile("\\A" + email + "\\z", MongoUtils.CASE_INSENSITIVE);
         query.put(MongoUser.EMAIL, equal);
         return super.find(query);
+    }
+
+    public MongoUser createEmpty(final String langCode, final String country) throws Exception {
+        final MongoUser user = new MongoUser(new BasicDBObject(IMongoConstants.ID, MongoUtils.createUUID()));
+        MongoUser.setEnabled(user, true);
+        user.setLang(StringUtils.hasText(langCode)
+                ? langCode
+                : IConstants.DEF_LANG);
+        user.setCountryId(null != country ? country : "IT");
+        // initial username and password
+        user.setUsername("new_user");
+        user.setPassword(RandomUtils.randomNumeric(6));
+
+        return user;
     }
 
     public MongoUser createNew(final String idphone,

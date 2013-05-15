@@ -1,5 +1,8 @@
 (function () {
 
+    lyb.require('/assets/lib/bootstrap/widgets/pagedlist/pagedlist.mini.css');
+    lyb.require('/assets/lib/bootstrap/widgets/pagedlist/pagedlistitem.js');
+
     var EVENT_SELECT = 'select'
         , EVENT_EDIT = 'edit'
         , EVENT_REMOVE = 'remove'
@@ -80,9 +83,16 @@
             self['_modal_edit'] = null != options['modal_edit'] ? !!options['modal_edit'] : true;
             self['_modal_remove'] = null != options['modal_remove'] ? !!options['modal_remove'] : true;
 
-            self['_item_name'] = options['item_name'] || 'name';
-            self['_item_description'] = options['item_description'] || 'description';
-            self['_item_image'] = options['item_image'] || 'image';
+            //-- item attributes --//
+            if (null == self['_item_name']) {
+                self['_item_name'] = null != options['item_name'] ? options['item_name'] : 'name';
+            }
+            if (null == self['_item_description']) {
+                self['_item_description'] = null != options['item_description'] ? options['item_description'] : 'description';
+            }
+            if (null == self['_item_image']) {
+                self['_item_image'] = null != options['item_image'] ? options['item_image'] : 'image';
+            }
 
             if (_.isArray(options['items'])) {
                 self.bindTo(_loadItems)(options['items']);
@@ -212,30 +222,38 @@
             return;
         }
 
-        var $items = $(self.template(sel_items))
-            ;
+        // loading....
+        self.bindTo(_toggleLoading)(true);
 
-        // clear body
-        $items.html('');
+        // load with little delay
+        _.delay(function () {
 
-        var count = 0;
-        _.forEach(items, function (item) {
-            if (!ly.isNull(item)) {
-                count++;
-                var comp = new ly.gui.widgets.PagedListItem({
-                    name: self['_item_name'],
-                    description: self['_item_description'],
-                    image: self['_item_image'],
-                    data: item
-                });
-                comp.appendTo($items);
-                comp.on('click', function () {
-                    self.bindTo(_clickItem)(item);
-                });
-            }
-        });
+            var $items = $(self.template(sel_items))
+                ;
 
-        self.bindTo(_toggleLoading)(false, count === 0);
+            // clear body
+            $items.html('');
+
+            var count = 0;
+            _.forEach(items, function (item) {
+                if (!ly.isNull(item)) {
+                    count++;
+                    var comp = new ly.gui.widgets.PagedListItem({
+                        name: self['_item_name'],
+                        description: self['_item_description'],
+                        image: self['_item_image'],
+                        data: item
+                    });
+                    comp.appendTo($items);
+                    comp.on('click', function () {
+                        self.bindTo(_clickItem)(item);
+                    });
+                }
+            });
+
+            self.bindTo(_toggleLoading)(false, count === 0);
+
+        }, 200);
     }
 
     function _clickItem(item) {
@@ -382,7 +400,8 @@
         $remove.unbind();
         if (!!self['_modal_edit']) {
             $edit.show();
-            ly.el.click($edit, function(){
+            ly.el.click($edit, function () {
+                $modal.modal('hide');
                 self.trigger(EVENT_EDIT, item);
             });
         } else {
@@ -391,16 +410,19 @@
 
         if (!!self['_modal_remove']) {
             $remove.show();
-            ly.el.click($remove, function(){
-               self.bindTo(_confirmRemove)(item);
+            ly.el.click($remove, function () {
+                self.bindTo(_confirmRemove)(item);
             });
         } else {
             $remove.hide();
         }
 
-        $name.html(item[self['_item_name']]);
-        $description.html(item[self['_item_description']]);
-        $image.attr('src', item[self['_item_image']] || IMG_SRC);
+        $name.html(ly.value(item, self['_item_name']));
+        $description.html(ly.value(item, self['_item_description']));
+        $image.attr('src', ly.value(item, self['_item_image'] || IMG_SRC));
+        //$name.html(item[self['_item_name']]);
+        //$description.html(item[self['_item_description']]);
+        //$image.attr('src', item[self['_item_image']] || IMG_SRC);
 
         //-- show modal --//
         $modal.modal({
@@ -410,7 +432,7 @@
         });
     }
 
-    function _confirmRemove(item){
+    function _confirmRemove(item) {
         var self = this;
         var $actions = $(self.template(sel_actions))
             , $confirm = $(self.template(sel_confirm))
@@ -421,17 +443,17 @@
         $actions.hide();
         $confirm.fadeIn();
 
-        ly.el.click($undo, function(){
+        ly.el.click($undo, function () {
             $confirm.hide();
             $actions.fadeIn();
         });
 
-        ly.el.click($remove, function(){
+        ly.el.click($remove, function () {
             self.trigger(EVENT_REMOVE, item);
             $confirm.fadeOut();
             // close modal with little delay
-            _.delay(function(){
-                 $(self.template(sel_modal)).modal('hide');
+            _.delay(function () {
+                $(self.template(sel_modal)).modal('hide');
             }, 500);
         });
     }
