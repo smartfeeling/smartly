@@ -2,9 +2,7 @@ package org.smartly.commons.network;
 
 import org.smartly.IConstants;
 import org.smartly.commons.lang.CharEncoding;
-import org.smartly.commons.util.ByteUtils;
-import org.smartly.commons.util.ClassLoaderUtils;
-import org.smartly.commons.util.FormatUtils;
+import org.smartly.commons.util.*;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -62,8 +60,8 @@ public class URLUtils {
             }
             final String text = ClassLoaderUtils.getResourceAsString(null, URLUtils.class, resource, CHARSET);
             final Map<String, String> args = new HashMap<String, String>();
-            args.put("uri", uri);
-            args.put("error", t.toString());
+            args.put("uri", StringEscapeUtils.escapeJavaScript(uri));
+            args.put("error", StringEscapeUtils.escapeJavaScript(t.toString()));
             return FormatUtils.formatTemplate(text, "{{", "}}", args);
         }
     }

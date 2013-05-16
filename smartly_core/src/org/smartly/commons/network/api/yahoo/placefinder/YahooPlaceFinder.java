@@ -33,7 +33,10 @@ public class YahooPlaceFinder {
     private static final String FLD_RESULTS = FLD_RESULTSET + ".Results";
     //-- patterns --//
     private static final String REVERSE_GEOCODING = "http://where.yahooapis.com/geocode?locale={locale}&location={latitude}+{longitude}&gflags=R&flags=J&appid={appid}";
-    private static final String GEOCODING = "http://where.yahooapis.com/geocode?locale={locale}&location={address}&flags=J&appid={appid}";
+    // private static final String GEOCODING = "http://where.yahooapis.com/geocode?locale={locale}&location={address}&flags=J&appid={appid}";
+    // http://query.yahooapis.com/v1/public/yql?q=select * from geo.placefinder where text="1600 Pennsylvania Ave, Washington, DC"&appid=test
+    //private static final String GEOCODING = "http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20geo.placefinder%20where%20text%3D%221600%20Pennsylvania%20Ave%2C%20Washington%2C%20DC%22&appid=D9qFIW3e&format=json";
+    private static final String GEOCODING = "http://query.yahooapis.com/v1/public/yql?q=select+*+from+geo.placefinder+where+text=\"{address}\"&appid={appid}&format=json";
     private static final String GEOCODING_COORD = "http://where.yahooapis.com/geocode?locale={locale}&location={address}&flags=JC&appid={appid}";
 
     public YahooPlaceFinder(final String appId) {
