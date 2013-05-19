@@ -26,7 +26,7 @@ public class MatrixToImageWriter {
      * Renders a {@link com.google.zxing.common.BitMatrix} as an image, where "false" bits are rendered
      * as white, and "true" bits are rendered as black.
      */
-    public static BufferedImage toBufferedImage(BitMatrix matrix) {
+    public static BufferedImage toBufferedImage(final BitMatrix matrix) {
         int width = matrix.getWidth();
         int height = matrix.getHeight();
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -44,7 +44,7 @@ public class MatrixToImageWriter {
      * luminance values, in theory. However, anything but 0 will be rendered as
      * white, and 0 will be rendered as black.
      */
-    public static BufferedImage toBufferedImage(ByteMatrix matrix) {
+    public static BufferedImage toBufferedImage(final ByteMatrix matrix) {
         int width = matrix.getWidth();
         int height = matrix.getHeight();
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
