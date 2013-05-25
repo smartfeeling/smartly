@@ -291,7 +291,7 @@
             return navigator.userAgent.match(/IEMobile/i) ? true : false;
         },
         any: function() {
-            return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Windows());
+            return (this.Android() || this.BlackBerry() || this.iOS() || this.Windows());
         }
     };
 
