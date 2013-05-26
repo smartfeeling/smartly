@@ -130,7 +130,7 @@ public class LocaleUtils {
                 }
             }
         }
-        return DEFAULT;
+        return getLocale(new Locale(lang));
     }
 
     public static Locale getLocaleByCountry(final String country) {
