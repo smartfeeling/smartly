@@ -245,7 +245,7 @@
             if (null == arg || 'NULL' == arg) return true;
             return _.isArray(arg)
                 ? (arg.length > 0 ? arg.length === 1 && isNull(arg[0]) : true)
-                : (_.isObject(arg) ? _.size(arg) === 0 : (arg === 'NULL' || arg == '' || arg['response'] === 'NULL'));
+                : (_.isObject(arg) ? _.size(arg) === 0||arg['response']==='NULL' : (arg === 'NULL' || arg == '' || arg['response'] === 'NULL'));
         } catch (err) {
             ly.console.error(err);
         }

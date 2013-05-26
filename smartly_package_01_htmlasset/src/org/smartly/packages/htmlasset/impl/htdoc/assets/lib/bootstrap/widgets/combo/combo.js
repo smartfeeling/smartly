@@ -121,9 +121,8 @@
     function _select(item_or_string, emitevent) {
         var self = this;
         _.delay(function () {
-            var item = _.isString(item_or_string) ? self.bindTo(_itemById)(item_or_string) : item_or_string
-                , item_id = item[self['_field_id']]
-                ;
+            var item = _.isString(item_or_string) ? self.bindTo(_itemById)(item_or_string) : item_or_string;
+            var item_id = item[self['_field_id']];
             self['_selected'] = item;
 
             ly.el.value(self.template(sel_self), item_id);
