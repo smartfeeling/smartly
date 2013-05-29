@@ -163,9 +163,9 @@ public abstract class DateUtils {
     }
 
     public static Date anticipateWorkingDay(final Date date,
-                                          final int measureUnit,
-                                          final int amount,
-                                          final Long[] holidays) {
+                                            final int measureUnit,
+                                            final int amount,
+                                            final Long[] holidays) {
         Date result = date;
         for (int i = 0; i < amount; i++) {
             result = postpone(result, measureUnit, -1);
@@ -200,8 +200,12 @@ public abstract class DateUtils {
 
         // check if in holiday
         if (null != holidays) {
+            final Calendar holiday = Calendar.getInstance();
             for (final long d : holidays) {
-                if (time == d) {
+                holiday.setTimeInMillis(d);
+                if (holiday.get(Calendar.YEAR) == calendar.get(Calendar.YEAR)
+                        && holiday.get(Calendar.MONTH) == calendar.get(Calendar.MONTH)
+                        && holiday.get(Calendar.DAY_OF_MONTH) == calendar.get(Calendar.DAY_OF_MONTH)) {
                     return false;
                 }
             }
