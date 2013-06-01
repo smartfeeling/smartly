@@ -78,7 +78,7 @@ public abstract class DateUtils {
      *
      * @param date1 First date
      * @param date2 Second date
-     * @return Difference betwwen first date and second date in milliseconds
+     * @return Difference between first date and second date in milliseconds
      */
     public static long dateDiff(Date date1, Date date2) {
         long result = date1.getTime() - date2.getTime();
@@ -92,7 +92,7 @@ public abstract class DateUtils {
      * @param date1       First date
      * @param date2       Second date
      * @param measureUnit Measure unit. Ex: DateUtility.DAY
-     * @return Difference betwwen first date and second date.
+     * @return Difference between first date and second date.
      */
     public static double dateDiff(Date date1, Date date2, int measureUnit) {
         long diff = dateDiff(date1, date2);
