@@ -35,7 +35,7 @@
 
         ;
 
-    function AdvancedCombo(options) {
+    function AdvancedCombo(attributes) {
         var self = this
             ;
 
@@ -45,16 +45,14 @@
             view: true
         });
 
-        options = options || {}; // avoid error on null options
-
-        self.set(options);
+        attributes = attributes || {}; // avoid error on null attributes
 
         self['_selected'] = "";
 
-        self.bindTo(_refreshOptions)();
-
         // add listeners
-        self.on('init', _init);
+        self.on('init', function () {
+            self.bindTo(_initAttributesModel)(attributes);
+        });
     }
 
     ly.inherits(AdvancedCombo, ly.Gui);
@@ -66,51 +64,6 @@
         });
     };
 
-    AdvancedCombo.prototype.set = function (options) {
-        var self = this;
-        if (!!options) {
-            self['_title'] = options['title'] || '';
-            self['_add'] = null != options['add'] ? !!options['add'] : true;
-            self['_add_tooltip'] = options['_add_tooltip'] || '';
-            self['_remove'] = null != options['remove'] ? !!options['remove'] : true;
-            self['_remove_tooltip'] = options['_remove_tooltip'] || '';
-            self['_edit'] = null != options['edit'] ? !!options['editd'] : true;
-            self['_edit_tooltip'] = options['_edit_tooltip'] || '';
-            self['_search'] = null != options['search'] ? !!options['search'] : true;
-            self['_search_tooltip'] = options['_search_tooltip'] || '';
-            self['_search_placeholder'] = options['_search_placeholder'] || '';
-
-            self['_icon'] = options['icon'] || 'icon-asterisk';
-            self['_size'] = options['size'] || 'input-medium';
-
-            self['_skip'] = null != options['skip'] ? options['skip'] : null != self['_skip'] ? self['_skip'] : 0;
-            self['_limit'] = null != options['limit'] ? options['limit'] : null != self['_limit'] ? self['_limit'] : 5;
-            self['_page_nr'] = null != options['page_nr'] ? options['page_nr'] : null != self['_page_nr'] ? self['_page_nr'] : 1;
-            self['_page_count'] = null != options['page_count'] ? options['page_count'] : null != self['_page_count'] ? self['_page_count'] : 1;
-            self['_total'] = null != options['total'] ? options['total'] : null != self['_total'] ? self['_total'] : 0;
-
-            self['_items'] = null != options['items'] ? options['items'] : self['_items'] || [];
-
-            //-- item attributes --//
-            if (null == self['_item_id']) {
-                self['_item_id'] = null != options['_item_id'] ? options['_item_id'] : '_id';
-            }
-            if (null == self['_item_name']) {
-                self['_item_name'] = null != options['item_name'] ? options['item_name'] : 'name';
-            }
-            if (null == self['_item_description']) {
-                self['_item_description'] = null != options['item_description'] ? options['item_description'] : 'description';
-            }
-            if (null == self['_item_image']) {
-                self['_item_image'] = null != options['item_image'] ? options['item_image'] : 'image';
-            }
-
-            if (_.isArray(options['items'])) {
-                self.bindTo(_loadItems)(options['items']);
-            }
-        }
-    };
-
     AdvancedCombo.prototype.select = function (item, emitEvent) {
         this.bindTo(_select)(item, emitEvent);
     };
@@ -120,49 +73,71 @@
     };
 
     AdvancedCombo.prototype.items = function (items) {
+        var self = this;
         if (!!items) {
-            this['_items'] = items;
-            this.bindTo(_init)();
+            self.attributes().set({items:items});
         }
-        return this['_items'];
+        return self.attributes().get('items');
     };
 
     AdvancedCombo.prototype.search = function () {
         return '';
     };
 
+    AdvancedCombo.prototype.attributes = function (object) {
+        var self = this;
+        if (_.isObject(object)) {
+            self['_attributes'].set(object);
+        }
+        return self['_attributes']; // returns the model
+    };
+
     // ------------------------------------------------------------------------
     //                      p r i v a t e
     // ------------------------------------------------------------------------
 
-    function _init() {
-        var self = this
-            , $combo = $(self.template(sel_combo))
-            , $icon = $(self.template(sel_icon))
-            ;
+    function _initAttributesModel(attributes) {
+        var self = this;
 
-        self.bindTo(_loadItems)(self['_items']);
+        attributes['title'] = attributes['title'] || '';
+        attributes['add'] = null != attributes['add'] ? !!attributes['add'] : true;
+        attributes['add_tooltip'] = attributes['add_tooltip'] || '';
+        attributes['remove'] = null != attributes['remove'] ? !!attributes['remove'] : true;
+        attributes['remove_tooltip'] = attributes['remove_tooltip'] || '';
+        attributes['edit'] = null != attributes['edit'] ? !!attributes['edit'] : true;
+        attributes['edit_tooltip'] = attributes['edit_tooltip'] || '';
+        attributes['search'] = null != attributes['search'] ? !!attributes['search'] : true;
+        attributes['search_tooltip'] = attributes['search_tooltip'] || '';
+        attributes['search_placeholder'] = attributes['search_placeholder'] || '';
 
+        attributes['icon'] = attributes['icon'] || 'icon-asterisk';
+        attributes['size'] = attributes['size'] || 'input-medium';
 
-        // icon
-        $icon.addClass(self['_icon']);
+        attributes['skip'] = 0;
+        attributes['limit'] = 0;
+        attributes['page_nr'] = 1;
+        attributes['page_count'] = 1;
+        attributes['total'] = null != attributes['total'] ? attributes['total'] : null != attributes['total'] ? attributes['total'] : 0;
 
-        // size
-        var size = self['_size'];
-        if (size.indexOf('px') > -1 || size.indexOf('%') > -1) {
-            $combo.attr('style', 'width:' + size + ';')
-        } else {
-            $combo.addClass(size);
-        }
+        attributes['items'] = null != attributes['items'] ? attributes['items'] : attributes['items'] || [];
+
+        //-- item attributes --//
+        attributes['item_id'] = attributes['item_id'] || '_id';
+        attributes['item_name'] = attributes['item_name'] || 'name';
+        attributes['item_description'] = attributes['item_description'] || 'description';
+        attributes['item_image'] = attributes['item_image'] || 'image';
+
+        self['_attributes'] = new (Backbone.Model.extend({}))();
+        self['_attributes'].on('change', self.bindTo(_changedAttributes));
+        self['_attributes'].set(attributes);
+
     }
 
     function _initComponents(callback) {
         var self = this
             ;
 
-        self.bindTo(_initParentOptions)();
-
-        self.bindTo(_refreshOptions)();
+        self.bindTo(_initParentAttributes)();
 
         self.bindTo(_initHandlers)();
 
@@ -171,118 +146,160 @@
         ly.call(callback);
     }
 
-    function _initParentOptions() {
+    function _initParentAttributes() {
         var self = this;
+
+        var attributes = {};
 
         //-- title --//
         var title = self.parent.attr('data-title');
-        if (!!title && !self['_title']) {
-            self['_title'] = title;
+        if (!!title) {
+            attributes['title'] = title;
         }
 
         //-- add --//
         var add = self.parent.attr('data-add');
-        self['_add'] = null == add || ly.toBoolean(add)
-        if (self['_add']) {
+        attributes['add'] = null == add || ly.toBoolean(add);
+        if (!!attributes['add']) {
             var add_tooltip = self.parent.attr('data-add-tooltip');
-            if (!!add_tooltip && !self['_add_tooltip']) {
-                self['_add_tooltip'] = add_tooltip;
+            if (!!add_tooltip) {
+                attributes['add_tooltip'] = add_tooltip;
             }
         }
 
         //-- remove --//
         var remove = self.parent.attr('data-remove');
-        self['_remove'] = null == remove || ly.toBoolean(remove);
-        if (self['_remove']) {
+        attributes['remove'] = null == remove || ly.toBoolean(remove);
+        if (attributes['remove']) {
             var remove_tooltip = self.parent.attr('data-remove-tooltip');
-            if (!!remove_tooltip && !self['_remove_tooltip']) {
-                self['_remove_tooltip'] = remove_tooltip;
+            if (!!remove_tooltip) {
+                attributes['remove_tooltip'] = remove_tooltip;
             }
         }
 
         //-- edit --//
         var edit = self.parent.attr('data-edit');
-        self['_edit'] = null == edit || ly.toBoolean(edit);
-        if (self['_edit']) {
+        attributes['edit'] = null == edit || ly.toBoolean(edit);
+        if (attributes['edit']) {
             var edit_tooltip = self.parent.attr('data-edit-tooltip');
-            if (!!edit_tooltip && !self['_edit_tooltip']) {
-                self['_edit_tooltip'] = edit_tooltip;
+            if (!!edit_tooltip) {
+                attributes['edit_tooltip'] = edit_tooltip;
             }
         }
 
         //-- search --//
         var search = self.parent.attr('data-search');
-        self['_search'] = null == search || ly.toBoolean(search);
-        if (self['_search']) {
+        attributes['search'] = null == search || ly.toBoolean(search);
+        if (attributes['search']) {
             var search_tooltip = self.parent.attr('data-search-tooltip');
-            if (!!search_tooltip && !self['_search_tooltip']) {
-                self['_search_tooltip'] = search_tooltip;
+            if (!!search_tooltip) {
+                attributes['search_tooltip'] = search_tooltip;
             }
             var search_placeholder = self.parent.attr('data-search-placeholder');
-            if (!!search_placeholder && !self['_search_placeholder']) {
-                self['_search_placeholder'] = search_placeholder;
+            if (!!search_placeholder) {
+                attributes['search_placeholder'] = search_placeholder;
             }
         }
+
+        self.attributes(attributes);
     }
 
-    function _refreshOptions() {
+    function _changedAttributes(model) {
         var self = this;
+        var changed = model['changed'];
+
+        //-- icon --//
+        if (_.has(changed, 'icon')) {
+            var $icon = $(self.template(sel_icon));
+            $icon.addClass(changed['icon']);
+        }
+
+        //-- size --//
+        if (_.has(changed, 'size')) {
+            var $combo = $(self.template(sel_combo));
+            var size = changed['size'];
+            if (size.indexOf('px') > -1 || size.indexOf('%') > -1) {
+                $combo.attr('style', 'width:' + size + ';')
+            } else {
+                $combo.addClass(size);
+            }
+        }
 
         //-- title --//
-        var $title = $(self.template(sel_title));
-        $title.html(self['_title']);
+        if (_.has(changed, 'title')) {
+            var $title = $(self.template(sel_title));
+            $title.html(changed['title']);
+        }
 
         //-- add --//
-        var $add = $(self.template(sel_add));
-        if (!!self['_add']) {
-            $add.show();
-            $add.attr('title', self['_add_tooltip']);
-        } else {
-            $add.hide();
+        if (_.has(changed, 'add')) {
+            var $add = $(self.template(sel_add));
+            if (!!changed['add']) {
+                $add.show();
+                $add.attr('title', self.attributes().get('add_tooltip'));
+            } else {
+                $add.hide();
+            }
         }
 
         //-- remove --//
-        var $remove = $(self.template(sel_remove));
-        if (!!self['_remove']) {
-            $remove.show();
-            $remove.attr('title', self['_remove_tooltip']);
-        } else {
-            $remove.hide();
+        if (_.has(changed, 'remove')) {
+            var $remove = $(self.template(sel_remove));
+            if (!!changed['remove']) {
+                $remove.show();
+                $remove.attr('title', self.attributes().get('remove_tooltip'));
+            } else {
+                $remove.hide();
+            }
         }
+
 
         //-- edit --//
-        var $edit = $(self.template(sel_edit));
-        if (!!self['_edit']) {
-            $edit.show();
-            $edit.attr('title', self['_edit_tooltip']);
-        } else {
-            $edit.hide();
+        if (_.has(changed, 'edit')) {
+            var $edit = $(self.template(sel_edit));
+            if (!!changed['edit']) {
+                $edit.show();
+                $edit.attr('title', self.attributes().get('edit_tooltip'));
+            } else {
+                $edit.hide();
+            }
         }
+
 
         //-- search --//
-        var $search_box = $(self.template(sel_search_box));
-        if (!!self['_search']) {
-            $search_box.show();
-            if (!!self['_search_tooltip']) {
-                $(self.template(sel_search)).attr('title', self['_search_tooltip']);
+        if (_.has(changed, 'search')) {
+            var $search_box = $(self.template(sel_search_box));
+            if (!!changed['search']) {
+                $search_box.show();
+                var tooltip = self.attributes().get('search_tooltip');
+                if (!!tooltip) {
+                    $(self.template(sel_search)).attr('title', tooltip);
+                }
+                var placeholder = self.attributes().get('search_placeholder');
+                if (!!placeholder) {
+                    $(self.template(sel_search_text)).attr('placeholder', placeholder);
+                }
+            } else {
+                $search_box.hide();
             }
-            if (!!self['_search_placeholder']) {
-                $(self.template(sel_search_text)).attr('placeholder', self['_search_placeholder']);
+        }
+
+        //-- items --//
+        if (_.has(changed, 'items')) {
+            if (_.isArray(changed['items'])) {
+                self.bindTo(_loadItems)(changed['items']);
             }
-        } else {
-            $search_box.hide();
         }
     }
-
 
     function _loadItems(items) {
         var self = this;
         var $combo = $(self.template(sel_combo))
 
         $combo.html('');
-        if (_.isArray(items) && items.length>0) {
-            var field_id = self['_item_id'];
-            var field_label = self['_item_name'];
+        if (_.isArray(items) && items.length > 0) {
+            var field_id = self.attributes().get('item_id');
+            var field_label = self.attributes().get('item_name');
             // creates items
             var count = 0;
             _.forEach(items, function (item) {
@@ -321,16 +338,18 @@
     }
 
     function _itemById(id) {
-        var result
-            , field_id = this['_item_id']
-            ;
-        _.forEach(this['_items'], function (item) {
+        var self = this;
+        var result;
+        var field_id = self.attributes().get('item_id');
+        var items = self.attributes().get('items');
+        _.forEach(items, function (item) {
             if (item[field_id] === id) {
                 result = item;
                 return false;
             }
+            return true;
         });
-        return result || this['_items'][0];
+        return result || items[0];
     }
 
     function _select(item_or_string, emitevent) {
@@ -355,10 +374,10 @@
         if (!item) {
             return;
         }
-        var field_id = self['_item_id']
-            , field_image = self['_item_image']
-            , field_description = self['_item_description']
-            , image = item[field_image]||''
+        var field_id = self.attributes().get('item_id')
+            , field_image = self.attributes().get('item_image')
+            , field_description = self.attributes().get('item_description')
+            , image = item[field_image] || ''
             , description = item[field_description]
             , $thumb = $(self.template(sel_thumb))
             , $thumb_img = $(self.template(sel_thumb_image))
@@ -449,9 +468,11 @@
         var txt = ly.el.value($search_text);
 
         //-- reset paging--//
-        self['_skip'] = 0;
-        self['_page_nr'] = 1;
-        self['_page_count'] = 1;
+        self.attributes().set({
+            skip:0,
+            page_nr:1,
+            page_count:1
+        });
 
         //-- trigger event --//
         self.trigger(EVENT_SEARCH, txt);

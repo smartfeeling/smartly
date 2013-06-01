@@ -119,6 +119,22 @@
         return ly.el.value($search_text) || '';
     };
 
+    /**
+     * Reset skip and page_nr parameters.
+     * No effect on query
+     */
+    PagedList.prototype.resetPosition = function (reload) {
+        var self = this;
+
+        //-- reset paging--//
+        self['_skip'] = 0;
+        self['_page_nr'] = 1;
+        self['_page_count'] = 1;
+        if(!!reload){
+           // new search event
+            self.bindTo(_clickSearch)($(self.template(sel_search_text)));
+        }
+    };
 
     // ------------------------------------------------------------------------
     //                      p r i v a t e
