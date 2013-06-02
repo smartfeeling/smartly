@@ -245,7 +245,7 @@
             if (null == arg || 'NULL' == arg) return true;
             return _.isArray(arg)
                 ? (arg.length > 0 ? arg.length === 1 && isNull(arg[0]) : true)
-                : (_.isObject(arg) ? _.size(arg) === 0||arg['response']==='NULL' : (arg === 'NULL' || arg == '' || arg['response'] === 'NULL'));
+                : (_.isObject(arg) ? _.size(arg) === 0 || arg['response'] === 'NULL' : (arg === 'NULL' || arg == '' || arg['response'] === 'NULL'));
         } catch (err) {
             ly.console.error(err);
         }
@@ -278,19 +278,19 @@
     // ------------------------------------------------------------------------
 
     var mobile = {
-        Android: function() {
+        Android: function () {
             return navigator.userAgent.match(/Android/i) ? true : false;
         },
-        BlackBerry: function() {
+        BlackBerry: function () {
             return navigator.userAgent.match(/BlackBerry/i) ? true : false;
         },
-        iOS: function() {
+        iOS: function () {
             return navigator.userAgent.match(/iPhone|iPad|iPod/i) ? true : false;
         },
-        Windows: function() {
+        Windows: function () {
             return navigator.userAgent.match(/IEMobile/i) ? true : false;
         },
-        any: function() {
+        any: function () {
             return (this.Android() || this.BlackBerry() || this.iOS() || this.Windows());
         }
     };
@@ -632,6 +632,17 @@
             return $el.attr(attr);
         },
 
+        attrs: function (selector) {
+            var arr = [];
+            var el = $(selector)[0];
+            if (!!el) {
+                for (var i = 0, attrs = el.attributes, l = attrs.length; i < l; i++) {
+                    arr.push(attrs.item(i).nodeName);
+                }
+            }
+            return arr;
+        },
+
         scrollTo: function (selector, navheight) {
             _.debounce(function () {
                 var offset = $(selector).offset();
@@ -734,15 +745,36 @@
     // ------------------------------------------------------------------------
 
     function Gui(options) {
+        //-- component id --//
         this['cid'] = _.uniqueId('comp-');
+
         this['parent'] = null;
         this['options'] = options;
         this['_template'] = !!options ? options['template'] || '' : '';
         this['model'] = !!options ? options['model'] || null : null;
         this['view'] = !!options ? options['view'] || null : null;
 
+        //-- creates attributes --//
+        this['_attributes'] = new (Backbone.Model.extend({}))();
+
         _.extend(this, Backbone.Events);
     }
+
+    Gui.prototype.attributes = function (object) {
+        //-- set values --//
+        if (_.isObject(object)) {
+            this['_attributes'].set(object);
+        }
+        return this['_attributes']; // returns the model
+    };
+
+    /**
+     * Retrieve parent data attributes (starting with 'data-') and returns map.
+     * @returns map
+     */
+    Gui.prototype.attrs = function(){
+        return this.bindTo(_parseAttributes)();
+    };
 
     Gui.prototype.bindTo = function (func) {
         return _.bind(func, this);
@@ -800,14 +832,14 @@
     Gui.prototype.children = function (selector) {
         return !!selector ? $('#' + this['cid']).find(selector) : $('#' + this['cid']).find();
     };
-
-    Gui.prototype.attributes = function (attributes) {
+    /**
+     Gui.prototype.attributes = function (attributes) {
         if (!!attributes && null != this['model']) {
             this['model'].set(attributes, {silent: true});
         }
         return (null != this['model']) ? this['model'].attributes : null;
     };
-
+     **/
     Gui.prototype.hasModel = function () {
         return null != this['model'];
     };
@@ -864,6 +896,22 @@
         el.value(_getElement(key), value);
         self['model'].set(item, {silent: !!silent});
         // self['model'].change();
+    }
+
+    function _parseAttributes() {
+        var $parent = this['parent'];
+        var attrs = ly.el.attrs($parent);
+        var data_attr = {};
+        if (_.isArray(attrs)) {
+            _.forEach(attrs, function (attr) {
+                if (attr.indexOf('data-') === 0) {
+                    var name = attr.substring('5');
+                    data_attr[name] = $parent.attr(attr);
+                    //console.log(name);
+                }
+            });
+        }
+        return data_attr;
     }
 
     function _attach(self, markup, callback) {
