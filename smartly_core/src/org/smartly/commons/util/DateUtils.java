@@ -58,7 +58,7 @@ public abstract class DateUtils {
      * Return a date.
      *
      * @param year    Year
-     * @param month   Month
+     * @param month   Month. 1 is January
      * @param day     Day
      * @param hour    Hour
      * @param minutes Minutes
