@@ -80,7 +80,7 @@ public abstract class DateUtils {
      * @param date2 Second date
      * @return Difference between first date and second date in milliseconds
      */
-    public static long dateDiff(Date date1, Date date2) {
+    public static long dateDiff(final Date date1, final Date date2) {
         long result = date1.getTime() - date2.getTime();
         return result;
     }
@@ -94,7 +94,7 @@ public abstract class DateUtils {
      * @param measureUnit Measure unit. Ex: DateUtility.DAY
      * @return Difference between first date and second date.
      */
-    public static double dateDiff(Date date1, Date date2, int measureUnit) {
+    public static double dateDiff(final Date date1, final Date date2, int measureUnit) {
         long diff = dateDiff(date1, date2);
         double result = 0d;
         switch (measureUnit) {
@@ -403,8 +403,14 @@ public abstract class DateUtils {
         return dateDiff(date1, date2) <= tolleranceMs;
     }
 
-    public static Date now() {
-        return new Date();
+    public static boolean equalsDay(final Date date1, final Date date2) {
+        final Calendar c1 = Calendar.getInstance();
+        c1.setTime(date1);
+        final Calendar c2 = Calendar.getInstance();
+        c2.setTime(date2);
+        return c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR)
+                && c1.get(Calendar.MONTH) == c2.get(Calendar.MONTH)
+                && c1.get(Calendar.DAY_OF_MONTH) == c2.get(Calendar.DAY_OF_MONTH);
     }
 
     public static Date infinite() {
@@ -427,6 +433,33 @@ public abstract class DateUtils {
         final int year = DateUtils.getYear(date);
         final boolean result = year <= ZERO_YEAR;
         return result;
+    }
+
+    public static Date now() {
+        return new Date();
+    }
+
+    public static Date yesterday() {
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(DAY, -1);
+        // zero time (hour, minutes, seconds, milliseconds)
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
+    }
+
+    public static Date today() {
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        // zero time (hour, minutes, seconds, milliseconds)
+        calendar.set(Calendar.HOUR, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        return calendar.getTime();
     }
 
     public static boolean isToday(final Date date) {

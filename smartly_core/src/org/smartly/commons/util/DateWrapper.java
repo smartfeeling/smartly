@@ -403,33 +403,47 @@ public class DateWrapper {
     // ------------------------------------------------------------------------
     //                      S T A T I C
     // ------------------------------------------------------------------------
+
+    public static DateWrapper parseNotNull(final String date) {
+        return parseNotNull(date, LocaleUtils.getLocale(Locale.ENGLISH));
+    }
+
+    public static DateWrapper parseNotNull(final String date,
+                                           final Locale locale) {
+        final DateWrapper result = parse(date, locale);
+        return result != null ? result : new DateWrapper(DateUtils.zero());
+    }
+
     public static DateWrapper parse(final String date) {
         return parse(date, LocaleUtils.getLocale(Locale.ENGLISH));
     }
 
-    public static DateWrapper parse(final String date, final Locale locale) {
-        // try with date
-        for (final String pattern : PATTERNS) {
-            try {
-                final DateWrapper dt = new DateWrapper(date, pattern, locale);
-                return dt;
-            } catch (Throwable t) {
+    public static DateWrapper parse(final String date,
+                                    final Locale locale) {
+        if (null != date) {
+            // try with date
+            for (final String pattern : PATTERNS) {
+                try {
+                    final DateWrapper dt = new DateWrapper(date, pattern, locale);
+                    return dt;
+                } catch (Throwable t) {
+                }
+            }
+            // try with clear date
+            final String clear = date.trim().
+                    replace("GMT", "").
+                    replace(", ", " ").
+                    replace("-", "");
+            for (final String pattern : PATTERNS) {
+                try {
+                    final DateWrapper dt = new DateWrapper(clear, pattern, locale);
+                    return dt;
+                } catch (Throwable ignored) {
+                }
             }
         }
-        // try with clear date
-        final String clear = date.trim().
-                replace("GMT", "").
-                replace(", ", " ").
-                replace("-", "");
-        for (final String pattern : PATTERNS) {
-            try {
-                final DateWrapper dt = new DateWrapper(clear, pattern, locale);
-                return dt;
-            } catch (Throwable ignored) {
-            }
-        }
-
         return null;
     }
+
 
 }
