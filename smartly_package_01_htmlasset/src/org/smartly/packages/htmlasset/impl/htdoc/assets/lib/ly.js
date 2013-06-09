@@ -772,8 +772,8 @@
      * Retrieve parent data attributes (starting with 'data-') and returns map.
      * @returns map
      */
-    Gui.prototype.attrs = function(){
-        return this.bindTo(_parseAttributes)();
+    Gui.prototype.attrs = function(prefix){
+        return this.bindTo(_parseAttributes)(prefix);
     };
 
     Gui.prototype.bindTo = function (func) {
@@ -898,14 +898,15 @@
         // self['model'].change();
     }
 
-    function _parseAttributes() {
+    function _parseAttributes(prefix) {
+        prefix = prefix || 'data-';
         var $parent = this['parent'];
         var attrs = ly.el.attrs($parent);
         var data_attr = {};
         if (_.isArray(attrs)) {
             _.forEach(attrs, function (attr) {
-                if (attr.indexOf('data-') === 0) {
-                    var name = attr.substring('5');
+                if (attr.indexOf(prefix) === 0) {
+                    var name = attr.substring(prefix.length);
                     data_attr[name] = $parent.attr(attr);
                     //console.log(name);
                 }
