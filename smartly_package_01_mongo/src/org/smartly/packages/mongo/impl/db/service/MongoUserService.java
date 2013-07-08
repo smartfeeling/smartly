@@ -63,6 +63,7 @@ public class MongoUserService
         return super.paged(query, fieldNames, skip, limit, sortAsc, sortDes);
     }
 
+
     public DBObject getById(final Object id, final boolean onlyEnabled) {
         final DBObject user = super.findById(id);
         if (null != user) {
