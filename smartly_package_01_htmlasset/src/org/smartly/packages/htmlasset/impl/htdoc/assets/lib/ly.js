@@ -1060,11 +1060,17 @@
         return !!self['model'] && _.isFunction(self['model'].validate) ? !_.isString(self['model'].validate(attributes)) : true;
     }
 
+    function _clearKey(key, cid){
+        var token = '-' + cid;
+        return key.replace(token, '');
+    }
+
     function _changedViewField(self, view, e) {
         if (!!view['model']) {
+            var cid = self['cid'];
             var target = e.target
                 , val = ly.el.value(target)
-                , key = $(target).attr('id')
+                , key = _clearKey($(target).attr('id'), cid)
                 , item = {}
                 ;
             item[key] = val;
@@ -1081,13 +1087,15 @@
     }
 
     function _changeModel(self, model, changed) {
+        var cid = self['cid'];
         var changes = changed['changes'] || model['changed'];
         _.each(changes, function (value, key, list) {
             try {
                 if (null != value) {
                     // update view
-                    el.value('#' + key, model.get(key));
-
+                    var key_val = model.get(key);
+                    el.value('#' + key, key_val); // binding with id
+                    el.value('#' + key + '-' + cid, key_val); // binding with id-cid
                     // trigger change event
                     _trigger(self, 'change', model, key, model.get(key));
                 }
