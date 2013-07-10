@@ -3,7 +3,6 @@
  */
 package org.smartly.commons.cryptograph;
 
-import org.smartly.commons.lang.Base64;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
@@ -14,16 +13,17 @@ import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
- * Simple DES encoder/decoder
+ * Simple AES encoder/decoder
  *
  * @author angelo.geminiani
  */
-public final class DESEncrypter {
+public final class AESEncrypter {
+
 
     private Cipher _ecipher;
     private Cipher _dcipher;
 
-    public DESEncrypter(final String textkey) {
+    public AESEncrypter(final String textkey) {
         try {
             final SecretKey key = this.createKeyFromCleartext(textkey);
             this.init(key);
@@ -31,48 +31,14 @@ public final class DESEncrypter {
         }
     }
 
-    public DESEncrypter() {
-        try {
-            final SecretKey key = KeyGenerator.getInstance("DES").generateKey();
-            this.init(key);
-        } catch (Throwable t) {
-        }
-    }
-
-    public DESEncrypter(final SecretKey key) {
+    public AESEncrypter(final SecretKey key) {
         this.init(key);
     }
 
-    public String encrypt(String str) {
+    public byte[] encrypt(final byte[] data) {
         try {
-            // Encode the string into bytes using utf-8
-            byte[] utf8 = str.getBytes("UTF8");
-
-            return this.encrypt(utf8);
-        } catch (Throwable t) {
-        }
-        return null;
-    }
-
-    public String encrypt(byte[] data) {
-        try {
-            // Encrypt
-            byte[] enc = _ecipher.doFinal(data);
-
-            // Encode bytes to base64 to get a string
-            return Base64.encodeBytes(enc);
-        } catch (Throwable t) {
-        }
-        return null;
-    }
-
-    public byte[] decrypt(final String str) {
-        try {
-            // Decode base64 to get bytes
-            byte[] dec = Base64.decode(str);
-
-            return this.decrypt(dec);
-        } catch (Throwable t) {
+            return _ecipher.doFinal(data);
+        } catch (Throwable ignored) {
         }
         return null;
     }
@@ -99,9 +65,9 @@ public final class DESEncrypter {
 
     private void init(final SecretKey key) {
         try {
-            _ecipher = Cipher.getInstance("DES");
-            _dcipher = Cipher.getInstance("DES");
+            _ecipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
             _ecipher.init(Cipher.ENCRYPT_MODE, key);
+            _dcipher = Cipher.getInstance("AES/CBC/PKCS7Padding");
             _dcipher.init(Cipher.DECRYPT_MODE, key);
         } catch (Throwable t) {
             this.getLogger().log(Level.SEVERE, null, t);
@@ -116,7 +82,7 @@ public final class DESEncrypter {
      */
     private SecretKey createKeyFromCleartext(final String cleartext) {
         final byte[] bytes = cleartext.getBytes();
-        final SecretKeySpec sk = new SecretKeySpec(bytes, "DES");
+        final SecretKeySpec sk = new SecretKeySpec(bytes, "AES");
         return sk;
     }
 }

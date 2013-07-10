@@ -2,6 +2,7 @@ package org.smartly.commons.network.socket.server;
 
 import junit.framework.TestCase;
 import org.smartly.commons.network.socket.client.Client;
+import org.smartly.commons.network.socket.server.Server;
 import org.smartly.commons.network.socket.server.handler.impl.EchoDateHandler;
 import org.smartly.commons.network.socket.server.handler.impl.EchoHandler;
 import org.smartly.commons.network.socket.server.handler.impl.EchoNullHandler;

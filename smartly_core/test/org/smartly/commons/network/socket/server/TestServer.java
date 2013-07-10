@@ -4,6 +4,8 @@ import junit.framework.TestCase;
 import org.smartly.commons.network.socket.client.Client;
 import org.smartly.commons.network.socket.server.handler.ISocketHandler;
 import org.smartly.commons.network.socket.server.handler.impl.EchoStringHandler;
+import org.smartly.commons.network.socket.server.helpers.SampleHandler;
+import org.smartly.commons.network.socket.server.helpers.ThreadClient;
 
 import java.util.ResourceBundle;
 
@@ -18,7 +20,7 @@ public class TestServer extends TestCase {
         host = resources.getString("server.host");
     }
 
-    private ISocketHandler simpleSocketHandler = new EchoStringHandler();
+    private ISocketHandler simpleSocketHandler = new SampleHandler();
     private Server simpleSocketServer;
 
     public void setUp() throws Exception {
@@ -53,6 +55,21 @@ public class TestServer extends TestCase {
         }
         assertNotNull(ex);
         System.out.println("Multiple instances not allowed: " + ex.getMessage());
+    }
+
+    public void test4() throws Exception {
+        Thread[] tasks = new Thread[50];
+        for (int i = 0; i < tasks.length; i++) {
+            tasks[i] = new Thread(new ThreadClient(host, port, i));
+        }
+
+        for (Thread task : tasks) {
+            task.start();
+        }
+
+        for (Thread task : tasks) {
+            task.join();
+        }
     }
 
 }
