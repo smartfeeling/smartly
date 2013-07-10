@@ -26,7 +26,7 @@
                     "welcome":["index.html", "index.html", "index.vhtml"]
                 },
                 {
-                    "class":"com.sphinner.sn.impl.websocket.servlets.SNWsServlet"
+                    "class":"org.smartly.packages.http.impl.handlers.websocket.WSocketServlet"
                 }
             ]
         },
