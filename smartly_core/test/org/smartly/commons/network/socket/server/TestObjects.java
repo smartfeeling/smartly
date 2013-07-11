@@ -2,10 +2,9 @@ package org.smartly.commons.network.socket.server;
 
 import junit.framework.TestCase;
 import org.smartly.commons.network.socket.client.Client;
-import org.smartly.commons.network.socket.server.Server;
-import org.smartly.commons.network.socket.server.handler.impl.EchoDateHandler;
-import org.smartly.commons.network.socket.server.handler.impl.EchoHandler;
-import org.smartly.commons.network.socket.server.handler.impl.EchoNullHandler;
+import org.smartly.commons.network.socket.server.handlers.impl.EchoDateFilter;
+import org.smartly.commons.network.socket.server.handlers.impl.EchoFilter;
+import org.smartly.commons.network.socket.server.handlers.impl.EchoNullFilter;
 
 import java.util.Date;
 import java.util.ResourceBundle;
@@ -22,7 +21,7 @@ public class TestObjects extends TestCase {
     }
 
     public void testEcho() throws Exception {
-        Server simpleSocketServer = Server.startServer(port, new EchoHandler());
+        Server simpleSocketServer = Server.startServer(port, new Class[]{EchoFilter.class});
         String[] strings = {"Hello", "World"};
         String[] response = (String[]) Client.send(host, port, strings);
         assertTrue(response[0].equals("Hello"));
@@ -30,7 +29,7 @@ public class TestObjects extends TestCase {
     }
 
     public void testDate() throws Exception {
-        Server simpleSocketServer = Server.startServer(port, new EchoDateHandler());
+        Server simpleSocketServer = Server.startServer(port, new Class[]{EchoDateFilter.class});
         Date serverDate = (Date) Client.send(host, port, (Object) null);
         long halfTripTimeMsec = (new Date()).getTime() - serverDate.getTime();
         System.out.println("Half Trip Time: " + halfTripTimeMsec);
@@ -39,7 +38,7 @@ public class TestObjects extends TestCase {
     }
 
     public void testNull() throws Exception {
-        Server simpleSocketServer = Server.startServer(port, new EchoNullHandler());
+        Server simpleSocketServer = Server.startServer(port, new Class[]{EchoNullFilter.class});
         Date serverDate = (Date) Client.send(host, port, (Object) null);
         assertTrue(serverDate == null);
         simpleSocketServer.stopServer();

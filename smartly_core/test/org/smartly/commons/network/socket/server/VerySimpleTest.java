@@ -2,16 +2,14 @@ package org.smartly.commons.network.socket.server;
 
 import junit.framework.TestCase;
 import org.smartly.commons.network.socket.client.Client;
-import org.smartly.commons.network.socket.server.handler.ISocketHandler;
-import org.smartly.commons.network.socket.server.handler.impl.EchoHandler;
+import org.smartly.commons.network.socket.server.handlers.impl.EchoFilter;
 
 public class VerySimpleTest extends TestCase {
 
-    private ISocketHandler _handler = new EchoHandler();
     private Server _server;
 
     public void setUp() throws Exception {
-        _server = Server.startServer(_handler);
+        _server = Server.startServer(new Class[]{EchoFilter.class});
     }
 
     public void tearDown() {
@@ -24,7 +22,7 @@ public class VerySimpleTest extends TestCase {
         assertEquals(response, testString);
 
          // try with many sync messages
-        for(int i=0;i<1000;i++){
+        for(int i=0;i<10;i++){
             String message = "msg: " + i;
             response = Client.sendString(message);
             assertEquals(response, message);

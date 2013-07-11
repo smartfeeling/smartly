@@ -3,7 +3,12 @@ package org.smartly.commons.network.socket.server;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
-import org.smartly.commons.network.socket.server.handler.ISocketHandler;
+import org.smartly.commons.network.socket.server.handlers.ISocketFilter;
+import org.smartly.commons.network.socket.server.handlers.ISocketHandler;
+import org.smartly.commons.network.socket.server.handlers.SocketRequest;
+import org.smartly.commons.network.socket.server.handlers.SocketResponse;
+import org.smartly.commons.network.socket.server.handlers.pool.SocketFilterPoolIterator;
+import org.smartly.commons.network.socket.server.handlers.pool.SocketHandlerPool;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -12,28 +17,37 @@ import java.net.Socket;
 
 public class ServerThread extends Thread {
 
-    private final Socket _socket;
-    private final ISocketHandler _handler;
+    private final Socket _client;
+    private final SocketHandlerPool _pool;
 
-    public ServerThread(final Socket socket, final ISocketHandler handler) {
-        _socket = socket;
-        _handler = handler;
+    public ServerThread(final Socket client,
+                        final SocketHandlerPool handlers) {
+        _client = client;
+        _pool = handlers;
     }
 
+    @Override
     public void run() {
         try {
-            final ObjectOutputStream out = new ObjectOutputStream(_socket.getOutputStream());
-            final ObjectInputStream in = new ObjectInputStream(_socket.getInputStream());
+            final ObjectOutputStream out = new ObjectOutputStream(_client.getOutputStream());
+            final ObjectInputStream in = new ObjectInputStream(_client.getInputStream());
             // read
             final Object input = in.readObject();
-            // handle
-            final Object output = _handler.handle(input);
-            // write
-            out.writeObject(output);
+            final SocketRequest request = new SocketRequest(input);
+            final SocketResponse response = new SocketResponse();
+
+            //-- handle request and write response --//
+            this.handle(request, response);
+
+            if (null != response.read()) {
+                final Object output = response.read();
+                // write
+                out.writeObject(output);
+            }
 
             out.close();
             in.close();
-            _socket.close();
+            _client.close();
         } catch (Throwable t) {
             this.getLogger().log(Level.SEVERE, null, t);
         }
@@ -45,5 +59,23 @@ public class ServerThread extends Thread {
 
     private Logger getLogger() {
         return LoggingUtils.getLogger(this);
+    }
+
+    private void handle(final SocketRequest request, final SocketResponse response) {
+        // filters
+        final SocketFilterPoolIterator iterator = _pool.getFiltersIterator();
+        while (iterator.hasNext()) {
+            final ISocketFilter handler = iterator.next();
+            if (handler.handle(request, response)) {
+                break;
+            }
+        }
+
+        if (response.canHandle() && _pool.hasHandler(request.getType())) {
+            final ISocketHandler handler = _pool.getHandler(request.getType());
+            if (null != handler) {
+                handler.handle(request, response);
+            }
+        }
     }
 }

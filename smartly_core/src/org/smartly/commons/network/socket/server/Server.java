@@ -3,10 +3,12 @@ package org.smartly.commons.network.socket.server;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
-import org.smartly.commons.network.socket.server.handler.ISocketHandler;
+import org.smartly.commons.network.socket.server.handlers.ISocketFilter;
+import org.smartly.commons.network.socket.server.handlers.ISocketHandler;
+import org.smartly.commons.network.socket.server.handlers.impl.MultipartMessageHandler;
+import org.smartly.commons.network.socket.server.handlers.pool.SocketHandlerPool;
 
 import java.io.IOException;
-import java.net.BindException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -33,23 +35,26 @@ public class Server extends Thread {
     public static int DEFAULT_PORT = 14444;
 
     private final int _port;
-    private final ISocketHandler _handler;
+    private SocketHandlerPool _handlers;
     private ServerSocket _socket;
     private boolean _running;
 
+    public Server(final int port) throws IOException {
+        this(port, null);
+    }
+
     public Server(final int port,
-                  final ISocketHandler handler) throws IOException {
+                  final Class<? extends ISocketFilter>[] handlers) throws IOException {
         super("Smartly-SocketServer");
         _running = false;
         _port = port;
-        _handler = handler;
+        _handlers = new SocketHandlerPool(handlers);
         _socket = new ServerSocket(_port);
-        if (handler == null) {
-            throw new RuntimeException("Null handler detected.");
-        }
+
+        this.init();
     }
 
-    public void run(){
+    public void run() {
         this.startServer();
     }
 
@@ -58,6 +63,9 @@ public class Server extends Thread {
         try {
             if (_socket != null) {
                 _socket.close();
+            }
+            if (null != _handlers) {
+                _handlers.clear();
             }
         } catch (Throwable t) {
             this.getLogger().log(Level.SEVERE, null, t);
@@ -68,6 +76,25 @@ public class Server extends Thread {
         return _running;
     }
 
+    public Server addFilter(final Class<? extends ISocketFilter> handler) {
+        _handlers.addFilter(handler);
+        return this;
+    }
+
+    public Server removeFilter(final Class<? extends ISocketFilter> handler) {
+        _handlers.removeFilter(handler);
+        return this;
+    }
+
+    public Server addHandler(final Class type, final Class<? extends ISocketHandler> handler) {
+        this.addHandler(type.getName(), handler);
+        return this;
+    }
+
+    public Server addHandler(final String type, final Class<? extends ISocketHandler> handler) {
+        _handlers.addHandler(type, handler);
+        return this;
+    }
     // --------------------------------------------------------------------
     //               p r i v a t e
     // --------------------------------------------------------------------
@@ -76,15 +103,21 @@ public class Server extends Thread {
         return LoggingUtils.getLogger(this);
     }
 
+    private void init() {
+        //-- register default handlers --//
+        this.addHandler(MultipartMessageHandler.TYPE,
+                MultipartMessageHandler.class);
+    }
+
     private void startServer() {
-        this.getLogger().info("Starting server on port [" + _port + "] with handler [" + _handler.toString() + "]");
+        this.getLogger().info("Starting server on port [" + _port + "] with handlers [" + _handlers.toString() + "]");
         try {
             _running = true;
             while (true) {
                 // accept client
-                final Socket s = _socket.accept();
+                final Socket client = _socket.accept();
                 // handle request in thread
-                final ServerThread st = new ServerThread(s, _handler);
+                final ServerThread st = new ServerThread(client, _handlers);
                 st.start();
             }
         } catch (Throwable t) {
@@ -104,13 +137,13 @@ public class Server extends Thread {
     //               S T A T I C
     // --------------------------------------------------------------------
 
-    public static Server startServer(final ISocketHandler handler) throws Exception {
-        return startServer(Server.DEFAULT_PORT, handler);
+    public static Server startServer(final Class<ISocketFilter>[] handlers) throws Exception {
+        return startServer(Server.DEFAULT_PORT, handlers);
     }
 
     public static synchronized Server startServer(final int port,
-                                                  final ISocketHandler handler) throws Exception {
-        final Server server = new Server(port, handler);
+                                                  final Class<ISocketFilter>[] handlers) throws Exception {
+        final Server server = new Server(port, handlers);
         server.start();
         while (!server.isServerRunning()) {
             Thread.sleep(100);

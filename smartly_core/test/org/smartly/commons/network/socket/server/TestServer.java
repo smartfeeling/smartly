@@ -2,9 +2,8 @@ package org.smartly.commons.network.socket.server;
 
 import junit.framework.TestCase;
 import org.smartly.commons.network.socket.client.Client;
-import org.smartly.commons.network.socket.server.handler.ISocketHandler;
-import org.smartly.commons.network.socket.server.handler.impl.EchoStringHandler;
-import org.smartly.commons.network.socket.server.helpers.SampleHandler;
+import org.smartly.commons.network.socket.server.helpers.FooFilter;
+import org.smartly.commons.network.socket.server.helpers.SampleFilter;
 import org.smartly.commons.network.socket.server.helpers.ThreadClient;
 
 import java.util.ResourceBundle;
@@ -20,11 +19,11 @@ public class TestServer extends TestCase {
         host = resources.getString("server.host");
     }
 
-    private ISocketHandler simpleSocketHandler = new SampleHandler();
     private Server simpleSocketServer;
 
     public void setUp() throws Exception {
-        simpleSocketServer = Server.startServer(port, simpleSocketHandler);
+        simpleSocketServer = Server.startServer(port, new Class[]{FooFilter.class, SampleFilter.class});
+        simpleSocketServer.addFilter(FooFilter.class);
     }
 
     public void tearDown() {
@@ -49,7 +48,7 @@ public class TestServer extends TestCase {
         //Force error by starting another server on same port
         Throwable ex = null;
         try {
-            Server.startServer(port, new EchoStringHandler());
+            Server.startServer(port, null);
         } catch (Throwable t) {
             ex = t;
         }
