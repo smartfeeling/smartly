@@ -18,12 +18,12 @@ import javax.crypto.spec.SecretKeySpec;
  *
  * @author angelo.geminiani
  */
-public final class DESEncrypter {
+public final class _DESEncrypter {
 
     private Cipher _ecipher;
     private Cipher _dcipher;
 
-    public DESEncrypter(final String textkey) {
+    public _DESEncrypter(final String textkey) {
         try {
             final SecretKey key = this.createKeyFromCleartext(textkey);
             this.init(key);
@@ -31,7 +31,7 @@ public final class DESEncrypter {
         }
     }
 
-    public DESEncrypter() {
+    public _DESEncrypter() {
         try {
             final SecretKey key = KeyGenerator.getInstance("DES").generateKey();
             this.init(key);
@@ -39,7 +39,7 @@ public final class DESEncrypter {
         }
     }
 
-    public DESEncrypter(final SecretKey key) {
+    public _DESEncrypter(final SecretKey key) {
         this.init(key);
     }
 
