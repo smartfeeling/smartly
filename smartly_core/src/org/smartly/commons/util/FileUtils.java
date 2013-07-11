@@ -88,9 +88,9 @@ public abstract class FileUtils {
                         return FileVisitResult.CONTINUE;
                     }
                 });
-                try{
-                  file.delete();
-                }catch(Throwable ignored){
+                try {
+                    file.delete();
+                } catch (Throwable ignored) {
                 }
             }
         }
@@ -113,6 +113,14 @@ public abstract class FileUtils {
             // System.out.println(checksum + " " + fileSize + " " + fileName);
             return checksum;
         } catch (Throwable t) {
+        }
+        return 0;
+    }
+
+    public static long getSize(final String filename) {
+        final File file = new File(filename);
+        if (file.exists()) {
+            return file.length();
         }
         return 0;
     }

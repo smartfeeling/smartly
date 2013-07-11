@@ -27,9 +27,38 @@ public abstract class PathUtils
     /**
      * Array of file system types. i.e. ["http://", "ftp://", ...] *
      */
-    public static String[] FILESYSTEM_TYPES = SystemUtils.FileType.getValues();
-    private static final boolean IS_WINDOWS = SystemUtils.isWindows();
+    public static final String[] FILESYSTEM_TYPES = SystemUtils.FileType.getValues();
 
+    private static final boolean IS_WINDOWS = SystemUtils.isWindows();
+    private static final String TEMP = "/temp";
+
+    /**
+     * Returns temp folder.
+     * @return temp folder name for current user
+     */
+    public static String getTemporaryDirectory() {
+        final String temp = concat(IConstants.USER_HOME, TEMP);
+        try {
+            FileUtils.mkdirs(temp);
+        } catch (Throwable ignored) {
+        }
+        return temp;
+    }
+
+    /**
+     * Returns a temp folder
+     *
+     * @param subFolder Sub folder
+     * @return Temp folder name for current user
+     */
+    public static String getTemporaryDirectory(final String subFolder) {
+        final String temp = concat(getTemporaryDirectory(), subFolder);
+        try {
+            FileUtils.mkdirs(temp);
+        } catch (Throwable ignored) {
+        }
+        return temp;
+    }
 
     /**
      * Extract parent Path from file name. i.e. "c:/mydir/filename.txt" returns
@@ -1060,4 +1089,6 @@ public abstract class PathUtils
         }
         return s;
     }
+
+
 }
