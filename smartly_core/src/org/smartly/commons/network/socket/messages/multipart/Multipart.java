@@ -24,14 +24,12 @@ public class Multipart {
     // --------------------------------------------------------------------
 
     private final Collection<OnFullListener> _listeners;
+    private final String _uid;
+    private final Date _creationDate;
+    private final Collection<MultipartMessagePart> _list;
 
     private int _capacity;
-
-    private final String _uid;
-
-    private final Date _creationDate;
-
-    private final Collection<MultipartMessagePart> _list;
+    private Object _userData; // custom data
 
     // --------------------------------------------------------------------
     //               c o n s t r u c t o r
@@ -60,7 +58,18 @@ public class Multipart {
         return _uid.hashCode();
     }
 
-// --------------------------------------------------------------------
+    @Override
+    protected void finalize() throws Throwable {
+        try {
+            _userData = null;
+            _listeners.clear();
+            _list.clear();
+        } catch (Throwable t) {
+        }
+        super.finalize();
+    }
+
+    // --------------------------------------------------------------------
     //               p u b l i c
     // --------------------------------------------------------------------
 
@@ -68,26 +77,13 @@ public class Multipart {
         return _uid;
     }
 
-    public boolean isFull() {
-        return _capacity == _list.size();
+    public Object getUserData() {
+        return _userData;
     }
 
-    public void add(final MultipartMessagePart part) {
-        synchronized (_list) {
-            if (!_list.contains(part) && !this.isFull()) {
-                // add uid to part
-                part.setUid(this.getUid());
-                // add part to internal list
-                _list.add(part);
-                // check if full
-                this.checkCapacity();
-            }
-        }
-    }
-
-    public int count() {
-        synchronized (_list) {
-            return _list.size();
+    public void setUserData(final Object value) {
+        if (null != value) {
+            _userData = value;
         }
     }
 
@@ -107,6 +103,29 @@ public class Multipart {
 
     public boolean isExpired(final long millisecondsTimeout) {
         return this.getAliveTime() < millisecondsTimeout;
+    }
+
+    public boolean isFull() {
+        return _capacity == _list.size();
+    }
+
+    public int count() {
+        synchronized (_list) {
+            return _list.size();
+        }
+    }
+
+    public void add(final MultipartMessagePart part) {
+        synchronized (_list) {
+            if (!_list.contains(part) && !this.isFull()) {
+                // add uid to part
+                part.setUid(this.getUid());
+                // add part to internal list
+                _list.add(part);
+                // check if full
+                this.checkCapacity();
+            }
+        }
     }
 
     // --------------------------------------------------------------------
@@ -130,7 +149,7 @@ public class Multipart {
         }
     }
 
-    private void doOnFull(){
+    private void doOnFull() {
         synchronized (_listeners) {
             for (final OnFullListener listener : _listeners) {
                 Async.Action(new Async.AsyncActionHandler() {

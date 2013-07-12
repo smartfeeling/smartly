@@ -3,6 +3,9 @@ package org.smartly.commons.network.socket.server;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
+import org.smartly.commons.network.socket.messages.multipart.Multipart;
+import org.smartly.commons.network.socket.messages.multipart.MultipartMessagePart;
+import org.smartly.commons.network.socket.messages.multipart.MultipartPool;
 import org.smartly.commons.network.socket.server.handlers.ISocketFilter;
 import org.smartly.commons.network.socket.server.handlers.ISocketHandler;
 import org.smartly.commons.network.socket.server.handlers.impl.MultipartMessageHandler;
@@ -34,10 +37,19 @@ public class Server extends Thread {
 
     public static int DEFAULT_PORT = 14444;
 
+    // --------------------------------------------------------------------
+    //               f i e l d s
+    // --------------------------------------------------------------------
+
+    private final MultipartPool _multipartPool;
     private final int _port;
     private SocketHandlerPool _handlers;
     private ServerSocket _socket;
     private boolean _running;
+
+    // --------------------------------------------------------------------
+    //               c o n s t r u c t o r
+    // --------------------------------------------------------------------
 
     public Server(final int port) throws IOException {
         this(port, null);
@@ -50,9 +62,24 @@ public class Server extends Thread {
         _port = port;
         _handlers = new SocketHandlerPool(handlers);
         _socket = new ServerSocket(_port);
+        _multipartPool = new MultipartPool();
 
         this.init();
     }
+
+    @Override
+    protected void finalize() throws Throwable {
+        try {
+            _multipartPool.clear();
+            _handlers.clear();
+        } catch (Throwable ignore) {
+        }
+        super.finalize();
+    }
+
+    // --------------------------------------------------------------------
+    //               p u b l i c
+    // --------------------------------------------------------------------
 
     public void run() {
         this.startServer();
@@ -76,7 +103,7 @@ public class Server extends Thread {
         return _running;
     }
 
-    public SocketHandlerPool getHandlers(){
+    public SocketHandlerPool getHandlers() {
         return _handlers;
     }
 
@@ -99,6 +126,12 @@ public class Server extends Thread {
         _handlers.addHandler(type, handler);
         return this;
     }
+
+    public void addMultipartMessagePart(final MultipartMessagePart part){
+        _multipartPool.add(part);
+    }
+
+
     // --------------------------------------------------------------------
     //               p r i v a t e
     // --------------------------------------------------------------------
@@ -108,9 +141,24 @@ public class Server extends Thread {
     }
 
     private void init() {
+
         //-- register default handlers --//
         this.addHandler(MultipartMessageHandler.TYPE,
                 MultipartMessageHandler.class);
+
+        //-- init multipart pool --//
+        _multipartPool.onFull(new MultipartPool.OnFullListener() {
+            @Override
+            public void handle(Multipart sender) {
+                onMultipartFull(sender);
+            }
+        });
+        _multipartPool.onTimeOut(new MultipartPool.OnTimeOutListener() {
+            @Override
+            public void handle(Multipart sender) {
+                onMultipartTimeout(sender);
+            }
+        });
     }
 
     private void startServer() {
@@ -135,6 +183,14 @@ public class Server extends Thread {
             _running = false;
         }
         this.getLogger().info("Stopped");
+    }
+
+    private void onMultipartFull(final Multipart multipart) {
+
+    }
+
+    private void onMultipartTimeout(final Multipart multipart) {
+
     }
 
     // --------------------------------------------------------------------

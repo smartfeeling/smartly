@@ -10,6 +10,7 @@ import java.util.*;
  */
 public class MultipartPool {
 
+
     // --------------------------------------------------------------------
     //               e v e n t s
     // --------------------------------------------------------------------
@@ -60,15 +61,7 @@ public class MultipartPool {
         try {
             _gc.interrupt();
             _gc = null;
-            synchronized (_listeners_full) {
-                _listeners_full.clear();
-            }
-            synchronized (_listeners_timeout) {
-                _listeners_timeout.clear();
-            }
-            synchronized (_data) {
-                _data.clear();
-            }
+            this.clear();
         } catch (Throwable ignored) {
         }
         super.finalize();
@@ -92,14 +85,37 @@ public class MultipartPool {
         return _timeOut;
     }
 
+    public void clear() {
+        synchronized (_listeners_full) {
+            _listeners_full.clear();
+        }
+        synchronized (_listeners_timeout) {
+            _listeners_timeout.clear();
+        }
+        synchronized (_data) {
+            _data.clear();
+        }
+    }
+
     /**
      * Add part into pool and returns pool size.
+     *
      * @param part Part to add
      * @return Pool Size.
      */
     public void add(final MultipartMessagePart part) {
+        this.add(part, null);
+    }
+
+    /**
+     * Add part into pool and returns pool size.
+     *
+     * @param part     Part to Add
+     * @param userData Custom data to pass to Multipart container
+     */
+    public void add(final MultipartMessagePart part, final Object userData) {
         if (null != part) {
-            this.addPart(part);
+            this.addPart(part, userData);
         }
         this.size();
     }
@@ -155,7 +171,7 @@ public class MultipartPool {
         }
     }
 
-    private Multipart addPart(final MultipartMessagePart part) {
+    private Multipart addPart(final MultipartMessagePart part, final Object userData) {
         synchronized (_data) {
             final String key = part.getUid();
             if (!_data.containsKey(key)) {
@@ -172,6 +188,7 @@ public class MultipartPool {
             final Multipart multipart = _data.get(key);
             if (null != multipart) {
                 multipart.add(part);
+                multipart.setUserData(userData);
             }
             return multipart;
         }

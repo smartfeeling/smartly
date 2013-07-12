@@ -7,6 +7,7 @@ import org.smartly.commons.network.socket.server.handlers.ISocketFilter;
 import org.smartly.commons.network.socket.server.handlers.ISocketHandler;
 import org.smartly.commons.network.socket.server.handlers.SocketRequest;
 import org.smartly.commons.network.socket.server.handlers.SocketResponse;
+import org.smartly.commons.network.socket.server.handlers.impl.SocketRequestServer;
 import org.smartly.commons.network.socket.server.handlers.pool.SocketFilterPoolIterator;
 import org.smartly.commons.network.socket.server.handlers.pool.SocketHandlerPool;
 
@@ -34,7 +35,7 @@ public class ServerThread extends Thread {
             final ObjectInputStream in = new ObjectInputStream(_client.getInputStream());
             // read
             final Object input = in.readObject();
-            final SocketRequest request = new SocketRequest(input);
+            final SocketRequest request = new SocketRequest(new SocketRequestServer(_server), input);
             final SocketResponse response = new SocketResponse();
 
             //-- handle request and write response --//

@@ -14,8 +14,9 @@ public class MultipartMessageHandler extends AbstractSocketHandler {
 
     @Override
     public void handle(final SocketRequest request, final SocketResponse response) {
-
-
-
+        // add part to server pool
+        if(request.isTypeOf(MultipartMessagePart.class)){
+           request.getServer().addMultipartMessagePart((MultipartMessagePart)request.read());
+        }
     }
 }
