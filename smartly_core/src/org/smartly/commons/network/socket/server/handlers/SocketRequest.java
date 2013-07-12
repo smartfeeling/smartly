@@ -21,6 +21,13 @@ public class SocketRequest {
     //               p u b l i c
     // --------------------------------------------------------------------
 
+    public Class getTypeClass() {
+        if (null != _data) {
+            return _data.getClass();
+        }
+        return null;
+    }
+
     public String getType() {
         if (null != _data) {
             return _data.getClass().getName();

@@ -14,6 +14,8 @@ public class MultipartMessageHandler extends AbstractSocketHandler {
 
     @Override
     public void handle(final SocketRequest request, final SocketResponse response) {
-        //To change body of implemented methods use File | Settings | File Templates.
+
+
+
     }
 }

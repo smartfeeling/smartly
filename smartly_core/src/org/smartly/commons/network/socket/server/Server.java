@@ -76,6 +76,10 @@ public class Server extends Thread {
         return _running;
     }
 
+    public SocketHandlerPool getHandlers(){
+        return _handlers;
+    }
+
     public Server addFilter(final Class<? extends ISocketFilter> handler) {
         _handlers.addFilter(handler);
         return this;
@@ -117,7 +121,7 @@ public class Server extends Thread {
                 // accept client
                 final Socket client = _socket.accept();
                 // handle request in thread
-                final ServerThread st = new ServerThread(client, _handlers);
+                final ServerThread st = new ServerThread(this, client);
                 st.start();
             }
         } catch (Throwable t) {

@@ -1,6 +1,5 @@
 package org.smartly.commons.mutex;
 
-import org.smartly.commons.util.DateUtils;
 
 /**
  *

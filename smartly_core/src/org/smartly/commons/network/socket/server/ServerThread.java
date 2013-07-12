@@ -17,13 +17,14 @@ import java.net.Socket;
 
 public class ServerThread extends Thread {
 
+    private final Server _server;
     private final Socket _client;
     private final SocketHandlerPool _pool;
 
-    public ServerThread(final Socket client,
-                        final SocketHandlerPool handlers) {
+    public ServerThread(final Server server, final Socket client) {
+        _server = server;
         _client = client;
-        _pool = handlers;
+        _pool = _server.getHandlers();
     }
 
     @Override
