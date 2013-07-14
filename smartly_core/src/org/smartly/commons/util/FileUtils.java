@@ -64,6 +64,12 @@ public abstract class FileUtils {
         return fileName;
     }
 
+    public static void delete(final String[] paths) throws IOException {
+        for(final String path:paths){
+           delete(path);
+        }
+    }
+
     public static void delete(final String path) throws IOException {
         final File file = new File(path);
         if (file.exists()) {

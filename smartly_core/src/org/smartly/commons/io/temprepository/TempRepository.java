@@ -11,7 +11,8 @@ import org.smartly.commons.util.PathUtils;
 import java.io.IOException;
 
 /**
- *
+ * Repository with expiration time for its content.
+ * Expired files are removed
  */
 public class TempRepository implements IFileObserverListener{
 

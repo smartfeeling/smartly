@@ -3,20 +3,15 @@
  */
 package org.smartly.commons.util;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.lang.reflect.Array;
-import java.util.zip.CRC32;
-import java.util.zip.CheckedInputStream;
 
 /**
- *
  * @author angelo.geminiani
  */
 public class ByteUtils {
 
-    public static boolean isByteArray(final Object data){
+    public static boolean isByteArray(final Object data) {
         if (data.getClass().isArray()) {
             final Object val = Array.get(data, 0);
             if (val instanceof Byte) {
@@ -63,15 +58,56 @@ public class ByteUtils {
                 out.close();
             }
             return out.toByteArray();
-        } catch (Throwable t) {
+        } catch (Throwable ignored) {
         }
         return new byte[0];
     }
 
-    public static byte[] getDataNotAvailable(){
-        try{
+    public static byte[] getBytes(final Object data) throws IOException {
+        byte[] result = new byte[0];
+        if (!isByteArray(data)) {
+            final ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutput out = null;
+            try {
+                out = new ObjectOutputStream(bos);
+                out.writeObject(data);
+                result = bos.toByteArray();
+            } finally {
+                if (null != out) out.close();
+                bos.close();
+            }
+        } else {
+            result = (byte[]) data;
+        }
+        return result;
+    }
+
+    public static byte[] optBytes(final Object data) {
+        byte[] result = new byte[0];
+        try {
+            if (!isByteArray(data)) {
+                final ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                ObjectOutput out = null;
+                try {
+                    out = new ObjectOutputStream(bos);
+                    out.writeObject(data);
+                    result = bos.toByteArray();
+                } finally {
+                    if (null != out) out.close();
+                    bos.close();
+                }
+            } else {
+                result = (byte[]) data;
+            }
+        } catch (Throwable ignored) {
+        }
+        return result;
+    }
+
+    public static byte[] getDataNotAvailable() {
+        try {
             return getBytes(ClassLoaderUtils.getResourceAsStream(null, ByteUtils.class, "nodata.png"));
-        }catch(Throwable ignored){
+        } catch (Throwable ignored) {
         }
         return new byte[0];
     }

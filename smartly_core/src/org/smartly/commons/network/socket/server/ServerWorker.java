@@ -16,13 +16,13 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 
-public class ServerThread extends Thread {
+public class ServerWorker extends Thread {
 
     private final Server _server;
     private final Socket _client;
     private final SocketHandlerPool _pool;
 
-    public ServerThread(final Server server, final Socket client) {
+    public ServerWorker(final Server server, final Socket client) {
         _server = server;
         _client = client;
         _pool = _server.getHandlers();

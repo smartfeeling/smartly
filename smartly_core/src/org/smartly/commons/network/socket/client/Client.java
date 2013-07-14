@@ -1,7 +1,14 @@
 package org.smartly.commons.network.socket.client;
 
-import org.smartly.commons.network.NetworkUtils;
+import org.smartly.commons.cryptograph.GUID;
+import org.smartly.commons.io.filetokenizer.FileTokenizer;
+import org.smartly.commons.network.socket.messages.multipart.MultipartInfo;
+import org.smartly.commons.network.socket.messages.multipart.MultipartMessagePart;
 import org.smartly.commons.network.socket.server.Server;
+import org.smartly.commons.util.CollectionUtils;
+import org.smartly.commons.util.FileUtils;
+import org.smartly.commons.util.PathUtils;
+import org.smartly.commons.util.StringUtils;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -35,6 +42,15 @@ public class Client {
         _socket.connect(address, 3000);
     }
 
+    public void close() {
+        try {
+            if (null != _socket) {
+                _socket.close();
+            }
+        } catch (Throwable ignored) {
+        }
+    }
+
     public Object send(final Object request) throws Exception {
         final ObjectOutputStream out = new ObjectOutputStream(_socket.getOutputStream());
         final ObjectInputStream in = new ObjectInputStream(_socket.getInputStream());
@@ -50,12 +66,42 @@ public class Client {
         return response;
     }
 
-    public void close() {
-        try {
-            if (null != _socket) {
-                _socket.close();
+    public boolean sendFile(final String fileName,
+                            final boolean useMultipleConnections) throws Exception {
+        boolean result = false;
+        if (FileUtils.exists(fileName)) {
+            final String uid = GUID.create();
+            final String[] chunks = FileTokenizer.splitFromChunkSize(fileName, uid, 1 * 1000 * 1024, null);
+            try {
+                this.sendFileChunks(PathUtils.getFilename(fileName, true), chunks, useMultipleConnections);
+                result = true;
+            } finally {
+                this.clearFolder(chunks);
             }
-        } catch (Throwable ignored) {
+        }
+        return true;
+    }
+
+    // --------------------------------------------------------------------
+    //               p r i v a t e
+    // --------------------------------------------------------------------
+
+    private void clearFolder(final String[] chunks) throws IOException {
+        // clean temp files
+        final String file = CollectionUtils.get(chunks, 0);
+        if (StringUtils.hasText(file)) {
+            FileUtils.delete(PathUtils.getParent(file));
+        }
+    }
+
+    private void sendFileChunks(final String fileName, final String[] chunks, final boolean useMultipleConnections) {
+        final int len = chunks.length;
+        for (int i = 0; i < len; i++) {
+            final String chunk = chunks[i];
+            final MultipartInfo info = new MultipartInfo(fileName,
+                    MultipartInfo.MultipartInfoType.File, chunk, i, len);
+            final MultipartMessagePart part = new MultipartMessagePart();
+
         }
     }
 

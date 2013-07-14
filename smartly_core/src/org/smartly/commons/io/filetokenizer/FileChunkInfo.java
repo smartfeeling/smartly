@@ -3,7 +3,7 @@ package org.smartly.commons.io.filetokenizer;
 
 public class FileChunkInfo {
 
-    public static final int MAX_CHUNKS = 50;
+    public static final int MAX_CHUNKS = 500;
     public static final long DEFAULT_CHUNK_SIZE = 1024 * 5 * 1000; //5Mb
     public static final int DEFAULT_CHUNK_COUNT = 0;
 

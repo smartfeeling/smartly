@@ -169,7 +169,7 @@ public class Server extends Thread {
                 // accept client
                 final Socket client = _socket.accept();
                 // handle request in thread
-                final ServerThread st = new ServerThread(this, client);
+                final ServerWorker st = new ServerWorker(this, client);
                 st.start();
             }
         } catch (Throwable t) {
@@ -186,10 +186,12 @@ public class Server extends Thread {
     }
 
     private void onMultipartFull(final Multipart multipart) {
+         // message ready
 
     }
 
     private void onMultipartTimeout(final Multipart multipart) {
+         // timeout
 
     }
 

@@ -2,6 +2,7 @@ package org.smartly.commons.io.filetokenizer;
 
 import org.smartly.commons.util.FileUtils;
 import org.smartly.commons.util.PathUtils;
+import org.smartly.commons.util.StringUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,16 +31,23 @@ public class FileTokenizer {
     public static String[] splitFromChunkSize(final String filename,
                                               final long chunkSize,
                                               final IFileTokenizerCallback progressCallback) throws Exception {
-        final File file = new File(filename);
-        final FileChunkInfo info = new FileChunkInfo(file.length(), chunkSize);
-        return splitFile(file, info, progressCallback);
+        return splitFromChunkSize(filename, null, chunkSize, progressCallback);
     }
 
-    public static String Join(final String[] filenames,
+    public static String[] splitFromChunkSize(final String filename,
+                                              final String folder,
+                                              final long chunkSize,
+                                              final IFileTokenizerCallback progressCallback) throws Exception {
+        final File file = new File(filename);
+        final FileChunkInfo info = new FileChunkInfo(file.length(), chunkSize);
+        return splitFile(file, folder, info, progressCallback);
+    }
+
+    public static String Join(final String[] fileNames,
                               final String outputFilename,
                               final IFileTokenizerCallback progressCallback) throws IOException {
 
-        joinFiles(filenames, outputFilename, progressCallback);
+        joinFiles(fileNames, outputFilename, progressCallback);
 
         return outputFilename;
     }
@@ -50,11 +58,14 @@ public class FileTokenizer {
     // --------------------------------------------------------------------
 
     private static String[] splitFile(final File file,
+                                      final String folder,
                                       final FileChunkInfo info,
                                       final IFileTokenizerCallback progressCallback) throws Exception {
         final String filename = file.getAbsolutePath();
         final String name = PathUtils.getFilename(filename, true);
-        final String root = PathUtils.getTemporaryDirectory("TOKENIZER/");
+        final String root = StringUtils.hasText(folder)
+                ? PathUtils.concat(PathUtils.getTemporaryDirectory("TOKENIZER/"), folder)
+                : PathUtils.getTemporaryDirectory("TOKENIZER/");
 
         // create file names
         final String[] names = new String[info.getChunkCount()];
@@ -117,24 +128,18 @@ public class FileTokenizer {
                                   final IFileTokenizerCallback progressCallback) throws IOException {
         FileUtils.delete(outputFilename);
         FileOutputStream output = new FileOutputStream(outputFilename);
-        try
-        {
+        try {
             //-- read all files one by one and append stream in outputFileName --//
             int terminated = 0;
-            for (int i = 0; i < filenames.length; i++)
-            {
+            for (int i = 0; i < filenames.length; i++) {
                 FileInputStream input = new FileInputStream(filenames[i]);
-                try
-                {
+                try {
                     byte[] buffer = new byte[32768];
                     int read;
-                    while ((read = input.read(buffer, 0, buffer.length)) > 0)
-                    {
+                    while ((read = input.read(buffer, 0, buffer.length)) > 0) {
                         output.write(buffer, 0, read);
                     }
-                }
-                finally
-                {
+                } finally {
                     input.close();
                     input = null;
                 }
@@ -146,9 +151,7 @@ public class FileTokenizer {
                     progressCallback.onProgress(terminated, filenames.length, progress);
                 }
             }
-        }
-        finally
-        {
+        } finally {
             output.flush();
             output.close();
             output = null;

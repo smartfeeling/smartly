@@ -7,7 +7,7 @@ public class MultipartMessagePart {
 
     private String _uid;
     private MultipartInfo _info;
-    private Object _data;
+    private byte[] _data;
 
     // --------------------------------------------------------------------
     //               c o n s t r u c t o r
@@ -15,6 +15,7 @@ public class MultipartMessagePart {
 
     public MultipartMessagePart() {
         _info = new MultipartInfo();
+        _data = new byte[0];
     }
 
     // --------------------------------------------------------------------
@@ -29,11 +30,11 @@ public class MultipartMessagePart {
         _uid = uid;
     }
 
-    public Object getData() {
+    public byte[] getData() {
         return _data;
     }
 
-    public void setData(final Object data) {
+    public void setData(final byte[] data) {
         _data = data;
     }
 
