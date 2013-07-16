@@ -2,9 +2,6 @@ package org.smartly.commons.util;
 
 import org.junit.Test;
 
-import java.io.File;
-import java.nio.file.Path;
-
 import static org.junit.Assert.assertTrue;
 
 public class PathUtilsTest {

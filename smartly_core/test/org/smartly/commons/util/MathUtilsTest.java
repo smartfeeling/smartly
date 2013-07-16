@@ -21,6 +21,6 @@ public class MathUtilsTest {
 
         double val = 150.56719999999999;
         double rounded = MathUtils.round(val, 2);
-        System.out.println( val + " rounded = " + rounded);
+        System.out.println(val + " rounded = " + rounded);
     }
 }

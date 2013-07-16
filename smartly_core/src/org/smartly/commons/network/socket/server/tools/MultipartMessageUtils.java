@@ -1,7 +1,6 @@
 package org.smartly.commons.network.socket.server.tools;
 
 import org.smartly.commons.network.socket.messages.multipart.MultipartMessagePart;
-import org.smartly.commons.util.FileUtils;
 import org.smartly.commons.util.PathUtils;
 
 /**
@@ -13,9 +12,10 @@ public class MultipartMessageUtils {
 
     /**
      * Save part on temp folder
+     *
      * @param part
      */
-    public static void save(final MultipartMessagePart part){
+    public static void save(final MultipartMessagePart part) {
 
 
     }

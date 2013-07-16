@@ -28,15 +28,15 @@ public class CSVReader implements ICSVConstants {
     private boolean _linesSkiped = false;
 
     //<editor-fold defaultstate="collapsed" desc=" Constructors ">
-    
+
     public CSVReader() {
-        
+
     }
-    
+
     /**
      * Constructs CSVReader using a null reader and a comma for the separator.<br>
-     * @param reader
-     *            the reader to an underlying CSV source.
+     *
+     * @param reader the reader to an underlying CSV source.
      */
     public CSVReader(final Reader reader) {
         this(reader, DEFAULT_SEPARATOR);
@@ -45,10 +45,8 @@ public class CSVReader implements ICSVConstants {
     /**
      * Constructs CSVReader with supplied separator.
      *
-     * @param reader
-     *            the reader to an underlying CSV source.
-     * @param separator
-     *            the delimiter to use for separating entries.
+     * @param reader    the reader to an underlying CSV source.
+     * @param separator the delimiter to use for separating entries.
      */
     public CSVReader(final Reader reader, char separator) {
         this(reader, separator, DEFAULT_QUOTE_CHARACTER);
@@ -57,12 +55,9 @@ public class CSVReader implements ICSVConstants {
     /**
      * Constructs CSVReader with supplied separator and quote char.
      *
-     * @param reader
-     *            the reader to an underlying CSV source.
-     * @param separator
-     *            the delimiter to use for separating entries
-     * @param quotechar
-     *            the character to use for quoted elements
+     * @param reader    the reader to an underlying CSV source.
+     * @param separator the delimiter to use for separating entries
+     * @param quotechar the character to use for quoted elements
      */
     public CSVReader(final Reader reader, char separator, char quotechar) {
         this(reader, separator, quotechar, DEFAULT_SKIP_LINES);
@@ -71,14 +66,10 @@ public class CSVReader implements ICSVConstants {
     /**
      * Constructs CSVReader with supplied separator and quote char.
      *
-     * @param reader
-     *            the reader to an underlying CSV source.
-     * @param separator
-     *            the delimiter to use for separating entries
-     * @param quotechar
-     *            the character to use for quoted elements
-     * @param line
-     *            the line number to skip for start reading
+     * @param reader    the reader to an underlying CSV source.
+     * @param separator the delimiter to use for separating entries
+     * @param quotechar the character to use for quoted elements
+     * @param line      the line number to skip for start reading
      */
     public CSVReader(final Reader reader, char separator, char quotechar, int line) {
         _reader = reader;
@@ -86,13 +77,13 @@ public class CSVReader implements ICSVConstants {
         _quotechar = quotechar;
         _skipLines = line;
     }
-    
+
     @Override
     protected void finalize() throws Throwable {
         this.close();
         super.finalize();
     }
-    
+
     //</editor-fold>
 
     public Reader getReader() {
@@ -130,15 +121,14 @@ public class CSVReader implements ICSVConstants {
     // ------------------------------------------------------------------------
     //                      p u b l i c
     // ------------------------------------------------------------------------
+
     /**
      * Reads the entire file into a List with each element being a String[] of
      * tokens.
      *
      * @return a List of String[], with each String[] representing a line of the
      *         file.
-     *
-     * @throws java.io.IOException
-     *             if bad things happen during the read
+     * @throws java.io.IOException if bad things happen during the read
      */
     public List<String[]> readAll() throws IOException {
         final List<String[]> result = new LinkedList<String[]>();
@@ -163,7 +153,7 @@ public class CSVReader implements ICSVConstants {
      * @throws java.io.IOException if the close fails
      */
     public void close() throws IOException {
-        if(null!=__reader){
+        if (null != __reader) {
             __reader.close();
         }
     }
@@ -172,8 +162,8 @@ public class CSVReader implements ICSVConstants {
     //                      p r i v a t e
     // ------------------------------------------------------------------------
 
-    private BufferedReader getBReader(){
-        if(null==__reader){
+    private BufferedReader getBReader() {
+        if (null == __reader) {
             __reader = new BufferedReader(_reader);
         }
         return __reader;
@@ -184,9 +174,7 @@ public class CSVReader implements ICSVConstants {
      *
      * @return a string array with each comma-separated element as a separate
      *         entry.
-     *
-     * @throws java.io.IOException
-     *             if bad things happen during the read
+     * @throws java.io.IOException if bad things happen during the read
      */
     private String[] readNext() throws IOException {
 
@@ -198,8 +186,7 @@ public class CSVReader implements ICSVConstants {
      * Reads the next line from the file.
      *
      * @return the next line from the file without trailing newline
-     * @throws java.io.IOException
-     *             if bad things happen during the read
+     * @throws java.io.IOException if bad things happen during the read
      */
     private String getNextLine() throws IOException {
         if (!_linesSkiped) {
@@ -218,8 +205,7 @@ public class CSVReader implements ICSVConstants {
     /**
      * Parses an incoming String and returns an array of elements.
      *
-     * @param nextLine
-     *            the string to parse
+     * @param nextLine the string to parse
      * @return the comma-tokenized list of elements, or null if nextLine is null
      * @throws java.io.IOException if bad things happen during the read
      */
@@ -277,9 +263,9 @@ public class CSVReader implements ICSVConstants {
         return tokensOnThisLine.toArray(new String[0]);
 
     }
-    
+
     private List<Map<String, String>> getMap(final List<String[]> rows,
-            boolean headerOnFirstRow) {
+                                             boolean headerOnFirstRow) {
         final List<Map<String, String>> result = new LinkedList<Map<String, String>>();
         String[] names;
         if (headerOnFirstRow) {

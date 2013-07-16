@@ -10,14 +10,14 @@ public class SmartlyShutdownHook extends Thread {
     private final SmartlyPackageLoader _packageLoader;
 
     public SmartlyShutdownHook(final SmartlyPackageLoader packageLoader) {
-         _packageLoader = packageLoader;
+        _packageLoader = packageLoader;
     }
 
     // call unload() when the JVM is closing
     @Override
     public void run() {
-        if(null!=_packageLoader){
-           _packageLoader.unload();
+        if (null != _packageLoader) {
+            _packageLoader.unload();
         }
     }
 

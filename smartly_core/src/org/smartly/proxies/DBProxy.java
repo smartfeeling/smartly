@@ -17,18 +17,18 @@ public class DBProxy {
 
     private static DBProxy __instance;
 
-    private static DBProxy getInstance(){
-        if(null==__instance){
+    private static DBProxy getInstance() {
+        if (null == __instance) {
             __instance = new DBProxy();
         }
         return __instance;
     }
 
-    public static <T> IDBProxy<T> get(){
+    public static <T> IDBProxy<T> get() {
         return getInstance()._proxy;
     }
 
-    public static void register(final IDBProxy proxy){
+    public static void register(final IDBProxy proxy) {
         getInstance()._proxy = proxy;
     }
 

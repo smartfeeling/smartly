@@ -19,14 +19,14 @@ public class MimeTypeUtils {
     private static final String CHARSET = ";charset=" + CharEncoding.getDefault();
 
     public static final String MIME_JSON = MimeTypeUtils.getMimeType(".json") + CHARSET;
-    public static final String MIME_PLAINTEXT = MimeTypeUtils.getMimeType(".txt")+ CHARSET;
+    public static final String MIME_PLAINTEXT = MimeTypeUtils.getMimeType(".txt") + CHARSET;
     public static final String MIME_AUDIOBASIC = MimeTypeUtils.getMimeType(".wav");
     public static final String MIME_IMAGEBMP = MimeTypeUtils.getMimeType(".bmp");
     public static final String MIME_IMAGEJPG = MimeTypeUtils.getMimeType(".jpg");
     public static final String MIME_IMAGEPNG = MimeTypeUtils.getMimeType(".png");
-    public static final String MIME_HTML = MimeTypeUtils.getMimeType(".html")+ CHARSET;
-    public static final String MIME_XML = MimeTypeUtils.getMimeType(".xml")+ CHARSET;
-    public static final String MIME_XMLRSS = MimeTypeUtils.getMimeType(".rss")+ CHARSET;
+    public static final String MIME_HTML = MimeTypeUtils.getMimeType(".html") + CHARSET;
+    public static final String MIME_XML = MimeTypeUtils.getMimeType(".xml") + CHARSET;
+    public static final String MIME_XMLRSS = MimeTypeUtils.getMimeType(".rss") + CHARSET;
     private final Map<String, String> _filetypemap;
 
     private MimeTypeUtils() {

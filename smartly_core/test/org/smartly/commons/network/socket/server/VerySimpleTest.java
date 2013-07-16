@@ -21,8 +21,8 @@ public class VerySimpleTest extends TestCase {
         String response = Client.sendString(testString);
         assertEquals(response, testString);
 
-         // try with many sync messages
-        for(int i=0;i<10;i++){
+        // try with many sync messages
+        for (int i = 0; i < 10; i++) {
             String message = "msg: " + i;
             response = Client.sendString(message);
             assertEquals(response, message);

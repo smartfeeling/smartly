@@ -64,9 +64,21 @@ public abstract class FileUtils {
         return fileName;
     }
 
+    public static boolean tryMkdirs(final String fileName) {
+        File dir = null;
+        final String ext = PathUtils.getFilenameExtension(fileName);
+        if (!StringUtils.hasText(ext)) {
+            dir = new File(fileName);
+        } else {
+            final File file = new File(fileName);
+            dir = file.getParentFile();
+        }
+        return (null != dir && !dir.exists()) && dir.mkdirs();
+    }
+
     public static void delete(final String[] paths) throws IOException {
-        for(final String path:paths){
-           delete(path);
+        for (final String path : paths) {
+            delete(path);
         }
     }
 

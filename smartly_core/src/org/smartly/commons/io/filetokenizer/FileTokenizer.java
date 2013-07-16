@@ -43,7 +43,7 @@ public class FileTokenizer {
         return splitFile(file, folder, info, progressCallback);
     }
 
-    public static String Join(final String[] fileNames,
+    public static String join(final String[] fileNames,
                               final String outputFilename,
                               final IFileTokenizerCallback progressCallback) throws IOException {
 
@@ -66,6 +66,9 @@ public class FileTokenizer {
         final String root = StringUtils.hasText(folder)
                 ? PathUtils.concat(PathUtils.getTemporaryDirectory("TOKENIZER/"), folder)
                 : PathUtils.getTemporaryDirectory("TOKENIZER/");
+
+        // root must exist
+        FileUtils.mkdirs(root);
 
         // create file names
         final String[] names = new String[info.getChunkCount()];

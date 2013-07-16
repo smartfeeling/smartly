@@ -2,7 +2,6 @@ package org.smartly.commons.util;
 
 
 import org.smartly.commons.lang.CharEncoding;
-import org.smartly.launcher.SmartlyClassLoader;
 
 import java.io.InputStream;
 import java.lang.reflect.Array;

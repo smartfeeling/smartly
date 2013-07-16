@@ -8,9 +8,9 @@ import java.util.Date;
 
 public class EchoStringFilter implements ISocketFilter {
 
-	public boolean handle(final SocketRequest request, final SocketResponse response) {
-		final String txt =  this.getClass().getSimpleName() + " (" + (new Date()).toString() + "): " + request.read().toString();
+    public boolean handle(final SocketRequest request, final SocketResponse response) {
+        final String txt = this.getClass().getSimpleName() + " (" + (new Date()).toString() + "): " + request.read().toString();
         response.write(txt);
         return true;
-	}
+    }
 }

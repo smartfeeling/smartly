@@ -90,7 +90,7 @@ public final class SmartlyPathManager {
         return __instance;
     }
 
-    private static Logger getLogger(){
+    private static Logger getLogger() {
         return LoggingUtils.getLogger(SmartlyPathManager.class);
     }
 
@@ -147,12 +147,12 @@ public final class SmartlyPathManager {
         final SmartlyPathManager instance = getInstance();
         JsonRepository result = instance.getConfig(key);
         if (null == result) {
-            try{
-            final String path = getConfigurationPath(key);
-            result = new JsonRepository(path);
-            instance.putConfig(key, result);
-            }catch(Throwable t){
-               getLogger().log(Level.SEVERE, null, t);
+            try {
+                final String path = getConfigurationPath(key);
+                result = new JsonRepository(path);
+                instance.putConfig(key, result);
+            } catch (Throwable t) {
+                getLogger().log(Level.SEVERE, null, t);
             }
         }
         return result;

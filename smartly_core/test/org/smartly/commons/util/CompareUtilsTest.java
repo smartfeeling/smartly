@@ -2,9 +2,7 @@ package org.smartly.commons.util;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * User: angelo.geminiani
@@ -24,7 +22,7 @@ public class CompareUtilsTest {
         int i = 10;
         double d = 10.0;
         long l = 10;
-        String s="10";
+        String s = "10";
         String[] arr1 = {"a", "b"};
         String[] arr2 = {"a", "b"};
         String[] arr3 = {"a", "c"};
@@ -38,13 +36,13 @@ public class CompareUtilsTest {
         result = CompareUtils.compare(i, s);
         assertEquals(result, 0);
 
-        s="11";
+        s = "11";
         result = CompareUtils.compare(i, s);
         assertEquals(result, -1);
 
-        l=999999999;
-        d=999999999.000;
-        result = CompareUtils.compare(d,l);
+        l = 999999999;
+        d = 999999999.000;
+        result = CompareUtils.compare(d, l);
         assertEquals(result, 0);
 
         assertTrue(CompareUtils.equals(arr1, arr2));

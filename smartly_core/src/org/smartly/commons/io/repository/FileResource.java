@@ -65,7 +65,7 @@ public class FileResource extends AbstractResource {
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof FileResource && path.equals(((FileResource)obj).path);
+        return obj instanceof FileResource && path.equals(((FileResource) obj).path);
     }
 
     @Override

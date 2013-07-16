@@ -595,7 +595,7 @@ public abstract class BeanUtils {
                                            final String path)
             throws IllegalAccessException, InvocationTargetException {
         Object result = null;
-        if(null!=instance){
+        if (null != instance) {
             if (StringUtils.hasText(path)) {
                 final String[] tokens = StringUtils.split(
                         path, ".");

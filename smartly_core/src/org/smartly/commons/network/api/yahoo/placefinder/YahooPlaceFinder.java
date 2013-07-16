@@ -1,7 +1,6 @@
 package org.smartly.commons.network.api.yahoo.placefinder;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
@@ -133,7 +132,7 @@ public class YahooPlaceFinder {
         return this.coordinates(locale, getAddress(address, false));
     }
 
-    public JSONObject coordinates (final String locale, final String address) {
+    public JSONObject coordinates(final String locale, final String address) {
         try {
             final Map<String, Object> params = new HashMap<String, Object>();
             params.put("locale", locale);
@@ -162,7 +161,6 @@ public class YahooPlaceFinder {
     // --------------------------------------------------------------------
 
 
-
     // --------------------------------------------------------------------
     //               S T A T I C  -  p r i v a t e
     // --------------------------------------------------------------------
@@ -178,9 +176,9 @@ public class YahooPlaceFinder {
                 } else {
                     // system error
                     final String sys_err = JsonWrapper.getString(json, "error");
-                    if(StringUtils.hasText(sys_err)){
+                    if (StringUtils.hasText(sys_err)) {
                         final String cause = JsonWrapper.getString(json, "error_message");
-                        if(StringUtils.hasText(cause)){
+                        if (StringUtils.hasText(cause)) {
                             throw new Exception("[" + cause + "] - " + sys_err);
                         }
                         throw new Exception(sys_err);
@@ -218,24 +216,24 @@ public class YahooPlaceFinder {
         final String country = address.optString("country");
         final String zip = address.optString("zip");
         final StringBuilder sb = new StringBuilder();
-        if(StringUtils.hasText(city) ||
+        if (StringUtils.hasText(city) ||
                 StringUtils.hasText(state) ||
                 StringUtils.hasText(zip) ||
-                StringUtils.hasText(country)){
-            if(includeStreet && StringUtils.hasText(street)){
+                StringUtils.hasText(country)) {
+            if (includeStreet && StringUtils.hasText(street)) {
                 sb.append(street);
                 sb.append(",");
             }
-            if(StringUtils.hasText(city)){
+            if (StringUtils.hasText(city)) {
                 sb.append(city).append(" ");
             }
-            if(StringUtils.hasText(state)){
+            if (StringUtils.hasText(state)) {
                 sb.append(state).append(" ");
             }
-            if(StringUtils.hasText(zip)){
+            if (StringUtils.hasText(zip)) {
                 sb.append(zip).append(" ");
             }
-            if(StringUtils.hasText(country)){
+            if (StringUtils.hasText(country)) {
                 sb.append(country);
             }
         }

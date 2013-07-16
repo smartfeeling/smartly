@@ -44,6 +44,7 @@ public class TestServer extends TestCase {
         Client.sendString(host, port, "Another String");
     }
 
+
     public void test3() {
         //Force error by starting another server on same port
         Throwable ex = null;

@@ -29,16 +29,22 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 package com.jcraft.jsch;
 
-public interface HostKeyRepository{
-  final int OK=0;
-  final int NOT_INCLUDED=1;
-  final int CHANGED=2;
+public interface HostKeyRepository {
+    final int OK = 0;
+    final int NOT_INCLUDED = 1;
+    final int CHANGED = 2;
 
-  int check(String host, byte[] key);
-  void add(HostKey hostkey, UserInfo ui);
-  void remove(String host, String type);
-  void remove(String host, String type, byte[] key);
-  String getKnownHostsRepositoryID();
-  HostKey[] getHostKey();
-  HostKey[] getHostKey(String host, String type);
+    int check(String host, byte[] key);
+
+    void add(HostKey hostkey, UserInfo ui);
+
+    void remove(String host, String type);
+
+    void remove(String host, String type, byte[] key);
+
+    String getKnownHostsRepositoryID();
+
+    HostKey[] getHostKey();
+
+    HostKey[] getHostKey(String host, String type);
 }

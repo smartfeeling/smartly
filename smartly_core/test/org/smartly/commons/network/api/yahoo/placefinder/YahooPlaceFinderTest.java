@@ -2,13 +2,6 @@ package org.smartly.commons.network.api.yahoo.placefinder;
 
 import org.json.JSONObject;
 import org.junit.Test;
-import org.smartly.commons.network.URLUtils;
-
-import java.net.URL;
-import java.net.URLDecoder;
-import java.util.Set;
-
-import static org.junit.Assert.*;
 
 
 public class YahooPlaceFinderTest {

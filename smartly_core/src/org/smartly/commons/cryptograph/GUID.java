@@ -114,8 +114,9 @@ public class GUID {
      * enables each random number generated to be cryptographically
      * strong.  Secure false defaults to the standard Random function seeded
      * with a single cryptographically strong random number.
+     *
      * @param secure True if you want each number generated is cryptographically
-     * strong
+     *               strong
      */
     public GUID(boolean secure) {
         this.getRandomGUID(secure);
@@ -180,6 +181,7 @@ public class GUID {
      * Convert to the standard format for GUID
      * (Useful for SQL Server UniqueIdentifiers, etc.)
      * Example: C2FEEEAC-CFCD-11D1-8B05-00600806D9B6
+     *
      * @return Example: C2FEEEAC-CFCD-11D1-8B05-00600806D9B6
      */
     @Override
@@ -203,8 +205,9 @@ public class GUID {
      * Convert to the standard format for GUID SESSION ID
      * (Useful for SQL Server UniqueIdentifiers, etc.)
      * Example: C2FEEEACCFCD11D18B0500600806D9B6
+     *
      * @param sessionStyle True if you want a GUID in style "C2FEEEACCFCD11D18B0500600806D9B6".
-     * False if you want a standard GUID (see toString()).
+     *                     False if you want a standard GUID (see toString()).
      * @return Example: C2FEEEACCFCD11D18B0500600806D9B6
      */
     public String toString(boolean sessionStyle) {
@@ -250,7 +253,7 @@ public class GUID {
     }
 
     public static String create(final boolean secure,
-            final boolean sessionstyle) {
+                                final boolean sessionstyle) {
         GUID guid = new GUID(secure);
         return guid.toString(sessionstyle);
     }

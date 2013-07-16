@@ -202,12 +202,14 @@ public class FormatUtils {
     // -------------------------------------------------------------------------
     //                      D A T E
     // -------------------------------------------------------------------------
+
     /**
      * Format an input date using passed Locale settings and a standard mask (yyyyMMdd).<br>
      * Ex: for a date "19680121", if locale is 'US'
      * return value: <br>
      * "01-21-1968"
-     * @param sDate String date to format. Ex: '21-01-1968'
+     *
+     * @param sDate  String date to format. Ex: '21-01-1968'
      * @param locale Locale
      * @return Formatted date using Locale settings and "yyyyMMdd" mask.
      */
@@ -227,9 +229,10 @@ public class FormatUtils {
      * Ex: for a date "21-01-1968", with mask "dd-MM-yyyy", if locale is 'US'
      * return value: <br>
      * "01-21-1968"
-     * @param sDate String date to format. Ex: '21-01-1968'
+     *
+     * @param sDate     String date to format. Ex: '21-01-1968'
      * @param inputMask Format of input date. Ex: 'dd-MM-yyyy'
-     * @param locale Locale
+     * @param locale    Locale
      * @return Formatted date using Locale settings
      */
     public static String formatDate(String sDate, String inputMask, Locale locale) {
@@ -250,10 +253,11 @@ public class FormatUtils {
      * Ex: for a date "21-01-1968", with input mask "dd-MM-yyyy", if outpurMask
      * is "yyyyMMdd" return value: <br>
      * "19680121"
-     * @param sDate String date to format. Ex: '21-01-1968'
-     * @param inputMask Format of input date. Ex: 'dd-MM-yyyy'
+     *
+     * @param sDate      String date to format. Ex: '21-01-1968'
+     * @param inputMask  Format of input date. Ex: 'dd-MM-yyyy'
      * @param outputMask Format of output mask (desired output date format).<br>
-     * Ex: 'yyyyMMdd'
+     *                   Ex: 'yyyyMMdd'
      * @return Formatted date. Ex: "19680121"
      */
     public static String formatDate(String sDate, String inputMask, String outputMask) {
@@ -271,8 +275,9 @@ public class FormatUtils {
 
     /**
      * Format a date using MEDIUM format.
+     *
      * @param dateToFormat Date to format
-     * @param locale Locale
+     * @param locale       Locale
      * @return String formatted date.
      */
     public static String formatDate(final Date dateToFormat, final Locale locale) {
@@ -296,9 +301,10 @@ public class FormatUtils {
      * - LONG = 1<br>
      * - MEDIUM = 2<br>
      * - SHORT = 3
+     *
      * @param dateToFormat Date to format
-     * @param style Date format style: FULL = 0, LONG = 1, MEDIUM = 2, SHORT = 3.
-     * @param locale Locale
+     * @param style        Date format style: FULL = 0, LONG = 1, MEDIUM = 2, SHORT = 3.
+     * @param locale       Locale
      * @return String formatted date.
      */
     public static String formatDate(Date dateToFormat, int style, Locale locale) {
@@ -312,10 +318,11 @@ public class FormatUtils {
      * - LONG = 1<br>
      * - MEDIUM = 2<br>
      * - SHORT = 3
+     *
      * @param dateToFormat Date to format
-     * @param style Date format style: FULL = 0, LONG = 1, MEDIUM = 2, SHORT = 3.
-     * @param locale Locale
-     * @param includetime If true also time in format "hh:mm:ss" is included in output
+     * @param style        Date format style: FULL = 0, LONG = 1, MEDIUM = 2, SHORT = 3.
+     * @param locale       Locale
+     * @param includetime  If true also time in format "hh:mm:ss" is included in output
      * @return formatted date.
      */
     public static String formatDate(Date dateToFormat, int style, Locale locale,
@@ -340,6 +347,7 @@ public class FormatUtils {
     /**
      * Format a date using passed outputFormat as mask.<br>
      * i.e. : if outputFormat is "yyyyMMdd" this date "21-jan-1968" will be formatted "19680121"
+     *
      * @param dateToFormat Date to format
      * @param outputFormat Date format
      * @return String formatted date.
@@ -392,6 +400,7 @@ public class FormatUtils {
 
     /**
      * Return the pattern of a certain date style using current locale.
+     *
      * @param style Date format style. i.e. DateFormat.SHORT
      * @return Patter of passed style and locale. i.e "M/d/yy"
      */
@@ -401,7 +410,8 @@ public class FormatUtils {
 
     /**
      * Return the pattern of a certain date style.
-     * @param style Date format style. i.e. DateFormat.SHORT
+     *
+     * @param style  Date format style. i.e. DateFormat.SHORT
      * @param locale Locale
      * @return Patter of passed style and locale. i.e "M/d/yy"
      */
@@ -412,6 +422,7 @@ public class FormatUtils {
 
     /**
      * Return the pattern of a certain date style using current locale.
+     *
      * @param style Date format style. i.e. DateFormat.SHORT
      * @return Patter of passed style and locale. i.e "M/d/yy"
      */
@@ -421,7 +432,8 @@ public class FormatUtils {
 
     /**
      * Return the pattern of a certain date style.
-     * @param style Date format style. i.e. DateFormat.SHORT
+     *
+     * @param style  Date format style. i.e. DateFormat.SHORT
      * @param locale Locale
      * @return Patter of passed style and locale. i.e "M/d/yy"
      */
@@ -433,9 +445,11 @@ public class FormatUtils {
     // -------------------------------------------------------------------------
     //                      D O U B L E
     // -------------------------------------------------------------------------
+
     /**
      * Format a Double number using Locale settings
-     * @param value Double number to format
+     *
+     * @param value  Double number to format
      * @param locale Locale
      * @return Formatted number. Ex: '1.256,78'
      */
@@ -445,7 +459,8 @@ public class FormatUtils {
 
     /**
      * Format a Double number using Locale settings
-     * @param value BigDecimal number to format
+     *
+     * @param value  BigDecimal number to format
      * @param locale Locale
      * @return Formatted number. Ex: '1.256,78'
      */
@@ -463,7 +478,8 @@ public class FormatUtils {
 
     /**
      * Format a Double number using Locale settings or current user
-     * @param value Double number (as String) to format
+     *
+     * @param value  Double number (as String) to format
      * @param locale Locale
      * @return Formatted number. Ex: '1.256,78'
      */
@@ -525,9 +541,9 @@ public class FormatUtils {
     }
 
     private static String getPattern(final int minDecimals) {
-        final int pos = 4-(minDecimals>4?4:minDecimals);
+        final int pos = 4 - (minDecimals > 4 ? 4 : minDecimals);
         String d = StringUtils.fillString("", "#", pos);
-        d=StringUtils.fillString(d, "0", 4);
+        d = StringUtils.fillString(d, "0", 4);
         return "#,##0.".concat(d).concat(";(#,##0.").concat(d).concat(")");
     }
 

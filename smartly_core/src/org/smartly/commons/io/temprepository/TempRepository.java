@@ -14,7 +14,7 @@ import java.io.IOException;
  * Repository with expiration time for its content.
  * Expired files are removed
  */
-public class TempRepository implements IFileObserverListener{
+public class TempRepository implements IFileObserverListener {
 
     private static final String REGISTRY = "registry.json";
 
@@ -140,7 +140,7 @@ public class TempRepository implements IFileObserverListener{
             if (event == FileObserver.EVENT_CREATE) {
                 // CREATE
                 if (!_path_registry.equalsIgnoreCase(path)) {
-                    if(_registry.addItem(path)){
+                    if (_registry.addItem(path)) {
                         _registry.save();
                     }
                 }
@@ -151,7 +151,7 @@ public class TempRepository implements IFileObserverListener{
                 }
             } else if (event == FileObserver.EVENT_DELETE) {
                 if (!_path_registry.equalsIgnoreCase(path)) {
-                    if(_registry.removeItem(path)){
+                    if (_registry.removeItem(path)) {
                         _registry.save();
                     }
                 } else {

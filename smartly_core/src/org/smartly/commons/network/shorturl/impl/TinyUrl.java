@@ -3,8 +3,8 @@
  */
 package org.smartly.commons.network.shorturl.impl;
 
-import org.smartly.commons.network.shorturl.IURLShortener;
 import org.smartly.commons.network.URLUtils;
+import org.smartly.commons.network.shorturl.IURLShortener;
 import org.smartly.commons.util.FormatUtils;
 
 import java.util.HashMap;

@@ -17,7 +17,7 @@ public class SocketFilterPoolIterator {
 
     public SocketFilterPoolIterator(final Class<? extends ISocketFilter>[] items) {
         _items = items;
-        _index = 0;
+        _index = -1;
     }
 
     // --------------------------------------------------------------------

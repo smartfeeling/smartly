@@ -16,7 +16,7 @@ public class Dictionary {
 
     public static final String NAME = "dic"; // velocity name
 
-    public Dictionary(){
+    public Dictionary() {
     }
 
     public String getName() {

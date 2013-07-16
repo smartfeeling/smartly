@@ -106,7 +106,7 @@ public class CharEncoding {
      *      encoding names</a>
      */
     public static boolean isSupported(final String name) {
-        if (name == null || name.length()==0) {
+        if (name == null || name.length() == 0) {
             return false;
         }
         try {
@@ -145,8 +145,8 @@ public class CharEncoding {
         return __DEFAULT;
     }
 
-    public static void setDefault(final String charset){
-        if(isSupported(charset)){
+    public static void setDefault(final String charset) {
+        if (isSupported(charset)) {
             __DEFAULT = charset;
             System.setProperty(IConstants.SYSPROP_CHARSET, charset);
         }

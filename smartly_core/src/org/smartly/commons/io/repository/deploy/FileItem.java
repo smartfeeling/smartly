@@ -107,7 +107,7 @@ public class FileItem {
         return root;
     }
 
-    private String lookupFolder(final String root, final String path){
+    private String lookupFolder(final String root, final String path) {
         return PathUtils.getParent(PathUtils.subtract(root, path));
     }
 }

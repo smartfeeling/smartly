@@ -5,9 +5,9 @@
 package org.smartly.commons.logging.util;
 
 import org.smartly.commons.logging.Level;
-import org.smartly.commons.logging.LoggingRepository;
 import org.smartly.commons.logging.LogItemRepositoryLogger;
 import org.smartly.commons.logging.Logger;
+import org.smartly.commons.logging.LoggingRepository;
 
 /**
  * @author

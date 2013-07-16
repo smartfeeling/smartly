@@ -52,12 +52,13 @@ public final class SecurityMessageDigester
     }
 
     public boolean testPassword(String clearTextTestPassword,
-            String encodedActualPassword) {
+                                String encodedActualPassword) {
         String encodedTestPassword = this.getEncodedText(
                 clearTextTestPassword);
 
         return (encodedTestPassword.equals(encodedActualPassword));
     }
+
     // ------------------------------------------------------------------------
     //                      S T A T I C
     // ------------------------------------------------------------------------
@@ -72,7 +73,7 @@ public final class SecurityMessageDigester
     }
 
     public static String encodeMD5(final String text,
-            final String opvalue) {
+                                   final String opvalue) {
         try {
             final SecurityMessageDigester instance = getInstance();
             return instance.getEncodedText(text);

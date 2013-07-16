@@ -493,77 +493,77 @@ public final class JsonWrapper implements Cloneable {
     }
 
     public Object remove(final int index) {
-        if (this.isJSONArray() && _array.length()>index) {
+        if (this.isJSONArray() && _array.length() > index) {
             return _array.remove(index);
         }
         return null;
     }
 
     public Object get(final int index) throws JSONException {
-        if (this.isJSONArray() && _array.length()>index) {
+        if (this.isJSONArray() && _array.length() > index) {
             return _array.get(index);
         }
         return null;
     }
 
     public String getString(final int index) throws JSONException {
-        if (this.isJSONArray() && _array.length()>index) {
+        if (this.isJSONArray() && _array.length() > index) {
             return _array.getString(index);
         }
         return null;
     }
 
     public boolean getBoolean(final int index) throws JSONException {
-        if (this.isJSONArray() && _array.length()>index) {
+        if (this.isJSONArray() && _array.length() > index) {
             return _array.getBoolean(index);
         }
         return false;
     }
 
     public double getDouble(final int index) throws JSONException {
-        if (this.isJSONArray() && _array.length()>index) {
+        if (this.isJSONArray() && _array.length() > index) {
             return _array.getDouble(index);
         }
         return 0.0;
     }
 
     public int getInt(final int index) throws JSONException {
-        if (this.isJSONArray() && _array.length()>index) {
+        if (this.isJSONArray() && _array.length() > index) {
             return _array.getInt(index);
         }
         return 0;
     }
 
     public long getLong(final int index) throws JSONException {
-        if (this.isJSONArray() && _array.length()>index) {
+        if (this.isJSONArray() && _array.length() > index) {
             return _array.getLong(index);
         }
         return 0L;
     }
 
     public JSONArray getJSONArray(final int index) throws JSONException {
-        if (this.isJSONArray() && _array.length()>index) {
+        if (this.isJSONArray() && _array.length() > index) {
             return _array.getJSONArray(index);
         }
         return null;
     }
 
     public JSONObject getJSONObject(final int index) throws JSONException {
-        if (this.isJSONArray() && _array.length()>index) {
+        if (this.isJSONArray() && _array.length() > index) {
             return _array.getJSONObject(index);
         }
         return null;
     }
 
     public Object opt(final int index) {
-        if (this.isJSONArray() && _array.length()>index) {
+        if (this.isJSONArray() && _array.length() > index) {
             return _array.opt(index);
         }
         return null;
     }
 
     public String optString(final int index) {
-        if (this.isJSONArray() && _array.length()>index) {
+        if (this.isJSONArray() && _array.length() > index) {
             return _array.optString(index);
         }
         return null;

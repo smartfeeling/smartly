@@ -23,15 +23,15 @@ public class ChainDictionary
         _dictionaries = new HashMap<String, Map<String, String>>();
     }
 
-    public String getName(){
+    public String getName() {
         return NAME;
     }
 
-    public boolean hasNext(){
-        return null!= _super;
+    public boolean hasNext() {
+        return null != _super;
     }
 
-    public AbstractI18nBundle next(){
+    public AbstractI18nBundle next() {
         return _super;
     }
 
@@ -88,7 +88,7 @@ public class ChainDictionary
         }
         // return formatted result
         if (StringUtils.hasText(result)) {
-            if (null!=args && !args.isEmpty()) {
+            if (null != args && !args.isEmpty()) {
                 return FormatUtils.format(result, args);
             } else {
                 return result;
@@ -142,18 +142,18 @@ public class ChainDictionary
         return result;
     }
 
-    private AbstractI18nBundle getSuperclassInstance(){
+    private AbstractI18nBundle getSuperclassInstance() {
         AbstractI18nBundle result = null;
-        try{
+        try {
             result = (AbstractI18nBundle) this.getClass().getSuperclass().newInstance();
-        }catch(Throwable ignored){
+        } catch (Throwable ignored) {
         }
-        return null!=result?result: getInstance();
+        return null != result ? result : getInstance();
     }
 
     public String lookup(final String key,
-                             final Locale locale,
-                             final ClassLoader classloader) {
+                         final Locale locale,
+                         final ClassLoader classloader) {
         // retrieve a dictionary
         final Map<String, String> dic = this.getDictionary(locale);
         // try dictionary

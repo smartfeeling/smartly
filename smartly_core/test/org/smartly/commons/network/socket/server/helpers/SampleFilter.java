@@ -24,7 +24,7 @@ public class SampleFilter implements ISocketFilter {
             Thread.sleep(1000);
         } catch (Throwable ignored) {
         }
-        final String txt =  " (" + (new Date()).toString() + "): " + request.read().toString();
+        final String txt = " (" + (new Date()).toString() + "): " + request.read().toString();
         response.write(txt);
         return true;
     }

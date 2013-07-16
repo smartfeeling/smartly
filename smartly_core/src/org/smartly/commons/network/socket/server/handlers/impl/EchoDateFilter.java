@@ -8,8 +8,8 @@ import java.util.Date;
 
 public class EchoDateFilter implements ISocketFilter {
 
-	public boolean handle(final SocketRequest request, final SocketResponse response) {
+    public boolean handle(final SocketRequest request, final SocketResponse response) {
         response.write(new Date());
-		return true;
-	}
+        return true;
+    }
 }

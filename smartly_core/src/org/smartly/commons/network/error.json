@@ -1,4 +1,4 @@
 {
-    "error":"Unable to retrieve data from '{{uri}}'",
-    "error_message":"{{error}}"
+    "error": "Unable to retrieve data from '{{uri}}'",
+    "error_message": "{{error}}"
 }

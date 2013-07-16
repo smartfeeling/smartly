@@ -8,7 +8,6 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 /**
- *
  * @author
  */
 public abstract class ExceptionUtils {
@@ -67,7 +66,7 @@ public abstract class ExceptionUtils {
     public static String getMessage(final Throwable ex) {
         if (null != ex) {
             String s;
-            for (Throwable t = ex;;) {
+            for (Throwable t = ex; ; ) {
                 s = t.getMessage();
                 if (StringUtils.hasText(s)) {
                     break; //found
@@ -84,6 +83,7 @@ public abstract class ExceptionUtils {
 
     /**
      * Retrieve message of real cause.
+     *
      * @param ex
      * @return
      */
@@ -92,21 +92,24 @@ public abstract class ExceptionUtils {
         return null != t ? t.toString() : getMessage(ex);
     }
 
-    /** Formats the stack trace and returns the result.
+    /**
+     * Formats the stack trace and returns the result.
      * Currently, it only adds the prefix to each line.
      *
      * @param prefix the prefix shown in front of each line of the stack trace;
-     * null to denote empty
+     *               null to denote empty
      */
     public static String formatStackTrace(Throwable t, String prefix) {
         return formatStackTrace(null, t, prefix).toString();
     }
 
-    /** Formats the stack trace and appends it to the specified string buffer.
-     * @param sb the string buffer to append the stack trace. A string buffer
-     * will be created if null.
+    /**
+     * Formats the stack trace and appends it to the specified string buffer.
+     *
+     * @param sb     the string buffer to append the stack trace. A string buffer
+     *               will be created if null.
      * @param prefix the prefix shown in front of each line of the stack trace;
-     * null to denote empty
+     *               null to denote empty
      */
     public static StringBuffer formatStackTrace(StringBuffer sb, Throwable t, String prefix) {
         return formatStackTrace(sb, t, prefix, 0);
@@ -115,19 +118,19 @@ public abstract class ExceptionUtils {
     /**
      * Formats the stack trace and appends it to the specified string buffer,
      * but only display at most maxcnt lines.
-     *
+     * <p/>
      * <p>The maximal allowed number of lines is controlled by
      * maxcnt. Note: a stack frame is not counted, if it belongs
      * to java.*, javax.* or sun.*.
      *
-     * @param sb the string buffer to append the stack trace. A string buffer
-     * will be created if null.
+     * @param sb     the string buffer to append the stack trace. A string buffer
+     *               will be created if null.
      * @param prefix the prefix shown in front of each line of the stack trace;
-     * null to denote empty
+     *               null to denote empty
      * @param maxcnt the maximal allowed number of lines to dump (<=0: no limit)
      */
     public static StringBuffer formatStackTrace(StringBuffer sb,
-            final Throwable t, String prefix, int maxcnt) {
+                                                final Throwable t, String prefix, int maxcnt) {
         final StringWriter sw = new StringWriter();
         t.printStackTrace(new PrintWriter(sw));
         final StringBuffer trace = sw.getBuffer();
@@ -144,7 +147,7 @@ public abstract class ExceptionUtils {
                 maxcnt = Integer.MAX_VALUE;
             }
             boolean ignoreCount = false;
-            for (int j = 0; j < len;) { //for each line
+            for (int j = 0; j < len; ) { //for each line
                 if (!ignoreCount && --maxcnt < 0) {
                     sb.append(prefix).append("...");
                     break;

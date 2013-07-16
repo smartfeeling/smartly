@@ -12,23 +12,23 @@ public class SocketResponse {
     //               c o n s t r u c t o r s
     // --------------------------------------------------------------------
 
-     public SocketResponse(){
-         _canContinue = true;
-     }
+    public SocketResponse() {
+        _canContinue = true;
+    }
 
     // --------------------------------------------------------------------
     //               p u b l i c
     // --------------------------------------------------------------------
 
-    public boolean canHandle(){
+    public boolean canHandle() {
         return _canContinue;
     }
 
-    public void stopHandle(){
+    public void stopHandle() {
         _canContinue = false;
     }
 
-    public void write (final Object data){
+    public void write(final Object data) {
         _data = data;
     }
 

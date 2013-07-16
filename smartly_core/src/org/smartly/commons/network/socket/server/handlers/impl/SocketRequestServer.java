@@ -14,7 +14,7 @@ public class SocketRequestServer {
         _server = server;
     }
 
-    public void addMultipartMessagePart(final MultipartMessagePart part){
+    public void addMultipartMessagePart(final MultipartMessagePart part) {
         _server.addMultipartMessagePart(part);
     }
 }

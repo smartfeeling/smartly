@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * Thread safe Map of listener's list.
- * 
+ *
  * @author
  */
 public class EventListeners
@@ -66,7 +66,7 @@ public class EventListeners
 
     public void add(IEventListener listener) {
         synchronized (_listeners) {
-            if(!_listeners.contains(listener)){
+            if (!_listeners.contains(listener)) {
                 _listeners.add(listener);
             }
         }
@@ -122,14 +122,14 @@ public class EventListeners
         StringBuilder result = new StringBuilder();
         result.append("Total listeners: ").append(size);
         try {
-            for (final IEventListener listener:_listeners) {
+            for (final IEventListener listener : _listeners) {
                 result.append("\n ");
                 result.append("\t").append(listener.toString());
             }
         } catch (Throwable t) {
             Logger logger = this.getLogger();
             logger.log(Level.WARNING, "Error getting listeners snapshot.", t);
-            
+
             result.append("ERROR [").append(t.toString()).append("]");
         }
         return result.toString();

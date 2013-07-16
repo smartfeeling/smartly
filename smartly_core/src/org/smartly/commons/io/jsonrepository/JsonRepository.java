@@ -57,17 +57,17 @@ public class JsonRepository {
     //-- utils --//
 
     public JSONObject getJSONObject(final String path) {
-        final Object result =  this.get(path);
-        if(result instanceof JSONObject){
-           return (JSONObject)result;
+        final Object result = this.get(path);
+        if (result instanceof JSONObject) {
+            return (JSONObject) result;
         }
         return null;
     }
 
     public JSONArray getJSONArray(final String path) {
-        final Object result =  this.get(path);
-        if(result instanceof JSONArray){
-            return (JSONArray)result;
+        final Object result = this.get(path);
+        if (result instanceof JSONArray) {
+            return (JSONArray) result;
         }
         return null;
     }
@@ -83,7 +83,7 @@ public class JsonRepository {
 
     public String[] getStringArray(final String path) {
         final Object value = this.get(path);
-        return (value instanceof JSONArray)?JsonWrapper.toArrayOfString((JSONArray)value):new String[0];
+        return (value instanceof JSONArray) ? JsonWrapper.toArrayOfString((JSONArray) value) : new String[0];
     }
 
     public boolean getBoolean(final String path) {

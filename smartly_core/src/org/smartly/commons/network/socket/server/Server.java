@@ -6,6 +6,7 @@ import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.network.socket.messages.multipart.Multipart;
 import org.smartly.commons.network.socket.messages.multipart.MultipartMessagePart;
 import org.smartly.commons.network.socket.messages.multipart.MultipartPool;
+import org.smartly.commons.network.socket.messages.multipart.util.MultipartPoolEvents;
 import org.smartly.commons.network.socket.server.handlers.ISocketFilter;
 import org.smartly.commons.network.socket.server.handlers.ISocketHandler;
 import org.smartly.commons.network.socket.server.handlers.impl.MultipartMessageHandler;
@@ -38,10 +39,16 @@ public class Server extends Thread {
     public static int DEFAULT_PORT = 14444;
 
     // --------------------------------------------------------------------
+    //               e v e n t s
+    // --------------------------------------------------------------------
+
+
+    // --------------------------------------------------------------------
     //               f i e l d s
     // --------------------------------------------------------------------
 
     private final MultipartPool _multipartPool;
+    private final MultipartPoolEvents _multipartEvents;
     private final int _port;
     private SocketHandlerPool _handlers;
     private ServerSocket _socket;
@@ -63,6 +70,7 @@ public class Server extends Thread {
         _handlers = new SocketHandlerPool(handlers);
         _socket = new ServerSocket(_port);
         _multipartPool = new MultipartPool();
+        _multipartEvents = new MultipartPoolEvents();
 
         this.init();
     }
@@ -75,6 +83,17 @@ public class Server extends Thread {
         } catch (Throwable ignore) {
         }
         super.finalize();
+    }
+    // --------------------------------------------------------------------
+    //               e v e n t
+    // --------------------------------------------------------------------
+
+    public void onMultipartFull(final MultipartPoolEvents.OnFullListener listener) {
+        _multipartEvents.onFull(listener);
+    }
+
+    public void onMultipartTimeOut(final MultipartPoolEvents.OnTimeOutListener listener) {
+        _multipartEvents.onTimeOut(listener);
     }
 
     // --------------------------------------------------------------------
@@ -127,7 +146,7 @@ public class Server extends Thread {
         return this;
     }
 
-    public void addMultipartMessagePart(final MultipartMessagePart part){
+    public void addMultipartMessagePart(final MultipartMessagePart part) {
         _multipartPool.add(part);
     }
 
@@ -147,13 +166,13 @@ public class Server extends Thread {
                 MultipartMessageHandler.class);
 
         //-- init multipart pool --//
-        _multipartPool.onFull(new MultipartPool.OnFullListener() {
+        _multipartPool.onFull(new MultipartPoolEvents.OnFullListener() {
             @Override
             public void handle(Multipart sender) {
                 onMultipartFull(sender);
             }
         });
-        _multipartPool.onTimeOut(new MultipartPool.OnTimeOutListener() {
+        _multipartPool.onTimeOut(new MultipartPoolEvents.OnTimeOutListener() {
             @Override
             public void handle(Multipart sender) {
                 onMultipartTimeout(sender);
@@ -186,13 +205,13 @@ public class Server extends Thread {
     }
 
     private void onMultipartFull(final Multipart multipart) {
-         // message ready
-
+        // message ready
+        _multipartEvents.doOnFull(multipart);
     }
 
     private void onMultipartTimeout(final Multipart multipart) {
-         // timeout
-
+        // timeout
+        _multipartEvents.doOnTimeOut(multipart);
     }
 
     // --------------------------------------------------------------------

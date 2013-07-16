@@ -1,9 +1,14 @@
 package org.smartly.commons.network.socket.messages.multipart;
 
+import org.smartly.commons.lang.CharEncoding;
+
+import java.io.Serializable;
+
 /**
  *
  */
-public class MultipartInfo {
+public final class MultipartInfo
+        implements Serializable {
 
     public static enum MultipartInfoType {
         File,
@@ -17,6 +22,7 @@ public class MultipartInfo {
     private MultipartInfoType _type;
     private String _partName;
     private String _parentName;
+    private String _encoding;
     private int _index;
     private int _length;
 
@@ -26,6 +32,7 @@ public class MultipartInfo {
 
     public MultipartInfo() {
         _type = MultipartInfoType.File;
+        _encoding = CharEncoding.UTF_8;
     }
 
     public MultipartInfo(final String parentName,
@@ -38,13 +45,14 @@ public class MultipartInfo {
         _partName = partName;
         _index = index;
         _length = length;
+        _encoding = CharEncoding.UTF_8;
     }
 
     //-----------------------------------------------
     //             o v e r r i d e
     //-----------------------------------------------
 
-    public String ToString() {
+    public String toString() {
         final StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName()).append("{");
         sb.append("Index: ").append(this.getIndex()).append(", ");
@@ -65,8 +73,17 @@ public class MultipartInfo {
         return _type;
     }
 
-    public MultipartInfo setType(MultipartInfoType _type) {
-        _type = _type;
+    public MultipartInfo setType(final MultipartInfoType value) {
+        _type = value;
+        return this;
+    }
+
+    public String getEncoding() {
+        return _encoding;
+    }
+
+    public MultipartInfo setEncoding(final String value) {
+        _encoding = value;
         return this;
     }
 
@@ -74,8 +91,8 @@ public class MultipartInfo {
         return _partName;
     }
 
-    public MultipartInfo setPartName(String _partName) {
-        _partName = _partName;
+    public MultipartInfo setPartName(final String value) {
+        _partName = value;
         return this;
     }
 
@@ -83,8 +100,8 @@ public class MultipartInfo {
         return _parentName;
     }
 
-    public MultipartInfo setParentName(String _parentName) {
-        _parentName = _parentName;
+    public MultipartInfo setParentName(final String value) {
+        _parentName = value;
         return this;
     }
 
@@ -92,8 +109,8 @@ public class MultipartInfo {
         return _index;
     }
 
-    public MultipartInfo setIndex(int _index) {
-        _index = _index;
+    public MultipartInfo setIndex(final int value) {
+        _index = value;
         return this;
     }
 
@@ -101,8 +118,8 @@ public class MultipartInfo {
         return _length;
     }
 
-    public MultipartInfo setLength(int _length) {
-        _length = _length;
+    public MultipartInfo setLength(final int value) {
+        _length = value;
         return this;
     }
 

@@ -5,12 +5,10 @@ package org.smartly.commons.i18n.resourcebundle;
 
 import org.smartly.commons.i18n.resourcebundle.bundle.ResourceBundleManager;
 import org.smartly.commons.util.ClassLoaderUtils;
-import org.smartly.commons.util.FormatUtils;
 import org.smartly.commons.util.PathUtils;
 import org.smartly.commons.util.StringUtils;
 
 import java.util.Locale;
-import java.util.Map;
 import java.util.Properties;
 
 
@@ -89,9 +87,9 @@ public abstract class AbstractI18nBundle {
         return value;
     }
 
-    private String readFile(final String fileName) throws Exception{
+    private String readFile(final String fileName) throws Exception {
         final String result = ClassLoaderUtils.getResourceAsString(null, this.getClass(), fileName);
-        if(null==result){
+        if (null == result) {
             throw new Exception("not a file");
         }
         return result;

@@ -4,7 +4,6 @@
 package org.smartly.commons.network.shorturl;
 
 /**
- *
  * @author angelo.geminiani
  */
 public interface IURLShortener {

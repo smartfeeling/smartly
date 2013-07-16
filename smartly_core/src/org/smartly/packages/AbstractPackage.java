@@ -186,7 +186,7 @@ public abstract class AbstractPackage
         Smartly.getLogger().debug(this, "EXITING " + this.getClass().getSimpleName());
     }
 
-    public Logger getLogger(){
+    public Logger getLogger() {
         return LoggingUtils.getLogger(this);
     }
 

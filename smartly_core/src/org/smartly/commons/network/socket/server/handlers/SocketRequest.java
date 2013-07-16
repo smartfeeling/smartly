@@ -24,12 +24,12 @@ public class SocketRequest {
     //               p u b l i c
     // --------------------------------------------------------------------
 
-    public SocketRequestServer getServer(){
+    public SocketRequestServer getServer() {
         return _server;
     }
 
-    public boolean isTypeOf(final Class aclass){
-        if(null!=aclass && null!=_data){
+    public boolean isTypeOf(final Class aclass) {
+        if (null != aclass && null != _data) {
             return aclass.equals(this.getTypeClass());
         }
         return false;

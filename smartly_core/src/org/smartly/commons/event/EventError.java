@@ -4,7 +4,6 @@
 package org.smartly.commons.event;
 
 /**
- *
  * @author
  */
 public class EventError extends Event {

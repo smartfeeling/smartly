@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author angelo.geminiani
  */
 public abstract class SystemUtils {
@@ -17,36 +16,36 @@ public abstract class SystemUtils {
     private static Boolean _islinux = null;
     private static Boolean _ismac = null;
 
-    public static String getOperatingSystem(){
+    public static String getOperatingSystem() {
         return System.getProperty("os.name");
     }
 
-    public static String getOSVersion(){
+    public static String getOSVersion() {
         return System.getProperty("os.version");
     }
 
-    public static String getOSAchitecture(){
+    public static String getOSAchitecture() {
         return System.getProperty("os.arch");
     }
 
-    public static boolean isWindows(){
-        if(null==_iswindow){
+    public static boolean isWindows() {
+        if (null == _iswindow) {
             final String os = getOperatingSystem();
             _iswindow = os.toLowerCase().startsWith("win");
         }
         return _iswindow;
     }
 
-    public static boolean isLinux(){
-        if(null==_islinux){
+    public static boolean isLinux() {
+        if (null == _islinux) {
             final String os = getOperatingSystem();
             _islinux = os.toLowerCase().startsWith("linux");
         }
         return _islinux;
     }
 
-    public static boolean isMac(){
-        if(null==_ismac){
+    public static boolean isMac() {
+        if (null == _ismac) {
             final String os = getOperatingSystem();
             _ismac = os.toLowerCase().startsWith("mac");
         }
@@ -89,6 +88,7 @@ public abstract class SystemUtils {
 
         /**
          * Retrieve a File System Type value
+         *
          * @param path a path. i.e. "http://folder/file.txt"
          * @return
          */

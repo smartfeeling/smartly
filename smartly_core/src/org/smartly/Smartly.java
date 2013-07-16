@@ -2,8 +2,8 @@ package org.smartly;
 
 import org.json.JSONObject;
 import org.smartly.commons.io.jsonrepository.JsonRepository;
-import org.smartly.commons.lang.CharEncoding;
 import org.smartly.commons.io.repository.deploy.FileDeployer;
+import org.smartly.commons.lang.CharEncoding;
 import org.smartly.commons.util.JsonWrapper;
 import org.smartly.commons.util.PathUtils;
 import org.smartly.commons.util.StringUtils;
@@ -32,6 +32,7 @@ public class Smartly {
     /**
      * Set with reflection from AbstractLauncher
      * BeanUtils.setValueIfAny(_runnerInstance, "mappedArgs", _argsMap);
+     *
      * @param mappedArgs
      */
     public void setMappedArgs(final Map<String, Object> mappedArgs) {

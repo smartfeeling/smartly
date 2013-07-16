@@ -6,7 +6,7 @@ import org.smartly.commons.network.socket.server.handlers.SocketResponse;
 
 public class EchoNullFilter implements ISocketFilter {
 
-	public boolean handle(final SocketRequest request, final SocketResponse response) {
-		return true;
-	}
+    public boolean handle(final SocketRequest request, final SocketResponse response) {
+        return true;
+    }
 }

@@ -27,6 +27,7 @@ public class FileRepository extends AbstractRepository {
 
     /**
      * Constructs a FileRepository using the given argument
+     *
      * @param path absolute path to the directory
      * @throws java.io.IOException if canonical path couldn't be resolved
      */
@@ -37,6 +38,7 @@ public class FileRepository extends AbstractRepository {
     /**
      * Constructs a FileRepository using the given directory as top-level
      * repository
+     *
      * @param dir directory
      * @throws java.io.IOException if canonical path couldn't be resolved
      */
@@ -47,7 +49,8 @@ public class FileRepository extends AbstractRepository {
     /**
      * Constructs a FileRepository using the given directory and top-level
      * repository
-     * @param dir directory
+     *
+     * @param dir    directory
      * @param parent top-level repository
      * @throws java.io.IOException if canonical path couldn't be resolved
      */
@@ -68,6 +71,7 @@ public class FileRepository extends AbstractRepository {
 
     /**
      * Check whether the repository exists.
+     *
      * @return true if the repository exists.
      */
     public boolean exists() {
@@ -76,6 +80,7 @@ public class FileRepository extends AbstractRepository {
 
     /**
      * Create a child repository with the given name
+     *
      * @param name the name of the repository
      * @return the child repository
      */
@@ -129,7 +134,7 @@ public class FileRepository extends AbstractRepository {
             // FIXME
             long checksum = lastModified;
 
-            for (Resource res: resources.values()) {
+            for (Resource res : resources.values()) {
                 checksum += res.lastModified();
             }
 
@@ -157,7 +162,7 @@ public class FileRepository extends AbstractRepository {
             throws IOException {
         final File[] dir = directory.listFiles();
 
-        for (final File file: dir) {
+        for (final File file : dir) {
             if (file.isFile()) {
                 final Resource resource = this.lookupResource(file.getName());
                 list.add(resource);
@@ -172,7 +177,7 @@ public class FileRepository extends AbstractRepository {
         final File[] dir = directory.listFiles();
         final List<Repository> list = new ArrayList<Repository>(dir.length);
 
-        for (final File file: dir) {
+        for (final File file : dir) {
             if (file.isDirectory()) {
                 list.add(lookupRepository(file.getName()));
             }
@@ -193,7 +198,7 @@ public class FileRepository extends AbstractRepository {
     @Override
     public boolean equals(Object obj) {
         return obj instanceof FileRepository &&
-               directory.equals(((FileRepository) obj).directory);
+                directory.equals(((FileRepository) obj).directory);
     }
 
     @Override

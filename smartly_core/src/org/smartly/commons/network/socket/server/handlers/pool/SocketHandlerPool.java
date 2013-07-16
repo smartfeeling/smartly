@@ -122,10 +122,10 @@ public class SocketHandlerPool {
         return null;
     }
 
-    public ISocketHandler getHandler(final String key){
-          synchronized (_handlers){
-              return this.getHandlerInstance(_handlers.get(key));
-          }
+    public ISocketHandler getHandler(final String key) {
+        synchronized (_handlers) {
+            return this.getHandlerInstance(_handlers.get(key));
+        }
     }
 
     // --------------------------------------------------------------------

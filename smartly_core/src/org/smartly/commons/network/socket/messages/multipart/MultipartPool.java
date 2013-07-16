@@ -1,8 +1,11 @@
 package org.smartly.commons.network.socket.messages.multipart;
 
-import org.smartly.commons.async.Async;
+import org.smartly.commons.network.socket.messages.multipart.util.MultipartPoolEvents;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Repository for Multipart message containers.
@@ -10,28 +13,13 @@ import java.util.*;
  */
 public class MultipartPool {
 
-
-    // --------------------------------------------------------------------
-    //               e v e n t s
-    // --------------------------------------------------------------------
-
-    public static interface OnFullListener {
-        public void handle(Multipart sender);
-    }
-
-    public static interface OnTimeOutListener {
-        public void handle(Multipart sender);
-    }
-
     // --------------------------------------------------------------------
     //               f i e l d s
     // --------------------------------------------------------------------
 
     private static final int DEFAULT_TIMEOUT = 60 * 2 * 1000; // two minute timeout
 
-    private final Collection<OnFullListener> _listeners_full;
-    private final Collection<OnTimeOutListener> _listeners_timeout;
-
+    private final MultipartPoolEvents _events;
     private final Map<String, Multipart> _data;
     private PoolGarbageCollector _gc;
 
@@ -48,8 +36,7 @@ public class MultipartPool {
     public MultipartPool(int timeOut) {
         _timeOut = timeOut;
         _data = Collections.synchronizedMap(new HashMap<String, Multipart>());
-        _listeners_full = Collections.synchronizedCollection(new ArrayList<OnFullListener>());
-        _listeners_timeout = Collections.synchronizedCollection(new ArrayList<OnTimeOutListener>());
+        _events = new MultipartPoolEvents();
 
         //-- gc for current pool --//
         _gc = new PoolGarbageCollector(this);
@@ -86,12 +73,7 @@ public class MultipartPool {
     }
 
     public void clear() {
-        synchronized (_listeners_full) {
-            _listeners_full.clear();
-        }
-        synchronized (_listeners_timeout) {
-            _listeners_timeout.clear();
-        }
+        _events.clear();
         synchronized (_data) {
             _data.clear();
         }
@@ -124,16 +106,12 @@ public class MultipartPool {
     //               e v e n t
     // --------------------------------------------------------------------
 
-    public void onFull(final OnFullListener listener) {
-        synchronized (_listeners_full) {
-            _listeners_full.add(listener);
-        }
+    public void onFull(final MultipartPoolEvents.OnFullListener listener) {
+        _events.onFull(listener);
     }
 
-    public void onTimeOut(final OnTimeOutListener listener) {
-        synchronized (_listeners_timeout) {
-            _listeners_timeout.add(listener);
-        }
+    public void onTimeOut(final MultipartPoolEvents.OnTimeOutListener listener) {
+        _events.onTimeOut(listener);
     }
 
     // --------------------------------------------------------------------
@@ -141,16 +119,7 @@ public class MultipartPool {
     // --------------------------------------------------------------------
 
     private void doOnTimeOut(final Multipart multipart) {
-        synchronized (_listeners_timeout) {
-            for (final OnTimeOutListener listener : _listeners_timeout) {
-                Async.Action(new Async.AsyncActionHandler() {
-                    @Override
-                    public void handle(Object... args) {
-                        listener.handle(multipart);
-                    }
-                });
-            }
-        }
+        _events.doOnTimeOut(multipart);
     }
 
     private void doOnFull(final Multipart multipart) {
@@ -159,16 +128,7 @@ public class MultipartPool {
             _data.remove(multipart.getUid());
         }
         // event
-        synchronized (_listeners_full) {
-            for (final OnFullListener listener : _listeners_full) {
-                Async.Action(new Async.AsyncActionHandler() {
-                    @Override
-                    public void handle(Object... args) {
-                        listener.handle(multipart);
-                    }
-                });
-            }
-        }
+        _events.doOnFull(multipart);
     }
 
     private Multipart addPart(final MultipartMessagePart part, final Object userData) {

@@ -979,9 +979,10 @@ public final class StringUtils {
 
     /**
      * Returns a left filled string with passed chars.
-     * @param s A String
+     *
+     * @param s        A String
      * @param fillChar Characters to append
-     * @param size Size of result
+     * @param size     Size of result
      * @return A String of defined size, filled with passed chars. i.e. "0000000123" // 10 characters string filled with "0"
      */
     public static String fillString(final String s, final String fillChar, final int size) {
@@ -999,9 +1000,10 @@ public final class StringUtils {
 
     /**
      * Returns a right filled string with passed chars.
-     * @param s A String
+     *
+     * @param s        A String
      * @param fillChar Characters to append
-     * @param size Size of result
+     * @param size     Size of result
      * @return A String of defined size, filled with passed chars. i.e. "123-------" // 10 characters string filled with "-"
      */
     public static String fillRightString(final String s, final String fillChar, final int size) {

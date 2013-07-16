@@ -1,13 +1,17 @@
 package org.smartly.commons.network.socket.messages.multipart;
 
+import java.io.Serializable;
+
 /**
  * Single Part of a multipart message
  */
-public class MultipartMessagePart {
+public class MultipartMessagePart
+        implements Serializable, Comparable<MultipartMessagePart> {
 
     private String _uid;
     private MultipartInfo _info;
     private byte[] _data;
+    private Throwable _error;
 
     // --------------------------------------------------------------------
     //               c o n s t r u c t o r
@@ -18,6 +22,28 @@ public class MultipartMessagePart {
         _data = new byte[0];
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName()).append("{");
+        sb.append("UID: ").append(_uid);
+        sb.append(", ");
+        sb.append("Info: ").append(_info);
+        sb.append("}");
+        return sb.toString();
+    }
+
+    @Override
+    public int compareTo(final MultipartMessagePart o) {
+        if (null != o) {
+            if (o.getInfo().getIndex() == this.getInfo().getIndex()) {
+                return 0;
+            }
+            return o.getInfo().getIndex() > this.getInfo().getIndex() ? -1 : 1;
+        }
+        return -1;
+    }
+
     // --------------------------------------------------------------------
     //               p u b l i c
     // --------------------------------------------------------------------
@@ -26,8 +52,20 @@ public class MultipartMessagePart {
         return _uid;
     }
 
-    void setUid(final String uid) {
+    public void setUid(final String uid) {
         _uid = uid;
+    }
+
+    public void setError(final Throwable value) {
+        _error = value;
+    }
+
+    public Throwable getError() {
+        return _error;
+    }
+
+    public boolean hasError() {
+        return null != _error;
     }
 
     public byte[] getData() {
@@ -36,6 +74,11 @@ public class MultipartMessagePart {
 
     public void setData(final byte[] data) {
         _data = data;
+    }
+
+    public void clearData() {
+        _data = null;
+        _data = new byte[0];
     }
 
     public MultipartInfo getInfo() {
@@ -58,6 +101,10 @@ public class MultipartMessagePart {
             return _info.getLength();
         }
         return 0;
+    }
+
+    public boolean hasData() {
+        return null != this.getData() && this.getData().length > 0;
     }
 
 }

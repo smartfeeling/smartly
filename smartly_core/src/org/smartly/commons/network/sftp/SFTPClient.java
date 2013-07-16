@@ -217,8 +217,7 @@ public class SFTPClient {
     }
 
     /**
-     *
-     * @param p1 Source
+     * @param p1     Source
      * @param opt_p2 Destination
      * @return
      */

@@ -1,10 +1,11 @@
 package org.smartly.commons.util;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * User: angelo.geminiani

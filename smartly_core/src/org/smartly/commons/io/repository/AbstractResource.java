@@ -81,7 +81,8 @@ public abstract class AbstractResource implements Resource {
             if (in != null) {
                 try {
                     in.close();
-                } catch (IOException ignore) {}
+                } catch (IOException ignore) {
+                }
             }
         }
     }
@@ -110,7 +111,8 @@ public abstract class AbstractResource implements Resource {
             if (in != null) {
                 try {
                     in.close();
-                } catch (IOException ignore) {}
+                } catch (IOException ignore) {
+                }
             }
         }
     }
@@ -160,6 +162,7 @@ public abstract class AbstractResource implements Resource {
     /**
      * Set this Resource to absolute mode. This will cause all its
      * relative path operations to use absolute paths instead.
+     *
      * @param absolute true to operate in absolute mode
      */
     public void setAbsolute(boolean absolute) {
@@ -168,6 +171,7 @@ public abstract class AbstractResource implements Resource {
 
     /**
      * Return true if this Resource is in absolute mode.
+     *
      * @return true if absolute mode is on
      */
     public boolean isAbsolute() {

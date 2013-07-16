@@ -30,8 +30,8 @@ public class BaseDictionary extends AbstractI18nBundle {
         super();
     }
 
-    public String getName(){
-         return NAME;
+    public String getName() {
+        return NAME;
     }
 
     // --------------------------------------------------------------------
@@ -58,7 +58,7 @@ public class BaseDictionary extends AbstractI18nBundle {
         final String resource = super.getMessage(key, locale, getClassLoader());
         return StringUtils.hasText(resource)
                 ? FormatUtils.format(resource, args)
-                :"";
+                : "";
     }
 
     public String getMessage(final String key,
@@ -67,7 +67,7 @@ public class BaseDictionary extends AbstractI18nBundle {
         final String resource = super.getMessage(key, locale, getClassLoader());
         return StringUtils.hasText(resource)
                 ? FormatUtils.format(resource, args)
-                :"";
+                : "";
     }
 
     // --------------------------------------------------------------------

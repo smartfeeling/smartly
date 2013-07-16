@@ -1,14 +1,13 @@
 package org.smartly.commons.network.socket.messages.multipart;
 
+import org.smartly.commons.Delegates;
 import org.smartly.commons.async.Async;
 import org.smartly.commons.cryptograph.GUID;
+import org.smartly.commons.util.CompareUtils;
 import org.smartly.commons.util.DateUtils;
 import org.smartly.commons.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
+import java.util.*;
 
 /**
  * Multipart Message aggregator.
@@ -26,10 +25,14 @@ public class Multipart {
     private final Collection<OnFullListener> _listeners;
     private final String _uid;
     private final Date _creationDate;
-    private final Collection<MultipartMessagePart> _list;
+    private final List<MultipartMessagePart> _list;
 
     private int _capacity;
     private Object _userData; // custom data
+
+    //-- readonly from part --//
+    private MultipartInfo.MultipartInfoType _type;
+    private String _name;
 
     // --------------------------------------------------------------------
     //               c o n s t r u c t o r
@@ -42,9 +45,31 @@ public class Multipart {
     public Multipart(final String uid, final int capacity) {
         _uid = StringUtils.hasText(uid) ? uid : GUID.create();
         _creationDate = DateUtils.now();
-        _list = Collections.synchronizedCollection(new ArrayList<MultipartMessagePart>(capacity));
+        _list = Collections.synchronizedList(new ArrayList<MultipartMessagePart>(capacity));
         _listeners = Collections.synchronizedCollection(new ArrayList<OnFullListener>());
         _capacity = capacity;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName()).append("{");
+        sb.append("UID:").append(this.getUid());
+        sb.append(", ");
+        sb.append("Type:").append(this.getType());
+        sb.append(", ");
+        sb.append("Alive Time:").append(this.getAliveTime());
+        sb.append(", ");
+        sb.append("Part Count:").append(this.count());
+        sb.append(", ");
+        sb.append("Capacity:").append(this.getCapacity());
+        sb.append(", ");
+        sb.append("Is Full:").append(this.isFull());
+        sb.append(", ");
+        sb.append("Name:").append(this.getName());
+        sb.append("}");
+
+        return sb.toString();
     }
 
     @Override
@@ -87,13 +112,67 @@ public class Multipart {
         }
     }
 
+    public MultipartInfo.MultipartInfoType getType() {
+        return _type;
+    }
+
+    public String getName() {
+        return _name;
+    }
+
+    public boolean isType(final MultipartInfo.MultipartInfoType type) {
+        return CompareUtils.equals(_type, type);
+    }
+
+    public boolean isTypeString() {
+        return this.isType(MultipartInfo.MultipartInfoType.String);
+    }
+
+    public boolean isTypeFile() {
+        return this.isType(MultipartInfo.MultipartInfoType.File);
+    }
+
     public int getCapacity() {
         return _capacity;
     }
 
+    public boolean hasError() {
+        synchronized (_list) {
+            for (final MultipartMessagePart part : _list) {
+                if (part.hasError()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    public Throwable getError() {
+        synchronized (_list) {
+            for (final MultipartMessagePart part : _list) {
+                if (part.hasError()) {
+                    return part.getError();
+                }
+            }
+            return null;
+        }
+    }
+
     public MultipartMessagePart[] getParts() {
         synchronized (_list) {
+            Collections.sort(_list);
             return _list.toArray(new MultipartMessagePart[_list.size()]);
+        }
+    }
+
+    public String[] getPartNames() {
+        synchronized (_list) {
+            final List<String> result = new LinkedList<String>();
+            Collections.sort(_list);
+            for (final MultipartMessagePart part : _list) {
+                result.add(part.getInfo().getPartName());
+            }
+            return result.toArray(new String[result.size()]);
         }
     }
 
@@ -122,6 +201,8 @@ public class Multipart {
                 part.setUid(this.getUid());
                 // add part to internal list
                 _list.add(part);
+                // set parent properties from part
+                this.setProperties(part);
                 // check if full
                 this.checkCapacity();
             }
@@ -152,12 +233,23 @@ public class Multipart {
     private void doOnFull() {
         synchronized (_listeners) {
             for (final OnFullListener listener : _listeners) {
-                Async.Action(new Async.AsyncActionHandler() {
+                Async.Action(new Delegates.AsyncActionHandler() {
                     @Override
                     public void handle(Object... args) {
                         listener.handle((Multipart) args[0]);
                     }
                 }, this);
+            }
+        }
+    }
+
+    private void setProperties(final MultipartMessagePart part) {
+        if (null != part) {
+            if (null == _type) {
+                _type = part.getInfo().getType();
+            }
+            if (null == _name) {
+                _name = part.getInfo().getParentName();
             }
         }
     }

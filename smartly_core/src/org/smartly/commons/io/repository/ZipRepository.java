@@ -33,9 +33,10 @@ public final class ZipRepository extends AbstractRepository {
 
     /**
      * Constructs a ZipRespository using the given zip file.
+     *
      * @param path path to zip file
      * @throws java.util.zip.ZipException a zip encoding related error occurred
-     * @throws java.io.IOException an I/O error occurred
+     * @throws java.io.IOException        an I/O error occurred
      */
     public ZipRepository(String path)
             throws ZipException, IOException {
@@ -44,9 +45,10 @@ public final class ZipRepository extends AbstractRepository {
 
     /**
      * Constructs a ZipRespository using the given zip file.
+     *
      * @param file zip file
      * @throws java.util.zip.ZipException a zip encoding related error occurred
-     * @throws java.io.IOException an I/O error occurred
+     * @throws java.io.IOException        an I/O error occurred
      */
     public ZipRepository(File file)
             throws ZipException, IOException {
@@ -66,11 +68,12 @@ public final class ZipRepository extends AbstractRepository {
     /**
      * Constructs a ZipRepository using the zip entryName belonging to the given
      * zip file and top-level repository
-     * @param file the zip file
-     * @param parent repository
+     *
+     * @param file      the zip file
+     * @param parent    repository
      * @param entryPath the entry path name
      * @throws java.util.zip.ZipException a zip encoding related error occurred
-     * @throws java.io.IOException an I/O error occurred
+     * @throws java.io.IOException        an I/O error occurred
      */
     private ZipRepository(File file, ZipRepository parent, String entryPath)
             throws ZipException, IOException {
@@ -87,11 +90,12 @@ public final class ZipRepository extends AbstractRepository {
         String[] pathArray = StringUtils.split(entryPath, SEPARATOR);
         depth = pathArray.length;
         name = pathArray[depth - 1];
-        path = parent.getPath() + name  + '/';
+        path = parent.getPath() + name + '/';
     }
 
     /**
      * Returns a java.util.zip.ZipFile for this repository.
+     *
      * @return a ZipFile for reading
      * @throws java.io.IOException an I/O related error occurred
      */
@@ -104,7 +108,8 @@ public final class ZipRepository extends AbstractRepository {
             if (zip != null) {
                 try {
                     zip.close();
-                } catch (Exception ignore) {}
+                } catch (Exception ignore) {
+                }
             }
             zip = new ZipFile(file);
             zipFile = new WeakReference<ZipFile>(zip);
@@ -140,6 +145,7 @@ public final class ZipRepository extends AbstractRepository {
 
     /**
      * Checks wether this resource actually (still) exists
+     *
      * @return true if the resource exists
      */
     public boolean exists() throws IOException {
@@ -162,7 +168,7 @@ public final class ZipRepository extends AbstractRepository {
 
     protected void getResources(List<Resource> list, boolean recursive)
             throws IOException {
-        Map<String,ZipEntry> entries = getChildEntries();
+        Map<String, ZipEntry> entries = getChildEntries();
 
         for (Map.Entry<String, ZipEntry> entry : entries.entrySet()) {
             String entryName = entry.getKey();
@@ -182,7 +188,7 @@ public final class ZipRepository extends AbstractRepository {
 
     public Repository[] getRepositories() throws IOException {
         List<Repository> list = new ArrayList<Repository>();
-        Map<String,ZipEntry> entries = getChildEntries();
+        Map<String, ZipEntry> entries = getChildEntries();
 
         for (Map.Entry<String, ZipEntry> entry : entries.entrySet()) {
             if (entry.getValue().isDirectory()) {
@@ -246,7 +252,7 @@ public final class ZipRepository extends AbstractRepository {
                 continue;
             }
             String[] entrypath = StringUtils.split(entryName, SEPARATOR);
-            if (depth > 0 && !name.equals(entrypath[depth-1])) {
+            if (depth > 0 && !name.equals(entrypath[depth - 1])) {
                 // catch case where our name is Foo and other's is FooBar
                 continue;
             }

@@ -13,6 +13,7 @@ public interface Trackable extends Serializable {
 
     /**
      * Returns the date the resource was last modified
+     *
      * @return last modified date
      */
     public long lastModified();
@@ -27,6 +28,7 @@ public interface Trackable extends Serializable {
 
     /**
      * Checks wether this resource actually (still) exists
+     *
      * @return true if the resource exists
      */
     public boolean exists() throws IOException;
@@ -35,12 +37,14 @@ public interface Trackable extends Serializable {
      * Returns the path of the resource. The returned string must be in a form so
      * that appending a child name produces a valid resource or repository name.
      * Usually this means that it should end with a file separator character.
+     *
      * @return path of the resource
      */
     public String getPath();
 
     /**
      * Returns the short name of the resource.
+     *
      * @return short name of the resource
      */
     public String getName();
@@ -48,24 +52,28 @@ public interface Trackable extends Serializable {
     /**
      * Returns an url to the resource if the repository of this resource is
      * able to provide urls.
+     *
      * @return url to the resource
      */
     public URL getUrl() throws UnsupportedOperationException, MalformedURLException;
 
     /**
      * Returns the parent repository containing this resource
+     *
      * @return parent repository
      */
     public Repository getParentRepository();
 
     /**
      * Returns the root repository of this resource
+     *
      * @return root repository
      */
     public Repository getRootRepository();
 
     /**
      * Utility method to get the name for the module defined by this resource.
+     *
      * @return the module name according to the securable module spec
      */
     public String getModuleName();
@@ -75,6 +83,7 @@ public interface Trackable extends Serializable {
      * The returned string must be in a form so that appending a child
      * name produces a valid resource or repository name. Usually this means
      * that it should end with a file separator character.
+     *
      * @return the relative resource path
      */
     public String getRelativePath();
@@ -82,12 +91,14 @@ public interface Trackable extends Serializable {
     /**
      * Set this Trackable to absolute mode. This will cause all its
      * relative path operations to use absolute paths instead.
+     *
      * @param absolute true to operate in absolute mode
      */
     public void setAbsolute(boolean absolute);
 
     /**
      * Return true if this Trackable is in absolute mode.
+     *
      * @return true if absolute mode is on
      */
     public boolean isAbsolute();

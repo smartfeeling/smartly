@@ -5,7 +5,6 @@
 package org.smartly.commons.logging;
 
 /**
- *
  * @author angelo.geminiani
  */
 public enum Level {
@@ -22,11 +21,11 @@ public enum Level {
 
     private final Integer _numValue;
 
-    Level(final int intValue){
+    Level(final int intValue) {
         _numValue = intValue;
     }
 
-    public int getNumValue(){
+    public int getNumValue() {
         return _numValue;
     }
 

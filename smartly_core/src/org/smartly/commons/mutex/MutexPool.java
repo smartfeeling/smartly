@@ -1,6 +1,9 @@
 package org.smartly.commons.mutex;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Main mutex dispenser.

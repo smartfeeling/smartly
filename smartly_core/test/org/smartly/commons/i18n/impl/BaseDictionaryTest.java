@@ -1,7 +1,8 @@
 package org.smartly.commons.i18n.impl;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * User: angelo.geminiani
@@ -18,7 +19,7 @@ public class BaseDictionaryTest {
 
     @Test
     public void testGetMessage() throws Exception {
-          TestDic dic = new TestDic();
+        TestDic dic = new TestDic();
 
         String label_de = dic.getMessage("label", "de");
         String file_de = dic.getMessage("file", "de");

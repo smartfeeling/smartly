@@ -32,7 +32,7 @@ public final class CSVFileWriter extends CSVWriter {
     }
 
     public CSVFileWriter(final String fileName, char separator,
-            final Locale locale) throws IOException {
+                         final Locale locale) throws IOException {
         this(new File(fileName),
                 separator,
                 DEFAULT_QUOTE_CHARACTER,
@@ -41,7 +41,7 @@ public final class CSVFileWriter extends CSVWriter {
     }
 
     public CSVFileWriter(final File file, char separator,
-            final Locale locale) throws IOException {
+                         final Locale locale) throws IOException {
         this(file,
                 separator,
                 DEFAULT_QUOTE_CHARACTER,
@@ -50,8 +50,8 @@ public final class CSVFileWriter extends CSVWriter {
     }
 
     public CSVFileWriter(final File file, char separator,
-            char quoteChar, final String lineEnd,
-            final Locale locale) throws IOException {
+                         char quoteChar, final String lineEnd,
+                         final Locale locale) throws IOException {
         super.setLineEnd(lineEnd);
         super.setLocale(locale);
         super.setQuotechar(quoteChar);

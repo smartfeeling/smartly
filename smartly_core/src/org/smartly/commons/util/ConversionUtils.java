@@ -138,7 +138,7 @@ public abstract class ConversionUtils {
 
     // ----------------- number conversion methods ---------------
 
-    public static  BigDecimal toBigDecimal(final Object value) {
+    public static BigDecimal toBigDecimal(final Object value) {
         try {
             final Number number = toNumber(value);
             return new BigDecimal(number.toString());
@@ -346,10 +346,10 @@ public abstract class ConversionUtils {
         if (value instanceof Boolean) {
             return (Boolean) value;
         }
-        try{
+        try {
             final String s = value.toString();
             return (s != null) ? Boolean.valueOf(s) : defValue;
-        }catch(Throwable ignored){
+        } catch (Throwable ignored) {
             return defValue;
         }
     }

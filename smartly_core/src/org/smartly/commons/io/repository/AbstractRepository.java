@@ -47,6 +47,7 @@ public abstract class AbstractRepository implements Repository {
 
     /**
      * Called to create a child resource for this repository if it exists.
+     *
      * @param name the name of the child resource
      * @return the child resource, or null if no resource with the given name exists
      * @throws java.io.IOException an I/O error occurred
@@ -55,6 +56,7 @@ public abstract class AbstractRepository implements Repository {
 
     /**
      * Create a new child reposiotory with the given name.
+     *
      * @param name the name
      * @return the new child repository
      * @throws java.io.IOException an I/O error occurred
@@ -64,7 +66,8 @@ public abstract class AbstractRepository implements Repository {
     /**
      * Add the repository's resources into the list, optionally descending into
      * nested repositories.
-     * @param list the list to add the resources to
+     *
+     * @param list      the list to add the resources to
      * @param recursive whether to descend into nested repositories
      * @throws java.io.IOException an I/O related error occurred
      */
@@ -96,6 +99,7 @@ public abstract class AbstractRepository implements Repository {
     /**
      * Set this Repository to absolute mode. This will cause all its
      * relative path operations to use absolute paths instead.
+     *
      * @param absolute true to operate in absolute mode
      */
     public void setAbsolute(boolean absolute) {
@@ -104,6 +108,7 @@ public abstract class AbstractRepository implements Repository {
 
     /**
      * Return true if this Repository is in absolute mode.
+     *
      * @return true if absolute mode is on
      */
     public boolean isAbsolute() {
@@ -147,7 +152,8 @@ public abstract class AbstractRepository implements Repository {
 
     /**
      * Resolve path relative to this repository.
-     * @param path a path string
+     *
+     * @param path     a path string
      * @param absolute whether to return an absolute path that can be used without this repository
      * @return a List containing the path elements resolved relative to this repository
      */
@@ -197,6 +203,7 @@ public abstract class AbstractRepository implements Repository {
 
     /**
      * Get a child repository with the given name
+     *
      * @param subpath the name of the repository
      * @return the child repository
      */
@@ -265,6 +272,7 @@ public abstract class AbstractRepository implements Repository {
 
     /**
      * Returns the repositories full path as string representation.
+     *
      * @see #getPath()
      */
     public String toString() {

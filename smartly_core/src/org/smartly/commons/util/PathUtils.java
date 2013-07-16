@@ -34,6 +34,7 @@ public abstract class PathUtils
 
     /**
      * Returns temp folder.
+     *
      * @return temp folder name for current user
      */
     public static String getTemporaryDirectory() {
