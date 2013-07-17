@@ -5,20 +5,18 @@ import org.eclipse.jetty.http.HttpStatus;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.json.JSONObject;
-import org.smartly.Smartly;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.util.DateUtils;
 import org.smartly.commons.util.StringUtils;
-import org.smartly.packages.http.impl.handlers.rest.impl.RESTRegistry;
-import org.smartly.packages.http.impl.handlers.rest.impl.wrapper.MethodWrapper;
+import org.smartly.commons.remoting.rest.RESTRegistry;
+import org.smartly.commons.remoting.rest.wrapper.MethodWrapper;
 import org.smartly.packages.http.impl.util.ServletUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Map;
 
 
 /**

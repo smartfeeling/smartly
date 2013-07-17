@@ -4,9 +4,6 @@
 package org.smartly.commons.logging;
 
 import org.smartly.IConstants;
-import org.smartly.commons.event.Event;
-import org.smartly.commons.event.Events;
-import org.smartly.commons.event.IEventListener;
 import org.smartly.commons.util.FileUtils;
 import org.smartly.commons.util.PathUtils;
 import org.smartly.commons.util.StringUtils;
@@ -37,7 +34,6 @@ public final class LoggingRepository {
     private Level _level = Level.INFO;
     private final Map<String, List<LogItem>> _data;
     private final Map<String, String> _customPaths;
-    private final List<IEventListener> _listeners;
     private String _root;
     private boolean _fileEnabled;
     private boolean _consoleEnabled;
@@ -48,7 +44,6 @@ public final class LoggingRepository {
     // ------------------------------------------------------------------------
     public LoggingRepository() {
         _data = Collections.synchronizedMap(new HashMap<String, List<LogItem>>());
-        _listeners = Collections.synchronizedList(new LinkedList<IEventListener>());
         _customPaths = Collections.synchronizedMap(new HashMap<String, String>());
         _fileEnabled = true;
         _consoleEnabled = true;
@@ -173,14 +168,6 @@ public final class LoggingRepository {
         this._maxItems = maxItems;
     }
 
-    public void addListener(final IEventListener listener) {
-        synchronized (_listeners) {
-            if (null != listener && !_listeners.contains(listener)) {
-                _listeners.add(listener);
-            }
-        }
-    }
-
     public void clear() {
         synchronized (_data) {
             _data.clear();
@@ -218,7 +205,7 @@ public final class LoggingRepository {
                 if (logitems.size() > _maxItems) {
                     logitems.remove(logitems.size() - 1);
                 }
-                this.invokeListeners(item);
+                // this.invokeListeners(item);
                 this.writeFile(logger);
                 this.writeConsole(item);
             }
@@ -281,15 +268,6 @@ public final class LoggingRepository {
             }
         }
         return result;
-    }
-
-    private void invokeListeners(final LogItem item) {
-        synchronized (_listeners) {
-            final Event event = new Event(this, Events.ON_ERROR, item);
-            for (final IEventListener listener : _listeners) {
-                listener.on(event);
-            }
-        }
     }
 
     private void writeFile(final Logger sender) {

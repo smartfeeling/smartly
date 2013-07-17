@@ -5,9 +5,9 @@ import static org.junit.Assert.*;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.smartly.packages.http.impl.handlers.rest.impl.RESTRegistry;
-import org.smartly.packages.http.impl.handlers.rest.impl.SampleRESTServiceImpl;
-import org.smartly.packages.http.impl.handlers.rest.impl.wrapper.MethodWrapper;
+import org.smartly.commons.remoting.rest.RESTRegistry;
+import org.smartly.commons.remoting.rest.SampleRESTServiceImpl;
+import org.smartly.commons.remoting.rest.wrapper.MethodWrapper;
 import org.smartly.packages.http.launcher.Main;
 
 import java.util.HashMap;

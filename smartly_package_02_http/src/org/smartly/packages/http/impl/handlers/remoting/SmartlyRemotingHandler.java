@@ -8,8 +8,8 @@ import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.util.*;
-import org.smartly.packages.http.impl.serialization.json.JsonSerializer;
-import org.smartly.packages.http.impl.util.BinaryData;
+import org.smartly.commons.io.serialization.json.JsonSerializer;
+import org.smartly.commons.io.BinaryData;
 import org.smartly.packages.http.impl.util.ServletUtils;
 
 import javax.servlet.AsyncEvent;
