@@ -14,7 +14,15 @@ import java.util.*;
  */
 public class Multipart {
 
+    // --------------------------------------------------------------------
+    //               e v e n t s
+    // --------------------------------------------------------------------
+
     public static interface OnFullListener {
+        public void handle(Multipart sender);
+    }
+
+    public static interface OnTimeOutListener {
         public void handle(Multipart sender);
     }
 

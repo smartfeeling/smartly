@@ -7,7 +7,6 @@ import org.smartly.commons.network.socket.client.Client;
 import org.smartly.commons.network.socket.messages.multipart.Multipart;
 import org.smartly.commons.network.socket.messages.multipart.MultipartInfo;
 import org.smartly.commons.network.socket.messages.multipart.MultipartMessagePart;
-import org.smartly.commons.network.socket.messages.multipart.util.MultipartPoolEvents;
 
 import java.util.ResourceBundle;
 
@@ -30,7 +29,7 @@ public class SendMultipartTest {
     @Before
     public void setUp() throws Exception {
         _simpleSocketServer = Server.startServer(port, new Class[]{});
-        _simpleSocketServer.onMultipartFull(new MultipartPoolEvents.OnFullListener() {
+        _simpleSocketServer.onMultipartFull(new Multipart.OnFullListener() {
             @Override
             public void handle(Multipart sender) {
                 System.out.println("FULL: " + sender.toString());

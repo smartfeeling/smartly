@@ -176,7 +176,7 @@ public class Client {
                             }
                         } catch (Throwable t) {
                             if (null != errorHandler) {
-                                errorHandler.handle(t);
+                                errorHandler.handle(null, t);
                             } else {
                                 LoggingUtils.getLogger(Client.class).log(Level.SEVERE, null, t);
                             }

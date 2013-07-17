@@ -1,6 +1,6 @@
 package org.smartly.commons.network.socket.messages.multipart;
 
-import org.smartly.commons.network.socket.messages.multipart.util.MultipartPoolEvents;
+import org.smartly.commons.Delegates;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -19,7 +19,11 @@ public class MultipartPool {
 
     private static final int DEFAULT_TIMEOUT = 60 * 2 * 1000; // two minute timeout
 
-    private final MultipartPoolEvents _events;
+    private static final Class EVENT_ON_TIMEOUT = Multipart.OnTimeOutListener.class;
+    private static final Class EVENT_ON_FULL = Multipart.OnFullListener.class;
+
+    //private final MultipartPoolEvents _events;
+    private final Delegates.Handlers _eventHandlers;
     private final Map<String, Multipart> _data;
     private PoolGarbageCollector _gc;
 
@@ -36,7 +40,8 @@ public class MultipartPool {
     public MultipartPool(int timeOut) {
         _timeOut = timeOut;
         _data = Collections.synchronizedMap(new HashMap<String, Multipart>());
-        _events = new MultipartPoolEvents();
+        //_events = new MultipartPoolEvents();
+        _eventHandlers = new Delegates.Handlers();
 
         //-- gc for current pool --//
         _gc = new PoolGarbageCollector(this);
@@ -73,7 +78,8 @@ public class MultipartPool {
     }
 
     public void clear() {
-        _events.clear();
+        //_events.clear();
+        _eventHandlers.clear();
         synchronized (_data) {
             _data.clear();
         }
@@ -106,12 +112,12 @@ public class MultipartPool {
     //               e v e n t
     // --------------------------------------------------------------------
 
-    public void onFull(final MultipartPoolEvents.OnFullListener listener) {
-        _events.onFull(listener);
+    public void onFull(final Multipart.OnFullListener listener) {
+        _eventHandlers.add(listener);
     }
 
-    public void onTimeOut(final MultipartPoolEvents.OnTimeOutListener listener) {
-        _events.onTimeOut(listener);
+    public void onTimeOut(final Multipart.OnTimeOutListener listener) {
+        _eventHandlers.add(listener);
     }
 
     // --------------------------------------------------------------------
@@ -119,7 +125,7 @@ public class MultipartPool {
     // --------------------------------------------------------------------
 
     private void doOnTimeOut(final Multipart multipart) {
-        _events.doOnTimeOut(multipart);
+        _eventHandlers.triggerAsync(EVENT_ON_TIMEOUT, multipart);
     }
 
     private void doOnFull(final Multipart multipart) {
@@ -128,7 +134,7 @@ public class MultipartPool {
             _data.remove(multipart.getUid());
         }
         // event
-        _events.doOnFull(multipart);
+        _eventHandlers.triggerAsync(EVENT_ON_FULL, multipart);
     }
 
     private Multipart addPart(final MultipartMessagePart part, final Object userData) {

@@ -1,7 +1,6 @@
 package org.smartly.commons.network.socket.messages.multipart;
 
 import org.junit.Test;
-import org.smartly.commons.network.socket.messages.multipart.util.MultipartPoolEvents;
 
 import static org.junit.Assert.assertTrue;
 
@@ -53,14 +52,14 @@ public class MultipartPoolTest {
 
     private void handleEvents(final MultipartPool pool) {
         // handle
-        pool.onFull(new MultipartPoolEvents.OnFullListener() {
+        pool.onFull(new Multipart.OnFullListener() {
             @Override
             public void handle(Multipart sender) {
                 System.out.println("FULL: " + sender.toString());
             }
         });
         // handle timeout
-        pool.onTimeOut(new MultipartPoolEvents.OnTimeOutListener() {
+        pool.onTimeOut(new Multipart.OnTimeOutListener() {
             @Override
             public void handle(Multipart sender) {
                 System.out.println("TIME OUT: " + sender.toString());

@@ -1,12 +1,12 @@
 package org.smartly.commons.network.socket.server;
 
+import org.smartly.commons.Delegates;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.network.socket.messages.multipart.Multipart;
 import org.smartly.commons.network.socket.messages.multipart.MultipartMessagePart;
 import org.smartly.commons.network.socket.messages.multipart.MultipartPool;
-import org.smartly.commons.network.socket.messages.multipart.util.MultipartPoolEvents;
 import org.smartly.commons.network.socket.server.handlers.ISocketFilter;
 import org.smartly.commons.network.socket.server.handlers.ISocketHandler;
 import org.smartly.commons.network.socket.server.handlers.impl.MultipartMessageHandler;
@@ -42,13 +42,21 @@ public class Server extends Thread {
     //               e v e n t s
     // --------------------------------------------------------------------
 
+    public static interface OnStart {
+        void handle(final Server sender);
+    }
+
+    private static final Class EVENT_ON_START = OnStart.class;
+    private static final Class EVENT_ON_FULL = Multipart.OnFullListener.class;
+    private static final Class EVENT_ON_TIME_OUT = Multipart.OnTimeOutListener.class;
+    private static final Class EVENT_ON_ERROR = Delegates.ExceptionCallback.class;
 
     // --------------------------------------------------------------------
     //               f i e l d s
     // --------------------------------------------------------------------
 
     private final MultipartPool _multipartPool;
-    private final MultipartPoolEvents _multipartEvents;
+    private final Delegates.Handlers _eventHandlers;
     private final int _port;
     private SocketHandlerPool _handlers;
     private ServerSocket _socket;
@@ -70,7 +78,7 @@ public class Server extends Thread {
         _handlers = new SocketHandlerPool(handlers);
         _socket = new ServerSocket(_port);
         _multipartPool = new MultipartPool();
-        _multipartEvents = new MultipartPoolEvents();
+        _eventHandlers = new Delegates.Handlers();
 
         this.init();
     }
@@ -80,6 +88,7 @@ public class Server extends Thread {
         try {
             _multipartPool.clear();
             _handlers.clear();
+            _eventHandlers.clear();
         } catch (Throwable ignore) {
         }
         super.finalize();
@@ -88,12 +97,20 @@ public class Server extends Thread {
     //               e v e n t
     // --------------------------------------------------------------------
 
-    public void onMultipartFull(final MultipartPoolEvents.OnFullListener listener) {
-        _multipartEvents.onFull(listener);
+    public void onStart(final OnStart handler){
+       _eventHandlers.add(handler);
     }
 
-    public void onMultipartTimeOut(final MultipartPoolEvents.OnTimeOutListener listener) {
-        _multipartEvents.onTimeOut(listener);
+    public void onError(final Delegates.ExceptionCallback listener) {
+         _eventHandlers.add(listener);
+    }
+
+    public void onMultipartFull(final Multipart.OnFullListener listener) {
+        _eventHandlers.add(listener);
+    }
+
+    public void onMultipartTimeOut(final Multipart.OnTimeOutListener listener) {
+        _eventHandlers.add(listener);
     }
 
     // --------------------------------------------------------------------
@@ -114,7 +131,7 @@ public class Server extends Thread {
                 _handlers.clear();
             }
         } catch (Throwable t) {
-            this.getLogger().log(Level.SEVERE, null, t);
+            this.onError(null, t);
         }
     }
 
@@ -166,13 +183,13 @@ public class Server extends Thread {
                 MultipartMessageHandler.class);
 
         //-- init multipart pool --//
-        _multipartPool.onFull(new MultipartPoolEvents.OnFullListener() {
+        _multipartPool.onFull(new Multipart.OnFullListener() {
             @Override
             public void handle(Multipart sender) {
                 onMultipartFull(sender);
             }
         });
-        _multipartPool.onTimeOut(new MultipartPoolEvents.OnTimeOutListener() {
+        _multipartPool.onTimeOut(new Multipart.OnTimeOutListener() {
             @Override
             public void handle(Multipart sender) {
                 onMultipartTimeout(sender);
@@ -184,6 +201,7 @@ public class Server extends Thread {
         this.getLogger().info("Starting server on port [" + _port + "] with handlers [" + _handlers.toString() + "]");
         try {
             _running = true;
+            _eventHandlers.triggerAsync(EVENT_ON_START, this);
             while (true) {
                 // accept client
                 final Socket client = _socket.accept();
@@ -195,7 +213,7 @@ public class Server extends Thread {
             if (_socket != null && _socket.isClosed()) {
                 //Ignore if closed by stopServer() call
             } else {
-                this.getLogger().log(Level.SEVERE, null, t);
+                this.onError(null, t);
             }
         } finally {
             _socket = null;
@@ -204,14 +222,44 @@ public class Server extends Thread {
         this.getLogger().info("Stopped");
     }
 
+    private void onError(final String message, final Throwable error){
+        if (_eventHandlers.contains(EVENT_ON_ERROR)) {
+            _eventHandlers.trigger(EVENT_ON_ERROR, message, error);
+        } else {
+            this.getLogger().log(Level.SEVERE, message, error);
+        }
+    }
+
     private void onMultipartFull(final Multipart multipart) {
-        // message ready
-        _multipartEvents.doOnFull(multipart);
+        try {
+            if (_eventHandlers.contains(EVENT_ON_FULL)) {
+                _eventHandlers.triggerAsync(EVENT_ON_FULL, multipart);
+            } else {
+                // no external handlers.
+                // handle internally
+
+            }
+        } catch (Throwable ignored) {
+
+        }
     }
 
     private void onMultipartTimeout(final Multipart multipart) {
         // timeout
-        _multipartEvents.doOnTimeOut(multipart);
+        try {
+            if (_eventHandlers.contains(EVENT_ON_TIME_OUT)) {
+                _eventHandlers.triggerAsync(EVENT_ON_TIME_OUT, multipart);
+            } else {
+                // no external handlers.
+                // handle internally
+                try {
+                    MultipartMessageHandler.remove(multipart);
+                } catch (Throwable t) {
+                    this.onError(null, t);
+                }
+            }
+        } catch (Throwable ignored) {
+        }
     }
 
     // --------------------------------------------------------------------
