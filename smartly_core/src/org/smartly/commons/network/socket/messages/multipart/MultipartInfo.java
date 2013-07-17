@@ -19,9 +19,10 @@ public final class MultipartInfo
     //               f i e l d s
     // --------------------------------------------------------------------
 
+    private String _userToken;
+    private String _parentName;
     private MultipartInfoType _type;
     private String _partName;
-    private String _parentName;
     private String _encoding;
     private int _index;
     private int _length;
@@ -55,6 +56,7 @@ public final class MultipartInfo
     public String toString() {
         final StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName()).append("{");
+        sb.append("User Token: ").append(this.getUserToken()).append(", ");
         sb.append("Index: ").append(this.getIndex()).append(", ");
         sb.append("Position: ").append(this.getPosition()).append(", ");
         sb.append("Lenght: ").append(this.getLength()).append(", ");
@@ -68,6 +70,15 @@ public final class MultipartInfo
     // --------------------------------------------------------------------
     //               p u b l i c
     // --------------------------------------------------------------------
+
+    public String getUserToken() {
+        return _userToken;
+    }
+
+    public MultipartInfo setUserToken(final String value) {
+        _userToken = value;
+        return this;
+    }
 
     public MultipartInfoType getType() {
         return _type;

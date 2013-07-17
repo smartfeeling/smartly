@@ -117,6 +117,7 @@ public class Client {
     }
 
     public Thread[] sendFile(final String fileName,
+                             final String userToken,
                              final boolean useMultipleConnections,
                              final Delegates.ProgressCallback progressCallback,
                              final Delegates.ExceptionCallback errorHandler) throws Exception {
@@ -126,6 +127,7 @@ public class Client {
             final String[] chunks = FileTokenizer.splitFromChunkSize(fileName, uid, 1 * 1000 * 1024, null);
             try {
                 result = this.sendFileChunks(PathUtils.getFilename(fileName, true),
+                        userToken,
                         chunks, useMultipleConnections,
                         progressCallback, errorHandler);
             } finally {
@@ -148,6 +150,7 @@ public class Client {
     }
 
     private Thread[] sendFileChunks(final String fileName,
+                                    final String userToken,
                                     final String[] chunks,
                                     final boolean useMultipleConnections,
                                     final Delegates.ProgressCallback progressCallback,
@@ -164,6 +167,7 @@ public class Client {
                             final String chunk = chunks[index];
                             final MultipartInfo info = new MultipartInfo(fileName,
                                     MultipartInfo.MultipartInfoType.File, chunk, index, len);
+                            info.setUserToken(userToken);
                             final MultipartMessagePart part = new MultipartMessagePart();
                             part.setInfo(info);
                             part.setUid(transactionId);

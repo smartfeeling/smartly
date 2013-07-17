@@ -1,12 +1,12 @@
 /*
  * 
  */
-package org.smartly.packages.remoting.impl.util;
+package org.smartly.commons.remoting.util;
 
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.util.DateWrapper;
 import org.smartly.commons.util.LocaleUtils;
-import org.smartly.packages.remoting.impl.RemoteService;
+import org.smartly.commons.remoting.RemoteService;
 
 import java.util.Locale;
 

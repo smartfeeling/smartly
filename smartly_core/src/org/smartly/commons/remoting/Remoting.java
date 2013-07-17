@@ -1,16 +1,17 @@
 /*
  * 
  */
-package org.smartly.packages.remoting.impl;
+package org.smartly.commons.remoting;
 
+import org.smartly.Smartly;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.util.BeanUtils;
 import org.smartly.commons.util.ConversionUtils;
 import org.smartly.commons.util.FormatUtils;
-import org.smartly.packages.remoting.impl.descriptor.MethodDescriptor;
-import org.smartly.packages.remoting.impl.descriptor.ServiceDescriptor;
+import org.smartly.commons.remoting.descriptor.MethodDescriptor;
+import org.smartly.commons.remoting.descriptor.ServiceDescriptor;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -18,12 +19,12 @@ import java.util.*;
 /**
  * @author angelo.geminiani
  */
-public class RemoteInvoker {
+public class Remoting {
 
     public static int POOL_SIZE = 3; // 3 services per instance
     private final Map<Class, List<Object>> _servicePools;
 
-    public RemoteInvoker() {
+    public Remoting() {
         _servicePools = Collections.synchronizedMap(new HashMap<Class, List<Object>>());
     }
 
@@ -172,9 +173,13 @@ public class RemoteInvoker {
     // ------------------------------------------------------------------------
     //                      S T A T I C
     // ------------------------------------------------------------------------
-    private final static RemoteInvoker __INSTANCE = new RemoteInvoker();
+    private final static Remoting __INSTANCE = new Remoting();
 
-    public static RemoteInvoker getInstance() {
+    public static Remoting getInstance() {
         return __INSTANCE;
+    }
+
+    public static String getAppToken() {
+        return Smartly.getConfiguration().getString("remoting.app_securetoken");
     }
 }

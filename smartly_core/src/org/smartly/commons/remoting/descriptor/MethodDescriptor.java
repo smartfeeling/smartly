@@ -1,7 +1,7 @@
 /*
  * 
  */
-package org.smartly.packages.remoting.impl.descriptor;
+package org.smartly.commons.remoting.descriptor;
 
 import java.util.*;
 

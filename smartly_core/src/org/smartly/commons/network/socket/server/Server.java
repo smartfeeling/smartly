@@ -93,6 +93,9 @@ public class Server extends Thread {
         }
         super.finalize();
     }
+
+
+
     // --------------------------------------------------------------------
     //               e v e n t
     // --------------------------------------------------------------------
@@ -201,7 +204,7 @@ public class Server extends Thread {
         this.getLogger().info("Starting server on port [" + _port + "] with handlers [" + _handlers.toString() + "]");
         try {
             _running = true;
-            _eventHandlers.triggerAsync(EVENT_ON_START, this);
+            this.onStart();
             while (true) {
                 // accept client
                 final Socket client = _socket.accept();
@@ -222,7 +225,11 @@ public class Server extends Thread {
         this.getLogger().info("Stopped");
     }
 
-    private void onError(final String message, final Throwable error){
+    void onStart() {
+        _eventHandlers.trigger(EVENT_ON_START, this);
+    }
+
+    void onError(final String message, final Throwable error) {
         if (_eventHandlers.contains(EVENT_ON_ERROR)) {
             _eventHandlers.trigger(EVENT_ON_ERROR, message, error);
         } else {

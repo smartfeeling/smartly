@@ -1,7 +1,7 @@
 /*
  * 
  */
-package org.smartly.packages.remoting.impl.util;
+package org.smartly.commons.remoting.util;
 
 import org.json.JSONObject;
 import org.smartly.Smartly;
@@ -10,7 +10,7 @@ import org.smartly.commons.network.shorturl.impl.TinyUrl;
 import org.smartly.commons.util.ConversionUtils;
 import org.smartly.commons.util.RandomUtils;
 import org.smartly.commons.util.StringUtils;
-import org.smartly.packages.remoting.impl.RemoteService;
+import org.smartly.commons.remoting.RemoteService;
 
 /**
  * system REST service

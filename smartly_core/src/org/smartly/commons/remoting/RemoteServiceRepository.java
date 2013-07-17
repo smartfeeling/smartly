@@ -1,7 +1,7 @@
 /*
  * 
  */
-package org.smartly.packages.remoting.impl;
+package org.smartly.commons.remoting;
 
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
@@ -9,7 +9,7 @@ import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.util.BeanUtils;
 import org.smartly.commons.util.CollectionUtils;
 import org.smartly.commons.util.StringUtils;
-import org.smartly.packages.remoting.impl.descriptor.*;
+import org.smartly.commons.remoting.descriptor.*;
 
 import java.lang.reflect.Method;
 import java.util.Collections;

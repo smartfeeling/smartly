@@ -1,11 +1,11 @@
 /*
  * 
  */
-package org.smartly.packages.remoting.impl;
+package org.smartly.commons.remoting;
 
 import org.smartly.commons.util.BeanUtils;
-import org.smartly.packages.remoting.impl.IRemoteContext;
-import org.smartly.packages.remoting.impl.RemoteService;
+import org.smartly.commons.remoting.IRemoteContext;
+import org.smartly.commons.remoting.RemoteService;
 
 /**
  * @author angelo.geminiani

@@ -2,7 +2,7 @@
  * 
  */
 
-package org.smartly.packages.remoting.impl.exception;
+package org.smartly.commons.remoting.exception;
 
 /**
  * Generic response exception.

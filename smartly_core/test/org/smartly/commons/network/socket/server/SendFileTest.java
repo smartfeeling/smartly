@@ -77,7 +77,8 @@ public class SendFileTest {
         final Client client = new Client();
         client.connect(host, port);
 
-        final Thread[] tasks = client.sendFile(filename, true,
+        final Thread[] tasks = client.sendFile(filename,
+                "{\"_id\":\"test_01\"}", true,
                 new Delegates.ProgressCallback() {
                     @Override
                     public void handle(int index, int length, double progress) {

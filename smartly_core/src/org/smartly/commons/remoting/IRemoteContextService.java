@@ -1,7 +1,7 @@
 /*
  * 
  */
-package org.smartly.packages.remoting.impl;
+package org.smartly.commons.remoting;
 
 /**
  * Implements this interface to create a context service.<br/>

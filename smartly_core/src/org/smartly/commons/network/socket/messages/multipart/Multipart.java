@@ -41,6 +41,7 @@ public class Multipart {
     //-- readonly from part --//
     private MultipartInfo.MultipartInfoType _type;
     private String _name;
+    private String _userToken;
 
     // --------------------------------------------------------------------
     //               c o n s t r u c t o r
@@ -126,6 +127,10 @@ public class Multipart {
 
     public String getName() {
         return _name;
+    }
+
+    public String getUserToken() {
+        return _userToken;
     }
 
     public boolean isType(final MultipartInfo.MultipartInfoType type) {
@@ -258,6 +263,9 @@ public class Multipart {
             }
             if (null == _name) {
                 _name = part.getInfo().getParentName();
+            }
+            if (null == _userToken) {
+                _userToken = part.getInfo().getUserToken();
             }
         }
     }

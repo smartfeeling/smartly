@@ -44,13 +44,8 @@ public class SmartlyRESTHandler extends ContextHandler {
                          final Request baseRequest,
                          final HttpServletRequest request,
                          final HttpServletResponse response) throws IOException, ServletException {
-        //-- verify if "smartly_remoting" is loaded--//
-        if (Smartly.hasPackage("smartly_remoting")) {
-            baseRequest.setHandled(true);
-            this.handleInternal(target, baseRequest, request, response);
-        } else {
-            baseRequest.setHandled(false);
-        }
+        baseRequest.setHandled(true);
+        this.handleInternal(target, baseRequest, request, response);
     }
 
     // ------------------------------------------------------------------------

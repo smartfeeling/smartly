@@ -11,7 +11,6 @@
     <orderEntry type="library" exported="" name="org.eclipse.jetty.aggregate:jetty-all:9.0.0.v20130308" level="application" />
     <orderEntry type="module" module-name="smartly_core" />
     <orderEntry type="module" module-name="smartly_package_01_velocity" />
-    <orderEntry type="module" module-name="smartly_package_01_remoting" />
     <orderEntry type="library" name="junit:junit:4.9" level="application" />
   </component>
 </module>

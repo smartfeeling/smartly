@@ -51,7 +51,8 @@ public class ServerWorker extends Thread {
             in.close();
             _client.close();
         } catch (Throwable t) {
-            this.getLogger().log(Level.SEVERE, null, t);
+            this.onError(null, t);
+
         }
     }
 
@@ -61,6 +62,14 @@ public class ServerWorker extends Thread {
 
     private Logger getLogger() {
         return LoggingUtils.getLogger(this);
+    }
+
+    private void onError(final String message, final Throwable t) {
+        try {
+            _server.onError(message, t);
+        } catch (Throwable ignored) {
+            this.getLogger().log(Level.SEVERE, null, t);
+        }
     }
 
     private void handle(final SocketRequest request, final SocketResponse response) {

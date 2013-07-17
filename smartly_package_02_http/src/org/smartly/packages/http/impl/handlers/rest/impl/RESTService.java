@@ -8,8 +8,8 @@ import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.mutex.Mutex;
 import org.smartly.commons.mutex.MutexPool;
+import org.smartly.commons.remoting.Remoting;
 import org.smartly.commons.util.StringUtils;
-import org.smartly.packages.remoting.SmartlyRemoting;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -123,7 +123,7 @@ public abstract class RESTService {
 
     private static String getAppToken() {
         if (null == __APP_TOKEN) {
-            __APP_TOKEN = SmartlyRemoting.getAppToken();
+            __APP_TOKEN = Remoting.getAppToken();
         }
         return null != __APP_TOKEN ? __APP_TOKEN : "";
     }
