@@ -1,12 +1,12 @@
 package org.smartly.commons.network.socket.messages.multipart;
 
-import java.io.Serializable;
+import org.smartly.commons.network.socket.messages.AbstractMessage;
 
 /**
  * Single Part of a multipart message
  */
-public class MultipartMessagePart
-        implements Serializable, Comparable<MultipartMessagePart> {
+public class MultipartMessagePart extends AbstractMessage
+        implements Comparable<MultipartMessagePart> {
 
     private String _uid;
     private MultipartInfo _info;

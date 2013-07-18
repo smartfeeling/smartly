@@ -265,7 +265,7 @@ public class Multipart {
                 _name = part.getInfo().getParentName();
             }
             if (null == _userToken) {
-                _userToken = part.getInfo().getUserToken();
+                _userToken = part.getUserToken();
             }
         }
     }

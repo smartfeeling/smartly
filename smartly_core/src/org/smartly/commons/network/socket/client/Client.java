@@ -167,11 +167,13 @@ public class Client {
                             final String chunk = chunks[index];
                             final MultipartInfo info = new MultipartInfo(fileName,
                                     MultipartInfo.MultipartInfoType.File, chunk, index, len);
-                            info.setUserToken(userToken);
+
                             final MultipartMessagePart part = new MultipartMessagePart();
+                            part.setUserToken(userToken);
                             part.setInfo(info);
                             part.setUid(transactionId);
                             part.setData(FileUtils.copyToByteArray(new File(chunk)));
+
                             //-- send part --//
                             if (useMultipleConnections) {
                                 send(getAddress(), part);

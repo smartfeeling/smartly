@@ -3,6 +3,8 @@ package org.smartly.commons.network.socket.server;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
+import org.smartly.commons.network.socket.messages.AbstractMessage;
+import org.smartly.commons.network.socket.messages.MessageResponse;
 import org.smartly.commons.network.socket.server.handlers.ISocketFilter;
 import org.smartly.commons.network.socket.server.handlers.ISocketHandler;
 import org.smartly.commons.network.socket.server.handlers.SocketRequest;
@@ -29,6 +31,7 @@ public class ServerWorker extends Thread {
     @Override
     public void run() {
         try {
+            // out and in
             final ObjectOutputStream out = new ObjectOutputStream(_client.getOutputStream());
             final ObjectInputStream in = new ObjectInputStream(_client.getInputStream());
             // read
@@ -38,12 +41,10 @@ public class ServerWorker extends Thread {
                 final SocketResponse response = new SocketResponse();
 
                 //-- handle request and write response --//
-                this.handle(request, response);
+                final MessageResponse output = this.handle(request, response);
 
-                if (null != response.read()) {
-
-                    final Object output = response.read();
-                    // write
+                // write
+                if (!output.isNull()) {
                     out.writeObject(output);
                     out.flush();
                 }
@@ -78,7 +79,10 @@ public class ServerWorker extends Thread {
         }
     }
 
-    private void handle(final SocketRequest request, final SocketResponse response) {
+    private MessageResponse handle(final SocketRequest request, final SocketResponse response) {
+        // response
+        final MessageResponse output = new MessageResponse();
+
         // filters
         final SocketFilterPoolIterator iterator = _pool.getFiltersIterator();
         while (iterator.hasNext()) {
@@ -94,6 +98,13 @@ public class ServerWorker extends Thread {
                 handler.handle(request, response);
             }
         }
+
+        if(request.read() instanceof AbstractMessage){
+            output.setUserToken(((AbstractMessage)request.read()).getUserToken());
+        }
+        output.setData(response.read());
+
+        return output;
     }
 
     private Object read(final InputStream is) {

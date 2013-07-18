@@ -1,14 +1,13 @@
 package org.smartly.commons.network.socket.messages.rest;
 
 import org.json.JSONObject;
+import org.smartly.commons.network.socket.messages.AbstractMessage;
 import org.smartly.commons.util.StringUtils;
-
-import java.io.Serializable;
 
 /**
  * Wrapper for REST like message.
  */
-public class RESTMessage implements Serializable {
+public class RESTMessage extends AbstractMessage {
 
     public static final String METHOD_GET = "GET";
     public static final String METHOD_POST = "POST";
