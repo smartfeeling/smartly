@@ -2,14 +2,14 @@ package org.smartly.commons.network.socket.server;
 
 import junit.framework.TestCase;
 import org.smartly.commons.network.socket.client.Client;
-import org.smartly.commons.network.socket.server.handlers.impl.EchoFilter;
+import org.smartly.commons.network.socket.server.handlers.impl.FilterEcho;
 
 public class VerySimpleTest extends TestCase {
 
     private Server _server;
 
     public void setUp() throws Exception {
-        _server = Server.startServer(new Class[]{EchoFilter.class});
+        _server = Server.startServer(new Class[]{FilterEcho.class});
     }
 
     public void tearDown() {

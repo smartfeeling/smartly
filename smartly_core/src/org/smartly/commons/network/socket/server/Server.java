@@ -9,8 +9,9 @@ import org.smartly.commons.network.socket.messages.multipart.MultipartMessagePar
 import org.smartly.commons.network.socket.messages.multipart.MultipartPool;
 import org.smartly.commons.network.socket.server.handlers.ISocketFilter;
 import org.smartly.commons.network.socket.server.handlers.ISocketHandler;
-import org.smartly.commons.network.socket.server.handlers.impl.MultipartMessageHandler;
+import org.smartly.commons.network.socket.server.handlers.impl.HandlerMultipartMessage;
 import org.smartly.commons.network.socket.server.handlers.pool.SocketHandlerPool;
+import org.smartly.commons.network.socket.server.tools.MultipartMessageUtils;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -95,17 +96,16 @@ public class Server extends Thread {
     }
 
 
-
     // --------------------------------------------------------------------
     //               e v e n t
     // --------------------------------------------------------------------
 
-    public void onStart(final OnStart handler){
-       _eventHandlers.add(handler);
+    public void onStart(final OnStart handler) {
+        _eventHandlers.add(handler);
     }
 
     public void onError(final Delegates.ExceptionCallback listener) {
-         _eventHandlers.add(listener);
+        _eventHandlers.add(listener);
     }
 
     public void onMultipartFull(final Multipart.OnFullListener listener) {
@@ -182,8 +182,8 @@ public class Server extends Thread {
     private void init() {
 
         //-- register default handlers --//
-        this.addHandler(MultipartMessageHandler.TYPE,
-                MultipartMessageHandler.class);
+        this.addHandler(HandlerMultipartMessage.TYPE,
+                HandlerMultipartMessage.class);
 
         //-- init multipart pool --//
         _multipartPool.onFull(new Multipart.OnFullListener() {
@@ -260,7 +260,7 @@ public class Server extends Thread {
                 // no external handlers.
                 // handle internally
                 try {
-                    MultipartMessageHandler.remove(multipart);
+                    MultipartMessageUtils.remove(multipart);
                 } catch (Throwable t) {
                     this.onError(null, t);
                 }

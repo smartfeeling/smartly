@@ -1,4 +1,4 @@
-package org.smartly.commons.network.socket.server.handlers.impl;
+package org.smartly.commons.network.socket.server;
 
 import org.smartly.commons.network.socket.messages.multipart.MultipartMessagePart;
 import org.smartly.commons.network.socket.server.Server;

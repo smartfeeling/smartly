@@ -6,7 +6,7 @@ import org.smartly.commons.network.socket.server.handlers.SocketResponse;
 
 import java.util.Date;
 
-public class EchoStringFilter implements ISocketFilter {
+public class FilterEchoString implements ISocketFilter {
 
     public boolean handle(final SocketRequest request, final SocketResponse response) {
         final String txt = this.getClass().getSimpleName() + " (" + (new Date()).toString() + "): " + request.read().toString();

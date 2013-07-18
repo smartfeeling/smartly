@@ -7,12 +7,10 @@ import org.smartly.commons.network.socket.server.handlers.ISocketFilter;
 import org.smartly.commons.network.socket.server.handlers.ISocketHandler;
 import org.smartly.commons.network.socket.server.handlers.SocketRequest;
 import org.smartly.commons.network.socket.server.handlers.SocketResponse;
-import org.smartly.commons.network.socket.server.handlers.impl.SocketRequestServer;
 import org.smartly.commons.network.socket.server.handlers.pool.SocketFilterPoolIterator;
 import org.smartly.commons.network.socket.server.handlers.pool.SocketHandlerPool;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 
 
@@ -35,24 +33,32 @@ public class ServerWorker extends Thread {
             final ObjectInputStream in = new ObjectInputStream(_client.getInputStream());
             // read
             final Object input = in.readObject();
-            final SocketRequest request = new SocketRequest(new SocketRequestServer(_server), input);
-            final SocketResponse response = new SocketResponse();
+            if (null != input) {
+                final SocketRequest request = new SocketRequest(new SocketRequestServer(_server), input);
+                final SocketResponse response = new SocketResponse();
 
-            //-- handle request and write response --//
-            this.handle(request, response);
+                //-- handle request and write response --//
+                this.handle(request, response);
 
-            if (null != response.read()) {
-                final Object output = response.read();
-                // write
-                out.writeObject(output);
+                if (null != response.read()) {
+
+                    final Object output = response.read();
+                    // write
+                    out.writeObject(output);
+                    out.flush();
+                }
             }
-
             out.close();
             in.close();
-            _client.close();
+        } catch (EOFException ignored) {
+        } catch (StreamCorruptedException ignored) {
         } catch (Throwable t) {
             this.onError(null, t);
-
+        } finally {
+            try {
+                _client.close();
+            } catch (Throwable ignored) {
+            }
         }
     }
 
@@ -88,5 +94,16 @@ public class ServerWorker extends Thread {
                 handler.handle(request, response);
             }
         }
+    }
+
+    private Object read(final InputStream is) {
+        Object result = null;
+        try {
+            final ObjectInputStream in = new ObjectInputStream(is);
+            result = in.readObject();
+        } catch (Throwable ignored) {
+            // unable to read stream
+        }
+        return result;
     }
 }

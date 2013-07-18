@@ -1,7 +1,7 @@
 package org.smartly.commons.network.socket.server.handlers;
 
 import org.smartly.IConstants;
-import org.smartly.commons.network.socket.server.handlers.impl.SocketRequestServer;
+import org.smartly.commons.network.socket.server.SocketRequestServer;
 
 /**
  * Socket request Message

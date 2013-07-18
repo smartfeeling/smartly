@@ -7,7 +7,7 @@ import org.smartly.commons.Delegates;
 import org.smartly.commons.async.Async;
 import org.smartly.commons.network.socket.client.Client;
 import org.smartly.commons.network.socket.messages.multipart.Multipart;
-import org.smartly.commons.network.socket.server.handlers.impl.MultipartMessageHandler;
+import org.smartly.commons.network.socket.server.tools.MultipartMessageUtils;
 import org.smartly.commons.util.FormatUtils;
 import org.smartly.commons.util.PathUtils;
 
@@ -31,25 +31,20 @@ public class SendFileTest {
 
     @Before
     public void setUp() throws Exception {
-        _simpleSocketServer =  new Server(port);
+        _simpleSocketServer = new Server(port);
         _simpleSocketServer.onStart(new Server.OnStart() {
             @Override
             public void handle(Server sender) {
                 System.out.println("STARTED!!!!!");
             }
         });
-        _simpleSocketServer.onStart(new Server.OnStart() {
-            @Override
-            public void handle(Server sender) {
-                System.out.println("ALREADY STARTED!!");
-            }
-        });
+
         _simpleSocketServer.onMultipartTimeOut(new Multipart.OnTimeOutListener() {
             @Override
             public void handle(Multipart sender) {
                 System.out.println("TIME-OUT: " + sender.toString());
                 try {
-                    MultipartMessageHandler.remove(sender);
+                    MultipartMessageUtils.remove(sender);
                 } catch (Throwable ignored) {
                 }
             }
@@ -103,7 +98,7 @@ public class SendFileTest {
     private static void parseMultipart(final Multipart item) {
         try {
             final String out_root = PathUtils.concat(PathUtils.getTemporaryDirectory(), "out");
-            MultipartMessageHandler.saveOnDisk(item, out_root);
+            MultipartMessageUtils.saveOnDisk(item, out_root);
         } catch (Throwable t) {
             System.out.println(t);
         }
