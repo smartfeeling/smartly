@@ -7,6 +7,7 @@ import org.smartly.Smartly;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
+import org.smartly.commons.remoting.rpc.RemoteInvoker;
 import org.smartly.commons.util.*;
 import org.smartly.commons.io.serialization.json.JsonSerializer;
 import org.smartly.commons.io.BinaryData;
@@ -111,22 +112,12 @@ public class SmartlyRemotingHandler extends ContextHandler {
             try {
                 if (StringUtils.hasText(methodName) && StringUtils.hasText(serviceName)) {
                     final Map<String, String> params = this.getParameters(method, request);
-                    final Class invokerClass = ClassLoaderUtils.forName("org.smartly.packages.remoting.impl.RemoteInvoker");
-                    final Object invoker = ClassLoaderUtils.newInstance(invokerClass);
-                    if (null != invoker) {
-                        final Method invokeMethod = invokerClass.getMethod("call",
-                                String.class, String.class, String.class, Map.class);
-                        if (null != invokeMethod) {
-                            final Object invokeResponse = invokeMethod.invoke(invoker,
-                                    endPoint,
-                                    serviceName,
-                                    methodName,
-                                    params);
-                            this.writeResponse(response, responseFormat, invokeResponse);
-                        }
-                    } else {
-                        throw new Exception("INVOKER NOT LOADED. REMOTING IS NOT AVAILABLE.");
-                    }
+                    final RemoteInvoker invoker = new RemoteInvoker();
+                    final Object invokeResponse = invoker.call(endPoint,
+                            serviceName,
+                            methodName,
+                            params);
+                    this.writeResponse(response, responseFormat, invokeResponse);
                 } else {
                     throw new Exception("BAD REQUEST FORMAT.");
                 }
