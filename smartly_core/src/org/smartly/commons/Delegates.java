@@ -95,7 +95,7 @@ public class Delegates {
                 if (_handlers.containsKey(hclass)) {
                     this.trigger(true, _handlers.get(hclass), args);
                 } else {
-                    this.getLogger().warning(FormatUtils.format("'{0}' is not a valid handler!", hclass.getName()));
+                    this.getLogger().fine(FormatUtils.format("No handlers of type '{0}'!", hclass.getName()));
                 }
             }
         }
@@ -105,7 +105,7 @@ public class Delegates {
                 if (_handlers.containsKey(hclass)) {
                     this.trigger(false, _handlers.get(hclass), args);
                 } else {
-                    this.getLogger().warning(FormatUtils.format("No handlers of type '{0}'!", hclass.getName()));
+                    this.getLogger().fine(FormatUtils.format("No handlers of type '{0}'!", hclass.getName()));
                 }
             }
         }
