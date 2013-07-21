@@ -14,11 +14,14 @@ import java.util.*;
  */
 public class Delegates {
 
+    public static interface Handler { /** base handler **/
+    }
+
     // --------------------------------------------------------------------
     //               F u n c t i o n   D e l e g a t e s
     // --------------------------------------------------------------------
 
-    public static interface CreateRunnableCallback {
+    public static interface CreateRunnableCallback extends Handler {
         Runnable handle(final int index, final int length);
     }
 
@@ -26,21 +29,21 @@ public class Delegates {
     //               E v e n t s
     // --------------------------------------------------------------------
 
-    public static interface ExceptionCallback {
+    public static interface ExceptionCallback extends Handler {
         void handle(final String message, final Throwable exception);
     }
 
     /**
      * Simple handler for Async Action
      */
-    public static interface AsyncActionHandler {
+    public static interface AsyncActionHandler extends Handler {
         void handle(Object... args);
     }
 
     /**
      * Callback for progress indicators.
      */
-    public static interface ProgressCallback {
+    public static interface ProgressCallback extends Handler {
         void handle(final int index, final int length, final double progress);
     }
 

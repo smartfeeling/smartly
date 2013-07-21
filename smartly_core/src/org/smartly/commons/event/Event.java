@@ -4,46 +4,49 @@
 
 package org.smartly.commons.event;
 
+import org.json.JSONObject;
+import org.smartly.commons.util.JsonWrapper;
+import org.smartly.commons.util.StringUtils;
+
 /**
- * @author
+ *
+ *
  */
 public class Event {
 
-    private final Object _sender;
-    private final String _name;
+    private static final String FLD_SENDER = "sender";
+    private static final String FLD_NAME = "name";
+    private static final String FLD_DATA = "data";
 
-    private Object _data;
+    private final JSONObject _json;
 
-
-    public Event(final Object sender, final String name) {
-        this._sender = sender;
-        this._name = name;
+    public Event(final Object sender,
+                 final String name) {
+        _json = new JSONObject();
+        this.put(FLD_SENDER, sender);
+        this.put(FLD_NAME, name);
     }
 
-    public Event(final Object sender, final String name, final Object data) {
-        this._sender = sender;
-        this._name = name;
-        this._data = data;
+    public Event(final Object sender,
+                 final String name,
+                 final Object data) {
+        _json = new JSONObject();
+        this.put(FLD_SENDER, sender);
+        this.put(FLD_NAME, name);
+        this.setData(data);
     }
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder();
-        result.append(this.getClass().getName());
-        result.append("[");
-        result.append("Name: '").append(_name).append("'");
-        result.append(", ");
-        result.append("Sender: {").append(_sender).append("}");
-        result.append(", ");
-        result.append("Data: {").append(_data).append("}");
-        result.append("]");
-
-        return result.toString();
+        return _json.toString();
     }
 
+    public JSONObject toJSON() {
+        return new JSONObject(_json);
+    }
 
     public Object getSender() {
-        return _sender;
+        return JsonWrapper.get(_json, FLD_SENDER);
     }
 
     /*
@@ -52,16 +55,55 @@ public class Event {
     }
     */
     public String getName() {
-        return _name;
+        return JsonWrapper.getString(_json, FLD_DATA);
     }
 
     public Object getData() {
-        return _data;
+        return JsonWrapper.get(_json, FLD_DATA);
     }
 
-    public void setData(Object data) {
-        this._data = data;
+    public void setData(final Object data) {
+        this.put(FLD_DATA, data);
     }
 
+    protected void put(final String key, final Object value) {
+        if (StringUtils.hasText(key) && null != value) {
+            JsonWrapper.put(_json, key, value);
+        }
+    }
 
+    protected Object get(final String key) {
+        if (StringUtils.hasText(key)) {
+            return JsonWrapper.get(_json, key);
+        }
+        return null;
+    }
+
+    protected String getString(final String key) {
+        if (StringUtils.hasText(key)) {
+            return JsonWrapper.getString(_json, key);
+        }
+        return "";
+    }
+
+    protected boolean getBoolean(final String key) {
+        if (StringUtils.hasText(key)) {
+            return JsonWrapper.getBoolean(_json, key);
+        }
+        return false;
+    }
+
+    protected int getInt(final String key) {
+        if (StringUtils.hasText(key)) {
+            return JsonWrapper.getInt(_json, key);
+        }
+        return 0;
+    }
+
+    protected double getDouble(final String key) {
+        if (StringUtils.hasText(key)) {
+            return JsonWrapper.getDouble(_json, key);
+        }
+        return 0.0;
+    }
 }
