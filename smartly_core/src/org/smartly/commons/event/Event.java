@@ -42,7 +42,7 @@ public class Event {
     }
 
     public JSONObject toJSON() {
-        return new JSONObject(_json);
+        return new JSONObject(_json.toString());
     }
 
     public Object getSender() {
@@ -55,7 +55,7 @@ public class Event {
     }
     */
     public String getName() {
-        return JsonWrapper.getString(_json, FLD_DATA);
+        return JsonWrapper.getString(_json, FLD_NAME);
     }
 
     public Object getData() {

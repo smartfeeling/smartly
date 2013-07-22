@@ -470,6 +470,17 @@ public abstract class FileUtils {
     //---------------------------------------------------------------------
 
     public static void listFiles(final List<File> fileList,
+                                 final List<File> startDir) {
+        for(final File file:startDir){
+            if(file.isDirectory()){
+                listFiles(fileList, file);
+            } else {
+                fileList.add(file);
+            }
+        }
+    }
+
+    public static void listFiles(final List<File> fileList,
                                  final File startDir) {
         listFiles(fileList, startDir, "*.*", null, -1);
     }

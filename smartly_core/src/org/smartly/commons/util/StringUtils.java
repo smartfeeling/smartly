@@ -356,6 +356,10 @@ public final class StringUtils {
         return concatArgsEx(".", args);
     }
 
+    public static String concatUnderscore(final Object... args) {
+        return concatArgsEx("_", args);
+    }
+
     /**
      * Append a value separated from comma (",") from other values to a
      * StringBuilder.
