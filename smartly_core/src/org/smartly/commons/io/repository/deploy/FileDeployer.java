@@ -89,6 +89,14 @@ public abstract class FileDeployer {
         return _settings;
     }
 
+    public String getSourceFolder() {
+        return _startFolder;
+    }
+
+    public String getTargetFolder() {
+        return _targetFolder;
+    }
+
     public boolean isOverwrite() {
         return _overwriteAll;
     }
