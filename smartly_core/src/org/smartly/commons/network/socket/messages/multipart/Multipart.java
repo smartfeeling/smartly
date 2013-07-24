@@ -246,7 +246,7 @@ public class Multipart {
     private void doOnFull() {
         synchronized (_listeners) {
             for (final OnFullListener listener : _listeners) {
-                Async.Action(new Delegates.AsyncActionHandler() {
+                Async.Action(new Delegates.Action() {
                     @Override
                     public void handle(Object... args) {
                         listener.handle((Multipart) args[0]);

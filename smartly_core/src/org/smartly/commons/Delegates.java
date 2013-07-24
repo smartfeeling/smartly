@@ -25,6 +25,10 @@ public class Delegates {
         Runnable handle(final int index, final int length);
     }
 
+    public static interface Function<T> extends Handler {
+        T handle(final Object...args );
+    }
+
     // --------------------------------------------------------------------
     //               E v e n t s
     // --------------------------------------------------------------------
@@ -36,8 +40,8 @@ public class Delegates {
     /**
      * Simple handler for Async Action
      */
-    public static interface AsyncActionHandler extends Handler {
-        void handle(Object... args);
+    public static interface Action extends Handler {
+        void handle(final Object... args);
     }
 
     /**
@@ -138,7 +142,7 @@ public class Delegates {
                         : BeanUtils.getMethodIfAny(hclass, "handle");
                 if (null != method) {
                     if (async) {
-                        Async.Action(new AsyncActionHandler() {
+                        Async.Action(new Action() {
                             @Override
                             public void handle(final Object... args2) {
                                 try {

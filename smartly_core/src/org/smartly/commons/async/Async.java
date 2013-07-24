@@ -12,7 +12,7 @@ import java.util.Set;
 public abstract class Async {
 
 
-    public static void Action(final Delegates.AsyncActionHandler handler, final Object... args) {
+    public static void Action(final Delegates.Action handler, final Object... args) {
         if (null != handler) {
             final Thread t = new Thread(new Runnable() {
                 @Override
@@ -26,7 +26,7 @@ public abstract class Async {
         }
     }
 
-    public static void Delay(final Delegates.AsyncActionHandler handler, final int delay, final Object... args) {
+    public static void Delay(final Delegates.Action handler, final int delay, final Object... args) {
         if (null != handler) {
             final Thread t = new Thread(new Runnable() {
                 @Override
@@ -54,7 +54,7 @@ public abstract class Async {
                                      final Delegates.ProgressCallback onProgress) {
         final int len = threads.length;
         //-- Async execution --//
-        Action(new Delegates.AsyncActionHandler() {
+        Action(new Delegates.Action() {
             @Override
             public void handle(Object... args) {
                 final int max = maxConcurrentThreads <= len ? maxConcurrentThreads : len;
