@@ -128,4 +128,7 @@ public abstract class RESTService {
         return null != __APP_TOKEN ? __APP_TOKEN : "";
     }
 
+    public static void setAppToken(final String token){
+         __APP_TOKEN = token;
+    }
 }

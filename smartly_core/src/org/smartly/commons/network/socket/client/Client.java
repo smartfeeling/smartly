@@ -76,13 +76,16 @@ public class Client {
         if (null != _socket) {
             try {
                 _socket.close();
-                _socket = null;
+                //_socket = null;
             } catch (Throwable ignored) {
+                _socket = null;
+                _socket = new Socket(_proxy);
             }
+        } else {
+            _socket = new Socket(_proxy);
         }
 
         _address = address;
-        _socket = new Socket(_proxy);
         _socket.connect(address, 3000);
     }
 
