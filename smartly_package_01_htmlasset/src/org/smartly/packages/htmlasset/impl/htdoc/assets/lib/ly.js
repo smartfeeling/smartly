@@ -780,6 +780,17 @@
         return _.bind(func, this);
     };
 
+    Gui.prototype.invoke = function () {
+        var args = _.toArray(arguments);
+        if (_.isFunction(args[0])) {
+            if (args.length === 1) {
+                _.bind(args[0], this)();
+            } else {
+                _.bind(args[0], this).apply(args.splice(0, 1));
+            }
+        }
+    };
+
     Gui.prototype.template = function (text) {
         var tpl = _.template(text, this);
         return $.trim(tpl);

@@ -699,6 +699,10 @@ public final class JsonWrapper implements Cloneable {
         return true;
     }
 
+    // ------------------------------------------------------------------------
+    //               S T A T I C  -  C O N V E R S I O N
+    // ------------------------------------------------------------------------
+
     public static List<JSONObject> parseList(final String jsonArray) {
         final JSONArray array = JsonWrapper.wrap(jsonArray).getJSONArray();
         return toListOfJSONObject(array);
@@ -853,8 +857,8 @@ public final class JsonWrapper implements Cloneable {
                 : new Object[0];
     }
 
-    public static List<JSONObject> toListOfJSONObject(final Object object) {
-        final List<JSONObject> result = new LinkedList<JSONObject>();
+    public static JsonList toListOfJSONObject(final Object object) {
+        final JsonList result = new JsonList();
         try {
             if (object instanceof JSONArray) {
                 final JSONArray array = (JSONArray) object;
@@ -876,7 +880,7 @@ public final class JsonWrapper implements Cloneable {
                 }
             }
 
-        } catch (Throwable t) {
+        } catch (Throwable ignored) {
         }
         return result;
     }
@@ -905,6 +909,10 @@ public final class JsonWrapper implements Cloneable {
                 ? result.toArray(new String[result.size()])
                 : new String[0];
     }
+
+    // ------------------------------------------------------------------------
+    //               S T A T I C  -  E X T E N D
+    // ------------------------------------------------------------------------
 
     public static JSONArray extend(final JSONArray target,
                                    final JSONArray source) {
@@ -1011,30 +1019,10 @@ public final class JsonWrapper implements Cloneable {
         return target;
     }
 
-    public static void clear(final JSONObject target) {
-        if (null != target) {
-            final String[] keys = CollectionUtils.toArrayOfString(target.keys());
-            for (final String key : keys) {
-                try {
-                    target.remove(key);
-                } catch (Throwable t) {
-                }
-            }
-        }
-    }
 
-    public static void provide(final JSONObject item,
-                               final String path) throws JSONException {
-        if (null != item) {
-            if (path.indexOf(".") > 0) {
-                final String[] tokens = StringUtils.splitAt(1, path, ".");
-                if (!item.has(tokens[0])) {
-                    item.putOnce(tokens[0], new JSONObject());
-                }
-                provide(item.optJSONObject(tokens[0]), tokens[1]);
-            }
-        }
-    }
+    // ------------------------------------------------------------------------
+    //               S T A T I C  -  P U T   A N D   G E T
+    // ------------------------------------------------------------------------
 
     public static JSONObject put(final JSONObject item,
                                  final String path,
@@ -1298,6 +1286,10 @@ public final class JsonWrapper implements Cloneable {
         return result;
     }
 
+    // ------------------------------------------------------------------------
+    //               S T A T I C  -  E Q U A L I T Y
+    // ------------------------------------------------------------------------
+
     public static boolean equals(final Object item1, final Object item2) {
         if (CompareUtils.equals(item1, item2)) {
             return true;
@@ -1356,6 +1348,136 @@ public final class JsonWrapper implements Cloneable {
             }
         }
         return false;
+    }
+
+    public static boolean contains(final JSONArray array, final String value) {
+        final int length = array.length();
+        for (int i = 0; i < length; i++) {
+            final String name = array.getString(i);
+            if (name.equalsIgnoreCase(value)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean contains(final JSONArray array,
+                                   final String key, final String value) {
+        return null != findOne(array, key, value);
+    }
+
+    // ------------------------------------------------------------------------
+    //               S T A T I C  -  L O O K U P
+    // ------------------------------------------------------------------------
+
+    public static JSONObject findOne(final JSONArray array,
+                                     final String key,
+                                     final Object value) {
+        final int length = array.length();
+        for (int i = 0; i < length; i++) {
+            final JSONObject item = array.getJSONObject(i);
+            if (item.has(key) && CompareUtils.equals(item.opt(key), value)) {
+                return item;
+            }
+        }
+        return null;
+    }
+
+    public static JsonList find(final JSONArray array,
+                                        final String key,
+                                        final Object value) {
+        final JsonList result = new JsonList();
+        final int length = array.length();
+        for (int i = 0; i < length; i++) {
+            final JSONObject item = array.getJSONObject(i);
+            if (item.has(key) && CompareUtils.equals(item.opt(key), value)) {
+                result.add(item);
+            }
+        }
+        return result;
+    }
+
+    public static boolean removeOne(final JSONArray array,
+                                      final String value) {
+        final int length = array.length();
+        for (int i = length - 1; i > -1; i--) {
+            final String item = array.getString(i);
+            if (item.equalsIgnoreCase(value)) {
+                array.remove(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static int removeAll(final JSONArray array,
+                                final String value) {
+        int count = 0;
+        final int length = array.length();
+        for (int i = length - 1; i > -1; i--) {
+            final String item = array.getString(i);
+            if (item.equalsIgnoreCase(value)) {
+                array.remove(i);
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public static JSONObject removeOne(final JSONArray array,
+                                         final String key, final String value) {
+        final int length = array.length();
+        for (int i = length - 1; i > -1; i--) {
+            final JSONObject item = array.getJSONObject(i);
+            if (item.has(key) && item.optString(key).equalsIgnoreCase(value)) {
+                array.remove(i);
+                return item;
+            }
+        }
+        return null;
+    }
+
+    public static JsonList removeAll(final JSONArray array,
+                                      final String key, final String value) {
+        final JsonList result = new JsonList();
+        final int length = array.length();
+        for (int i = length - 1; i > -1; i--) {
+            final JSONObject item = array.getJSONObject(i);
+            if (item.has(key) && item.optString(key).equalsIgnoreCase(value)) {
+                array.remove(i);
+                result.add(item);
+            }
+        }
+        return result;
+    }
+
+    // ------------------------------------------------------------------------
+    //               S T A T I C  -  U T I L I T Y
+    // ------------------------------------------------------------------------
+
+    public static void clear(final JSONObject target) {
+        if (null != target) {
+            final String[] keys = CollectionUtils.toArrayOfString(target.keys());
+            for (final String key : keys) {
+                try {
+                    target.remove(key);
+                } catch (Throwable t) {
+                }
+            }
+        }
+    }
+
+    public static void provide(final JSONObject item,
+                               final String path) throws JSONException {
+        if (null != item) {
+            if (path.indexOf(".") > 0) {
+                final String[] tokens = StringUtils.splitAt(1, path, ".");
+                if (!item.has(tokens[0])) {
+                    item.putOnce(tokens[0], new JSONObject());
+                }
+                provide(item.optJSONObject(tokens[0]), tokens[1]);
+            }
+        }
     }
 
     // ------------------------------------------------------------------------
