@@ -1375,22 +1375,25 @@ public final class JsonWrapper implements Cloneable {
                                      final Object value) {
         final int length = array.length();
         for (int i = 0; i < length; i++) {
-            final JSONObject item = array.getJSONObject(i);
-            if (item.has(key) && CompareUtils.equals(item.opt(key), value)) {
-                return item;
+            final Object item = array.get(i);
+            if (item instanceof JSONObject) {
+                final JSONObject jitem = (JSONObject) item;
+                if (jitem.has(key) && CompareUtils.equals(jitem.opt(key), value)) {
+                    return jitem;
+                }
             }
         }
         return null;
     }
 
     public static JsonList find(final JSONArray array,
-                                        final String key,
-                                        final Object value) {
+                                final String key,
+                                final Object value) {
         final JsonList result = new JsonList();
         final int length = array.length();
         for (int i = 0; i < length; i++) {
-            final JSONObject item = array.getJSONObject(i);
-            if (item.has(key) && CompareUtils.equals(item.opt(key), value)) {
+            final JSONObject item = array.optJSONObject(i);
+            if (null!=item && item.has(key) && CompareUtils.equals(item.opt(key), value)) {
                 result.add(item);
             }
         }
@@ -1398,11 +1401,11 @@ public final class JsonWrapper implements Cloneable {
     }
 
     public static boolean removeOne(final JSONArray array,
-                                      final String value) {
+                                    final String value) {
         final int length = array.length();
         for (int i = length - 1; i > -1; i--) {
-            final String item = array.getString(i);
-            if (item.equalsIgnoreCase(value)) {
+            final String item = array.optString(i);
+            if (null!=item && item.equalsIgnoreCase(value)) {
                 array.remove(i);
                 return true;
             }
@@ -1415,8 +1418,8 @@ public final class JsonWrapper implements Cloneable {
         int count = 0;
         final int length = array.length();
         for (int i = length - 1; i > -1; i--) {
-            final String item = array.getString(i);
-            if (item.equalsIgnoreCase(value)) {
+            final String item = array.optString(i);
+            if (null!=item && item.equalsIgnoreCase(value)) {
                 array.remove(i);
                 count++;
             }
@@ -1425,27 +1428,31 @@ public final class JsonWrapper implements Cloneable {
     }
 
     public static JSONObject removeOne(final JSONArray array,
-                                         final String key, final String value) {
+                                       final String key, final String value) {
         final int length = array.length();
         for (int i = length - 1; i > -1; i--) {
-            final JSONObject item = array.getJSONObject(i);
-            if (item.has(key) && item.optString(key).equalsIgnoreCase(value)) {
+            final Object item = array.get(i);
+            if ((item instanceof JSONObject)
+                    && ((JSONObject) item).has(key)
+                    && ((JSONObject) item).optString(key).equalsIgnoreCase(value)) {
                 array.remove(i);
-                return item;
+                return (JSONObject) item;
             }
         }
         return null;
     }
 
     public static JsonList removeAll(final JSONArray array,
-                                      final String key, final String value) {
+                                     final String key, final String value) {
         final JsonList result = new JsonList();
         final int length = array.length();
         for (int i = length - 1; i > -1; i--) {
-            final JSONObject item = array.getJSONObject(i);
-            if (item.has(key) && item.optString(key).equalsIgnoreCase(value)) {
+            final Object item = array.get(i);
+            if ((item instanceof JSONObject)
+                    && ((JSONObject) item).has(key)
+                    && ((JSONObject) item).optString(key).equalsIgnoreCase(value)) {
                 array.remove(i);
-                result.add(item);
+                result.add((JSONObject)item);
             }
         }
         return result;

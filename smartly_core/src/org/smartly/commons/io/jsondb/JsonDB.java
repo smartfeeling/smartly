@@ -3,6 +3,7 @@ package org.smartly.commons.io.jsondb;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.smartly.commons.Delegates;
+import org.smartly.commons.lang.CharEncoding;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.util.FileUtils;
@@ -15,6 +16,8 @@ import java.io.File;
  *
  */
 public class JsonDB {
+
+    public static final String CHARSET = CharEncoding.UTF_8;
 
     // ------------------------------------------------------------------------
     //                      e v e n t s
@@ -122,6 +125,14 @@ public class JsonDB {
         }
     }
 
+    void handle(final Throwable t) {
+        if (_eventHandlers.contains(EVENT_ERROR)) {
+            _eventHandlers.triggerAsync(EVENT_ERROR, t);
+        } else {
+            LoggingUtils.getLogger(this).log(Level.SEVERE, null, t);
+        }
+    }
+
 
     // ------------------------------------------------------------------------
     //                      p r i v a t e
@@ -145,18 +156,11 @@ public class JsonDB {
         return result;
     }
 
-    private void handle(final Throwable t) {
-        if (_eventHandlers.contains(EVENT_ERROR)) {
-            _eventHandlers.triggerAsync(EVENT_ERROR, t);
-        } else {
-            LoggingUtils.getLogger(this).log(Level.SEVERE, null, t);
-        }
-    }
 
     private String readMetadata() {
         try {
             if (PathUtils.exists(_file_metadata)) {
-                return FileUtils.readFileToString(new File(_file_metadata));
+                return FileUtils.readFileToString(new File(_file_metadata), CHARSET);
             }
         } catch (Throwable ignored) {
 
@@ -166,7 +170,7 @@ public class JsonDB {
 
     private boolean saveMetadata() {
         try {
-            FileUtils.copy(_matadata.toString().getBytes(), new File(_file_metadata));
+            FileUtils.copy(_matadata.toString().getBytes(CHARSET), new File(_file_metadata));
         } catch (Throwable t) {
             return false;
         }

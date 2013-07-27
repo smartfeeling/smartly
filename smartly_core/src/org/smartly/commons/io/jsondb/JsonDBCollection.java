@@ -48,40 +48,70 @@ public class JsonDBCollection {
         _db.collectionsMetadata(_name, true);
     }
 
-    public synchronized JsonList find() {
+    public JsonList find() {
         final JSONArray data = this.getData();
         return JsonWrapper.toListOfJSONObject(data);
     }
 
-    public synchronized JsonList find(final String key, final Object value) {
-        final JSONArray data = this.getData();
-        return JsonWrapper.find(data, key, value);
+    public JsonList find(final String key, final Object value) {
+        try {
+            final JSONArray data = this.getData();
+            return JsonWrapper.find(data, key, value);
+        } catch (Throwable t) {
+            this.handle(t);
+        }
+        return null;
     }
 
-    public synchronized JSONObject findOne(final String key, final Object value) {
-        final JSONArray data = this.getData();
-        return JsonWrapper.findOne(data, key, value);
+    public JSONObject findOne(final String key, final Object value) {
+        try {
+            final JSONArray data = this.getData();
+            return JsonWrapper.findOne(data, key, value);
+        } catch (Throwable t) {
+            this.handle(t);
+        }
+        return null;
     }
 
     public String findOneAsString(final String key, final Object value) {
-        final JSONArray data = this.getData();
-        final JSONObject result = JsonWrapper.findOne(data, key, value);
-        return null!=result?result.toString():"{}";
+        try {
+            final JSONArray data = this.getData();
+            final JSONObject result = JsonWrapper.findOne(data, key, value);
+            return null != result ? result.toString() : "";
+        } catch (Throwable t) {
+            this.handle(t);
+        }
+        return "";
     }
 
-    public synchronized JSONObject upsert(final Object item) throws JsonDBInvalidItemException {
+    public JSONObject upsert(final Object item) throws JsonDBInvalidItemException {
         if (item instanceof String && StringUtils.isJSONObject(item)) {
-            this.upsert(new JSONObject((String) item));
+            return this.upsert(new JSONObject((String) item));
         } else if (item instanceof JSONObject) {
-            this.upsert((JSONObject) item);
+            return this.upsert((JSONObject) item);
+        } else {
+            throw new JsonDBInvalidItemException("Invalid item type: " + null != item ? item.getClass().getName() : "NULL");
         }
+    }
 
-        throw new JsonDBInvalidItemException("Invalid item type: " + null != item ? item.getClass().getName() : "NULL");
+    public String upsertAsString(final String item) {
+        try {
+            return this.upsert(new JSONObject(item)).toString();
+        } catch (Throwable t) {
+            this.handle(t);
+        }
+        return "";
     }
 
     // ------------------------------------------------------------------------
     //                      p r i v a t e
     // ------------------------------------------------------------------------
+
+    private void handle(final Throwable t) {
+        if (null != _db) {
+            _db.handle(t);
+        }
+    }
 
     private JSONArray getData() {
         if (null == __data) {
@@ -101,15 +131,30 @@ public class JsonDBCollection {
         if (item.has(ID)) {
             // update
             final JSONObject existing = JsonWrapper.removeOne(this.getData(), ID, item.optString(ID));
-            JsonWrapper.extend(existing, item, true);
-            this.add(existing);
-            return existing;
+            if (null != existing) {
+                return this.update(existing, item);
+            } else {
+                return this.insert(item);
+            }
         } else {
             // insert
-            item.put(ID, GUID.create());
-            this.add(item);
-            return item;
+            return this.insert(item);
         }
+    }
+
+    private JSONObject update(final JSONObject existing,
+                              final JSONObject item) {
+        JsonWrapper.extend(existing, item, true);
+        this.add(existing);
+        return existing;
+    }
+
+    public JSONObject insert(final JSONObject item) {
+        if (!item.has(ID)) {
+            item.put(ID, GUID.create());
+        }
+        this.add(item);
+        return item;
     }
 
     private void add(final JSONObject item) {
@@ -121,7 +166,8 @@ public class JsonDBCollection {
     private String read() {
         try {
             if (PathUtils.exists(_file_path)) {
-                return FileUtils.readFileToString(new File(_file_path));
+                return FileUtils.readFileToString(new File(_file_path),
+                        JsonDB.CHARSET);
             }
         } catch (Throwable ignored) {
 
@@ -131,7 +177,8 @@ public class JsonDBCollection {
 
     private boolean save() {
         try {
-            FileUtils.copy(this.getData().toString().getBytes(), new File(_file_path));
+            final String json = this.getData().toString();
+            FileUtils.copy(json.getBytes(JsonDB.CHARSET), new File(_file_path));
         } catch (Throwable t) {
             return false;
         }
