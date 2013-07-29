@@ -1,5 +1,9 @@
 package org.smartly.commons.network.socket.messages;
 
+import org.json.JSONObject;
+import org.smartly.commons.util.FormatUtils;
+import org.smartly.commons.util.StringUtils;
+
 import java.io.Serializable;
 
 /**
@@ -7,6 +11,8 @@ import java.io.Serializable;
  */
 public class MessageResponse
         extends AbstractMessage {
+
+    private static final String JSON_TEMPLATE = "{\"isError\":[0], \"response\":\"[1]\"}";
 
     // ------------------------------------------------------------------------
     //                      f i e l d s
@@ -48,19 +54,56 @@ public class MessageResponse
     //                      p u b l i c
     // ------------------------------------------------------------------------
 
-    public boolean isNull(){
-        return null == _data;
+    public boolean isNull() {
+        return isNull(_data);
     }
 
     public boolean isError() {
-        return (_data instanceof Throwable);
+        return isError(_data);
+    }
+
+    public boolean isJSON() {
+        return isJSON(_data);
     }
 
     public Throwable getError() {
-        if (_data instanceof Throwable) {
+        if (isError(_data)) {
             return (Throwable) _data;
         }
         return null;
     }
 
+    public JSONObject toJSON() {
+        return toJSON(_data);
+    }
+
+    // ------------------------------------------------------------------------
+    //                      S T A T I C
+    // ------------------------------------------------------------------------
+
+    private static boolean isNull(final Object data) {
+        return null == data;
+    }
+
+    private static boolean isJSON(final Object data) {
+        return StringUtils.isJSON(data);
+    }
+
+    private static boolean isError(final Object data) {
+        return (data instanceof Throwable);
+    }
+
+    public static JSONObject toJSON(final Object object) {
+        if (null != object) {
+            if (object instanceof MessageResponse) {
+                return ((MessageResponse) object).toJSON();
+            } else {
+                if (isJSON(object)) {
+                    return new JSONObject(object.toString());
+                }
+                return new JSONObject(FormatUtils.format("[", "]", JSON_TEMPLATE, isError(object), isNull(object) ? "" : object.toString()));
+            }
+        }
+        return null;
+    }
 }

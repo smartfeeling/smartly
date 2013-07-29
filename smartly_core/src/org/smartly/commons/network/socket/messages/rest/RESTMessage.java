@@ -7,7 +7,8 @@ import org.smartly.commons.util.StringUtils;
 /**
  * Wrapper for REST like message.
  */
-public class RESTMessage extends AbstractMessage {
+public class RESTMessage
+        extends AbstractMessage {
 
     public static final String METHOD_GET = "GET";
     public static final String METHOD_POST = "POST";

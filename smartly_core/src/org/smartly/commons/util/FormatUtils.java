@@ -56,6 +56,24 @@ public class FormatUtils {
         return text;
     }
 
+    public static String format(final String prefix,
+                                final String suffix,
+                                final String text,
+                                final Object... args) {
+        Object[] array = CollectionUtils.toArray(args);
+        final int length = null != array ? array.length : 0;
+        if (StringUtils.hasText(text) && length > 0) {
+            // "hello {0}"
+            final Map<String, Object> context = new HashMap<String, Object>();
+            for (int i = 0; i < array.length; i++) {
+                final Object arg = array[i];
+                context.put(i + "", arg);
+            }
+            return formatTemplate(text, prefix, suffix, context);
+        }
+        return text;
+    }
+
     public static String format(final String text,
                                 final Map<String, ? extends Object> context) {
         if (StringUtils.hasText(text) && null != context && !context.isEmpty()) {

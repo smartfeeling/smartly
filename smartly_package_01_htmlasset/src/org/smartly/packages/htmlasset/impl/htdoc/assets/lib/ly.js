@@ -784,11 +784,12 @@
         var args = _.toArray(arguments);
         if (_.isFunction(args[0])) {
             if (args.length === 1) {
-                _.bind(args[0], this)();
+                return _.bind(args[0], this)();
             } else {
-                _.bind(args[0], this).apply(args.splice(0, 1));
+                return _.bind(args[0], this).apply(this, args.splice(1));
             }
         }
+        return null;
     };
 
     Gui.prototype.template = function (text) {

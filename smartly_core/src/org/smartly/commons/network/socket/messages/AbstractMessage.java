@@ -8,7 +8,8 @@ import java.util.Date;
 /**
  *
  */
-public abstract class AbstractMessage implements Serializable {
+public abstract class AbstractMessage
+        implements Serializable {
 
     // ------------------------------------------------------------------------
     //                      f i e l d s
