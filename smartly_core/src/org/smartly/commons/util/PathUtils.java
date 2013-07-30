@@ -173,9 +173,9 @@ public abstract class PathUtils
                 return true;
             } else {
                 final File file = new File(path);
-                return file.isFile();
+                return file.isFile() || file.exists();
             }
-        } catch (Throwable t) {
+        } catch (Throwable ignored) {
         }
         return false;
     }

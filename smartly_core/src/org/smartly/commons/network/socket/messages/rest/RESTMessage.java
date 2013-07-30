@@ -4,6 +4,8 @@ import org.json.JSONObject;
 import org.smartly.commons.network.socket.messages.AbstractMessage;
 import org.smartly.commons.util.StringUtils;
 
+import java.util.Date;
+
 /**
  * Wrapper for REST like message.
  */
@@ -27,6 +29,22 @@ public class RESTMessage
 
     public RESTMessage() {
         _method = METHOD_GET;
+    }
+
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName()).append("{");
+        sb.append("CreationDate: ").append(new Date(this.getCreationDate()));
+        sb.append(", ");
+        sb.append("Elapsed: ").append(this.getElapsedTime());
+        sb.append(", ");
+        sb.append("UserToken: ").append(this.getUserToken());
+        sb.append(", ");
+        sb.append("Method: ").append(this.getMethod());
+        sb.append(", ");
+        sb.append("Path: ").append(this.getPath());
+        sb.append("}");
+        return sb.toString();
     }
 
     // --------------------------------------------------------------------
