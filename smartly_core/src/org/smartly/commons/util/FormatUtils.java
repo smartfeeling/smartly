@@ -32,11 +32,7 @@ public class FormatUtils {
             //-- string type ("hello {0}" or "hello %s") --//
             if (text.indexOf("{0}") > -1) {
                 // "hello {0}"
-                final Map<String, Object> context = new HashMap<String, Object>();
-                for (int i = 0; i < array.length; i++) {
-                    final Object arg = array[i];
-                    context.put(i + "", arg);
-                }
+                final Map<String, Object> context = toContext(args);
                 return formatTemplate(text, "{", "}", context);
             } else {
                 // "hello %s"
@@ -56,22 +52,25 @@ public class FormatUtils {
         return text;
     }
 
-    public static String format(final String prefix,
-                                final String suffix,
-                                final String text,
-                                final Object... args) {
-        Object[] array = CollectionUtils.toArray(args);
-        final int length = null != array ? array.length : 0;
-        if (StringUtils.hasText(text) && length > 0) {
-            // "hello {0}"
-            final Map<String, Object> context = new HashMap<String, Object>();
-            for (int i = 0; i < array.length; i++) {
-                final Object arg = array[i];
-                context.put(i + "", arg);
-            }
+    public static String formatText(final String prefix,
+                                    final String suffix,
+                                    final String text,
+                                    final Object... args) {
+        final Map<String, Object> context = toContext(args);
+        if (StringUtils.hasText(text) && !context.isEmpty()) {
             return formatTemplate(text, prefix, suffix, context);
         }
         return text;
+    }
+
+    public static Map<String, Object> toContext(final Object... args) {
+        final Object[] array = CollectionUtils.toArray(args);
+        final Map<String, Object> context = new HashMap<String, Object>();
+        for (int i = 0; i < array.length; i++) {
+            final Object arg = array[i];
+            context.put(i + "", arg);
+        }
+        return context;
     }
 
     public static String format(final String text,
