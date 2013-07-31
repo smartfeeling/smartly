@@ -173,7 +173,7 @@ public abstract class PathUtils
                 return true;
             } else {
                 final File file = new File(path);
-                return file.isFile() || file.exists();
+                return file.isFile() || ! file.isDirectory();
             }
         } catch (Throwable ignored) {
         }

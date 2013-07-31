@@ -398,17 +398,13 @@ public abstract class AbstractMongoService {
         return this.find(null, fieldNames, null, null);
     }
 
-    public List<DBObject> find(final DBObject filter, final String[] fieldNames,
-                               final String[] sortAscBy, final String[] sortDescBy) {
-        if (null != _coll) {
-            final DBCursor cursor = this.cursor(
-                    filter, fieldNames, 0, 0, sortAscBy, sortDescBy);
-            return null != cursor
-                    ? cursor.toArray()
-                    : new ArrayList<DBObject>();
-        }
-        return null;
+    public List<DBObject> find(final DBObject filter,
+                               final String[] fieldNames,
+                               final String[] sortAscBy,
+                               final String[] sortDescBy) {
+        return this.find(filter, fieldNames, 0,0, sortAscBy, sortDescBy);
     }
+
 
     /**
      * Return list of items.

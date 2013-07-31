@@ -1,6 +1,8 @@
 package org.smartly.commons.network.socket.messages;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+import org.smartly.commons.util.ConversionUtils;
 import org.smartly.commons.util.FormatUtils;
 import org.smartly.commons.util.StringUtils;
 
@@ -73,10 +75,26 @@ public class MessageResponse
         return null;
     }
 
-    public JSONObject toJSON() {
-        return toJSON(_data);
+    public JSONObject toJSONObject() {
+        return toJSONObject(_data);
     }
 
+    public JSONArray toJSONArray() {
+        return toJSONArray(_data);
+    }
+
+    public int toInteger(){
+        return toInteger(_data);
+    }
+
+
+    public boolean toBoolean(){
+        return toBoolean(_data);
+    }
+
+    public double toDouble(){
+        return toDouble(_data);
+    }
     // ------------------------------------------------------------------------
     //                      S T A T I C
     // ------------------------------------------------------------------------
@@ -89,21 +107,75 @@ public class MessageResponse
         return StringUtils.isJSON(data);
     }
 
+    private static boolean isJSONObject(final Object data) {
+        return StringUtils.isJSONObject(data);
+    }
+
+    private static boolean isJSONArray(final Object data) {
+        return StringUtils.isJSONArray(data);
+    }
+
     private static boolean isError(final Object data) {
         return (data instanceof Throwable);
     }
 
-    public static JSONObject toJSON(final Object object) {
+    public static JSONObject toJSONObject(final Object object) {
         if (null != object) {
             if (object instanceof MessageResponse) {
-                return ((MessageResponse) object).toJSON();
+                return ((MessageResponse) object).toJSONObject();
             } else {
-                if (isJSON(object)) {
+                if (isJSONObject(object)) {
                     return new JSONObject(object.toString());
                 }
                 return new JSONObject(FormatUtils.format("[", "]", JSON_TEMPLATE, isError(object), isNull(object) ? "" : object.toString()));
             }
         }
         return null;
+    }
+
+    public static JSONArray toJSONArray(final Object object) {
+        if (null != object) {
+            if (object instanceof MessageResponse) {
+                return ((MessageResponse) object).toJSONArray();
+            } else {
+                if (isJSONArray(object)) {
+                    return new JSONArray(object.toString());
+                }
+            }
+        }
+        return null;
+    }
+
+    public static int toInteger(final Object object) {
+        if (null != object) {
+            if (object instanceof MessageResponse) {
+                return ((MessageResponse) object).toInteger();
+            } else {
+                return ConversionUtils.toInteger(object);
+            }
+        }
+        return 0;
+    }
+
+    public static double toDouble(final Object object) {
+        if (null != object) {
+            if (object instanceof MessageResponse) {
+                return ((MessageResponse) object).toDouble();
+            } else {
+                return ConversionUtils.toDouble(object);
+            }
+        }
+        return 0;
+    }
+
+    public static boolean toBoolean(final Object object) {
+        if (null != object) {
+            if (object instanceof MessageResponse) {
+                return ((MessageResponse) object).toBoolean();
+            } else {
+                return ConversionUtils.toBoolean(object);
+            }
+        }
+        return false;
     }
 }
