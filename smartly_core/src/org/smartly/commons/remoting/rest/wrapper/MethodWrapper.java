@@ -239,12 +239,14 @@ public class MethodWrapper {
     private static byte[] serialize(final String type, final Object data) throws IOException {
         if (!StringUtils.isNULL(data)) {
             if (IRESTCons.TYPE_JSON.equalsIgnoreCase(type)) {
+                /*
                 if (StringUtils.isJSON(data)) {
                     final JsonBean json = new JsonBean(data);
                     return json.asJSONObject().toString().getBytes(CHARSET);
                 } else {
-                    return wrapStringToJson(data.toString()).getBytes(CHARSET);
-                }
+                    return ResponseWrapper.wrapToJSONResponse(data.toString()).toString().getBytes(CHARSET);
+                } */
+                return ResponseWrapper.wrapToJSONString(data).getBytes(CHARSET);
             } else {
                 if (data instanceof BinaryData) {
                     final BinaryData bin_data = (BinaryData) data;
@@ -261,17 +263,13 @@ public class MethodWrapper {
             }
         } else {
             if (IRESTCons.TYPE_JSON.equalsIgnoreCase(type)) {
-                return wrapStringToJson(IConstants.NULL).getBytes(CHARSET);
+                return ResponseWrapper.wrapToJSONResponse(IConstants.NULL).toString().getBytes(CHARSET);
             }
         }
         return IConstants.NULL.getBytes(CHARSET);
     }
 
-    private static String wrapStringToJson(final String text) {
-        final JSONObject json = new JSONObject();
-        JsonWrapper.put(json, "response", text);
-        return json.toString();
-    }
+
 
     private static String getPathId(final String path) {
         final StringBuilder sb = new StringBuilder();

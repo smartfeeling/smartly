@@ -106,13 +106,15 @@ public final class JsonBean {
     }
 
     /**
-     * Returns JSONObjects List or JSONObject
-     * @return JSONObjects List or JSONObject
+     * Returns JSONObjects List, JSONArray or JSONObject
+     * @return JSONObjects List, JSONArray or JSONObject
      */
     public Object asJSONObject() {
         final Object object = this.asObject();
         if (object instanceof JSONObject) {
             return (JSONObject) object;
+        } else if (object instanceof JSONArray) {
+            return (JSONArray) object;
         } else if (object instanceof List) {
             return (List) object;
         } else if (object instanceof Exception) {

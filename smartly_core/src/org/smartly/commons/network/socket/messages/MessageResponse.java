@@ -2,8 +2,10 @@ package org.smartly.commons.network.socket.messages;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.smartly.commons.remoting.rest.wrapper.ResponseWrapper;
 import org.smartly.commons.util.ConversionUtils;
 import org.smartly.commons.util.FormatUtils;
+import org.smartly.commons.util.JsonWrapper;
 import org.smartly.commons.util.StringUtils;
 
 import java.io.Serializable;
@@ -83,16 +85,16 @@ public class MessageResponse
         return toJSONArray(_data);
     }
 
-    public int toInteger(){
+    public int toInteger() {
         return toInteger(_data);
     }
 
 
-    public boolean toBoolean(){
+    public boolean toBoolean() {
         return toBoolean(_data);
     }
 
-    public double toDouble(){
+    public double toDouble() {
         return toDouble(_data);
     }
     // ------------------------------------------------------------------------
@@ -151,7 +153,7 @@ public class MessageResponse
             if (object instanceof MessageResponse) {
                 return ((MessageResponse) object).toInteger();
             } else {
-                return ConversionUtils.toInteger(object);
+                return ConversionUtils.toInteger(ResponseWrapper.getResponse(object));
             }
         }
         return 0;
@@ -162,7 +164,7 @@ public class MessageResponse
             if (object instanceof MessageResponse) {
                 return ((MessageResponse) object).toDouble();
             } else {
-                return ConversionUtils.toDouble(object);
+                return ConversionUtils.toDouble(ResponseWrapper.getResponse(object));
             }
         }
         return 0;
@@ -173,7 +175,7 @@ public class MessageResponse
             if (object instanceof MessageResponse) {
                 return ((MessageResponse) object).toBoolean();
             } else {
-                return ConversionUtils.toBoolean(object);
+                return ConversionUtils.toBoolean(ResponseWrapper.getResponse(object));
             }
         }
         return false;
