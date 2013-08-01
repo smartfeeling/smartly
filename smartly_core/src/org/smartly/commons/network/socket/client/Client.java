@@ -76,7 +76,8 @@ public class Client {
         if (null != _socket) {
             try {
                 _socket.close();
-                //_socket = null;
+                _socket = null;
+                _socket = new Socket(_proxy);
             } catch (Throwable ignored) {
                 _socket = null;
                 _socket = new Socket(_proxy);

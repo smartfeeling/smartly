@@ -760,6 +760,10 @@
         _.extend(this, Backbone.Events);
     }
 
+    Gui.prototype.ly = function(){
+        return true;
+    };
+
     Gui.prototype.attributes = function (object) {
         //-- set values --//
         if (_.isObject(object)) {

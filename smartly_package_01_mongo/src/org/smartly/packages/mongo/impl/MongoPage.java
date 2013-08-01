@@ -3,6 +3,7 @@
  */
 package org.smartly.packages.mongo.impl;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import org.smartly.packages.mongo.impl.util.MongoUtils;
@@ -12,7 +13,8 @@ import java.util.List;
 /**
  * @author angelo.geminiani
  */
-public class MongoPage extends BasicDBObject {
+public class MongoPage
+        extends BasicDBObject {
 
     private static final String ITEMS = "items";
     private static final String COUNT = "count";
@@ -20,6 +22,10 @@ public class MongoPage extends BasicDBObject {
     private static final String PAGE_NR = "page_nr";
 
     public MongoPage() {
+        this.setCount(0);
+        this.setPageCount(0);
+        this.setPageNr(0);
+        this.setItems(new BasicDBList());
     }
 
     public void setItems(final List value) {
