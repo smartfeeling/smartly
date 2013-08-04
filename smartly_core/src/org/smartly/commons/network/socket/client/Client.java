@@ -60,7 +60,11 @@ public class Client {
     }
 
     public boolean isConnected() {
-        return _socket.isConnected();
+        try {
+            return null != _socket && _socket.isConnected();
+        } catch (Throwable ignored) {
+        }
+        return false;
     }
 
     public void connect() throws IOException {
@@ -96,6 +100,7 @@ public class Client {
                 _socket.close();
             }
         } catch (Throwable ignored) {
+            _socket = null;
         }
     }
 
@@ -106,7 +111,6 @@ public class Client {
         try {
             out.writeObject(request);
             out.flush();
-
             try {
                 response = in.readObject();
             } catch (EOFException ignored) {
