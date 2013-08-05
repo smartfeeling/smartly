@@ -20,7 +20,8 @@ import java.util.regex.Pattern;
 /**
  * @author angelo.geminiani
  */
-public class MongoUtils implements IMongoConstants {
+public class MongoUtils
+        implements IMongoConstants {
 
     public static final int CASE_INSENSITIVE = Pattern.CASE_INSENSITIVE;
 
@@ -63,7 +64,7 @@ public class MongoUtils implements IMongoConstants {
 
 
     public static boolean isEmpty(final DBObject object) {
-        return !(null != object && object.keySet().size()>0);
+        return !(null != object && object.keySet().size() > 0);
     }
 
     public static boolean hasId(final DBObject object) {
@@ -452,7 +453,8 @@ public class MongoUtils implements IMongoConstants {
 
     /**
      * Add default properties to target if missing.
-     * @param defaults source
+     *
+     * @param defaults          source
      * @param target
      * @param excludeProperties
      */
@@ -478,7 +480,7 @@ public class MongoUtils implements IMongoConstants {
             final Set<String> keys = defaults.keySet();
             for (final String key : keys) {
                 if (!CollectionUtils.contains(excludeProperties, key)) {
-                    if(deep || !target.containsField(key)){
+                    if (deep || !target.containsField(key)) {
                         mergeKey(key, defaults, target, false); // does not overwrite existing primitive values
                     }
                 }
@@ -488,7 +490,7 @@ public class MongoUtils implements IMongoConstants {
 
     public static void mergeKey(final String key,
                                 final Object source,
-                                final DBObject target)  {
+                                final DBObject target) {
         mergeKey(key, source, target, true);
     }
 
@@ -508,7 +510,7 @@ public class MongoUtils implements IMongoConstants {
     public static void mergeKey(final String key,
                                 final Object source,
                                 final DBObject target,
-                                final boolean overwrite)  {
+                                final boolean overwrite) {
         if (source instanceof DBObject) {
             mergeKey(key, (DBObject) source, target);
         } else {
@@ -529,7 +531,7 @@ public class MongoUtils implements IMongoConstants {
                             ((Collection) tvalue).add(svalue);
                         } else {
                             // add new value to target
-                            if(overwrite || !target.containsField(key)){
+                            if (overwrite || !target.containsField(key)) {
                                 target.put(key, svalue);
                             }
                         }
@@ -561,7 +563,7 @@ public class MongoUtils implements IMongoConstants {
                     ((Collection) tvalue).add(svalue);
                 } else {
                     // add new value to target
-                    if(overwrite || !target.containsField(key)){
+                    if (overwrite || !target.containsField(key)) {
                         target.put(key, svalue);
                     }
                 }
@@ -641,8 +643,16 @@ public class MongoUtils implements IMongoConstants {
 
     public static DBObject queryEquals(final String field,
                                        final Object value) {
-         return queryEquals(field, value, CASE_INSENSITIVE);
+        return queryEquals(field, value, CASE_INSENSITIVE);
     }
+
+    public static DBObject queryEquals(final String field,
+                                       final Object value,
+                                       final int flags) {
+        final DBObject query = new BasicDBObject();
+        return queryEquals(query, field, value, flags);
+    }
+
     /**
      * { x : "a" }<br/>
      * { x : { $in : [ null ] } }<br/>
@@ -652,13 +662,12 @@ public class MongoUtils implements IMongoConstants {
      * @param value
      * @return
      */
-    public static DBObject queryEquals(final String field,
+    public static DBObject queryEquals(final DBObject query,
+                                       final String field,
                                        final Object value,
                                        final int flags) {
-        final DBObject query;
         if (null == value) {
             // {"z" : {"$in" : [null], "$exists" : true}}
-            query = new BasicDBObject();
             final DBObject condition = new BasicDBObject();
             condition.put(OP_IN, new Object[]{null});
             condition.put(OP_EXISTS, true);
@@ -666,16 +675,30 @@ public class MongoUtils implements IMongoConstants {
         } else if (value instanceof List) {
             // { x : { $in : [ a, b ] } }
             final List lvalue = (List) value;
-            query = new BasicDBObject();
             final DBObject condition = new BasicDBObject();
             condition.put(OP_IN, lvalue.toArray(new Object[lvalue.size()]));
             //condition.put(OP_EXISTS, true);
             query.put(field, condition);
         } else {
             final Pattern pattern = patternEquals(value.toString(), flags);
-            query = new BasicDBObject(field, pattern);
+            query.put(field, pattern);
         }
         return query;
+    }
+
+    public static DBObject queryNotEquals(final DBObject query,
+                                          final String field,
+                                          final Object value) {
+        final DBObject condition = new BasicDBObject();
+        condition.put(OP_NE, value);
+        query.put(field, condition);
+        return query;
+    }
+
+    public static DBObject queryNotEquals(final String field,
+                                          final Object value) {
+        final DBObject query = new BasicDBObject();
+        return queryNotEquals(query, field, value);
     }
 
     public static DBObject queryStartWith(final String field,
@@ -1044,7 +1067,7 @@ public class MongoUtils implements IMongoConstants {
             CollectionUtils.addAllNoDuplicates(tvaluelist, sourcevalues);
         } else {
             // Source is Collection but target not.
-            if(overwrite || !target.containsField(key)){
+            if (overwrite || !target.containsField(key)) {
                 sourcevalues.add(tvalue);
                 target.put(key, sourcevalues);
             }
@@ -1066,7 +1089,7 @@ public class MongoUtils implements IMongoConstants {
             merge(sourcevalue, (DBObject) tvalue, null);
         } else {
             // TARGET is NULL or other Type (String, int, Object...)
-            if(overwrite || !target.containsField(key)){
+            if (overwrite || !target.containsField(key)) {
                 target.put(key, sourcevalue);
             }
         }
