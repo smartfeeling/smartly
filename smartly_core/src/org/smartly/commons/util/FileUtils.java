@@ -118,6 +118,34 @@ public abstract class FileUtils {
         return (new File(fileName)).exists();
     }
 
+    public static long getCRC(final String fileName) {
+        long result = 0;
+        try {
+            final FileInputStream is = new FileInputStream(fileName);
+            try {
+                result = getCRC(is);
+            } finally {
+                is.close();
+            }
+        } catch (Throwable ignored) {
+        }
+        return result;
+    }
+
+    public static long getCRC(final File file) {
+        long result = 0;
+        try {
+            final FileInputStream is = new FileInputStream(file);
+            try {
+                result = getCRC(is);
+            } finally {
+                is.close();
+            }
+        } catch (Throwable ignored) {
+        }
+        return result;
+    }
+
     public static long getCRC(final InputStream is) {
         try {
             // Computer CRC32 checksum
@@ -130,7 +158,7 @@ public abstract class FileUtils {
             long checksum = cis.getChecksum().getValue();
             // System.out.println(checksum + " " + fileSize + " " + fileName);
             return checksum;
-        } catch (Throwable t) {
+        } catch (Throwable ignored) {
         }
         return 0;
     }
@@ -154,7 +182,7 @@ public abstract class FileUtils {
                 }
                 size += r;
             }
-        } catch (Throwable t) {
+        } catch (Throwable ignored) {
         }
         return size;
     }
@@ -471,8 +499,8 @@ public abstract class FileUtils {
 
     public static void listFiles(final List<File> fileList,
                                  final List<File> startDir) {
-        for(final File file:startDir){
-            if(file.isDirectory()){
+        for (final File file : startDir) {
+            if (file.isDirectory()) {
                 listFiles(fileList, file);
             } else {
                 fileList.add(file);
