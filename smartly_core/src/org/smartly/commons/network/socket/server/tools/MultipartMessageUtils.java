@@ -56,14 +56,17 @@ public class MultipartMessageUtils {
      *
      * @param multipart Multipart to save on disk
      */
-    public static void saveOnDisk(final Multipart multipart, final String outputDir) throws Exception {
-        if (null != multipart && StringUtils.hasText(outputDir) && multipart.isFull()) {
+    public static void saveOnDisk(final Multipart multipart,
+                                  final String outputPath) throws Exception {
+        if (null != multipart && StringUtils.hasText(outputPath) && multipart.isFull()) {
             final Throwable partError = multipart.getError();
             if (null == partError) {
                 // ensure directory exists
-                FileUtils.tryMkdirs(outputDir);
+                FileUtils.tryMkdirs(outputPath);
                 // get output filename and join chunks
-                final String outputFile = PathUtils.concat(outputDir, multipart.getName());
+                final String outputFile = PathUtils.isDirectory(outputPath)
+                        ? PathUtils.concat(outputPath, multipart.getName())
+                        : outputPath;
                 final String[] names = multipart.getPartNames();
                 FileTokenizer.join(names, outputFile, null);
                 // remove temp

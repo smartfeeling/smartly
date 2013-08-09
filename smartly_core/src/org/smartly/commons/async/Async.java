@@ -87,7 +87,8 @@ public abstract class Async {
         final Thread[] concurrent = new Thread[max];
         int count = 0;
         for (int i = 0; i < length; i++) {
-            final Thread t = new Thread(runnableFunction.handle(i, length));
+            final Runnable runnable = runnableFunction.handle(i, length);
+            final Thread t = (runnable instanceof Thread) ? (Thread) runnable : new Thread(runnable);
             result[i] = t;
             concurrent[count] = t;
             count++;

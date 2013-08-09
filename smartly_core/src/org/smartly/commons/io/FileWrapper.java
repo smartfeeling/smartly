@@ -2,12 +2,12 @@ package org.smartly.commons.io;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.smartly.commons.cryptograph.MD5;
 import org.smartly.commons.util.*;
 
 import java.io.File;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Serializable File descriptor
@@ -185,7 +185,7 @@ public final class FileWrapper
             this.setLength(file.length());
             this.setCRC(FileUtils.getCRC(file));
         }
-        this.setHash(createHash(this));
+        this.setHash(createUUID());
         this.setDescription(describe(this));
     }
 
@@ -209,12 +209,8 @@ public final class FileWrapper
     // --------------------------------------------------------------------
 
 
-    public static String createHash(final FileWrapper file) {
-        if (file.isDirectory()) {
-            return MD5.encode(file.getAbsolutePath() + file.getLength());
-        } else {
-            return MD5.encode("" + file.getCRC());
-        }
+    public static String createUUID() {
+        return UUID.randomUUID().toString().replace("-", "");
     }
 
     public static String describe(final FileWrapper file) {

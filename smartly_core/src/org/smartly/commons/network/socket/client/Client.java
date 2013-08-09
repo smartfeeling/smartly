@@ -4,17 +4,16 @@ import org.smartly.commons.Delegates;
 import org.smartly.commons.async.Async;
 import org.smartly.commons.cryptograph.GUID;
 import org.smartly.commons.io.filetokenizer.FileTokenizer;
-import org.smartly.commons.logging.Level;
-import org.smartly.commons.logging.util.LoggingUtils;
-import org.smartly.commons.network.socket.messages.multipart.MultipartInfo;
-import org.smartly.commons.network.socket.messages.multipart.MultipartMessagePart;
 import org.smartly.commons.network.socket.server.Server;
 import org.smartly.commons.util.CollectionUtils;
 import org.smartly.commons.util.FileUtils;
 import org.smartly.commons.util.PathUtils;
 import org.smartly.commons.util.StringUtils;
 
-import java.io.*;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.Socket;
@@ -105,30 +104,14 @@ public class Client {
     }
 
     public Object send(final Object request) throws Exception {
-        Object response = null;
-        final ObjectOutputStream out = new ObjectOutputStream(_socket.getOutputStream());
-        final ObjectInputStream in = new ObjectInputStream(_socket.getInputStream());
-        try {
-            out.writeObject(request);
-            out.flush();
-            try {
-                response = in.readObject();
-            } catch (EOFException ignored) {
-                // no response
-            }
-        } finally {
-            out.close();
-            in.close();
-        }
-        return response;
-
+        return send(_socket, request);
     }
 
     public Thread[] sendFile(final String fileName,
-                             final String userToken,
-                             final boolean useMultipleConnections,
-                             final Delegates.ProgressCallback progressCallback,
-                             final Delegates.ExceptionCallback errorHandler) throws Exception {
+                                     final String userToken,
+                                     final boolean useMultipleConnections,
+                                     final Delegates.ProgressCallback progressCallback,
+                                     final Delegates.ExceptionCallback errorHandler) throws Exception {
         Thread[] result = new Thread[0];
         if (this.isConnected() && FileUtils.exists(fileName)) {
             final String uid = GUID.create();
@@ -158,17 +141,26 @@ public class Client {
     }
 
     private Thread[] sendFileChunks(final String fileName,
-                                    final String userToken,
-                                    final String[] chunks,
-                                    final boolean useMultipleConnections,
-                                    final Delegates.ProgressCallback progressCallback,
-                                    final Delegates.ExceptionCallback errorHandler) {
+                                            final String userToken,
+                                            final String[] chunks,
+                                            final boolean useMultipleConnections,
+                                            final Delegates.ProgressCallback progressCallback,
+                                            final Delegates.ExceptionCallback errorHandler) {
         final int len = chunks.length;
         final String transactionId = GUID.create();
         return Async.maxConcurrent(len, 3, new Delegates.CreateRunnableCallback() {
             @Override
             public Runnable handle(final int index, final int length) {
-                return new Runnable() {
+                return new UploadRunnable(transactionId,
+                        getAddress(),
+                        _socket,
+                        fileName,
+                        userToken,
+                        chunks,
+                        useMultipleConnections,
+                        index,
+                        errorHandler);
+                /*return new Runnable() {
                     @Override
                     public void run() {
                         try {
@@ -196,7 +188,7 @@ public class Client {
                             }
                         }
                     }
-                };
+                };*/
             }
         });
     }
@@ -227,6 +219,25 @@ public class Client {
         response = cli.send(request);
         cli.close();
 
+        return response;
+    }
+
+    public static Object send(final Socket socket, final Object request) throws Exception {
+        Object response = null;
+        final ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+        final ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+        try {
+            out.writeObject(request);
+            out.flush();
+            try {
+                response = in.readObject();
+            } catch (EOFException ignored) {
+                // no response
+            }
+        } finally {
+            out.close();
+            in.close();
+        }
         return response;
     }
 

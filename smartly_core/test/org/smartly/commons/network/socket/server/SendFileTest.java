@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.smartly.commons.Delegates;
 import org.smartly.commons.async.Async;
 import org.smartly.commons.network.socket.client.Client;
+import org.smartly.commons.network.socket.client.UploadRunnable;
 import org.smartly.commons.network.socket.messages.multipart.Multipart;
 import org.smartly.commons.network.socket.server.tools.MultipartMessageUtils;
 import org.smartly.commons.util.FormatUtils;
@@ -73,7 +74,8 @@ public class SendFileTest {
         client.connect(host, port);
 
         final Thread[] tasks = client.sendFile(filename,
-                "{\"_id\":\"test_01\"}", true,
+                "{\"_id\":\"test_01\"}",
+                true,
                 new Delegates.ProgressCallback() {
                     @Override
                     public void handle(int index, int length, double progress) {
@@ -91,6 +93,11 @@ public class SendFileTest {
         Async.joinAll(tasks);
 
         System.out.println("finishing....");
+
+        for (final Thread thread : tasks) {
+            final UploadRunnable task = (UploadRunnable) thread;
+            System.out.println(task.toString());
+        }
 
         Thread.sleep(5000);
     }
