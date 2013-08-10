@@ -217,13 +217,13 @@ public final class FileWrapper
         final StringBuilder sb = new StringBuilder();
         if (file.isDirectory()) {
             // DIRECTORY
-            sb.append("* Directory * ").append("\n");
-            sb.append("- Size: ").append(file.getLength()).append(" (").append(ConversionUtils.bytesToMbyte(file.getLength())).append(" Mb)").append(" \n");
-            sb.append("- Size: ").append(file.getLength()).append(" \n");
+            sb.append("*Directory* ").append("\n");
+            sb.append("_Size:_ ").append(file.getLength()).append(" (").append(ConversionUtils.bytesToMbyte(file.getLength(), 3)).append(" Mb)").append(" \n");
+            sb.append("_Size:_ ").append(file.getLength()).append(" \n");
         } else {
-            sb.append("* File * ").append("\n");
-            sb.append("- Size: ").append(file.getLength()).append(" (").append(ConversionUtils.bytesToMbyte(file.getLength())).append(" Mb)").append(" \n");
-            sb.append("- CRC: ").append(file.getCRC()).append(" \n");
+            sb.append("*File* ").append("\n");
+            sb.append("_Size:_ ").append(file.getLength()).append(" (").append(ConversionUtils.bytesToMbyte(file.getLength(), 3)).append(" Mb)").append(" \n");
+            sb.append("_CRC:_ ").append(file.getCRC()).append(" \n");
         }
         return sb.toString();
     }

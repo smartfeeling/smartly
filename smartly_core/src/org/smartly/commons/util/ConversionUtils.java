@@ -21,8 +21,8 @@ import java.util.*;
  */
 public abstract class ConversionUtils {
 
-    public static final long KBYTE = 1024L;
-    public static final long MBYTE = KBYTE * 1024L;
+    public static final double KBYTE = 1024L;
+    public static final double MBYTE = KBYTE * 1024L;
 
     private static final int STYLE_NUMBER = 0;
     private static final int STYLE_CURRENCY = 1;
@@ -700,11 +700,19 @@ public abstract class ConversionUtils {
 
 
     public static double bytesToMbyte(long bytes) {
-        return bytes / MBYTE;
+        return (double)bytes / MBYTE;
     }
 
     public static double bytesToKbyte(long bytes) {
-        return bytes / KBYTE;
+        return (double)bytes / KBYTE;
+    }
+
+    public static double bytesToMbyte(long bytes, final int decimals) {
+        return MathUtils.round((double)bytes / MBYTE, decimals);
+    }
+
+    public static double bytesToKbyte(long bytes, final int decimals) {
+        return MathUtils.round((double)bytes / KBYTE, decimals);
     }
 
     public static Charset toCharset(final Object val) {

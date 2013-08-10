@@ -8,6 +8,10 @@ import java.util.*;
 
 public class FormatUtils {
 
+    public static interface FormatHandler{
+        Object handle(final String placeholder);
+    }
+
     public static final String DEFAULT_DATEFORMAT = "yyyyMMdd";
     public static final String DEFAULT_TIMEFORMAT = "HH:mm:ss";
 
@@ -189,6 +193,37 @@ public class FormatUtils {
 
         return buf.toString();
     }
+
+    public static String formatTemplate(final String text,
+                                        final String prefix, final String suffix,
+                                        final FormatHandler handler) {
+        if (null == text || null==handler) {
+            return null;
+        }
+
+        final StringBuilder buf = new StringBuilder(text);
+
+        int startIndex = text.indexOf(prefix);
+        while (startIndex != -1) {
+            final int endIndex = buf.toString().indexOf(suffix, startIndex + prefix.length());
+            if (endIndex != -1) {
+                final String placeholder = buf.toString().substring(startIndex + prefix.length(), endIndex);
+                final Object propVal = handler.handle(placeholder);
+                if (propVal != null) {
+                    buf.replace(startIndex, endIndex + suffix.length(), propVal.toString());
+                    startIndex = buf.toString().indexOf(prefix, startIndex + propVal.toString().length());
+                } else {
+                    // Could not resolve placeholder
+                    startIndex = buf.toString().indexOf(prefix, endIndex + suffix.length());
+                }
+            } else {
+                startIndex = -1;
+            }
+        }
+
+        return buf.toString();
+    }
+
 
     /**
      * Resolve placeholders in the given text, replacing them with corresponding
