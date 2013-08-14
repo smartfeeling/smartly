@@ -245,7 +245,7 @@
             if (null == arg || 'NULL' == arg) return true;
             return _.isArray(arg)
                 ? (arg.length > 0 ? arg.length === 1 && isNull(arg[0]) : true)
-                : (_.isObject(arg) ? _.size(arg) === 0 || arg['response'] === 'NULL' : (arg === 'NULL' || arg == '' || arg['response'] === 'NULL'));
+                : (_.isObject(arg) ? _.keys(arg).length === 0 || arg['response'] === 'NULL' : (arg === 'NULL' || arg == '' || arg['response'] === 'NULL'));
         } catch (err) {
             ly.console.error(err);
         }
@@ -671,6 +671,7 @@
                 $el.unbind('click');
                 $el.on('click', function (e) {
                     e.preventDefault();
+                    e.stopImmediatePropagation();
                     var $self = $(this);
                     _.debounce(_.bind(callback, context || $self, $self), delay || 1000, true)();
                     return false;
@@ -794,6 +795,16 @@
             }
         }
         return null;
+    };
+
+    Gui.prototype.triggerAsync = function () {
+        var self = this;
+        var args = _.toArray(arguments);
+        if (args.length>0) {
+            _.delay(function(){
+                self.trigger.apply(self, args);
+            }, 10);
+        }
     };
 
     Gui.prototype.template = function (text) {
