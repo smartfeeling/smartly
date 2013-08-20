@@ -368,7 +368,7 @@ public abstract class AbstractMongoService {
     public DBObject findOne(final DBObject filter, final String[] fieldNames) {
         final DBObject fields = this.getFields(fieldNames, true);
         return null != fields
-                ? _coll.findOne(fields, fields)
+                ? _coll.findOne(filter, fields)
                 : _coll.findOne(filter);
     }
 
