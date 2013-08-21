@@ -9,6 +9,76 @@ import java.util.Map.Entry;
 
 public abstract class CollectionUtils {
 
+
+    public static interface IterationCallback {
+        Object handle(final Object item, final int index, final Object key);
+    }
+
+    //---------------------------------------------------------------------
+    // forEach utilities
+    // Use to filter, map reduce or simply loop on items
+    //---------------------------------------------------------------------
+
+    public static Collection<?> forEach(final Collection<?> items, final IterationCallback callback) {
+        final Collection<Object> result = new LinkedList<Object>();
+        if (null != callback && null != items) {
+            int index = 0;
+            for (final Object item : items) {
+                final Object response = callback.handle(item, index, null);
+                if (null != response) {
+                    result.add(response);
+                }
+                index++;
+            }
+        }
+        return result;
+    }
+
+    public static Object[] forEach(final Object[] items, final IterationCallback callback) {
+        final Collection<Object> result = new LinkedList<Object>();
+        if (null != callback && null != items) {
+            int index = 0;
+            for (final Object item : items) {
+                final Object response = callback.handle(item, index, null);
+                if (null != response) {
+                    result.add(response);
+                }
+                index++;
+            }
+        }
+        return result.toArray(new Object[result.size()]);
+    }
+
+    public static JSONArray forEach(final JSONArray items, final IterationCallback callback) {
+        final JSONArray result = new JSONArray();
+        if (null != callback && null != items && items.length() > 0) {
+            final int len = items.length();
+            for (int i = 0; i < len; i++) {
+                final Object response = callback.handle(items.get(i), i, null);
+                if (null != response) {
+                    result.put(response);
+                }
+            }
+        }
+        return result;
+    }
+
+    public static Map<?, ?> forEach(final Map<?, ?> map, final IterationCallback callback) {
+        final Map<Object, Object> result = new HashMap<Object,Object>();
+        if (null != callback && null != map) {
+            final Set<?> keys = map.keySet();
+            int index = 0;
+            for (final Object key : keys) {
+                final Object response = callback.handle(map.get(key), index, key);
+                if (null != response) {
+                    result.put(key, response);
+                }
+                index++;
+            }
+        }
+        return result;
+    }
+
     //---------------------------------------------------------------------
     // Convenience methods for working with String arrays
     //---------------------------------------------------------------------
