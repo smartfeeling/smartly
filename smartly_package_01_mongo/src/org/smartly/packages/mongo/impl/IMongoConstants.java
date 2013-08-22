@@ -34,6 +34,7 @@ public interface IMongoConstants {
     public static final String OP_LT = "$lt";
     public static final String OP_LTE = "$lte";
     public static final String OP_IN = "$in";
+    public static final String OP_NIN = "$nin";
     public static final String OP_NE = "$ne";
     public static final String OP_EXISTS = "$exists";
     public static final String OP_SIZE = "$size";

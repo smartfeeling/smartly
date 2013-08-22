@@ -686,6 +686,32 @@ public class MongoUtils
         return query;
     }
 
+    public static DBObject queryNotNull(final String field) {
+        return queryNotNull(new BasicDBObject(), field);
+    }
+
+    public static DBObject queryNotNull(final DBObject query,
+                                        final String field) {
+        final DBObject condition = new BasicDBObject();
+        condition.put(OP_NIN, new Object[]{null});
+        condition.put(OP_EXISTS, true);
+        query.put(field, condition);
+        return query;
+    }
+
+    public static DBObject queryNotEmpty(final String field) {
+        return queryNotEmpty(new BasicDBObject(), field);
+    }
+
+    public static DBObject queryNotEmpty(final DBObject query,
+                                        final String field) {
+        final DBObject condition = new BasicDBObject();
+        condition.put(OP_NIN, new Object[]{null, ""});
+        condition.put(OP_EXISTS, true);
+        query.put(field, condition);
+        return query;
+    }
+
     public static DBObject queryNotEquals(final DBObject query,
                                           final String field,
                                           final Object value) {
