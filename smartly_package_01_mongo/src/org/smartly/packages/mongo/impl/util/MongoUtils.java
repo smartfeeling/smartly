@@ -746,6 +746,15 @@ public class MongoUtils
         return new BasicDBObject(field, in);
     }
 
+    public static DBObject queryIn(final DBObject query,
+                                   final String field,
+                                   final Object[] array) {
+        // { field : { $in : array } }
+        final DBObject in = new BasicDBObject(OP_IN, array);
+        query.put(field, in);
+        return query;
+    }
+
     /**
      * Return a query object to search a value "like"
      *

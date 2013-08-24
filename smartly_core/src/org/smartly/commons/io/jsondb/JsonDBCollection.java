@@ -45,7 +45,10 @@ public class JsonDBCollection {
     }
 
     public void drop() {
+        // remove metadata
         _db.collectionsMetadata(_name, true);
+        // remove data
+        this.remove();
     }
 
     public JsonList find() {
@@ -173,6 +176,15 @@ public class JsonDBCollection {
 
         }
         return null;
+    }
+
+    private void remove() {
+        try {
+            if (PathUtils.exists(_file_path)) {
+                FileUtils.delete(_file_path);
+            }
+        } catch (Throwable ignored) {
+        }
     }
 
     private boolean save() {
