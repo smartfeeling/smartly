@@ -6,7 +6,6 @@ package org.smartly.packages.mongo.impl;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import org.json.JSONObject;
-import org.smartly.commons.util.DateUtils;
 import org.smartly.commons.util.FormatUtils;
 import org.smartly.packages.mongo.impl.util.MongoUtils;
 
@@ -24,22 +23,22 @@ public class MongoObject extends BasicDBObject
 
     public MongoObject(final Map m) {
         super(m);
-        this.setCreationDate(this.getNow());
+        this.setCreationDate(FormatUtils.getNow());
     }
 
     public MongoObject(final String key, final Object value) {
         super(key, value);
-        this.setCreationDate(this.getNow());
+        this.setCreationDate(FormatUtils.getNow());
     }
 
     public MongoObject(int size) {
         super(size);
-        this.setCreationDate(this.getNow());
+        this.setCreationDate(FormatUtils.getNow());
     }
 
     public MongoObject(final DBObject object) {
         super();
-        this.setCreationDate(this.getNow());
+        this.setCreationDate(FormatUtils.getNow());
         if (null != object) {
             super.putAll(object);
         }
@@ -47,12 +46,12 @@ public class MongoObject extends BasicDBObject
 
     public MongoObject() {
         super();
-        this.setCreationDate(this.getNow());
+        this.setCreationDate(FormatUtils.getNow());
     }
 
     public MongoObject(final String jsontext) {
         super();
-        this.setCreationDate(this.getNow());
+        this.setCreationDate(FormatUtils.getNow());
         final DBObject object = MongoUtils.parseObject(jsontext);
         if (null != object) {
             super.putAll(object);
@@ -61,7 +60,7 @@ public class MongoObject extends BasicDBObject
 
     public MongoObject(final JSONObject json) {
         super();
-        this.setCreationDate(this.getNow());
+        this.setCreationDate(FormatUtils.getNow());
         final DBObject object = (DBObject) json;
         if (null != object) {
             super.putAll(object);
@@ -127,7 +126,5 @@ public class MongoObject extends BasicDBObject
     // ------------------------------------------------------------------------
     //                      p r i v a t e
     // ------------------------------------------------------------------------
-    private String getNow() {
-        return FormatUtils.formatDate(DateUtils.now());
-    }
+
 }

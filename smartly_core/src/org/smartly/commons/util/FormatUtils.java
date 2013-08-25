@@ -451,6 +451,10 @@ public class FormatUtils {
                 + " " + FormatUtils.formatDate(toDate, 2, locale);
     }
 
+    public static String getNow() {
+        return FormatUtils.formatDate(DateUtils.now());
+    }
+
     /**
      * Return the pattern of a certain date style using current locale.
      *
