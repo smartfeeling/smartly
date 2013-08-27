@@ -704,7 +704,7 @@ public class MongoUtils
     }
 
     public static DBObject queryNotEmpty(final DBObject query,
-                                        final String field) {
+                                         final String field) {
         final DBObject condition = new BasicDBObject();
         condition.put(OP_NIN, new Object[]{null, ""});
         condition.put(OP_EXISTS, true);
@@ -812,6 +812,14 @@ public class MongoUtils
                                             final Object value, final boolean equals) {
         final DBObject condition = conditionGreaterThan(value, equals);
         final DBObject query = new BasicDBObject(field, condition);
+        return query;
+    }
+
+    public static DBObject queryGreaterThan(final DBObject query,
+                                            final String field,
+                                            final Object value, final boolean equals) {
+        final DBObject condition = conditionGreaterThan(value, equals);
+        query.put(field, condition);
         return query;
     }
 
