@@ -23,6 +23,7 @@ public class URLUtils {
 
     private static final String CHARSET = CharEncoding.getDefault();
 
+    public static final String TYPE_ALL = IConstants.TYPE_ALL;
     public static final String TYPE_JSON = IConstants.TYPE_JSON;
     public static final String TYPE_TEXT = IConstants.TYPE_TEXT;
     public static final String TYPE_HTML = IConstants.TYPE_HTML;
@@ -96,6 +97,8 @@ public class URLUtils {
         }
         conn.setConnectTimeout(timeout);
         conn.addRequestProperty("Accept", type);
+        conn.addRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:23.0) Gecko/20100101 Firefox/23.0");
+        conn.addRequestProperty("Connection", "keep-alive");
         conn.connect();
 
         return conn.getInputStream();

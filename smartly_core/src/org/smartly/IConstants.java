@@ -40,4 +40,5 @@ public interface IConstants {
     public static final String TYPE_HTML = "text/html;charset=UTF-8";
     public static final String TYPE_ZIP = "application/zip";
     public static final String TYPE_XML = "application/xml";
+    public static final String TYPE_ALL ="text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8";
 }
