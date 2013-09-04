@@ -1,8 +1,6 @@
 package org.smartly.packages.http.launcher;
 
-import org.smartly.commons.util.ClassLoaderUtils;
 import org.smartly.launcher.SmartlyLauncher;
-import org.smartly.packages.AbstractPackage;
 import org.smartly.packages.SmartlyPackageLoader;
 import org.smartly.packages.http.SmartlyHttp;
 import org.smartly.packages.velocity.SmartlyVelocity;
@@ -21,8 +19,7 @@ public class Main extends SmartlyLauncher {
 
         //-- system packages --//
         loader.register(new SmartlyVelocity());
-        final AbstractPackage remoting = ClassLoaderUtils.optInstance("org.smartly.packages.remoting.SmartlyRemoting") ;
-        loader.register(remoting);
+
     }
 
     // ------------------------------------------------------------------------
