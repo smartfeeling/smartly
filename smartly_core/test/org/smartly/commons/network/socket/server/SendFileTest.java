@@ -7,6 +7,7 @@ import org.smartly.commons.Delegates;
 import org.smartly.commons.async.Async;
 import org.smartly.commons.network.socket.client.Client;
 import org.smartly.commons.network.socket.client.UploadRunnable;
+import org.smartly.commons.network.socket.messages.UserToken;
 import org.smartly.commons.network.socket.messages.multipart.Multipart;
 import org.smartly.commons.network.socket.server.tools.MultipartMessageUtils;
 import org.smartly.commons.util.FormatUtils;
@@ -73,8 +74,10 @@ public class SendFileTest {
         final Client client = new Client();
         client.connect(host, port);
 
-        final Thread[] tasks = client.sendFile(filename,
-                "{\"_id\":\"test_01\"}",
+        final UserToken ut = new UserToken();
+        ut.setSourceAbsolutePath(filename);
+
+        final Thread[] tasks = client.sendFile(ut,
                 true,
                 new Delegates.ProgressCallback() {
                     @Override

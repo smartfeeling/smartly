@@ -45,7 +45,8 @@ public class SendMultipartTest {
     @Test
     public void testMultipart() throws Exception {
         String testString = "Hello World\nHow are you?";
-        MultipartInfo info = new MultipartInfo("test", MultipartInfo.MultipartInfoType.String, "part1", 0, 1);
+        MultipartInfo info = new MultipartInfo("test", MultipartInfo.MultipartInfoType.String,
+                MultipartInfo.MultipartInfoDirection.Upload,"part1", 0, 0, 1);
         MultipartMessagePart part = new MultipartMessagePart();
         part.setInfo(info);
         part.setData(testString.getBytes());

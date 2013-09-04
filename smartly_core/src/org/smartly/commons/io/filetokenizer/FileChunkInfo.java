@@ -11,6 +11,7 @@ public class FileChunkInfo {
     private long _chunkSize;
     private int _chunkCount;
     private int _maxChunks;
+    private long[] _chunkOffsets;
 
 
     //-----------------------------------------------
@@ -45,19 +46,28 @@ public class FileChunkInfo {
     //             p r o p e r t i e s
     //-----------------------------------------------
 
-    /// <summary>
-    /// Size of Chunk.
-    /// Last Chunk should be different.
-    /// </summary>
+    /**
+     * Size of every chunk
+     * @return Size of chunk
+     */
     public long getChunkSize() {
         return _chunkSize;
     }
 
-    /// <summary>
-    /// Number of Chunks
-    /// </summary>
+    /**
+     * NUmber of Chunks
+     * @return Number of Chunks
+     */
     public int getChunkCount() {
         return _chunkCount;
+    }
+
+    /**
+     * Offsets array.
+     * @return Array with offsets
+     */
+    public long[] getChunkOffsets() {
+        return null != _chunkOffsets ? _chunkOffsets : new long[0];
     }
 
     //-----------------------------------------------
@@ -81,6 +91,13 @@ public class FileChunkInfo {
         long check = (_chunkCount * _chunkSize);
         if (_fileSize > check) {
             throw new Exception("Invalid or incoherent parameters!");
+        }
+
+        // generate chunks
+        _chunkOffsets = new long[_chunkCount];
+        for (int i = 0; i < _chunkCount; i++) {
+            long offset = i * _chunkSize;
+            _chunkOffsets[i] = offset;
         }
     }
 

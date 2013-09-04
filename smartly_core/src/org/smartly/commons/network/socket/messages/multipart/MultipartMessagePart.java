@@ -74,11 +74,14 @@ public class MultipartMessagePart extends AbstractMessage
 
     public void setData(final byte[] data) {
         _data = data;
+        if (null != data && null != _info) {
+            _info.setPartLength(data.length);
+        }
     }
 
     public void clearData() {
         _data = null;
-        _data = new byte[0];
+        this.setData(new byte[0]);
     }
 
     public MultipartInfo getInfo() {
@@ -98,7 +101,7 @@ public class MultipartMessagePart extends AbstractMessage
 
     public int getPartCount() {
         if (null != _info) {
-            return _info.getLength();
+            return _info.getCount();
         }
         return 0;
     }

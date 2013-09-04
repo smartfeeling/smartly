@@ -228,6 +228,11 @@ public abstract class FileUtils {
         return copyToByteArray(new BufferedInputStream(new FileInputStream(in)));
     }
 
+    public static byte[] copyToByteArray(final File in, final long skip, final long length) throws IOException {
+        return copyToByteArray(new BufferedInputStream(new FileInputStream(in)), skip, length);
+    }
+
+
     /**
      * Copies a file or a directory into another.
      * <p/>
@@ -349,6 +354,46 @@ public abstract class FileUtils {
     }
 
     /**
+     * Copy a chunk of given input to output.
+     *
+     * @param in  the stream to copy from
+     * @param out the stream to copy to
+     * @param offset skip bytes length
+     * @param length read length
+     * @throws IOException
+     */
+    public static void copy(final InputStream in,
+                            final OutputStream out,
+                            final long offset,
+                            final long length) throws IOException {
+        try {
+            in.skip(offset);
+            byte[] buffer = new byte[BLOCK_SIZE];
+            long count = 0;
+            while (true) {
+                long remaining = length - count;
+                int read = in.read(buffer, 0, remaining > buffer.length ? buffer.length : (int) remaining);
+                if (read <= 0) break;
+                count += read;
+                out.write(buffer, 0, read);
+                if (count >= length) break;
+            }
+            out.flush();
+        } finally {
+            try {
+                in.close();
+            } catch (IOException ex) {
+                logger.log(Level.WARNING, "Could not close InputStream", ex);
+            }
+            try {
+                out.close();
+            } catch (IOException ex) {
+                logger.log(Level.WARNING, "Could not close OutputStream", ex);
+            }
+        }
+    }
+
+    /**
      * Copy the contents of the given byte array to the given OutputStream.
      *
      * @param in  the byte array to copy from
@@ -369,6 +414,14 @@ public abstract class FileUtils {
     public static byte[] copyToByteArray(final InputStream in) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         copy(in, out);
+        return out.toByteArray();
+    }
+
+    public static byte[] copyToByteArray(final InputStream in,
+                                         final long skip,
+                                         final long length) throws IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        copy(in, out, skip, length);
         return out.toByteArray();
     }
 

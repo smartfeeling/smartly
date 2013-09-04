@@ -28,6 +28,11 @@ public class FileTokenizer {
     //               p u b l i c
     // --------------------------------------------------------------------
 
+    public static String getChunkName(final String filename, final int index){
+        final String name = PathUtils.getFilename(filename, true);
+        return name + CHUNK_EXT + "_" + index;
+    }
+
     public static String[] splitFromChunkSize(final String filename,
                                               final long chunkSize,
                                               final IFileTokenizerCallback progressCallback) throws Exception {

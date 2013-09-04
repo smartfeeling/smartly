@@ -1,19 +1,12 @@
 package org.smartly.commons.network.socket.server.handlers.impl;
 
-import org.smartly.IConstants;
-import org.smartly.commons.io.filetokenizer.FileTokenizer;
-import org.smartly.commons.network.socket.messages.multipart.Multipart;
+import org.smartly.commons.network.socket.messages.UserToken;
+import org.smartly.commons.network.socket.messages.multipart.MultipartInfo;
 import org.smartly.commons.network.socket.messages.multipart.MultipartMessagePart;
 import org.smartly.commons.network.socket.server.handlers.AbstractSocketHandler;
 import org.smartly.commons.network.socket.server.handlers.SocketRequest;
 import org.smartly.commons.network.socket.server.handlers.SocketResponse;
 import org.smartly.commons.network.socket.server.tools.MultipartMessageUtils;
-import org.smartly.commons.util.FileUtils;
-import org.smartly.commons.util.PathUtils;
-import org.smartly.commons.util.StringUtils;
-
-import java.io.File;
-import java.io.IOException;
 
 /**
  *
@@ -27,15 +20,25 @@ public class HandlerMultipartMessage extends AbstractSocketHandler {
         // add part to server pool
         if (request.isTypeOf(MultipartMessagePart.class)) {
             final MultipartMessagePart part = (MultipartMessagePart) request.read();
-            MultipartMessageUtils.saveOnDisk(part);
-            request.getServer().addMultipartMessagePart(part);
+            // multipart messages are used to upload or download
+            if (part.getInfo().getType() == MultipartInfo.MultipartInfoType.File) {
+                if (part.getInfo().getDirection() == MultipartInfo.MultipartInfoDirection.Upload) {
+                    // UPLOAD
+                    MultipartMessageUtils.saveOnDisk(part);
+                    request.getServer().addMultipartMessagePart(part);
+                } else {
+                    // DOWNLOAD
+                    MultipartMessageUtils.setPartBytes(part); // read chunk bytes
+                    // send back data with bytes
+                    response.write(part);
+                }
+            }
         }
     }
 
     // --------------------------------------------------------------------
     //               S T A T I C
     // --------------------------------------------------------------------
-
 
 
 }

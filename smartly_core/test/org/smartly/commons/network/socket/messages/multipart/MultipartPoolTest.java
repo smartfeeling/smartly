@@ -18,10 +18,12 @@ public class MultipartPoolTest {
 
         final MultipartMessagePart part1 = new MultipartMessagePart();
         part1.setUid("FULL-PART");
-        part1.setInfo(new MultipartInfo("FULL", MultipartInfo.MultipartInfoType.File, "chunk_01", 0, 2));
+        part1.setInfo(new MultipartInfo("FULL", MultipartInfo.MultipartInfoType.File,
+                MultipartInfo.MultipartInfoDirection.Upload, "chunk_01", 0, 0, 2));
         final MultipartMessagePart part2 = new MultipartMessagePart();
         part2.setUid("FULL-PART");
-        part2.setInfo(new MultipartInfo("FULL", MultipartInfo.MultipartInfoType.File, "chunk_02", 1, 2));
+        part2.setInfo(new MultipartInfo("FULL", MultipartInfo.MultipartInfoType.File,
+                MultipartInfo.MultipartInfoDirection.Upload, "chunk_02", 0, 1, 2));
 
         pool.add(part1);
         pool.add(part2);
@@ -36,7 +38,8 @@ public class MultipartPoolTest {
         System.out.println("Testing timeout.... ");
         final MultipartMessagePart part3 = new MultipartMessagePart();
         part3.setUid("INCOMPLETE-PART");
-        part3.setInfo(new MultipartInfo("INCOMPLETE", MultipartInfo.MultipartInfoType.File, "chunk_01", 0, 2));
+        part3.setInfo(new MultipartInfo("INCOMPLETE", MultipartInfo.MultipartInfoType.File,
+                MultipartInfo.MultipartInfoDirection.Upload, "chunk_01", 0, 0, 2));
 
         pool.add(part3);
 

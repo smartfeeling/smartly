@@ -2,6 +2,7 @@ package org.smartly.commons.network.socket.server.tools;
 
 import org.smartly.IConstants;
 import org.smartly.commons.io.filetokenizer.FileTokenizer;
+import org.smartly.commons.network.socket.messages.UserToken;
 import org.smartly.commons.network.socket.messages.multipart.Multipart;
 import org.smartly.commons.network.socket.messages.multipart.MultipartMessagePart;
 import org.smartly.commons.util.FileUtils;
@@ -25,9 +26,10 @@ public class MultipartMessageUtils {
      *
      * @param part Part to save on disk.
      */
-    public static void saveOnDisk(final MultipartMessagePart part) {
+    public static long saveOnDisk(final MultipartMessagePart part) {
         if (part.hasData()) {
             try {
+                final long length = part.getData().length;
                 final String root = PathUtils.concat(STORE,
                         part.getUid());
 
@@ -39,6 +41,8 @@ public class MultipartMessageUtils {
 
                 FileUtils.copy(part.getData(), new File(output));
                 part.getInfo().setPartName(output);
+
+                return length;
             } catch (Throwable t) {
                 part.getInfo().setPartName(IConstants.NULL);
                 part.setError(t);
@@ -49,6 +53,7 @@ public class MultipartMessageUtils {
             // no data in this part
             part.getInfo().setPartName(IConstants.NULL);
         }
+        return 0;
     }
 
     /**
@@ -89,4 +94,17 @@ public class MultipartMessageUtils {
         }
     }
 
+    public static void setPartBytes(final MultipartMessagePart part) {
+        try {
+            final UserToken userToken = new UserToken(part.getUserToken());
+            final String sourceName = userToken.getSourceAbsolutePath();
+            if (FileUtils.exists(sourceName)) {
+                final int index = part.getInfo().getIndex();
+                final long chunkSize = part.getInfo().getPartLength();
+                part.setData(FileUtils.copyToByteArray(new File(sourceName), index * chunkSize, chunkSize));
+            }
+        } catch (final Throwable t) {
+            part.setError(t);
+        }
+    }
 }
