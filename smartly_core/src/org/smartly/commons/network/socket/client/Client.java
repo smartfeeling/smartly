@@ -302,7 +302,11 @@ public class Client {
             } else {
                 // no external handlers.
                 // handle internally
-
+                try {
+                    saveOnDisk(multipart);
+                } catch (Throwable t) {
+                    this.onError(null, t);
+                }
             }
         } catch (Throwable ignored) {
 
@@ -327,10 +331,23 @@ public class Client {
         }
     }
 
+
+
     // --------------------------------------------------------------------
     //               S T A T I C
     // --------------------------------------------------------------------
 
+    private static void saveOnDisk(final Multipart multipart) throws Exception {
+        try {
+            final UserToken userToken = new UserToken(multipart.getUserToken());
+            final String target = userToken.getTargetAbsolutePath();
+            // save file on disk and remove temp
+            MultipartMessageUtils.saveOnDisk(multipart, target);
+        } catch (Exception t) {
+            MultipartMessageUtils.remove(multipart);
+            throw t;
+        }
+    }
 
     public static String sendString(final String request) throws Exception {
         return sendString("localhost", Server.DEFAULT_PORT, request);
