@@ -6,6 +6,7 @@ import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Response;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.HandlerWrapper;
+import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.util.URIUtil;
 import org.eclipse.jetty.util.resource.Resource;
 import org.smartly.commons.logging.Logger;
@@ -48,7 +49,6 @@ public class SmartlyResourceHandler extends HandlerWrapper {
 
     public void setServer(final WebServer server) {
         _server = server;
-
     }
 
     // --------------------------------------------------------------------
@@ -239,7 +239,7 @@ public class SmartlyResourceHandler extends HandlerWrapper {
         } catch (MalformedURLException e){
             this.getLogger().debug("Malformed URL: " + path);
         } catch (Exception e) {
-            this.getLogger().warning(e.toString());
+            this.getLogger().debug(e.toString());
         }
 
         return null;
