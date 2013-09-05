@@ -236,10 +236,7 @@ public class SmartlyResourceHandler extends HandlerWrapper {
         try {
             path = URIUtil.canonicalPath(path);
             return base.addPath(path);
-        } catch (MalformedURLException e){
-            this.getLogger().debug("Malformed URL: " + path);
-        } catch (Exception e) {
-            this.getLogger().debug(e.toString());
+        } catch (Exception ignored) {
         }
 
         return null;
