@@ -71,12 +71,14 @@ public class GenericPool<T> {
         this.putItem(item);
     }
 
-    public T[] clear() {
+    public Object[] clear() {
         synchronized (_syncObj) {
-            T[] result = (T[]) new Object[_pool.size()];
+            final Object[] result = new Object[_pool.size()];
             int i = 0;
-            for (final T item : _pool) {
-                result[i] = item;
+            for (final Object item : _pool) {
+                if (null != item) {
+                    result[i] = item;
+                }
                 i++;
             }
             _pool.clear();
