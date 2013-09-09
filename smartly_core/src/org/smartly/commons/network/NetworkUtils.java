@@ -182,6 +182,10 @@ public class NetworkUtils {
         return getDefaultProxy();
     }
 
+    public static Proxy getProxy(final String url, final int port, final String user, final String password) {
+        return getDefaultProxy();
+    }
+
     public static boolean ping(final String host, final int timeout) {
         try {
             final InetAddress address = InetAddress.getByName(host);

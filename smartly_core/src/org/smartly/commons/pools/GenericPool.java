@@ -71,6 +71,19 @@ public class GenericPool<T> {
         this.putItem(item);
     }
 
+    public T[] clear() {
+        synchronized (_syncObj) {
+            T[] result = (T[]) new Object[_pool.size()];
+            int i = 0;
+            for (final T item : _pool) {
+                result[i] = item;
+                i++;
+            }
+            _pool.clear();
+            return result;
+        }
+    }
+
     // --------------------------------------------------------------------
     //               p r i v a t e
     // --------------------------------------------------------------------
