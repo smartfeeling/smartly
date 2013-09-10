@@ -5,6 +5,7 @@ package org.smartly.commons.network;
 
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.util.LoggingUtils;
+import org.smartly.commons.util.StringUtils;
 
 import java.net.*;
 import java.rmi.dgc.VMID;
@@ -182,8 +183,27 @@ public class NetworkUtils {
         return getDefaultProxy();
     }
 
-    public static Proxy getProxy(final String url, final int port, final String user, final String password) {
-        return getDefaultProxy();
+    public static Proxy getProxy(final String url,
+                                 final int port,
+                                 final String user,
+                                 final String password) {
+        final Proxy proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress(url, port));
+
+        System.setProperty("http.proxyHost", url);
+        System.setProperty("http.proxyPort", port+"");
+        System.setProperty("http.proxyUser", user);
+        System.setProperty("http.proxyPassword", password);
+
+        if (StringUtils.hasText(user) && StringUtils.hasText(password)) {
+            Authenticator.setDefault(
+                    new Authenticator() {
+                        public PasswordAuthentication getPasswordAuthentication() {
+                            return new PasswordAuthentication(user, password.toCharArray());
+                        }
+                    }
+            );
+        }
+        return proxy;
     }
 
     public static boolean ping(final String host, final int timeout) {
