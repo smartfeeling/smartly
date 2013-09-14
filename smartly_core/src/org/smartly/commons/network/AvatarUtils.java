@@ -1,11 +1,11 @@
 package org.smartly.commons.network;
 
+import org.smartly.commons.cryptograph.MD5;
 import org.smartly.commons.lang.Base64;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.util.ByteUtils;
 import org.smartly.commons.util.FormatUtils;
-import org.smartly.commons.util.RandomUtils;
 import org.smartly.commons.util.RegExUtils;
 
 import java.io.InputStream;
@@ -14,7 +14,7 @@ import java.util.Map;
 
 /**
  * Utility for Avatar Image.
- *
+ * <p/>
  * Gravatar is not supported for base64 and bytes, because require a redirect to gravatar site
  */
 public class AvatarUtils {
@@ -38,7 +38,7 @@ public class AvatarUtils {
                                       final int width) {
         final String avatar_email = RegExUtils.isValidEmail(email)
                 ? email
-                : RandomUtils.random(6, RandomUtils.CHARS_LOW_NUMBERS) + "@email.com";
+                : MD5.encode(email) + "@email.com";
         final String base_url = FormatUtils.format(ROBO_HASH, avatar_email);
 
         //-- options --//
@@ -52,7 +52,7 @@ public class AvatarUtils {
             options.append(OPT_GRAVATAR);
         }
 
-        if (imgSet>1) {
+        if (imgSet > 1) {
             if (options.length() == 0) {
                 options.append("?");
             } else {
@@ -61,7 +61,7 @@ public class AvatarUtils {
             options.append(FormatUtils.format(OPT_IMG_SET, imgSet));
         }
 
-        if (bgSet>0) {
+        if (bgSet > 0) {
             if (options.length() == 0) {
                 options.append("?");
             } else {
@@ -70,7 +70,7 @@ public class AvatarUtils {
             options.append(FormatUtils.format(OPT_BG_SET, bgSet));
         }
 
-        if(height>0 && width>0){
+        if (height > 0 && width > 0) {
             if (options.length() == 0) {
                 options.append("?");
             } else {
