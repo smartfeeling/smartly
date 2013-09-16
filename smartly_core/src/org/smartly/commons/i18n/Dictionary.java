@@ -1,5 +1,6 @@
 package org.smartly.commons.i18n;
 
+import org.smartly.Smartly;
 import org.smartly.commons.i18n.resourcebundle.AbstractI18nBundle;
 import org.smartly.commons.util.FormatUtils;
 import org.smartly.commons.util.LocaleUtils;
@@ -46,14 +47,14 @@ public class Dictionary {
     public static String getMessage(final String lang,
                                     final String key,
                                     final Object... args) {
-        final Locale locale = LocaleUtils.getLocaleFromString(lang);
+        final Locale locale = LocaleUtils.getLocaleFromString(toLangString(lang));
         return getMessage(locale, key, args);
     }
 
     public static String getMessage(final String lang,
                                     final String key,
                                     final Map<String, ? extends Object> args) {
-        final Locale locale = LocaleUtils.getLocaleFromString(lang);
+        final Locale locale = LocaleUtils.getLocaleFromString(toLangString(lang));
         return getMessage(locale, key, args);
     }
 
@@ -79,7 +80,7 @@ public class Dictionary {
                                     final String dicName,
                                     final String key,
                                     final Object... args) {
-        final Locale locale = LocaleUtils.getLocaleFromString(lang);
+        final Locale locale = LocaleUtils.getLocaleFromString(toLangString(lang));
         return getMessage(locale, dicName, key, args);
     }
 
@@ -87,7 +88,7 @@ public class Dictionary {
                                     final String dicName,
                                     final String key,
                                     final Map<String, ? extends Object> args) {
-        final Locale locale = LocaleUtils.getLocaleFromString(lang);
+        final Locale locale = LocaleUtils.getLocaleFromString(toLangString(lang));
         return getMessage(locale, dicName, key, args);
     }
 
@@ -134,4 +135,7 @@ public class Dictionary {
         return "";
     }
 
+    private static String toLangString(final Object lang) {
+        return null != lang ? lang.toString() : Smartly.getLang();
+    }
 }

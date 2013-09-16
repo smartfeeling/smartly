@@ -196,7 +196,7 @@ public class LocaleUtils {
      * @return Locale from String
      */
     public static Locale getLocaleFromString(final String localeString) {
-        Locale result = parseLocaleString(localeString);
+        Locale result = parseLocaleString(null!=localeString?localeString.toString():"");
 
         if (null == result) {
             result = getLocale(getCurrent());

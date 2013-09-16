@@ -333,6 +333,7 @@ public class SysTool
 
     /**
      * Search for value in array or property in object.
+     *
      * @param object
      * @param path
      * @return

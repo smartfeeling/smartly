@@ -87,6 +87,7 @@ public class Smartly {
     private static String __home;
     private static ClassLoader __classLoader;
     private static String[] __langCodes;
+    private static JsonWrapper __langMap;
     private static SmartlyLogger __logger;
     private static JsonRepository _configuration;
     private static Set<String> _packages; // loaded packages
@@ -188,19 +189,34 @@ public class Smartly {
 
     public static String[] getLanguages() {
         if (null == __langCodes) {
-            final Set<String> langs = new HashSet<String>();
-            final List<JSONObject> configLanguages = _configuration.getList("languages");
-            for (final JSONObject lang : configLanguages) {
-                langs.add(JsonWrapper.getString(lang, "code"));
-            }
-            __langCodes = langs.toArray(new String[langs.size()]);
+            initLanguages();
         }
         return __langCodes;
+    }
+
+    public static JsonWrapper getLanguagesHelper() {
+        if (null == __langMap) {
+            initLanguages();
+        }
+        return __langMap;
     }
 
     public static void register(final FileDeployer deployer) {
         FileDeployer.register(deployer);
     }
 
+
+    private static void initLanguages() {
+        __langMap = new JsonWrapper(new JSONObject());
+        final Set<String> langs = new HashSet<String>();
+        final List<JSONObject> configLanguages = _configuration.getList("languages");
+        for (final JSONObject lang : configLanguages) {
+            final String code = JsonWrapper.getString(lang, "code");
+            final String label = JsonWrapper.getString(lang, "label");
+            langs.add(code);
+            __langMap.putOpt(code, label);
+        }
+        __langCodes = langs.toArray(new String[langs.size()]);
+    }
 
 }

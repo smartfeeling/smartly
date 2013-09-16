@@ -2,6 +2,7 @@ package org.smartly.packages.http.impl.util.vtool;
 
 
 import org.smartly.Smartly;
+import org.smartly.commons.util.JsonWrapper;
 import org.smartly.commons.util.PathUtils;
 import org.smartly.packages.http.SmartlyHttp;
 
@@ -25,6 +26,14 @@ public class AppTool extends org.smartly.packages.velocity.impl.vtools.AppTool {
         } catch (Throwable ignored) {
         }
         return "";
+    }
+
+    public String[] getLangArray() {
+        return Smartly.getLanguages();
+    }
+
+    public JsonWrapper getLangMap() {
+        return Smartly.getLanguagesHelper();
     }
 
     public String getHttpPath(final String path) {

@@ -25,8 +25,6 @@ public class Cookies implements IVLCTool {
     private final Map<String, String> __cookies;
     private JSONObject _authCookie;
 
-    private String _langCode;
-    private String _userAgent;
 
     public Cookies(final HttpServletRequest httprequest, final HttpServletResponse httpresponse) {
         _request = httprequest;
@@ -84,8 +82,8 @@ public class Cookies implements IVLCTool {
         return __cookies.containsKey(name);
     }
 
-    public boolean hasAuth(){
-        return null!=_authCookie;
+    public boolean hasAuth() {
+        return null != _authCookie;
     }
 
     public JSONObject getAuth() {
@@ -95,8 +93,21 @@ public class Cookies implements IVLCTool {
         return _authCookie;
     }
 
-    public String getAuthLang(){
-        return this.getAuthCookie().optString("lang");
+    public String getLang() {
+        return this.getAuthLang();
+    }
+
+    public void setLang(final String lang) {
+        this.setAuthLang(lang);
+    }
+
+    public String getAuthLang() {
+        return this.getAuth().optString("lang");
+    }
+
+    public void setAuthLang(final String lang) {
+        this.getAuth().putOpt("lang", lang);
+        this.addCookie("lang", lang);
     }
 
     // ------------------------------------------------------------------------
@@ -109,7 +120,6 @@ public class Cookies implements IVLCTool {
             __cookies.put(cookie.getName(), cookie.getValue());
         }
     }
-
 
     /**
      * exports.userid = authcookie.userid || exports.userid;
@@ -202,5 +212,6 @@ public class Cookies implements IVLCTool {
     private static DecimalFormatSymbols getDfs(final String lang, final String country) {
         return LocaleUtils.getDecimalFormatSymbols(LocaleUtils.getLocale(lang, country));
     }
+
 
 }
