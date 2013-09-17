@@ -173,7 +173,7 @@ public abstract class PathUtils
                 return true;
             } else {
                 final File file = new File(path);
-                return file.isFile() || ! file.isDirectory();
+                return file.isFile() || !file.isDirectory();
             }
         } catch (Throwable ignored) {
         }
@@ -728,17 +728,51 @@ public abstract class PathUtils
      * @return URI with parameters . i.e. "/uri/page?param1=1234&param2=567"
      */
     public static String addURIParameters(final String uri,
-                                          final Map<String, ? extends Object> params) {
-        return addURIParameters(uri, params, true);
+                                          final Map<String, Object> params) {
+        return addURIParameters(uri, params, true, true);
     }
 
     public static String addURIParameters(final String uri,
-                                          final Map<String, ? extends Object> params,
+                                          final Object var_params,
                                           final boolean encodeValues) {
-        final StringBuilder result = new StringBuilder();
-        result.append(uri);
-        if (!CollectionUtils.isEmpty(params)) {
-            result.append("?");
+
+        final Map<String, Object> params = var_params instanceof Map
+                ? (Map) var_params
+                : CollectionUtils.stringToMap(var_params.toString(), "&");
+        return addURIParameters(uri, params, encodeValues, true);
+    }
+
+    public static String addURIParameters(final String uri,
+                                          final Map<String, Object> params,
+                                          final boolean encodeValues,
+                                          final boolean checkForDuplicates) {
+        // check if parameters exists
+        if (StringUtils.hasText(uri) && !CollectionUtils.isEmpty(params)) {
+            final StringBuilder result = new StringBuilder();
+
+            //-- append or insert params? --//
+            if (uri.contains("?")) {
+                if (checkForDuplicates) {
+                    // check for duplicate parameters
+                    final String[] tokens = StringUtils.split(uri, "?");
+                    result.append(tokens[0]);
+                    final Map<String, Object> existing_params = CollectionUtils.stringToMap(tokens[1], "&");
+                    final Set<String> keys = existing_params.keySet();
+                    for(final String key:keys){
+                        // add existing to passed params
+                        if(!params.containsKey(key)){
+                            params.put(key, existing_params.get(key));
+                        }
+                    }
+                    result.append("?");
+                } else {
+                    result.append("&");
+                }
+            } else {
+                result.append(uri);
+                result.append("?");
+            }
+
             final StringBuilder paramsStr = new StringBuilder();
             final Set<String> keys = params.keySet();
             for (final String key : keys) {
@@ -756,10 +790,12 @@ public abstract class PathUtils
                 }
             }
             result.append(paramsStr);
+            return result.toString();
+        } else {
+            return uri;
         }
-
-        return result.toString();
     }
+
 
     /**
      * Resolve path from c:/dir1/dir2/../file.txt to C:/dir1/file.txt

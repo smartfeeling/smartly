@@ -2,10 +2,7 @@ package org.smartly.packages.http.impl.util.vtool;
 
 
 import org.smartly.Smartly;
-import org.smartly.commons.util.ByteUtils;
-import org.smartly.commons.util.ConversionUtils;
-import org.smartly.commons.util.LocaleUtils;
-import org.smartly.commons.util.StringUtils;
+import org.smartly.commons.util.*;
 import org.smartly.packages.velocity.impl.vtools.IVLCTool;
 
 import javax.servlet.http.HttpServletRequest;
@@ -56,6 +53,10 @@ public class Req implements IVLCTool {
         return NAME;
     }
 
+    // ------------------------------------------------------------------------
+    //                      p u b l i c
+    // ------------------------------------------------------------------------
+
     /**
      * Return requested file path. i.e. "/pages/index.html"
      *
@@ -64,6 +65,7 @@ public class Req implements IVLCTool {
     public String getFilePath() {
         return _resourcePath;
     }
+
 
     /**
      * Returns the part of this request's URL from the protocol
@@ -86,6 +88,7 @@ public class Req implements IVLCTool {
     public String getRequestURI() {
         return _request.getRequestURI();
     }
+
 
     /**
      * Returns any extra path information associated with
@@ -110,6 +113,32 @@ public class Req implements IVLCTool {
     public String getPathInfo() {
         return _request.getPathInfo();
     }
+
+    public String getQueryString() {
+        return null != _request ? _request.getQueryString() : "";
+    }
+
+    public String getPath() {
+        final StringBuilder result = new StringBuilder();
+        result.append(this.getFilePath());
+        final String query = this.getQueryString();
+        if (StringUtils.hasText(query)) {
+            result.append("?").append(query);
+        }
+        return result.toString();
+    }
+
+    public String getPath(final Object params) {
+        final String uri = this.getPath();
+        try {
+            if (null != params) {
+                return PathUtils.addURIParameters(uri, params, true);
+            }
+        } catch (Throwable ignored) {
+        }
+        return uri;
+    }
+
 
     /**
      * Return request parameter or empty String

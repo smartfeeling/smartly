@@ -486,7 +486,7 @@ public class MongoUser extends MongoObject {
                 } else {
                     return "[Reserved]";
                 }
-            } catch (Throwable t) {
+            } catch (Throwable ignored) {
             }
             return id + "";
         }

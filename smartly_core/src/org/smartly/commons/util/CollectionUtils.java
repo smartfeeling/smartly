@@ -64,7 +64,7 @@ public abstract class CollectionUtils {
     }
 
     public static Map<?, ?> forEach(final Map<?, ?> map, final IterationCallback callback) {
-        final Map<Object, Object> result = new HashMap<Object,Object>();
+        final Map<Object, Object> result = new HashMap<Object, Object>();
         if (null != callback && null != map) {
             final Set<?> keys = map.keySet();
             int index = 0;
@@ -554,12 +554,15 @@ public abstract class CollectionUtils {
     }
 
     public static Map<String, Object> stringToMap(final String data, String separator) {
-        if (StringUtils.hasText(data)) {
-            if (".".equals(separator) || "|".equals(separator)) {
-                separator = "\\" + separator;
+        try {
+            if (StringUtils.hasText(data)) {
+                if (".".equals(separator) || "|".equals(separator)) {
+                    separator = "\\" + separator;
+                }
+                final String[] tokens = data.split(separator);
+                return toMap(tokens);
             }
-            final String[] tokens = data.split(separator);
-            return toMap(tokens);
+        } catch (Throwable ignored) {
         }
         return new HashMap<String, Object>();
     }
