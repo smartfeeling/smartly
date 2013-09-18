@@ -38,6 +38,7 @@ import java.net.Socket;
 public class Server extends Thread {
 
     public static int DEFAULT_PORT = 14444;
+    private static final int DEFAULT_MULTIPART_TIMEOUT = 60 * 2 * 1000; // two minute timeout
 
     // --------------------------------------------------------------------
     //               e v e n t s
@@ -48,6 +49,7 @@ public class Server extends Thread {
     }
 
     private static final Class EVENT_ON_START = OnStart.class;
+    private static final Class EVENT_ON_PART = Multipart.OnPartListener.class;
     private static final Class EVENT_ON_FULL = Multipart.OnFullListener.class;
     private static final Class EVENT_ON_TIME_OUT = Multipart.OnTimeOutListener.class;
     private static final Class EVENT_ON_ERROR = Delegates.ExceptionCallback.class;
@@ -78,7 +80,7 @@ public class Server extends Thread {
         _port = port;
         _handlers = new SocketHandlerPool(handlers);
         _socket = new ServerSocket(_port);
-        _multipartPool = new MultipartPool();
+        _multipartPool = new MultipartPool(DEFAULT_MULTIPART_TIMEOUT);
         _eventHandlers = new Delegates.Handlers();
 
         this.init();
@@ -105,6 +107,10 @@ public class Server extends Thread {
     }
 
     public void onError(final Delegates.ExceptionCallback listener) {
+        _eventHandlers.add(listener);
+    }
+
+    public void onMultipartPart(final Multipart.OnPartListener listener) {
         _eventHandlers.add(listener);
     }
 
@@ -186,6 +192,12 @@ public class Server extends Thread {
                 HandlerMultipartMessage.class);
 
         //-- init multipart pool --//
+        _multipartPool.onPart(new Multipart.OnPartListener() {
+            @Override
+            public void handle(final Multipart sender, final MultipartMessagePart part) {
+                onMultipartPart(sender, part);
+            }
+        });
         _multipartPool.onFull(new Multipart.OnFullListener() {
             @Override
             public void handle(Multipart sender) {
@@ -234,6 +246,18 @@ public class Server extends Thread {
             _eventHandlers.trigger(EVENT_ON_ERROR, message, error);
         } else {
             this.getLogger().log(Level.SEVERE, message, error);
+        }
+    }
+
+    private void onMultipartPart(final Multipart multipart, final MultipartMessagePart part) {
+        try {
+            if (_eventHandlers.contains(EVENT_ON_PART)) {
+                _eventHandlers.triggerAsync(EVENT_ON_PART, multipart, part);
+            } else {
+                // no external handlers.
+                // handle internally
+            }
+        } catch (Throwable ignored) {
         }
     }
 

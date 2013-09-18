@@ -21,6 +21,7 @@ public class MultipartPool {
 
     private static final Class EVENT_ON_TIMEOUT = Multipart.OnTimeOutListener.class;
     private static final Class EVENT_ON_FULL = Multipart.OnFullListener.class;
+    private static final Class EVENT_ON_PART = Multipart.OnPartListener.class;
 
     //private final MultipartPoolEvents _events;
     private final Delegates.Handlers _eventHandlers;
@@ -112,6 +113,10 @@ public class MultipartPool {
     //               e v e n t
     // --------------------------------------------------------------------
 
+    public void onPart(final Multipart.OnPartListener listener) {
+        _eventHandlers.add(listener);
+    }
+
     public void onFull(final Multipart.OnFullListener listener) {
         _eventHandlers.add(listener);
     }
@@ -137,6 +142,11 @@ public class MultipartPool {
         _eventHandlers.triggerAsync(EVENT_ON_FULL, multipart);
     }
 
+    private void doOnPart(final Multipart multipart, final MultipartMessagePart part) {
+        // event
+        _eventHandlers.triggerAsync(EVENT_ON_PART, multipart, part);
+    }
+
     private Multipart addPart(final MultipartMessagePart part, final Object userData) {
         synchronized (_data) {
             final String key = part.getUid();
@@ -146,8 +156,14 @@ public class MultipartPool {
                 _data.put(key, multipart);
                 multipart.onFull(new Multipart.OnFullListener() {
                     @Override
-                    public void handle(Multipart sender) {
+                    public void handle(final Multipart sender) {
                         doOnFull(sender);
+                    }
+                });
+                multipart.onPart(new Multipart.OnPartListener() {
+                    @Override
+                    public void handle(final Multipart sender, final MultipartMessagePart part) {
+                        doOnPart(sender, part);
                     }
                 });
             }

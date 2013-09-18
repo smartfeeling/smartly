@@ -18,6 +18,10 @@ public class Multipart {
     //               e v e n t s
     // --------------------------------------------------------------------
 
+    public static interface OnPartListener {
+        public void handle(Multipart sender, MultipartMessagePart part);
+    }
+
     public static interface OnFullListener {
         public void handle(Multipart sender);
     }
@@ -30,13 +34,15 @@ public class Multipart {
     //               f i e l d s
     // --------------------------------------------------------------------
 
-    private final Collection<OnFullListener> _listeners;
+    private final Collection<OnPartListener> _listeners_OnPart;
+    private final Collection<OnFullListener> _listeners_OnFull;
     private final String _uid;
     private final Date _creationDate;
     private final List<MultipartMessagePart> _list;
 
     private int _capacity;
     private Object _userData; // custom data
+    private Date _lastActivityDate;
 
     //-- readonly from part --//
     private MultipartInfo.MultipartInfoType _type;
@@ -54,8 +60,10 @@ public class Multipart {
     public Multipart(final String uid, final int capacity) {
         _uid = StringUtils.hasText(uid) ? uid : GUID.create();
         _creationDate = DateUtils.now();
+        _lastActivityDate = DateUtils.now();
         _list = Collections.synchronizedList(new ArrayList<MultipartMessagePart>(capacity));
-        _listeners = Collections.synchronizedCollection(new ArrayList<OnFullListener>());
+        _listeners_OnFull = Collections.synchronizedCollection(new ArrayList<OnFullListener>());
+        _listeners_OnPart = Collections.synchronizedCollection(new ArrayList<OnPartListener>());
         _capacity = capacity;
     }
 
@@ -96,9 +104,10 @@ public class Multipart {
     protected void finalize() throws Throwable {
         try {
             _userData = null;
-            _listeners.clear();
+            _listeners_OnFull.clear();
+            _listeners_OnPart.clear();
             _list.clear();
-        } catch (Throwable t) {
+        } catch (Throwable ignored) {
         }
         super.finalize();
     }
@@ -193,8 +202,12 @@ public class Multipart {
         return DateUtils.dateDiff(DateUtils.now(), _creationDate, DateUtils.MILLISECOND);
     }
 
+    public double getExpirationTime() {
+        return DateUtils.dateDiff(DateUtils.now(), _lastActivityDate, DateUtils.MILLISECOND);
+    }
+
     public boolean isExpired(final long millisecondsTimeout) {
-        return this.getAliveTime() < millisecondsTimeout;
+        return this.getExpirationTime() < millisecondsTimeout;
     }
 
     public boolean isFull() {
@@ -210,10 +223,14 @@ public class Multipart {
     public void add(final MultipartMessagePart part) {
         synchronized (_list) {
             if (!_list.contains(part) && !this.isFull()) {
+                // reset expiration timer
+                _lastActivityDate = DateUtils.now();
                 // add uid to part
                 part.setUid(this.getUid());
                 // add part to internal list
                 _list.add(part);
+                // raise event
+                this.doOnPart(part);
                 // set parent properties from part
                 this.setProperties(part);
                 // check if full
@@ -226,9 +243,15 @@ public class Multipart {
     //               e v e n t
     // --------------------------------------------------------------------
 
+    public void onPart(final OnPartListener listener) {
+        synchronized (_listeners_OnPart) {
+            _listeners_OnPart.add(listener);
+        }
+    }
+
     public void onFull(final OnFullListener listener) {
-        synchronized (_listeners) {
-            _listeners.add(listener);
+        synchronized (_listeners_OnFull) {
+            _listeners_OnFull.add(listener);
         }
     }
 
@@ -244,14 +267,27 @@ public class Multipart {
     }
 
     private void doOnFull() {
-        synchronized (_listeners) {
-            for (final OnFullListener listener : _listeners) {
+        synchronized (_listeners_OnFull) {
+            for (final OnFullListener listener : _listeners_OnFull) {
                 Async.Action(new Delegates.Action() {
                     @Override
                     public void handle(Object... args) {
                         listener.handle((Multipart) args[0]);
                     }
                 }, this);
+            }
+        }
+    }
+
+    private void doOnPart(final MultipartMessagePart part) {
+        synchronized (_listeners_OnPart) {
+            for (final OnPartListener listener : _listeners_OnPart) {
+                Async.Action(new Delegates.Action() {
+                    @Override
+                    public void handle(Object... args) {
+                        listener.handle((Multipart) args[0], (MultipartMessagePart) args[1]);
+                    }
+                }, this, part);
             }
         }
     }

@@ -10,18 +10,19 @@ import org.smartly.commons.util.JsonWrapper;
  */
 public class UserToken {
 
-    private static final String USER_ID = "userid";
+    public static final String USER_ID = "userid";
+    public static final String PROCESS_ID = "processid";
 
     //-- file data --//
-    private static final String SOURCE_ABSOLUTE_PATH = "source_absolute_path";
-    private static final String TARGET_ABSOLUTE_PATH = "target_absolute_path";
-    private static final String CRC = "crc";
-    private static final String LENGTH = "length";
+    public static final String SOURCE_ABSOLUTE_PATH = "source_absolute_path";
+    public static final String TARGET_ABSOLUTE_PATH = "target_absolute_path";
+    public static final String CRC = "crc";
+    public static final String LENGTH = "length";
 
     //-- response data --//
-    private static final String ELAPSED_TIME = "elapsed_time";
-    private static final String ERROR = "error";
-    private static final String DATA_LENGTH = "data_length";
+    public static final String ELAPSED_TIME = "elapsed_time";
+    public static final String ERROR = "error";
+    public static final String DATA_LENGTH = "data_length";
 
     // --------------------------------------------------------------------
     //               f i e l d s
@@ -56,6 +57,14 @@ public class UserToken {
 
     public void setUserId(final String value) {
         JsonWrapper.put(_json, USER_ID, value);
+    }
+
+    public String getProcessId() {
+        return JsonWrapper.getString(_json, PROCESS_ID);
+    }
+
+    public void setProcessId(final String value) {
+        JsonWrapper.put(_json, PROCESS_ID, value);
     }
 
     public void put(final String key, final Object value) {
