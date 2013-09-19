@@ -38,6 +38,7 @@ public class Client {
 
     private static final int CHUNK_SIZE = 1 * 1000 * 1024; // 1Mb
 
+    private static final Class EVENT_ON_PART = Multipart.OnPartListener.class;
     private static final Class EVENT_ON_FULL = Multipart.OnFullListener.class;
     private static final Class EVENT_ON_TIME_OUT = Multipart.OnTimeOutListener.class;
     private static final Class EVENT_ON_ERROR = Delegates.ExceptionCallback.class;
@@ -74,9 +75,30 @@ public class Client {
     protected void finalize() throws Throwable {
         try {
             _multipartPool.clear();
+            _eventHandlers.clear();
         } catch (Throwable ignore) {
         }
         super.finalize();
+    }
+
+    // --------------------------------------------------------------------
+    //               e v e n t
+    // --------------------------------------------------------------------
+
+    public void onError(final Delegates.ExceptionCallback listener) {
+        _eventHandlers.add(listener);
+    }
+
+    public void onMultipartPart(final Multipart.OnPartListener listener) {
+        _eventHandlers.add(listener);
+    }
+
+    public void onMultipartFull(final Multipart.OnFullListener listener) {
+        _eventHandlers.add(listener);
+    }
+
+    public void onMultipartTimeOut(final Multipart.OnTimeOutListener listener) {
+        _eventHandlers.add(listener);
     }
 
     // --------------------------------------------------------------------
@@ -87,7 +109,7 @@ public class Client {
         return _address;
     }
 
-    public Socket getSocket(){
+    public Socket getSocket() {
         return _socket;
     }
 
@@ -191,6 +213,12 @@ public class Client {
 
 
         //-- init multipart pool --//
+        _multipartPool.onPart(new Multipart.OnPartListener() {
+            @Override
+            public void handle(final Multipart sender, final MultipartMessagePart part) {
+                onMultipartPart(sender, part);
+            }
+        });
         _multipartPool.onFull(new Multipart.OnFullListener() {
             @Override
             public void handle(Multipart sender) {
@@ -295,6 +323,18 @@ public class Client {
         }
     }
 
+    private void onMultipartPart(final Multipart multipart, final MultipartMessagePart part) {
+        try {
+            if (_eventHandlers.contains(EVENT_ON_PART)) {
+                _eventHandlers.triggerAsync(EVENT_ON_PART, multipart, part);
+            } else {
+                // no external handlers.
+            }
+        } catch (Throwable ignored) {
+
+        }
+    }
+
     private void onMultipartFull(final Multipart multipart) {
         try {
             if (_eventHandlers.contains(EVENT_ON_FULL)) {
@@ -330,7 +370,6 @@ public class Client {
         } catch (Throwable ignored) {
         }
     }
-
 
 
     // --------------------------------------------------------------------

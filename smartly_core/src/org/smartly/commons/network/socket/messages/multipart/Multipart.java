@@ -37,12 +37,12 @@ public class Multipart {
     private final Collection<OnPartListener> _listeners_OnPart;
     private final Collection<OnFullListener> _listeners_OnFull;
     private final String _uid;
-    private final Date _creationDate;
+    private final long _creationDate;
     private final List<MultipartMessagePart> _list;
 
     private int _capacity;
     private Object _userData; // custom data
-    private Date _lastActivityDate;
+    private long _lastActivityDate;
 
     //-- readonly from part --//
     private MultipartInfo.MultipartInfoType _type;
@@ -59,8 +59,8 @@ public class Multipart {
 
     public Multipart(final String uid, final int capacity) {
         _uid = StringUtils.hasText(uid) ? uid : GUID.create();
-        _creationDate = DateUtils.now();
-        _lastActivityDate = DateUtils.now();
+        _creationDate = System.currentTimeMillis();
+        _lastActivityDate = System.currentTimeMillis();
         _list = Collections.synchronizedList(new ArrayList<MultipartMessagePart>(capacity));
         _listeners_OnFull = Collections.synchronizedCollection(new ArrayList<OnFullListener>());
         _listeners_OnPart = Collections.synchronizedCollection(new ArrayList<OnPartListener>());
@@ -199,11 +199,11 @@ public class Multipart {
     }
 
     public double getAliveTime() {
-        return DateUtils.dateDiff(DateUtils.now(), _creationDate, DateUtils.MILLISECOND);
+        return System.currentTimeMillis() - _creationDate; // DateUtils.dateDiff(DateUtils.now(), _creationDate, DateUtils.MILLISECOND);
     }
 
     public double getExpirationTime() {
-        return DateUtils.dateDiff(DateUtils.now(), _lastActivityDate, DateUtils.MILLISECOND);
+        return System.currentTimeMillis() - _lastActivityDate; // DateUtils.dateDiff(DateUtils.now(), _lastActivityDate, DateUtils.MILLISECOND);
     }
 
     public boolean isExpired(final long millisecondsTimeout) {
@@ -224,7 +224,7 @@ public class Multipart {
         synchronized (_list) {
             if (!_list.contains(part) && !this.isFull()) {
                 // reset expiration timer
-                _lastActivityDate = DateUtils.now();
+                _lastActivityDate = System.currentTimeMillis();
                 // add uid to part
                 part.setUid(this.getUid());
                 // add part to internal list

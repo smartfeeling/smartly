@@ -38,7 +38,7 @@ import java.net.Socket;
 public class Server extends Thread {
 
     public static int DEFAULT_PORT = 14444;
-    private static final int DEFAULT_MULTIPART_TIMEOUT = 60 * 2 * 1000; // two minute timeout
+    public static final int DEFAULT_MULTIPART_TIMEOUT = 60 * 2 * 1000; // two minute timeout
 
     // --------------------------------------------------------------------
     //               e v e n t s
@@ -70,17 +70,23 @@ public class Server extends Thread {
     // --------------------------------------------------------------------
 
     public Server(final int port) throws IOException {
-        this(port, null);
+        this(port, DEFAULT_MULTIPART_TIMEOUT, null);
     }
 
     public Server(final int port,
+                  final int uploadTimeout) throws IOException {
+        this(port, uploadTimeout, null);
+    }
+
+    public Server(final int port,
+                  final int uploadTimeout,
                   final Class<? extends ISocketFilter>[] handlers) throws IOException {
         super("Smartly-SocketServer");
         _running = false;
         _port = port;
         _handlers = new SocketHandlerPool(handlers);
         _socket = new ServerSocket(_port);
-        _multipartPool = new MultipartPool(DEFAULT_MULTIPART_TIMEOUT);
+        _multipartPool = new MultipartPool(uploadTimeout);
         _eventHandlers = new Delegates.Handlers();
 
         this.init();
@@ -297,13 +303,20 @@ public class Server extends Thread {
     //               S T A T I C
     // --------------------------------------------------------------------
 
+
     public static Server startServer(final Class<ISocketFilter>[] handlers) throws Exception {
-        return startServer(Server.DEFAULT_PORT, handlers);
+        return startServer(Server.DEFAULT_PORT, DEFAULT_MULTIPART_TIMEOUT, handlers);
+    }
+
+    public static Server startServer(final int port,
+                                     final Class<ISocketFilter>[] handlers) throws Exception {
+        return startServer(port, DEFAULT_MULTIPART_TIMEOUT, handlers);
     }
 
     public static synchronized Server startServer(final int port,
+                                                  final int uploadTimeout,
                                                   final Class<ISocketFilter>[] handlers) throws Exception {
-        final Server server = new Server(port, handlers);
+        final Server server = new Server(port, uploadTimeout, handlers);
         server.start();
         while (!server.isServerRunning()) {
             Thread.sleep(100);

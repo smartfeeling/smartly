@@ -11,7 +11,7 @@ import org.smartly.commons.util.JsonWrapper;
 public class UserToken {
 
     public static final String USER_ID = "userid";
-    public static final String PROCESS_ID = "processid";
+    public static final String PROCESS_ID = "process_id";
 
     //-- file data --//
     public static final String SOURCE_ABSOLUTE_PATH = "source_absolute_path";
@@ -50,6 +50,10 @@ public class UserToken {
     // --------------------------------------------------------------------
     //               p u b l i c
     // --------------------------------------------------------------------
+
+    public JSONObject toJSON() {
+        return _json;
+    }
 
     public String getUserId() {
         return JsonWrapper.getString(_json, USER_ID);
