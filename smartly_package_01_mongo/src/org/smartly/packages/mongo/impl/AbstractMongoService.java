@@ -292,6 +292,14 @@ public abstract class AbstractMongoService {
         return this.removeOne(id);
     }
 
+    public DBObject removeById(final Object id) throws StandardCodedException {
+        final DBObject item = this.findById(id);
+        if (null != item) {
+            this.removeOne(id);
+        }
+        return item;
+    }
+
     public int removeOne(final Object id) throws StandardCodedException {
         if (null != id) {
             final DBObject filter;
@@ -402,7 +410,7 @@ public abstract class AbstractMongoService {
                                final String[] fieldNames,
                                final String[] sortAscBy,
                                final String[] sortDescBy) {
-        return this.find(filter, fieldNames, 0,0, sortAscBy, sortDescBy);
+        return this.find(filter, fieldNames, 0, 0, sortAscBy, sortDescBy);
     }
 
 

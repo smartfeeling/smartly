@@ -36,7 +36,10 @@ public class Client {
     private static final String DEFAULT_HOST = "localhost";
     private static final int DEFAULT_PORT = 10000;
 
-    private static final int CHUNK_SIZE = 1 * 1000 * 1024; // 1Mb
+    // file download
+    private static final int DEFAULT_CHUNK_SIZE = 1 * 3000 * 1024; // 3Mb
+    private static final int DEFAULT_TIMEOUT = 60 * 30 * 1000; // 30 minute timeout
+
 
     private static final Class EVENT_ON_PART = Multipart.OnPartListener.class;
     private static final Class EVENT_ON_FULL = Multipart.OnFullListener.class;
@@ -51,6 +54,8 @@ public class Client {
 
     private Proxy _proxy;
     private SocketAddress _address;
+    private int _timeOut;
+    private int _chunkSize;
     private final MultipartPool _multipartPool;       // manage downloads
     private final Delegates.Handlers _eventHandlers;
 
@@ -63,9 +68,17 @@ public class Client {
     }
 
     public Client(final Proxy proxy) {
+        this(proxy, DEFAULT_TIMEOUT, DEFAULT_CHUNK_SIZE);
+    }
+
+    public Client(final Proxy proxy,
+                  final int timeOut,
+                  final int chunkSize) {
+        _timeOut = timeOut;
+        _chunkSize = chunkSize;
         _proxy = proxy;
         _address = new InetSocketAddress(DEFAULT_HOST, DEFAULT_PORT);
-        _multipartPool = new MultipartPool();
+        _multipartPool = new MultipartPool(_timeOut);
         _eventHandlers = new Delegates.Handlers();
 
         this.init();
@@ -104,6 +117,25 @@ public class Client {
     // --------------------------------------------------------------------
     //               p u b l i c
     // --------------------------------------------------------------------
+
+    public int getChunkSize() {
+        return _chunkSize;
+    }
+
+    public void setChunkSize(final int value) {
+        _chunkSize = value;
+    }
+
+    public int getTimeOut() {
+        return _timeOut;
+    }
+
+    public void setTimeOut(final int value) {
+        _timeOut = value;
+        if (null != _multipartPool) {
+            _multipartPool.setTimeout(_timeOut);
+        }
+    }
 
     public SocketAddress getAddress() {
         return _address;
@@ -174,7 +206,7 @@ public class Client {
         Thread[] result = new Thread[0];
         if (this.isConnected() && FileUtils.exists(fileName)) {
             final String uid = GUID.create();
-            final String[] chunks = FileTokenizer.splitFromChunkSize(fileName, uid, CHUNK_SIZE, null);
+            final String[] chunks = FileTokenizer.splitFromChunkSize(fileName, uid, _chunkSize, null);
             try {
                 result = this.sendFileChunks(PathUtils.getFilename(fileName, true),
                         userToken,
@@ -191,7 +223,7 @@ public class Client {
     public Thread[] getFile(final UserToken userToken,
                             final Delegates.ProgressCallback progressCallback,
                             final Delegates.ExceptionCallback errorHandler) throws Exception {
-        final FileChunkInfo info = new FileChunkInfo(userToken.getLength(), CHUNK_SIZE);
+        final FileChunkInfo info = new FileChunkInfo(userToken.getLength(), _chunkSize);
         return this.getFileChunks(userToken,
                 info,
                 progressCallback, errorHandler);

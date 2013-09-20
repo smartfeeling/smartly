@@ -17,7 +17,7 @@ public class MultipartPool {
     //               f i e l d s
     // --------------------------------------------------------------------
 
-    private static final int DEFAULT_TIMEOUT = 60 * 2 * 1000; // two minute timeout
+    private static final int DEFAULT_TIMEOUT = 60 * 30 * 1000; // 30 minute timeout
 
     private static final Class EVENT_ON_TIMEOUT = Multipart.OnTimeOutListener.class;
     private static final Class EVENT_ON_FULL = Multipart.OnFullListener.class;
