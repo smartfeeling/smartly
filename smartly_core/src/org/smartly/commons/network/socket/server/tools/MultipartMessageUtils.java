@@ -69,9 +69,17 @@ public class MultipartMessageUtils {
                 // ensure directory exists
                 FileUtils.tryMkdirs(outputPath);
                 // get output filename and join chunks
-                final String outputFile = PathUtils.isDirectory(outputPath)
-                        ? PathUtils.concat(outputPath, multipart.getName())
-                        : outputPath;
+                final String partName = multipart.getName();
+                final String outputFile;
+                if(PathUtils.isDirectory(outputPath)){
+                    if(StringUtils.hasText(partName)){
+                        outputFile = PathUtils.concat(outputPath, partName);
+                    }else{
+                        outputFile = PathUtils.concat(outputPath, "new_file");
+                    }
+                } else {
+                    outputFile = outputPath;
+                }
                 final String[] names = multipart.getPartNames();
                 FileTokenizer.join(names, outputFile, null);
                 // remove temp
