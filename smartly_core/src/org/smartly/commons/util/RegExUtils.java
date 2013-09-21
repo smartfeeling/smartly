@@ -16,6 +16,7 @@ public abstract class RegExUtils {
     //public static final String EMAIL_PATTERN = ".+@.+.[a-z]+\\.+.[a-z]";
 
     public static final String ALPHANUMERIC = "([0-9a-zA-Z])";
+    public static final String ALPHANUMERIC_EXT = "([0-9a-zA-Z ,'\"()])";
     public static final String NOTNUMERIC = "[^0-9]+";
     public static final String VELOCITY_VARIABLES = "(\\$|\\$\\{)(?:[a-zA-Z\\.\\('\\)\\{\\}]+)?(?=(\\s|))";
     public static final String IP_ADDRESS = "([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})";
