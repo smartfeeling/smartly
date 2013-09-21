@@ -273,6 +273,25 @@
         return !!value ? value != 'false' && value != '0' : false;
     }
 
+    function sanitize(html) {
+        var tmp = document.createElement("DIV");
+        tmp.innerHTML = html;
+        return tmp.textContent || tmp.innerText || "";
+    }
+
+    function random() {
+        try {
+            var args = _.toArray(arguments);
+            if (args.length === 1) {
+                return Math.random() * args[1];
+            } else if (args.length === 2) {
+                return Math.floor(Math.random() * args[1]) + args[0];
+            }
+        } catch (err) {
+        }
+        return Math.random();
+    }
+
     // ------------------------------------------------------------------------
     //                      Utils Mobile
     // ------------------------------------------------------------------------
@@ -1192,6 +1211,8 @@
     exports.hasText = hasText;
     exports.replaceAll = replaceAll;
     exports.toBoolean = toBoolean;
+    exports.sanitize = sanitize;
+    exports.random = random;
 
     //-- mobile --//
     exports.mobile = mobile;
