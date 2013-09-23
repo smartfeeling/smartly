@@ -4,6 +4,8 @@ package org.smartly.commons.lang;
 import org.smartly.IConstants;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.UnsupportedCharsetException;
 
 public class CharEncoding {
 
@@ -143,6 +145,21 @@ public class CharEncoding {
             }
         }
         return __DEFAULT;
+    }
+
+    public static Charset getDefaultCharset(){
+        try{
+           final Charset result = Charset.forName(getDefault());
+            if(null==result){
+                throw  new UnsupportedCharsetException(getDefault());
+            } else {
+                return result;
+            }
+        } catch(Throwable ignored){
+            final Charset result = Charset.defaultCharset();
+            setDefault(result.name());
+            return result;
+        }
     }
 
     public static void setDefault(final String charset) {

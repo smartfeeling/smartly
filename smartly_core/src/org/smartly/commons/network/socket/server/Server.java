@@ -11,7 +11,7 @@ import org.smartly.commons.network.socket.server.handlers.ISocketFilter;
 import org.smartly.commons.network.socket.server.handlers.ISocketHandler;
 import org.smartly.commons.network.socket.server.handlers.impl.HandlerMultipartMessage;
 import org.smartly.commons.network.socket.server.handlers.pool.SocketHandlerPool;
-import org.smartly.commons.network.socket.server.tools.MultipartMessageUtils;
+import org.smartly.commons.network.socket.messages.tools.MultipartMessageUtils;
 
 import java.io.IOException;
 import java.net.ServerSocket;

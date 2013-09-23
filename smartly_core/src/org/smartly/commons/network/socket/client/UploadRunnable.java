@@ -133,7 +133,7 @@ public class UploadRunnable
         part.setUid(_transactionId);
         part.setData(FileUtils.copyToByteArray(new File(chunk)));
 
-        _dataLength = part.getData().length;
+        _dataLength = part.getDataLength();
 
         //-- send part --//
         if (_useMultipleConnections) {

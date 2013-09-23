@@ -13,7 +13,7 @@ import org.smartly.commons.network.socket.messages.multipart.Multipart;
 import org.smartly.commons.network.socket.messages.multipart.MultipartMessagePart;
 import org.smartly.commons.network.socket.messages.multipart.MultipartPool;
 import org.smartly.commons.network.socket.server.Server;
-import org.smartly.commons.network.socket.server.tools.MultipartMessageUtils;
+import org.smartly.commons.network.socket.messages.tools.MultipartMessageUtils;
 import org.smartly.commons.util.CollectionUtils;
 import org.smartly.commons.util.FileUtils;
 import org.smartly.commons.util.PathUtils;

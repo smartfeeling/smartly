@@ -22,8 +22,6 @@ public class MessageResponse
     //                      f i e l d s
     // ------------------------------------------------------------------------
 
-    private Serializable _data;
-
     // ------------------------------------------------------------------------
     //                      c o n s t r u c t o r
     // ------------------------------------------------------------------------
@@ -33,7 +31,7 @@ public class MessageResponse
     }
 
     public MessageResponse(final Serializable data) {
-        _data = data;
+        super.setData(data);
     }
 
     // ------------------------------------------------------------------------
@@ -42,16 +40,8 @@ public class MessageResponse
 
     public void setData(final Object value) {
         if (value instanceof Serializable) {
-            this.setData((Serializable) value);
+            super.setData((Serializable) value);
         }
-    }
-
-    public void setData(final Serializable value) {
-        _data = value;
-    }
-
-    public Serializable getData() {
-        return _data;
     }
 
     // ------------------------------------------------------------------------
@@ -59,43 +49,44 @@ public class MessageResponse
     // ------------------------------------------------------------------------
 
     public boolean isNull() {
-        return isNull(_data);
+        return super.getDataLength()==0;
     }
 
     public boolean isError() {
-        return isError(_data);
+        return isError(super.getData());
     }
 
     public boolean isJSON() {
-        return isJSON(_data);
+        return isJSON(super.getData());
     }
 
     public Throwable getError() {
-        if (isError(_data)) {
-            return (Throwable) _data;
+        final Serializable data = super.getData();
+        if (isError(data)) {
+            return (Throwable) data;
         }
         return null;
     }
 
     public JSONObject toJSONObject() {
-        return toJSONObject(_data);
+        return toJSONObject(super.getData());
     }
 
     public JSONArray toJSONArray() {
-        return toJSONArray(_data);
+        return toJSONArray(super.getData());
     }
 
     public int toInteger() {
-        return toInteger(_data);
+        return toInteger(super.getData());
     }
 
 
     public boolean toBoolean() {
-        return toBoolean(_data);
+        return toBoolean(super.getData());
     }
 
     public double toDouble() {
-        return toDouble(_data);
+        return toDouble(super.getData());
     }
     // ------------------------------------------------------------------------
     //                      S T A T I C

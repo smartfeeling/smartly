@@ -9,7 +9,7 @@ import org.smartly.commons.network.socket.client.Client;
 import org.smartly.commons.network.socket.client.UploadRunnable;
 import org.smartly.commons.network.socket.messages.UserToken;
 import org.smartly.commons.network.socket.messages.multipart.Multipart;
-import org.smartly.commons.network.socket.server.tools.MultipartMessageUtils;
+import org.smartly.commons.network.socket.messages.tools.MultipartMessageUtils;
 import org.smartly.commons.util.FormatUtils;
 import org.smartly.commons.util.PathUtils;
 

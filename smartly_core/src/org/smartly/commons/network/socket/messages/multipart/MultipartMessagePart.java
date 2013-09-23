@@ -10,7 +10,6 @@ public class MultipartMessagePart extends AbstractMessage
 
     private String _uid;
     private MultipartInfo _info;
-    private byte[] _data;
     private Throwable _error;
 
     // --------------------------------------------------------------------
@@ -19,7 +18,6 @@ public class MultipartMessagePart extends AbstractMessage
 
     public MultipartMessagePart() {
         _info = new MultipartInfo();
-        _data = new byte[0];
     }
 
     @Override
@@ -68,21 +66,14 @@ public class MultipartMessagePart extends AbstractMessage
         return null != _error;
     }
 
-    public byte[] getData() {
-        return _data;
-    }
-
-    public void setData(final byte[] data) {
-        _data = data;
+    public MultipartMessagePart setData(final byte[] value) {
+        final byte[] data = super.setData(value).getDataBytes();
         if (null != data && null != _info) {
             _info.setPartLength(data.length);
         }
+        return this;
     }
 
-    public void clearData() {
-        _data = null;
-        this.setData(new byte[0]);
-    }
 
     public MultipartInfo getInfo() {
         return _info;
@@ -106,8 +97,5 @@ public class MultipartMessagePart extends AbstractMessage
         return 0;
     }
 
-    public boolean hasData() {
-        return null != this.getData() && this.getData().length > 0;
-    }
 
 }

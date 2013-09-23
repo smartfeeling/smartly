@@ -3,18 +3,11 @@ package org.smartly.commons.network.socket.server;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.smartly.commons.Delegates;
-import org.smartly.commons.async.Async;
 import org.smartly.commons.network.socket.client.Client;
-import org.smartly.commons.network.socket.messages.multipart.Multipart;
 import org.smartly.commons.network.socket.messages.rest.RESTMessage;
 import org.smartly.commons.network.socket.server.handlers.impl.HandlerREST;
-import org.smartly.commons.network.socket.server.helpers.SampleRESTMessage;
 import org.smartly.commons.network.socket.server.helpers.SampleRESTService;
-import org.smartly.commons.network.socket.server.tools.MultipartMessageUtils;
 import org.smartly.commons.remoting.rest.RESTRegistry;
-import org.smartly.commons.util.FormatUtils;
-import org.smartly.commons.util.PathUtils;
 
 import java.util.ResourceBundle;
 

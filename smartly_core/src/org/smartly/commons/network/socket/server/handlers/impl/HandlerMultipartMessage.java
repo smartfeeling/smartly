@@ -1,12 +1,11 @@
 package org.smartly.commons.network.socket.server.handlers.impl;
 
-import org.smartly.commons.network.socket.messages.UserToken;
 import org.smartly.commons.network.socket.messages.multipart.MultipartInfo;
 import org.smartly.commons.network.socket.messages.multipart.MultipartMessagePart;
 import org.smartly.commons.network.socket.server.handlers.AbstractSocketHandler;
 import org.smartly.commons.network.socket.server.handlers.SocketRequest;
 import org.smartly.commons.network.socket.server.handlers.SocketResponse;
-import org.smartly.commons.network.socket.server.tools.MultipartMessageUtils;
+import org.smartly.commons.network.socket.messages.tools.MultipartMessageUtils;
 
 /**
  *

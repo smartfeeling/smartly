@@ -1,4 +1,4 @@
-package org.smartly.commons.network.socket.server.tools;
+package org.smartly.commons.network.socket.messages.tools;
 
 import org.smartly.IConstants;
 import org.smartly.commons.io.filetokenizer.FileTokenizer;
@@ -29,7 +29,7 @@ public class MultipartMessageUtils {
     public static long saveOnDisk(final MultipartMessagePart part) {
         if (part.hasData()) {
             try {
-                final long length = part.getData().length;
+                final long length = part.getDataLength();
                 final String root = PathUtils.concat(STORE,
                         part.getUid());
 
@@ -39,7 +39,7 @@ public class MultipartMessageUtils {
                 final String output = PathUtils.concat(root,
                         PathUtils.getFilename(part.getInfo().getPartName()));
 
-                FileUtils.copy(part.getData(), new File(output));
+                FileUtils.copy(part.getDataBytes(), new File(output));
                 part.getInfo().setPartName(output);
 
                 return length;
@@ -71,10 +71,10 @@ public class MultipartMessageUtils {
                 // get output filename and join chunks
                 final String partName = multipart.getName();
                 final String outputFile;
-                if(PathUtils.isDirectory(outputPath)){
-                    if(StringUtils.hasText(partName)){
+                if (PathUtils.isDirectory(outputPath)) {
+                    if (StringUtils.hasText(partName)) {
                         outputFile = PathUtils.concat(outputPath, partName);
-                    }else{
+                    } else {
                         outputFile = PathUtils.concat(outputPath, "new_file");
                     }
                 } else {

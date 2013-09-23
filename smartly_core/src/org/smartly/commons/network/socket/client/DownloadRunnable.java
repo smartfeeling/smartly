@@ -7,7 +7,7 @@ import org.smartly.commons.network.socket.messages.MessageResponse;
 import org.smartly.commons.network.socket.messages.UserToken;
 import org.smartly.commons.network.socket.messages.multipart.MultipartInfo;
 import org.smartly.commons.network.socket.messages.multipart.MultipartMessagePart;
-import org.smartly.commons.network.socket.server.tools.MultipartMessageUtils;
+import org.smartly.commons.network.socket.messages.tools.MultipartMessageUtils;
 import org.smartly.commons.util.PathUtils;
 
 /**

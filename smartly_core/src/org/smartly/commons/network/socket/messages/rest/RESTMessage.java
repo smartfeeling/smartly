@@ -21,7 +21,6 @@ public class RESTMessage
 
     private String _method;
     private String _path;
-    private String _data; // json string
 
     // --------------------------------------------------------------------
     //               c o n s t r u c t o r
@@ -67,23 +66,26 @@ public class RESTMessage
         return _method;
     }
 
-    public void setData(final String json) {
+    public RESTMessage setData(final String json) {
         if (StringUtils.isJSONObject(json)) {
-            _data = json;
+            super.setData(json);
         }
+        return this;
     }
 
-    public void setData(final JSONObject json) {
-        _data = json.toString();
+    public RESTMessage setData(final JSONObject json) {
+        super.setData(json.toString());
+        return this;
     }
 
     public String getData() {
-        return _data;
+        return super.getDataString();
     }
 
     public JSONObject getDataAsJSON() {
-        if (StringUtils.isJSONObject(_data)) {
-            return new JSONObject(_data);
+        final String data = this.getData();
+        if (StringUtils.isJSONObject(data)) {
+            return new JSONObject(data);
         }
         return new JSONObject();
     }

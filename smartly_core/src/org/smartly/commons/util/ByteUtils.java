@@ -83,25 +83,32 @@ public class ByteUtils {
     }
 
     public static byte[] optBytes(final Object data) {
-        byte[] result = new byte[0];
         try {
-            if (!isByteArray(data)) {
-                final ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                ObjectOutput out = null;
-                try {
-                    out = new ObjectOutputStream(bos);
-                    out.writeObject(data);
-                    result = bos.toByteArray();
-                } finally {
-                    if (null != out) out.close();
-                    bos.close();
-                }
-            } else {
-                result = (byte[]) data;
-            }
+            return getBytes(data);
         } catch (Throwable ignored) {
         }
-        return result;
+        return new byte[0];
+    }
+
+    public static Object getObject(final byte[] data)
+            throws IOException, ClassNotFoundException {
+        final ByteArrayInputStream bis = new ByteArrayInputStream(data);
+        ObjectInput in = null;
+        try {
+            in = new ObjectInputStream(bis);
+            return  in.readObject();
+        } finally {
+            if (null != in) in.close();
+            bis.close();
+        }
+    }
+
+    public static Object optObject(final byte[] data) {
+        try {
+            return getObject(data);
+        } catch (Throwable ignored) {
+        }
+        return null;
     }
 
     public static byte[] getDataNotAvailable() {
