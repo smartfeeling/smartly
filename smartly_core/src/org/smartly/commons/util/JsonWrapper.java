@@ -237,8 +237,12 @@ public final class JsonWrapper implements Cloneable {
     }
 
     public boolean deepBoolean(final String path, final boolean def) {
-        final Object result = this.deep(path);
-        return result instanceof Boolean ? Boolean.parseBoolean(result.toString()) : def;
+        try {
+            final Object result = this.deep(path);
+            return result instanceof Boolean ? Boolean.parseBoolean(result.toString()) : def;
+        } catch (Throwable ignored) {
+        }
+        return def;
     }
 
     public int deepInteger(final String path) {
@@ -246,8 +250,16 @@ public final class JsonWrapper implements Cloneable {
     }
 
     public int deepInteger(final String path, final int def) {
-        final Object result = this.deep(path);
-        return result instanceof Number ? Integer.parseInt(result.toString()) : def;
+        try {
+            final Object result = this.deep(path);
+            if (result instanceof Integer) {
+                return Integer.parseInt(result.toString());
+            } else {
+                return ConversionUtils.toInteger(result, def);
+            }
+        } catch (Throwable ignored) {
+        }
+        return def;
     }
 
     public long deepLong(final String path) {
@@ -255,8 +267,16 @@ public final class JsonWrapper implements Cloneable {
     }
 
     public long deepLong(final String path, final long def) {
-        final Object result = this.deep(path);
-        return result instanceof Number ? Long.parseLong(result.toString()) : def;
+        try {
+            final Object result = this.deep(path);
+            if (result instanceof Long) {
+                return Long.parseLong(result.toString());
+            } else {
+                return ConversionUtils.toLong(result, def);
+            }
+        } catch (Throwable ignored) {
+        }
+        return def;
     }
 
     public double deepDouble(final String path) {
@@ -265,8 +285,16 @@ public final class JsonWrapper implements Cloneable {
     }
 
     public double deepDouble(final String path, final double def) {
-        final Object result = this.deep(path);
-        return result instanceof Number ? Double.parseDouble(result.toString()) : def;
+        try {
+            final Object result = this.deep(path);
+            if (result instanceof Double) {
+                return Double.parseDouble(result.toString());
+            } else {
+                return ConversionUtils.toDouble(result);
+            }
+        } catch (Throwable ignored) {
+        }
+        return def;
     }
 
     //-- JSONObject --//
@@ -1393,7 +1421,7 @@ public final class JsonWrapper implements Cloneable {
         final int length = array.length();
         for (int i = 0; i < length; i++) {
             final JSONObject item = array.optJSONObject(i);
-            if (null!=item && item.has(key) && CompareUtils.equals(item.opt(key), value)) {
+            if (null != item && item.has(key) && CompareUtils.equals(item.opt(key), value)) {
                 result.add(item);
             }
         }
@@ -1405,7 +1433,7 @@ public final class JsonWrapper implements Cloneable {
         final int length = array.length();
         for (int i = length - 1; i > -1; i--) {
             final String item = array.optString(i);
-            if (null!=item && item.equalsIgnoreCase(value)) {
+            if (null != item && item.equalsIgnoreCase(value)) {
                 array.remove(i);
                 return true;
             }
@@ -1419,7 +1447,7 @@ public final class JsonWrapper implements Cloneable {
         final int length = array.length();
         for (int i = length - 1; i > -1; i--) {
             final String item = array.optString(i);
-            if (null!=item && item.equalsIgnoreCase(value)) {
+            if (null != item && item.equalsIgnoreCase(value)) {
                 array.remove(i);
                 count++;
             }
@@ -1452,7 +1480,7 @@ public final class JsonWrapper implements Cloneable {
                     && ((JSONObject) item).has(key)
                     && ((JSONObject) item).optString(key).equalsIgnoreCase(value)) {
                 array.remove(i);
-                result.add((JSONObject)item);
+                result.add((JSONObject) item);
             }
         }
         return result;

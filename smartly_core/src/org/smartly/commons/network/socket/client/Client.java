@@ -408,12 +408,12 @@ public class Client {
     //               S T A T I C
     // --------------------------------------------------------------------
 
-    private static void saveOnDisk(final Multipart multipart) throws Exception {
+    private static String saveOnDisk(final Multipart multipart) throws Exception {
         try {
             final UserToken userToken = new UserToken(multipart.getUserToken());
             final String target = userToken.getTargetAbsolutePath();
             // save file on disk and remove temp
-            MultipartMessageUtils.saveOnDisk(multipart, target);
+            return MultipartMessageUtils.saveOnDisk(multipart, target);
         } catch (Exception t) {
             MultipartMessageUtils.remove(multipart);
             throw t;

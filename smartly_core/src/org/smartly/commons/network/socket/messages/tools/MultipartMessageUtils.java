@@ -61,8 +61,8 @@ public class MultipartMessageUtils {
      *
      * @param multipart Multipart to save on disk
      */
-    public static void saveOnDisk(final Multipart multipart,
-                                  final String outputPath) throws Exception {
+    public static String saveOnDisk(final Multipart multipart,
+                                    final String outputPath) throws Exception {
         if (null != multipart && StringUtils.hasText(outputPath) && multipart.isFull()) {
             final Throwable partError = multipart.getError();
             if (null == partError) {
@@ -84,6 +84,8 @@ public class MultipartMessageUtils {
                 FileTokenizer.join(names, outputFile, null);
                 // remove temp
                 FileUtils.delete(PathUtils.getParent(names[0]));
+
+                return outputFile;
             } else {
                 try {
                     remove(multipart);
@@ -92,6 +94,7 @@ public class MultipartMessageUtils {
                 throw new Exception(partError);
             }
         }
+        return "";
     }
 
     public static void remove(final Multipart multipart) throws IOException {

@@ -105,12 +105,13 @@ public class SendFileTest {
         Thread.sleep(5000);
     }
 
-    private static void parseMultipart(final Multipart item) {
+    private static String parseMultipart(final Multipart item) {
         try {
             final String out_root = PathUtils.concat(PathUtils.getTemporaryDirectory(), "out");
-            MultipartMessageUtils.saveOnDisk(item, out_root);
+            return MultipartMessageUtils.saveOnDisk(item, out_root);
         } catch (Throwable t) {
             System.out.println(t);
         }
+        return "";
     }
 }
