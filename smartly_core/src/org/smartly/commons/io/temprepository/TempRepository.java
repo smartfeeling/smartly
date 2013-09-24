@@ -14,26 +14,30 @@ import java.io.IOException;
  * Repository with expiration time for its content.
  * Expired files are removed
  */
-public class TempRepository implements IFileObserverListener {
+public class TempRepository
+        implements IFileObserverListener {
 
-    private static final String REGISTRY = "registry.json";
+    private static final String REGISTRY_SETTINGS = "_registry_settings.json";
+    private static final String REGISTRY_DATA = "_registry_data.json";
 
 
     private final String _root;
-    private final String _path_registry;
+    private final String _path_data;
+    private final String _path_settings;
     private final Registry _registry;
     private FileObserver _dirObserver;
 
 
     public TempRepository(final String root) throws IOException {
         _root = root;
-        _path_registry = PathUtils.concat(_root, REGISTRY);
+        _path_data = PathUtils.concat(_root, REGISTRY_DATA);
+        _path_settings = PathUtils.concat(_root, REGISTRY_SETTINGS);
 
         //-- ensure temp dir exists --//
         FileUtils.mkdirs(root);
 
         //-- load file registry (creates if any) --//
-        _registry = new Registry(_path_registry);
+        _registry = new Registry(_path_settings, _path_data);
         _registry.save();
 
         this.startThreads();
@@ -139,18 +143,20 @@ public class TempRepository implements IFileObserverListener {
         try {
             if (event == FileObserver.EVENT_CREATE) {
                 // CREATE
-                if (!_path_registry.equalsIgnoreCase(path)) {
+                if (!_path_data.equalsIgnoreCase(path)
+                        && !_path_settings.equalsIgnoreCase(path)) {
                     if (_registry.addItem(path)) {
                         _registry.save();
                     }
                 }
             } else if (event == FileObserver.EVENT_MODIFY) {
                 // MODIFY
-                if (_path_registry.equalsIgnoreCase(path)) {
-                    _registry.reload();
+                if (_path_settings.equalsIgnoreCase(path)) {
+                    _registry.reloadSettings();
                 }
             } else if (event == FileObserver.EVENT_DELETE) {
-                if (!_path_registry.equalsIgnoreCase(path)) {
+                if (!_path_data.equalsIgnoreCase(path)
+                        && !_path_settings.equalsIgnoreCase(path)) {
                     if (_registry.removeItem(path)) {
                         _registry.save();
                     }

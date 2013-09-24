@@ -280,8 +280,7 @@ public final class JsonWrapper implements Cloneable {
     }
 
     public double deepDouble(final String path) {
-        final Double result = this.deepDouble(path, 0.0);
-        return result;
+        return this.deepDouble(path, 0.0);
     }
 
     public double deepDouble(final String path, final double def) {

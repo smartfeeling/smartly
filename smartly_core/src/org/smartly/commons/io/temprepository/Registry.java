@@ -22,14 +22,19 @@ public class Registry {
     private static final String CHECK_MS = "check_ms";
     private static final String ITEMS = "items";
 
-    private final String _path_registry;
+    private final String _path_settings;
+    private final String _path_data;
     private final JsonWrapper _data;
+    private final JsonWrapper _settings;
     private Thread _registryThread;
 
-    public Registry(final String path) {
-        _path_registry = path;
+    public Registry(final String path_settings,
+                    final String path_data) {
+        _path_settings = path_settings;
+        _path_data = path_data;
 
-        _data = new JsonWrapper(this.loadRegistry(_path_registry));
+        _data = new JsonWrapper(this.loadData(_path_data));
+        _settings = new JsonWrapper(this.loadSettings(_path_settings));
     }
 
     public void start() {
@@ -53,39 +58,47 @@ public class Registry {
     }
 
     public void clear() {
-        this.reload();
+        this.reloadSettings();
         synchronized (_data) {
             _data.putSilent(ITEMS, new JSONObject());
         }
     }
 
-    public void reload() {
-        _data.parse(this.loadRegistry(_path_registry));
+    public void reloadSettings() {
+        _settings.parse(this.loadSettings(_path_settings));
     }
 
     public long getLife() {
-        final long result = _data.optLong(LIFE_MS);
+        final long result = _settings.optLong(LIFE_MS);
         return result > 0 ? result : DEFAULT_LIFE;
     }
 
     public void setLife(final long value) {
-        _data.putSilent(LIFE_MS, value);
-        if (_data.optLong(CHECK_MS) < value) {
-            _data.putSilent(CHECK_MS, value);
+        _settings.putSilent(LIFE_MS, value);
+        if (_settings.optLong(CHECK_MS) < value) {
+            _settings.putSilent(CHECK_MS, value);
+            try {
+                this.saveSettings();
+            } catch (Throwable ignored) {
+            }
         }
     }
 
     public long getCheck() {
-        final long result = _data.optLong(CHECK_MS);
+        final long result = _settings.optLong(CHECK_MS);
         return result > getLife() ? result : getLife();
     }
 
     public void setCheck(final long value) {
-        _data.putSilent(CHECK_MS, value);
+        _settings.putSilent(CHECK_MS, value);
+        try {
+            this.saveSettings();
+        } catch (Throwable ignored) {
+        }
     }
 
     public void save() throws IOException {
-        this.saveFile();
+        this.saveData();
     }
 
     public boolean addItem(final String path) {
@@ -130,19 +143,33 @@ public class Registry {
     //               p r i v a t e
     // --------------------------------------------------------------------
 
-    private String loadRegistry(final String fileName) {
+    private String loadData(final String fileName) {
+        try {
+            return FileUtils.readFileToString(new File(fileName));
+        } catch (Throwable t) {
+            return "{'items':[]}";
+        }
+    }
+
+    private String loadSettings(final String fileName) {
         try {
             return FileUtils.readFileToString(new File(fileName));
         } catch (Throwable t) {
             return "{'" + LIFE_MS + "':" + DEFAULT_LIFE + ", '" +
                     CHECK_MS + "':" + DEFAULT_LIFE +
-                    " ,'items':{}}";
+                    "}";
         }
     }
 
-    private void saveFile() throws IOException {
-        FileUtils.writeStringToFile(new File(_path_registry),
+    private void saveData() throws IOException {
+        FileUtils.writeStringToFile(new File(_path_data),
                 _data.toString(1),
+                Smartly.getCharset());
+    }
+
+    private void saveSettings() throws IOException {
+        FileUtils.writeStringToFile(new File(_path_settings),
+                _settings.toString(1),
                 Smartly.getCharset());
     }
 
@@ -182,6 +209,7 @@ public class Registry {
                 }
             }
         });
+        _registryThread.setDaemon(true);
         _registryThread.setPriority(Thread.NORM_PRIORITY);
         _registryThread.start();
     }
