@@ -79,6 +79,62 @@ public abstract class CollectionUtils {
         return result;
     }
 
+    public static Object find(final Collection<?> items, final IterationCallback callback) {
+        if (null != callback && null != items) {
+            int index = 0;
+            for (final Object item : items) {
+                final Object response = callback.handle(item, index, null);
+                if (null!=response) {
+                    return response;
+                }
+                index++;
+            }
+        }
+        return null;
+    }
+
+    public static Object find(final Object[] items, final IterationCallback callback) {
+        if (null != callback && null != items) {
+            int index = 0;
+            for (final Object item : items) {
+                final Object response = callback.handle(item, index, null);
+                if (null!=response) {
+                    return response;
+                }
+                index++;
+            }
+        }
+        return null;
+    }
+
+    public static Object find(final JSONArray items, final IterationCallback callback) {
+        if (null != callback && null != items && items.length() > 0) {
+            final int len = items.length();
+            for (int i = 0; i < len; i++) {
+                final Object response = callback.handle(items.get(i), i, null);
+                if (null!=response) {
+                    return response;
+                }
+            }
+        }
+        return null;
+    }
+
+    public static Object find(final Map<?, ?> map, final IterationCallback callback) {
+        if (null != callback && null != map) {
+            final Set<?> keys = map.keySet();
+            int index = 0;
+            for (final Object key : keys) {
+                final Object response = callback.handle(map.get(key), index, key);
+                if (null!=response) {
+                    return response;
+                }
+                index++;
+            }
+        }
+        return null;
+    }
+
     //---------------------------------------------------------------------
     // Convenience methods for working with String arrays
     //---------------------------------------------------------------------

@@ -1,8 +1,10 @@
 package org.smartly.commons.io.temprepository;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.smartly.Smartly;
 import org.smartly.commons.cryptograph.MD5;
+import org.smartly.commons.util.CollectionUtils;
 import org.smartly.commons.util.FileUtils;
 import org.smartly.commons.util.JsonWrapper;
 import org.smartly.commons.util.PathUtils;
@@ -77,10 +79,10 @@ public class Registry {
         _settings.putSilent(LIFE_MS, value);
         if (_settings.optLong(CHECK_MS) < value) {
             _settings.putSilent(CHECK_MS, value);
-            try {
-                this.saveSettings();
-            } catch (Throwable ignored) {
-            }
+        }
+        try {
+            this.saveSettings();
+        } catch (Throwable ignored) {
         }
     }
 
@@ -104,9 +106,10 @@ public class Registry {
     public boolean addItem(final String path) {
         synchronized (_data) {
             final String key = getId(path);
-            final JsonWrapper items = new JsonWrapper(_data.optJSONObject(ITEMS));
+            final JSONObject items = _data.optJSONObject(ITEMS);
             if (!items.has(key)) {
-                items.putSilent(key, (new RegistryItem(path)).getData());
+                JsonWrapper.put(items, key, (new RegistryItem(path)).getData());
+                _data.putOpt(ITEMS, items);
                 return true;
             }
             return false;
@@ -147,7 +150,7 @@ public class Registry {
         try {
             return FileUtils.readFileToString(new File(fileName));
         } catch (Throwable t) {
-            return "{'items':[]}";
+            return "{'items':{}}";
         }
     }
 

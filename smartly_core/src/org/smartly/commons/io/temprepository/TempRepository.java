@@ -54,7 +54,15 @@ public class TempRepository
     }
 
     public void setDuration(final long ms) {
+        _registry.interrupt();
         _registry.setLife(ms);
+        _registry.start();
+    }
+
+    public void setCheckTime(final long ms) {
+        _registry.interrupt();
+        _registry.setCheck(ms);
+        _registry.start();
     }
 
     public void interrupt() {
@@ -140,8 +148,10 @@ public class TempRepository
 
     @Override
     public void onEvent(int event, String path) {
+        String sevent = "UNDEFINED";
         try {
             if (event == FileObserver.EVENT_CREATE) {
+                sevent = "CREATE";
                 // CREATE
                 if (!_path_data.equalsIgnoreCase(path)
                         && !_path_settings.equalsIgnoreCase(path)) {
@@ -150,11 +160,13 @@ public class TempRepository
                     }
                 }
             } else if (event == FileObserver.EVENT_MODIFY) {
+                sevent = "MODIFY";
                 // MODIFY
                 if (_path_settings.equalsIgnoreCase(path)) {
                     _registry.reloadSettings();
                 }
             } else if (event == FileObserver.EVENT_DELETE) {
+                sevent = "DELETE";
                 if (!_path_data.equalsIgnoreCase(path)
                         && !_path_settings.equalsIgnoreCase(path)) {
                     if (_registry.removeItem(path)) {
@@ -166,7 +178,8 @@ public class TempRepository
                 }
             }
         } catch (Throwable t) {
-            final String msg = FormatUtils.format("Error adding '{0}' to temp repository: {1}", path, t);
+            final String msg = FormatUtils.format("Error on '{0}' path '{1}' to temp repository: {2}",
+                    sevent, path, t);
             getLogger().severe(msg);
             //-- problem with registry. stop everything --//
             this.interrupt();
