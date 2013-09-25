@@ -104,6 +104,18 @@ public abstract class VLCTemplateManager
         return "";
     }
 
+    public String get(final Locale locale, final String key, final Object... args) {
+        final String value = this.getPropertyValue(locale, key);
+        if (StringUtils.hasText(value)) {
+            final String result = this.evalText(value, null);
+            if (null != args && args.length > 0) {
+                return FormatUtils.format(result, args);
+            }
+            return result;
+        }
+        return "";
+    }
+
     public String getTitle(final Locale locale) {
         final String value = this.getPropertyValue(locale, KEY_TITLE);
         if (StringUtils.hasText(value)) {
