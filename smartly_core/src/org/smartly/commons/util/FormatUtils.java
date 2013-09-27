@@ -12,6 +12,10 @@ public class FormatUtils {
         Object handle(final String placeholder);
     }
 
+    public static final int STYLE_SHORT = DateFormat.SHORT;
+    public static final int STYLE_MEDIUM = DateFormat.MEDIUM;
+    public static final int STYLE_LONG = DateFormat.LONG;
+
     public static final String DEFAULT_DATEFORMAT = "yyyyMMdd";
     public static final String DEFAULT_TIMEFORMAT = "HH:mm:ss";
 
@@ -342,6 +346,10 @@ public class FormatUtils {
         return formatDate(date, locale);
     }
 
+    public static String formatDate(final long dateToFormat, int style, Locale locale) {
+        return formatDate(new Date(dateToFormat), style, locale, false);
+    }
+
     public static String formatDate(final Date dateToFormat, final Locale locale,
                                     final boolean includetime) {
         return formatDate(dateToFormat, DateFormat.MEDIUM, locale, includetime);
@@ -360,7 +368,9 @@ public class FormatUtils {
      * @param locale       Locale
      * @return String formatted date.
      */
-    public static String formatDate(Date dateToFormat, int style, Locale locale) {
+    public static String formatDate(final Date dateToFormat,
+                                    final int style,
+                                    final Locale locale) {
         return formatDate(dateToFormat, style, locale, false);
     }
 
@@ -378,7 +388,9 @@ public class FormatUtils {
      * @param includetime  If true also time in format "hh:mm:ss" is included in output
      * @return formatted date.
      */
-    public static String formatDate(Date dateToFormat, int style, Locale locale,
+    public static String formatDate(final Date dateToFormat,
+                                    final int style,
+                                    final Locale locale,
                                     final boolean includetime) {
         String result = null;
         try {

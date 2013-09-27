@@ -47,6 +47,8 @@ public class JsonDBCollection {
     public void drop() {
         // remove metadata
         _db.collectionsMetadata(_name, true);
+        // remove data from memory
+        __data = null;
         // remove data
         this.remove();
     }
