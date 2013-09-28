@@ -1,5 +1,7 @@
 (function (window, $, _, Backbone) {
 
+    // 'use strict';
+
     // ------------------------------------------------------------------------
     //                      initialization
     // ------------------------------------------------------------------------
@@ -449,12 +451,11 @@
             var super_ = 'super_';
 
             /** @constructor */
-            function tempCtor() {
-            }
+            var ctr =  function tempCtor() {};
 
-            tempCtor.prototype = superConstructor.prototype;
+            ctr.prototype = superConstructor.prototype;
             constructor[super_] = superConstructor.prototype;
-            constructor.prototype = new tempCtor();
+            constructor.prototype = new ctr();
             constructor.prototype.constructor = constructor;
         } else {
             console.error('Constructor and SuperConstructor must be valid. Constructor=' + constructor);
