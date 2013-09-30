@@ -44,11 +44,12 @@ public class WebServer extends AbstractHttpServer {
     public void start() throws Exception {
         try {
             final String jettyHome = super.getRoot(); // absolute path
+            final String sslRoot = super.getSslRootPath();
             final JSONObject configuration = super.getConfiguration();
 
 
             //-- init connectors --//
-            final Connector[] connectors = initConnectors(super.getJetty(), jettyHome, configuration);
+            final Connector[] connectors = initConnectors(super.getJetty(), sslRoot, configuration);
 
             super.getJetty().setConnectors(connectors);
 
@@ -95,16 +96,23 @@ public class WebServer extends AbstractHttpServer {
         return absolutePath;
     }
 
-    private static Connector[] initConnectors(final Server server, final String jettyHome, final JSONObject configuration) {
+    private static Connector[] initConnectors(final Server server,
+                                              final String sslRoot,
+                                              final JSONObject configuration) {
+        final int request_buffer = JsonWrapper.getInt(configuration, "request_buffer", 8112);
+        final int response_buffer = JsonWrapper.getInt(configuration, "response_buffer", 32768);
+        final int secure_port = JsonWrapper.getInt(configuration, "secure_port", 8443);
+        final String secure_scheme = JsonWrapper.getString(configuration, "secure_scheme", "https");
         final JSONObject connectors = JsonWrapper.getJSON(configuration, "connectors");
         final Iterator<String> keys = connectors.keys();
         final List<Connector> result = new LinkedList<Connector>();
 
         // http configuration
         final HttpConfiguration http_config = new HttpConfiguration();
-        http_config.setSecureScheme("https");
-        http_config.setSecurePort(8443);
-        http_config.setOutputBufferSize(32768);
+        http_config.setSecureScheme(secure_scheme);
+        http_config.setSecurePort(secure_port);
+        http_config.setOutputBufferSize(response_buffer);
+        http_config.setRequestHeaderSize(request_buffer);
 
         while (keys.hasNext()) {
             final String key = keys.next();
@@ -112,8 +120,6 @@ public class WebServer extends AbstractHttpServer {
             if ("http".equalsIgnoreCase(key)) {
                 final JSONObject connector = JsonWrapper.getJSON(connectors, key);
                 if (null != connector && JsonWrapper.getBoolean(connector, "enabled")) {
-
-                    http_config.setRequestHeaderSize(JsonWrapper.getInt(connector, "header_buffer", 8112));
 
                     final ServerConnector http = new ServerConnector(server, new HttpConnectionFactory(http_config));
                     http.setPort(JsonWrapper.getInt(connector, "port", 8080));
@@ -124,13 +130,14 @@ public class WebServer extends AbstractHttpServer {
                 final JSONObject connector = JsonWrapper.getJSON(connectors, key);
                 if (null != connector && JsonWrapper.getBoolean(connector, "enabled")) {
 
-                    final String keySorePath = mkdirs(PathUtils.join(jettyHome, "/etc/keystore"));
+                    mkdirs(sslRoot);
+                    final String keySorePath = PathUtils.join(sslRoot, "/keystore");
 
                     // SSL Context Factory for HTTPS and SPDY
                     SslContextFactory sslContextFactory = new SslContextFactory();
                     sslContextFactory.setKeyStorePath(keySorePath);
-                    sslContextFactory.setKeyStorePassword("OBF:1vny1zlo1x8e1vnw1vn61x8g1zlu1vn4");
-                    sslContextFactory.setKeyManagerPassword("OBF:1u2u1wml1z7s1z7a1wnl1u2g");
+                    sslContextFactory.setKeyStorePassword(JsonWrapper.getString(connector, "key_password"));
+                    sslContextFactory.setKeyManagerPassword(JsonWrapper.getString(connector, "key_manager_password"));
 
                     // HTTPS Configuration
                     HttpConfiguration https_config = new HttpConfiguration(http_config);
@@ -141,6 +148,7 @@ public class WebServer extends AbstractHttpServer {
                             new SslConnectionFactory(sslContextFactory,"http/1.1"),
                             new HttpConnectionFactory(https_config));
                     https.setPort(JsonWrapper.getInt(connector, "port", 8443));
+                    https.setIdleTimeout(JsonWrapper.getInt(connector, "max_idle", 30000));
 
                     result.add(https);
                 }

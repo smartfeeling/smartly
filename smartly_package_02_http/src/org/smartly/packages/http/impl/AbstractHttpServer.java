@@ -12,6 +12,7 @@ import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.LoggingRepository;
 import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.util.JsonWrapper;
+import org.smartly.commons.util.PathUtils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,15 +23,22 @@ import java.util.Set;
 public abstract class AbstractHttpServer {
 
     private static final String LOG_FILE = IConstants.PATH_LOG.concat("/").concat("http/webserver.log");
+    private static final String PATH_ETC = "etc/";
+
 
     private final String _absoluteBaseResource;
+    private final String _absoluteWorkSpacePath;
+    private final String _absoluteEtcPath;
     private final JSONObject _configuration;
     private final Server _jetty;
     private final Set<String> _servletExtensions; // resource's extensions managed from servlet (i.e. vhtml)
     private final Set<String> _servletPaths;
 
-    public AbstractHttpServer(final String absolutePath, final JSONObject configuration) {
+    public AbstractHttpServer(final String absolutePath,
+                              final JSONObject configuration) {
         _absoluteBaseResource = absolutePath;
+        _absoluteWorkSpacePath = PathUtils.getParent(_absoluteBaseResource);
+        _absoluteEtcPath = PathUtils.concat(_absoluteWorkSpacePath, PATH_ETC);
         _configuration = configuration;
 
         // init custom log file
@@ -80,6 +88,14 @@ public abstract class AbstractHttpServer {
 
     public String getRoot() {
         return _absoluteBaseResource;
+    }
+
+    public String getWorkSpacePath(){
+       return _absoluteWorkSpacePath;
+    }
+
+    public String getSslRootPath(){
+        return _absoluteEtcPath;
     }
 
     public void join() throws InterruptedException {
