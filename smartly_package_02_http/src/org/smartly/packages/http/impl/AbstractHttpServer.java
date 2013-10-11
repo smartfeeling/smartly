@@ -14,8 +14,9 @@ import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.util.JsonWrapper;
 import org.smartly.commons.util.PathUtils;
 
-import java.util.HashSet;
-import java.util.Set;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import java.util.*;
 
 /**
  * @author angelo.geminiani
@@ -25,6 +26,9 @@ public abstract class AbstractHttpServer {
     private static final String LOG_FILE = IConstants.PATH_LOG.concat("/").concat("http/webserver.log");
     private static final String PATH_ETC = "etc/";
 
+    // --------------------------------------------------------------------
+    //               f i e l d s
+    // --------------------------------------------------------------------
 
     private final String _absoluteBaseResource;
     private final String _absoluteWorkSpacePath;
@@ -33,6 +37,11 @@ public abstract class AbstractHttpServer {
     private final Server _jetty;
     private final Set<String> _servletExtensions; // resource's extensions managed from servlet (i.e. vhtml)
     private final Set<String> _servletPaths;
+    private final Map<Class, IHttpHandler> _external_handlers;
+
+    // --------------------------------------------------------------------
+    //               c o n s t r u c t o r
+    // --------------------------------------------------------------------
 
     public AbstractHttpServer(final String absolutePath,
                               final JSONObject configuration) {
@@ -40,6 +49,7 @@ public abstract class AbstractHttpServer {
         _absoluteWorkSpacePath = PathUtils.getParent(_absoluteBaseResource);
         _absoluteEtcPath = PathUtils.concat(_absoluteWorkSpacePath, PATH_ETC);
         _configuration = configuration;
+        _external_handlers = Collections.synchronizedMap(new HashMap<Class, IHttpHandler>());
 
         // init custom log file
         LoggingRepository.getInstance().setLogFileName(this.getClass(), LOG_FILE);
@@ -52,21 +62,21 @@ public abstract class AbstractHttpServer {
 
     //-- RESOURCE EXTENSIONS MANAGED BY SERVLETS --//
 
-    public void registerEndPoint(final String endPoint){
-       if(endPoint.startsWith("*.")){
-           final String ext = endPoint.substring(1);
-           _servletExtensions.add(ext);
-       } else {
-           final String path = endPoint.replace("*", "");
-           _servletPaths.add(path);
-       }
+    public void registerEndPoint(final String endPoint) {
+        if (endPoint.startsWith("*.")) {
+            final String ext = endPoint.substring(1);
+            _servletExtensions.add(ext);
+        } else {
+            final String path = endPoint.replace("*", "");
+            _servletPaths.add(path);
+        }
     }
 
-    public Set<String> getServletExtensions(){
+    public Set<String> getServletExtensions() {
         return _servletExtensions;
     }
 
-    public Set<String> getServletPaths(){
+    public Set<String> getServletPaths() {
         return _servletPaths;
     }
 
@@ -82,19 +92,40 @@ public abstract class AbstractHttpServer {
 
     //-- SERVER --//
 
-    protected Server getJetty(){
+    protected Server getJetty() {
         return _jetty;
     }
 
+    /**
+     * Returns root path of webserver (the htdoc).
+     *
+     * @return Absolute path of web server root.
+     */
     public String getRoot() {
         return _absoluteBaseResource;
     }
 
-    public String getWorkSpacePath(){
-       return _absoluteWorkSpacePath;
+    public String getRootPath(final String path) {
+        if (PathUtils.isAbsolute(path)) {
+            return path;
+        } else {
+            return PathUtils.concat(getRoot(), path);
+        }
     }
 
-    public String getSslRootPath(){
+    public String getWorkSpacePath() {
+        return _absoluteWorkSpacePath;
+    }
+
+    public String getWorkSpacePath(final String path) {
+        if (PathUtils.isAbsolute(path)) {
+            return path;
+        } else {
+            return PathUtils.concat(getWorkSpacePath(), path);
+        }
+    }
+
+    public String getSslRootPath() {
         return _absoluteEtcPath;
     }
 
@@ -114,6 +145,20 @@ public abstract class AbstractHttpServer {
         if (null != _jetty) {
             _jetty.stop();
         }
+    }
+
+    //-- CALLBACKS FOR SERVLET --//
+
+    public void addHandler(final Class servlet, final IHttpHandler handler){
+         _external_handlers.put(servlet, handler);
+    }
+
+    public boolean handleRequest(final Object sender,
+                                 final ServletRequest request,
+                                 final ServletResponse response) throws Exception{
+
+        // not handled
+        return false;
     }
 
     //-- LOG --//

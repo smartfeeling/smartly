@@ -19,9 +19,7 @@ import org.smartly.packages.http.impl.handlers.SmartlyShutdownHandler;
 import org.smartly.packages.http.impl.util.vtool.AppTool;
 import org.smartly.packages.velocity.impl.VLCManager;
 
-import javax.servlet.DispatcherType;
-import javax.servlet.Filter;
-import javax.servlet.Servlet;
+import javax.servlet.*;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -29,14 +27,48 @@ import java.util.List;
 
 /**
  * Web Server Wrapper
- *
+ * <p/>
  * More about Jetty here:
  * http://git.eclipse.org/c/jetty/org.eclipse.jetty.project.git/tree/examples/embedded/src/main/java/org/eclipse/jetty/embedded/
  */
 public class WebServer extends AbstractHttpServer {
 
 
-    public WebServer(final String docRoot, final JSONObject configuration) {
+    // --------------------------------------------------------------------
+    //               c o n s t a n t s
+    // --------------------------------------------------------------------
+
+    private static final String KEYSTORE = "/keystore";
+
+    private static final String PARAM_REQUEST_BUFFER = "request_buffer";
+    private static final String PARAM_RESPONSE_BUFFER = "response_buffer";
+    private static final String PARAM_SECURE_PORT = "secure_port";
+    private static final String PARAM_SECURE_SCHEME = "secure_scheme";
+    private static final String PARAM_CONNECTORS = "connectors";
+    private static final String PARAM_ENABLED = "enabled";
+    private static final String PARAM_PORT = "port";
+    private static final String PARAM_MAX_IDLE = "max_idle";
+    private static final String PARAM_KEY_PASSWORD = "key_password";
+    private static final String PARAM_KEY_MANAGER_PASSWORD = "key_manager_password";
+    private static final String PARAM_HANDLERS = "handlers";
+    private static final String PARAM_CHAIN = "chain";
+    private static final String PARAM_ENDPOINTS = "endpoints";
+    private static final String PARAM_ENDPOINT = "endpoint";
+    private static final String PARAM_SERVLETS = "servlets";
+    private static final String PARAM_DATA = "data";
+    public static final String PARAM_MULTIPART = "multipart";
+    public static final String PARAM_MULTIPART_LOCATION = "multipart_location";
+    public static final String PARAM_MULTIPART_MAX_FILE = "multipart_max_file";
+    public static final String PARAM_MULTIPART_MAX_REQUEST = "multipart_max_request";
+    public static final String PARAM_MULTIPART_FILE_THRESHOLD = "multipart_file_threshold";
+
+
+    // --------------------------------------------------------------------
+    //               c o n s t r u c t o r
+    // --------------------------------------------------------------------
+
+    public WebServer(final String docRoot,
+                     final JSONObject configuration) {
         super(docRoot, configuration);
     }
 
@@ -72,6 +104,20 @@ public class WebServer extends AbstractHttpServer {
         }
     }
 
+    /**
+     * May handle externally a request
+     *
+     * @param sender   Servlet or Filter
+     * @param request  Servlet Request
+     * @param response Servlet Response
+     * @return False if request has not been handled
+     */
+    public boolean handleRequest(final Object sender,
+                                 final ServletRequest request,
+                                 final ServletResponse response) throws Exception{
+        return super.handleRequest(sender, request, response);
+    }
+
     // --------------------------------------------------------------------
     //               p r i v a t e
     // --------------------------------------------------------------------
@@ -99,11 +145,11 @@ public class WebServer extends AbstractHttpServer {
     private static Connector[] initConnectors(final Server server,
                                               final String sslRoot,
                                               final JSONObject configuration) {
-        final int request_buffer = JsonWrapper.getInt(configuration, "request_buffer", 8112);
-        final int response_buffer = JsonWrapper.getInt(configuration, "response_buffer", 32768);
-        final int secure_port = JsonWrapper.getInt(configuration, "secure_port", 8443);
-        final String secure_scheme = JsonWrapper.getString(configuration, "secure_scheme", "https");
-        final JSONObject connectors = JsonWrapper.getJSON(configuration, "connectors");
+        final int request_buffer = JsonWrapper.getInt(configuration, PARAM_REQUEST_BUFFER, 8112);
+        final int response_buffer = JsonWrapper.getInt(configuration, PARAM_RESPONSE_BUFFER, 32768);
+        final int secure_port = JsonWrapper.getInt(configuration, PARAM_SECURE_PORT, 8443);
+        final String secure_scheme = JsonWrapper.getString(configuration, PARAM_SECURE_SCHEME, "https");
+        final JSONObject connectors = JsonWrapper.getJSON(configuration, PARAM_CONNECTORS);
         final Iterator<String> keys = connectors.keys();
         final List<Connector> result = new LinkedList<Connector>();
 
@@ -119,25 +165,25 @@ public class WebServer extends AbstractHttpServer {
 
             if ("http".equalsIgnoreCase(key)) {
                 final JSONObject connector = JsonWrapper.getJSON(connectors, key);
-                if (null != connector && JsonWrapper.getBoolean(connector, "enabled")) {
+                if (null != connector && JsonWrapper.getBoolean(connector, PARAM_ENABLED)) {
 
                     final ServerConnector http = new ServerConnector(server, new HttpConnectionFactory(http_config));
-                    http.setPort(JsonWrapper.getInt(connector, "port", 8080));
-                    http.setIdleTimeout(JsonWrapper.getInt(connector, "max_idle", 30000));
+                    http.setPort(JsonWrapper.getInt(connector, PARAM_PORT, 8080));
+                    http.setIdleTimeout(JsonWrapper.getInt(connector, PARAM_MAX_IDLE, 30000));
                     result.add(http);
                 }
             } else if ("ssl".equalsIgnoreCase(key)) {
                 final JSONObject connector = JsonWrapper.getJSON(connectors, key);
-                if (null != connector && JsonWrapper.getBoolean(connector, "enabled")) {
+                if (null != connector && JsonWrapper.getBoolean(connector, PARAM_ENABLED)) {
 
                     mkdirs(sslRoot);
-                    final String keySorePath = PathUtils.join(sslRoot, "/keystore");
+                    final String keySorePath = PathUtils.join(sslRoot, KEYSTORE);
 
                     // SSL Context Factory for HTTPS and SPDY
                     SslContextFactory sslContextFactory = new SslContextFactory();
                     sslContextFactory.setKeyStorePath(keySorePath);
-                    sslContextFactory.setKeyStorePassword(JsonWrapper.getString(connector, "key_password"));
-                    sslContextFactory.setKeyManagerPassword(JsonWrapper.getString(connector, "key_manager_password"));
+                    sslContextFactory.setKeyStorePassword(JsonWrapper.getString(connector, PARAM_KEY_PASSWORD));
+                    sslContextFactory.setKeyManagerPassword(JsonWrapper.getString(connector, PARAM_KEY_MANAGER_PASSWORD));
 
                     // HTTPS Configuration
                     HttpConfiguration https_config = new HttpConfiguration(http_config);
@@ -145,10 +191,10 @@ public class WebServer extends AbstractHttpServer {
 
                     // HTTPS connector
                     ServerConnector https = new ServerConnector(server,
-                            new SslConnectionFactory(sslContextFactory,"http/1.1"),
+                            new SslConnectionFactory(sslContextFactory, "http/1.1"),
                             new HttpConnectionFactory(https_config));
-                    https.setPort(JsonWrapper.getInt(connector, "port", 8443));
-                    https.setIdleTimeout(JsonWrapper.getInt(connector, "max_idle", 30000));
+                    https.setPort(JsonWrapper.getInt(connector, PARAM_PORT, 8443));
+                    https.setIdleTimeout(JsonWrapper.getInt(connector, PARAM_MAX_IDLE, 30000));
 
                     result.add(https);
                 }
@@ -172,17 +218,17 @@ public class WebServer extends AbstractHttpServer {
     private static Handler initHandlers(final WebServer server, final JSONObject configuration) {
         final String shutdownToken = JsonWrapper.getString(configuration, "shutdown_token", "smartly");
 
-        final JSONObject handlers = JsonWrapper.getJSON(configuration, "handlers");
+        final JSONObject handlers = JsonWrapper.getJSON(configuration, PARAM_HANDLERS);
         if (null != handlers && handlers.length() > 0) {
 
             //-- file handler --//
-            final HandlerList main = initChainHandlers(server, JsonWrapper.getJSON(handlers, "chain"));
+            final HandlerList main = initChainHandlers(server, JsonWrapper.getJSON(handlers, PARAM_CHAIN));
 
             //-- shutdown handler --//
             main.addHandler(new SmartlyShutdownHandler(server.getJetty(), shutdownToken));
 
             //-- add endpoints (servlets and rest) --//
-            final ContextHandlerCollection endpoints = initContextHandlers(server, JsonWrapper.getJSON(handlers, "endpoints"));
+            final ContextHandlerCollection endpoints = initContextHandlers(server, JsonWrapper.getJSON(handlers, PARAM_ENDPOINTS));
             if (null != endpoints) {
                 main.addHandler(endpoints);
             }
@@ -195,8 +241,8 @@ public class WebServer extends AbstractHttpServer {
 
     private static HandlerList initChainHandlers(final WebServer server, final JSONObject chain) {
         final HandlerList list = new HandlerList();
-        if (null != chain && JsonWrapper.getBoolean(chain, "enabled")) {
-            final List<JSONObject> data = JsonWrapper.toListOfJSONObject(JsonWrapper.getArray(chain, "data"));
+        if (null != chain && JsonWrapper.getBoolean(chain, PARAM_ENABLED)) {
+            final List<JSONObject> data = JsonWrapper.toListOfJSONObject(JsonWrapper.getArray(chain, PARAM_DATA));
             if (!CollectionUtils.isEmpty(data)) {
                 for (final JSONObject file : data) {
                     final Handler handler = createHandler(server, file);
@@ -211,11 +257,11 @@ public class WebServer extends AbstractHttpServer {
 
     private static ContextHandlerCollection initContextHandlers(final WebServer server, final JSONObject endpoints) {
         final ContextHandlerCollection result = new ContextHandlerCollection();
-        if (null != endpoints && JsonWrapper.getBoolean(endpoints, "enabled")) {
+        if (null != endpoints && JsonWrapper.getBoolean(endpoints, PARAM_ENABLED)) {
             // rest
-            loadRestHandlers(result, server, JsonWrapper.toListOfJSONObject(JsonWrapper.getArray(endpoints, "data")));
+            loadRestHandlers(result, server, JsonWrapper.toListOfJSONObject(JsonWrapper.getArray(endpoints, PARAM_DATA)));
             // servlets
-            final ServletContextHandler servlets = initServletHandlers(server, JsonWrapper.getJSON(endpoints, "servlets"));
+            final ServletContextHandler servlets = initServletHandlers(server, JsonWrapper.getJSON(endpoints, PARAM_SERVLETS));
             if (null != servlets) {
                 result.addHandler(servlets);
             }
@@ -273,25 +319,57 @@ public class WebServer extends AbstractHttpServer {
     }
 
     private static ServletContextHandler initServletHandlers(final WebServer server, final JSONObject servlets) {
-        if (null != servlets && JsonWrapper.getBoolean(servlets, "enabled")) {
+        if (null != servlets && JsonWrapper.getBoolean(servlets, PARAM_ENABLED)) {
             // creates context
-            final String contextPath = JsonWrapper.getString(servlets, "endpoint", "/");
+            final String contextPath = JsonWrapper.getString(servlets, PARAM_ENDPOINT, "/");
             final ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
             context.setContextPath(contextPath);
 
             // creates servlets
-            final JSONArray servletData = JsonWrapper.getArray(servlets, "data");
+            final JSONArray servletData = JsonWrapper.getArray(servlets, PARAM_DATA);
             if (null != servletData && servletData.length() > 0) {
                 for (int i = 0; i < servletData.length(); i++) {
                     final JSONObject servletJSON = servletData.optJSONObject(i);
-                    final Object handler = createServlet(server, servletJSON);
+                    final Object handler = createServletOrFilter(server, servletJSON);
                     if (null != handler) {
-                        final String pathSpec = JsonWrapper.getString(servletJSON, "endpoint");
+                        final String pathSpec = JsonWrapper.getString(servletJSON, PARAM_ENDPOINT);
+                        final boolean isMultipart = JsonWrapper.getBoolean(servletJSON, PARAM_MULTIPART);
+                        final String location = server.getWorkSpacePath(JsonWrapper.getString(servletJSON, PARAM_MULTIPART_LOCATION));
+                        final long maxFileSize = JsonWrapper.getLong(servletJSON, PARAM_MULTIPART_MAX_FILE, 1048576); // 1Mb
+                        final long maxRequestSize = JsonWrapper.getLong(servletJSON, PARAM_MULTIPART_MAX_REQUEST, maxFileSize);
+                        final int fileSizeThreshold = JsonWrapper.getInt(servletJSON, PARAM_MULTIPART_FILE_THRESHOLD, 262144);
                         if (handler instanceof Servlet) {
-                            context.addServlet(new ServletHolder((Servlet) handler), pathSpec);
+                            // servlet
+                            final ServletHolder sh = new ServletHolder((Servlet) handler);
+                            if (isMultipart) {
+                                final MultipartConfigElement config = new MultipartConfigElement(
+                                        location,               // location (String)
+                                        maxFileSize,            // maxFileSize (long)
+                                        maxRequestSize,         // maxRequestSize (long)
+                                        fileSizeThreshold);     // fileSizeThreshold (int)
+                                sh.getRegistration().setMultipartConfig(config);
+                                sh.getRegistration().setInitParameter(PARAM_MULTIPART_LOCATION, location);
+                                sh.getRegistration().setInitParameter(PARAM_MULTIPART_MAX_FILE, maxFileSize + "");
+                                sh.getRegistration().setInitParameter(PARAM_MULTIPART_MAX_REQUEST, maxRequestSize + "");
+                                sh.getRegistration().setInitParameter(PARAM_MULTIPART_FILE_THRESHOLD, fileSizeThreshold + "");
+                            }
+                            context.addServlet(sh, pathSpec);
                             server.registerEndPoint(pathSpec);
                         } else if (handler instanceof Filter) {
-                            context.addFilter(new FilterHolder((Filter) handler), pathSpec, EnumSet.allOf(DispatcherType.class));
+                            // filter
+                            final FilterHolder holder = new FilterHolder((Filter) handler);
+                            if (isMultipart) {
+                                holder.getRegistration().setInitParameter(PARAM_MULTIPART_LOCATION, location);
+                                holder.getRegistration().setInitParameter(PARAM_MULTIPART_MAX_FILE, maxFileSize + "");
+                                holder.getRegistration().setInitParameter(PARAM_MULTIPART_MAX_REQUEST, maxRequestSize + "");
+                                holder.getRegistration().setInitParameter(PARAM_MULTIPART_FILE_THRESHOLD, fileSizeThreshold + "");
+                                holder.getRegistration().setInitParameter("deleteFiles", "true");
+                                holder.getRegistration().setInitParameter("fileOutputBuffer", fileSizeThreshold + "");
+                                holder.getRegistration().setInitParameter("maxFileSize", maxFileSize + "");
+                                holder.getRegistration().setInitParameter("maxRequestSize", maxRequestSize + "");
+                                holder.getRegistration().setInitParameter("maxFormKeys", "1000");
+                            }
+                            context.addFilter(holder, pathSpec, EnumSet.allOf(DispatcherType.class));
                             server.registerEndPoint(pathSpec);
                         } else {
                             staticLogger().log(Level.WARNING, FormatUtils.format("UNSUPPORTED HANDLER. " +
@@ -308,7 +386,7 @@ public class WebServer extends AbstractHttpServer {
         return null;
     }
 
-    private static Object createServlet(final WebServer server, final JSONObject servlet) {
+    private static Object createServletOrFilter(final WebServer server, final JSONObject servlet) {
         if (null != servlet) {
             try {
                 final String className = JsonWrapper.getString(servlet, "class");
@@ -317,15 +395,16 @@ public class WebServer extends AbstractHttpServer {
                     if (null != servletClass) {
                         final Object params = JsonWrapper.get(servlet, "params");
                         final Object instance;
-                        if (null != params) {
-                            instance = ClassLoaderUtils.newInstance(servletClass, new Class[]{Object.class}, new Object[]{params});
+                        if (null != params && StringUtils.hasText(params.toString())) {
+                            instance = newInstance(servletClass, params);
                         } else {
-                            instance = ClassLoaderUtils.newInstance(servletClass);
+                            instance = newInstance(servletClass, servlet);
                         }
                         // server
                         BeanUtils.setValueIfAny(instance, "server", server);
                         // doc_root
                         BeanUtils.setValueIfAny(instance, "resourceBase", server.getRoot());
+
                         return instance;
                     } else {
                         staticLogger().log(Level.WARNING, FormatUtils.format("Servlet not found: '{0}'", className));
@@ -336,6 +415,14 @@ public class WebServer extends AbstractHttpServer {
             }
         }
         return null;
+    }
+
+    private static Object newInstance(final Class aclass, final Object params) throws Exception {
+        try {
+            return ClassLoaderUtils.newInstance(aclass, new Class[]{Object.class}, new Object[]{params});
+        } catch (Throwable ignored) {
+            return ClassLoaderUtils.newInstance(aclass);
+        }
     }
 
     private static FilterHolder createFilter(final WebServer server, final JSONObject filter) {
