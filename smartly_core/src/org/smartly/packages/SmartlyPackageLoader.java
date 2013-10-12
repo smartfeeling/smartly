@@ -35,6 +35,10 @@ public class SmartlyPackageLoader {
         return _packages.keySet();
     }
 
+    public void register(final AbstractPackage instance) {
+        this.register(instance, null);
+    }
+
     /**
      * Programmatically registration of a package.
      * Usually packages are loaded from package folder, but when launched from IDE you may
@@ -42,12 +46,13 @@ public class SmartlyPackageLoader {
      *
      * @param instance Package Instance
      */
-    public void register(final AbstractPackage instance) {
+    public void register(final AbstractPackage instance,
+                         final Boolean modal) {
         if (null != instance) {
             final String key = instance.getId();
             synchronized (_packages) {
                 if (!_packages.containsKey(key)) {
-                    if (instance instanceof ISmartlyModalPackage) {
+                    if (isModal(instance, modal)) {
                         if (null != _modalPackage) {
                             final String msg = FormatUtils.format("Modal Package already registered. Only one modal " +
                                     "package is allowed. '{0}->{1}' will not be registered.",
@@ -74,6 +79,8 @@ public class SmartlyPackageLoader {
             }
         }
     }
+
+
 
     public void load() throws Exception {
         if (_runned) {
@@ -258,6 +265,14 @@ public class SmartlyPackageLoader {
             this.warning(FormatUtils.format("RESOURCE '{0}' not found. " +
                     "Ensure you included it in your package distribution " +
                     "(i.e. check IDE settings for Compiler Options.)", filePath));
+        }
+    }
+
+    private static boolean isModal(final AbstractPackage instance, final Boolean modal) {
+        if (null == modal) {
+            return instance instanceof ISmartlyModalPackage;
+        } else {
+            return modal;
         }
     }
 }

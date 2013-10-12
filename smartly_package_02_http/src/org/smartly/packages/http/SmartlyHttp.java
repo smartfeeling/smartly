@@ -1,19 +1,18 @@
 package org.smartly.packages.http;
 
 
-import org.json.JSONObject;
 import org.smartly.Smartly;
 import org.smartly.commons.io.jsonrepository.JsonRepository;
 import org.smartly.commons.lang.CharEncoding;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.util.FileUtils;
-import org.smartly.commons.util.JsonWrapper;
 import org.smartly.commons.util.PathUtils;
 import org.smartly.commons.util.StringUtils;
 import org.smartly.packages.AbstractPackage;
 import org.smartly.packages.ISmartlyModalPackage;
 import org.smartly.packages.ISmartlySystemPackage;
 import org.smartly.packages.http.config.Deployer;
+import org.smartly.packages.http.impl.AbstractHttpServer;
 import org.smartly.packages.http.impl.WebServer;
 import org.smartly.packages.velocity.SmartlyVelocity;
 
@@ -32,7 +31,13 @@ public class SmartlyHttp
 
     public static final String NAME = "smartly_http";
 
+    private final boolean _join;
+
     public SmartlyHttp() {
+        this(true); // start server and wait
+    }
+
+    public SmartlyHttp(final boolean join) {
         super(NAME, 2);
         super.setDescription("Http Module");
         super.setMaintainerName("Gian Angelo Geminiani");
@@ -44,6 +49,8 @@ public class SmartlyHttp
 
         //-- lib dependencies --//
         super.addDependency("org.mongodb:mongo-java-driver:2.7.3", "");
+
+        _join = join;
     }
 
     @Override
@@ -66,27 +73,14 @@ public class SmartlyHttp
     // --------------------------------------------------------------------
 
     private void init() {
-        //-- web server settings --//
-        final boolean enabled = Smartly.getConfiguration().getBoolean("http.webserver.enabled");
-        if (enabled) {
-            final JSONObject configuration = Smartly.getConfiguration().getJSONObject("http.webserver");
-            final String docRoot = JsonWrapper.getString(configuration, "root");
-            final String absoluteDocRoot = Smartly.getAbsolutePath(docRoot);
-
-            //-- the web server --//
-            this.startWebserver(absoluteDocRoot, configuration);
-        } else {
-            super.getLogger().warning("Web Server not enabled! Check configuration file.");
-        }
-    }
-
-    private void startWebserver(final String docRoot, final JSONObject configuration) {
         try {
-            // ensure resource base exists
-            FileUtils.mkdirs(docRoot);
-
-            final WebServer server = new WebServer(docRoot, configuration);
-            server.start();
+            final AbstractHttpServer server = WebServer.launch(false);
+            if (null == server) {
+                super.getLogger().warning("Web Server not enabled! Check configuration file.");
+            }
+            if(null!=server && _join){
+               server.join();
+            }
         } catch (Throwable t) {
             super.getLogger().log(Level.SEVERE, null, t);
         }

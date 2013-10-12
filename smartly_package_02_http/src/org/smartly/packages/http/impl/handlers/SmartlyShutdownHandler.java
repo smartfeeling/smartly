@@ -4,10 +4,10 @@ package org.smartly.packages.http.impl.handlers;
 /* ------------------------------------------------------------ */
 
 import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
+import org.smartly.packages.http.impl.AbstractHttpServer;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -53,7 +53,7 @@ public class SmartlyShutdownHandler extends ContextHandler {
     private static final Logger logger = LoggingUtils.getLogger(SmartlyShutdownHandler.class);
 
     private final String _shutdownToken;
-    private final Server _server;
+    private final AbstractHttpServer _server;
     private boolean _exitJvm = false;
 
 
@@ -63,7 +63,7 @@ public class SmartlyShutdownHandler extends ContextHandler {
      * @param server        the Jetty instance that should be shut down
      * @param shutdownToken a secret password to avoid unauthorized shutdown attempts
      */
-    public SmartlyShutdownHandler(final Server server,
+    public SmartlyShutdownHandler(final AbstractHttpServer server,
                                   final String shutdownToken) {
         _server = server;
         _shutdownToken = shutdownToken;
@@ -78,7 +78,7 @@ public class SmartlyShutdownHandler extends ContextHandler {
                          final Request baseRequest,
                          final HttpServletRequest request,
                          final HttpServletResponse response)
-            throws IOException, ServletException{
+            throws IOException, ServletException {
         // accept only clean commands
         if (!target.equals("/")) {
             return;

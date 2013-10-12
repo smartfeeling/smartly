@@ -5,8 +5,10 @@
 package org.smartly.packages.http.impl;
 
 import org.eclipse.jetty.server.Server;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.smartly.IConstants;
+import org.smartly.commons.Delegates;
 import org.smartly.commons.logging.Level;
 import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.LoggingRepository;
@@ -14,14 +16,37 @@ import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.util.JsonWrapper;
 import org.smartly.commons.util.PathUtils;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author angelo.geminiani
  */
 public abstract class AbstractHttpServer {
+
+    // --------------------------------------------------------------------
+    //               e v e n t s
+    // --------------------------------------------------------------------
+
+    public static interface OnError extends Delegates.ExceptionCallback {
+    }
+
+    public static interface OnStart {
+        void handle(final AbstractHttpServer sender);
+    }
+
+    public static interface OnUploaded {
+        void handle(final AbstractHttpServer sender, final JSONObject attributes,
+                    final JSONObject parameters, final JSONArray files);
+    }
+
+    private static final Class EVENT_ON_ERROR = OnError.class;
+    private static final Class EVENT_ON_START = OnStart.class;
+    private static final Class EVENT_ON_UPLOAD = OnUploaded.class;
+
+    // --------------------------------------------------------------------
+    //               c o n s t a n t s
+    // --------------------------------------------------------------------
 
     private static final String LOG_FILE = IConstants.PATH_LOG.concat("/").concat("http/webserver.log");
     private static final String PATH_ETC = "etc/";
@@ -37,7 +62,7 @@ public abstract class AbstractHttpServer {
     private final Server _jetty;
     private final Set<String> _servletExtensions; // resource's extensions managed from servlet (i.e. vhtml)
     private final Set<String> _servletPaths;
-    private final Map<Class, IHttpHandler> _external_handlers;
+    private final Delegates.Handlers _event_handlers;
 
     // --------------------------------------------------------------------
     //               c o n s t r u c t o r
@@ -49,7 +74,7 @@ public abstract class AbstractHttpServer {
         _absoluteWorkSpacePath = PathUtils.getParent(_absoluteBaseResource);
         _absoluteEtcPath = PathUtils.concat(_absoluteWorkSpacePath, PATH_ETC);
         _configuration = configuration;
-        _external_handlers = Collections.synchronizedMap(new HashMap<Class, IHttpHandler>());
+        _event_handlers = new Delegates.Handlers();
 
         // init custom log file
         LoggingRepository.getInstance().setLogFileName(this.getClass(), LOG_FILE);
@@ -59,6 +84,67 @@ public abstract class AbstractHttpServer {
         _servletExtensions = new HashSet<String>();
         _servletPaths = new HashSet<String>();
     }
+
+    @Override
+    protected void finalize() throws Throwable {
+        try {
+            _event_handlers.clear();
+        } catch (Throwable ignore) {
+        }
+        super.finalize();
+    }
+
+    // --------------------------------------------------------------------
+    //               e v e n t
+    // --------------------------------------------------------------------
+
+    public void onError(final OnError handler) {
+        _event_handlers.add(handler);
+    }
+
+    public void onStart(final OnStart handler) {
+        _event_handlers.add(handler);
+    }
+
+    public void onUploaded(final OnUploaded handler) {
+        _event_handlers.add(handler);
+    }
+
+    public void triggerOnError(final String message, final Throwable t) {
+        try {
+            if (_event_handlers.contains(EVENT_ON_ERROR)) {
+                _event_handlers.triggerAsync(EVENT_ON_ERROR, message, t);
+            } else {
+                // no  handlers.
+            }
+        } catch (Throwable ignored) {
+        }
+    }
+
+    public void triggerOnStart() {
+        try {
+            if (_event_handlers.contains(EVENT_ON_START)) {
+                _event_handlers.triggerAsync(EVENT_ON_START, this);
+            } else {
+                // no  handlers.
+            }
+        } catch (Throwable ignored) {
+        }
+    }
+
+    public void triggerOnUploaded(final JSONObject attributes, final JSONObject parameters, final JSONArray files) {
+        try {
+            if (_event_handlers.contains(EVENT_ON_UPLOAD)) {
+                _event_handlers.triggerAsync(EVENT_ON_UPLOAD, this, attributes, parameters, files);
+            } else {
+                // no  handlers.
+            }
+        } catch (Throwable ignored) {
+        }
+    }
+    // --------------------------------------------------------------------
+    //               p u b l i c
+    // --------------------------------------------------------------------
 
     //-- RESOURCE EXTENSIONS MANAGED BY SERVLETS --//
 
@@ -109,7 +195,7 @@ public abstract class AbstractHttpServer {
         if (PathUtils.isAbsolute(path)) {
             return path;
         } else {
-            return PathUtils.concat(getRoot(), path);
+            return PathUtils.merge(getRoot(), path);
         }
     }
 
@@ -121,7 +207,7 @@ public abstract class AbstractHttpServer {
         if (PathUtils.isAbsolute(path)) {
             return path;
         } else {
-            return PathUtils.concat(getWorkSpacePath(), path);
+            return PathUtils.merge(getWorkSpacePath(), path);
         }
     }
 
@@ -129,15 +215,19 @@ public abstract class AbstractHttpServer {
         return _absoluteEtcPath;
     }
 
-    public void join() throws InterruptedException {
+    public void start(final boolean join) throws Exception {
         if (null != _jetty) {
-            _jetty.join();
+            _jetty.start();
+            this.triggerOnStart();
+            if (join) {
+                _jetty.join();
+            }
         }
     }
 
-    public void start() throws Exception {
+    public void join() throws Exception {
         if (null != _jetty) {
-            _jetty.start();
+            _jetty.join();
         }
     }
 
@@ -145,44 +235,6 @@ public abstract class AbstractHttpServer {
         if (null != _jetty) {
             _jetty.stop();
         }
-    }
-
-    //-- CALLBACKS FOR SERVLET --//
-
-    public void addHandler(final Class servlet, final IHttpHandler handler){
-         _external_handlers.put(servlet, handler);
-    }
-
-    public boolean handleRequest(final Object sender,
-                                 final ServletRequest request,
-                                 final ServletResponse response) throws Exception{
-
-        // not handled
-        return false;
-    }
-
-    //-- LOG --//
-
-    public void debug(final String message) {
-        if (this.isDebugMode()) {
-            this.getLogger().log(Level.FINE, message);
-        }
-    }
-
-    public void info(final String message) {
-        this.getLogger().log(Level.INFO, message);
-    }
-
-    public void error(final String message) {
-        this.getLogger().log(Level.SEVERE, message);
-    }
-
-    public void error(final String message, final Throwable t) {
-        this.getLogger().log(Level.SEVERE, message, t);
-    }
-
-    public void error(final Throwable t) {
-        this.getLogger().log(Level.SEVERE, null, t);
     }
 
     // --------------------------------------------------------------------
@@ -193,5 +245,32 @@ public abstract class AbstractHttpServer {
         return LoggingUtils.getLogger(this);
     }
 
+    //-- LOG --//
+
+    protected void debug(final String message) {
+        if (this.isDebugMode()) {
+            this.getLogger().log(Level.FINE, message);
+        }
+    }
+
+    protected void info(final String message) {
+        this.getLogger().log(Level.INFO, message);
+    }
+
+    private void error(final String message) {
+        this.error(message, null);
+    }
+
+    private void error(final Throwable t) {
+        this.error(null, t);
+    }
+
+    private void error(final String message, final Throwable t) {
+        if (null != t) {
+            this.getLogger().log(Level.SEVERE, message, t);
+        } else {
+            this.getLogger().log(Level.SEVERE, message);
+        }
+    }
 
 }

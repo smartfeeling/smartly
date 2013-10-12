@@ -14,34 +14,92 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.smartly.Smartly;
+import org.smartly.commons.io.FileMeta;
+import org.smartly.commons.io.FileMetaArray;
 import org.smartly.commons.util.ByteUtils;
 import org.smartly.commons.util.FileUtils;
 import org.smartly.commons.util.JsonWrapper;
 import org.smartly.commons.util.StringUtils;
 
+import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URLDecoder;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  *
  */
 public class ServletUtils {
 
-
+    private static final String DEF_PART_NAME = "file";
     private static final String REQ_PARAM_SEP = "&";
 
     private ServletUtils() {
 
+    }
+
+    /**
+     * Extract file info from a MultipartRequest
+     * @param request Servlet Request
+     * @return List of file wrappers
+     * @throws IOException
+     * @throws ServletException
+     */
+    public static FileMetaArray getFiles(final HttpServletRequest request)
+            throws IOException, ServletException {
+
+        final FileMetaArray files = new FileMetaArray();
+        FileMeta temp = null;
+        try {
+            // Get all parts and creates meta wrappers
+            final Collection<Part> parts = request.getParts();
+            for (final Part part : parts) {
+                // if part is multiparts "file"
+                if (part.getContentType() != null) {
+                    final FileMeta meta = getFileMeta(part);
+                    if(null!=meta){
+                        files.add(getFileMeta(part));
+                    }
+                }
+            }
+        } catch (Throwable ignored) {
+            final Part part = request.getPart(DEF_PART_NAME);
+            if (null!=part && part.getContentType() != null) {
+                final FileMeta meta = getFileMeta(part);
+                if(null!=meta){
+                    files.add(getFileMeta(part));
+                }
+            }
+        }
+        return files;
+    }
+
+    private static FileMeta getFileMeta(final Part part) throws IOException {
+        final String filename = getFilename(part);
+        if(StringUtils.hasText(filename)){
+            final FileMeta meta = new FileMeta();
+            meta.setName(getFilename(part));
+            meta.setSize(part.getSize());
+            meta.setType(part.getContentType());
+            meta.setContent(part.getInputStream());
+
+            // attributes
+            final Collection<String> names = part.getHeaderNames();
+            for(final String name:names){
+                meta.addAttribute(name, part.getHeader(name));
+            }
+
+            return meta;
+        }
+        return null;
     }
 
     public static JSONObject getParameters(final HttpServletRequest request) {
@@ -82,6 +140,32 @@ public class ServletUtils {
         }
 
 
+        return result;
+    }
+
+    public static JSONObject getAttributes(final ServletRequest request) {
+        final JSONObject result = new JSONObject();
+        try {
+            final Enumeration<String> names = request.getAttributeNames();
+            while (names.hasMoreElements()) {
+                final String name = names.nextElement();
+                result.putOpt(name, request.getAttribute(name));
+            }
+        } catch (Throwable ignored) {
+        }
+        return result;
+    }
+
+    public static Map<String, Object> getAttributesMap(final ServletRequest request) {
+        final Map<String, Object> result = new HashMap<String, Object>();
+        try {
+            final Enumeration<String> names = request.getAttributeNames();
+            while (names.hasMoreElements()) {
+                final String name = names.nextElement();
+                result.put(name, request.getAttribute(name));
+            }
+        } catch (Throwable ignored) {
+        }
         return result;
     }
 
@@ -292,6 +376,17 @@ public class ServletUtils {
             return result.substring(0, result.length() - 1);
         }
         return result;
+    }
+
+    private static String getFilename(final Part part) {
+        final String partHeader = part.getHeader("content-disposition");
+        for (String content : part.getHeader("content-disposition").split(";")) {
+            if (content.trim().startsWith("filename")) {
+                final String filename = content.substring(content.indexOf('=') + 1).trim().replace("\"", "");
+                return filename.substring(filename.lastIndexOf('/') + 1).substring(filename.lastIndexOf('\\') + 1); // MSIE fix.
+            }
+        }
+        return null;
     }
 
 }

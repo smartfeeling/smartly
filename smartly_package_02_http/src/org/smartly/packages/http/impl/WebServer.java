@@ -19,7 +19,11 @@ import org.smartly.packages.http.impl.handlers.SmartlyShutdownHandler;
 import org.smartly.packages.http.impl.util.vtool.AppTool;
 import org.smartly.packages.velocity.impl.VLCManager;
 
-import javax.servlet.*;
+import javax.servlet.DispatcherType;
+import javax.servlet.Filter;
+import javax.servlet.MultipartConfigElement;
+import javax.servlet.Servlet;
+import java.io.IOException;
 import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -31,7 +35,8 @@ import java.util.List;
  * More about Jetty here:
  * http://git.eclipse.org/c/jetty/org.eclipse.jetty.project.git/tree/examples/embedded/src/main/java/org/eclipse/jetty/embedded/
  */
-public class WebServer extends AbstractHttpServer {
+public class WebServer
+        extends AbstractHttpServer {
 
 
     // --------------------------------------------------------------------
@@ -40,28 +45,33 @@ public class WebServer extends AbstractHttpServer {
 
     private static final String KEYSTORE = "/keystore";
 
-    private static final String PARAM_REQUEST_BUFFER = "request_buffer";
-    private static final String PARAM_RESPONSE_BUFFER = "response_buffer";
-    private static final String PARAM_SECURE_PORT = "secure_port";
-    private static final String PARAM_SECURE_SCHEME = "secure_scheme";
-    private static final String PARAM_CONNECTORS = "connectors";
-    private static final String PARAM_ENABLED = "enabled";
-    private static final String PARAM_PORT = "port";
-    private static final String PARAM_MAX_IDLE = "max_idle";
-    private static final String PARAM_KEY_PASSWORD = "key_password";
-    private static final String PARAM_KEY_MANAGER_PASSWORD = "key_manager_password";
-    private static final String PARAM_HANDLERS = "handlers";
-    private static final String PARAM_CHAIN = "chain";
-    private static final String PARAM_ENDPOINTS = "endpoints";
-    private static final String PARAM_ENDPOINT = "endpoint";
-    private static final String PARAM_SERVLETS = "servlets";
-    private static final String PARAM_DATA = "data";
+    public static final String PARAM_REQUEST_BUFFER = "request_buffer";
+    public static final String PARAM_RESPONSE_BUFFER = "response_buffer";
+    public static final String PARAM_SECURE_PORT = "secure_port";
+    public static final String PARAM_SECURE_SCHEME = "secure_scheme";
+    public static final String PARAM_CONNECTORS = "connectors";
+    public static final String PARAM_ENABLED = "enabled";
+    public static final String PARAM_PORT = "port";
+    public static final String PARAM_MAX_IDLE = "max_idle";
+    public static final String PARAM_KEY_PASSWORD = "key_password";
+    public static final String PARAM_KEY_MANAGER_PASSWORD = "key_manager_password";
+    public static final String PARAM_HANDLERS = "handlers";
+    public static final String PARAM_CHAIN = "chain";
+    public static final String PARAM_ENDPOINTS = "endpoints";
+    public static final String PARAM_ENDPOINT = "endpoint";
+    public static final String PARAM_SERVLETS = "servlets";
+    public static final String PARAM_DATA = "data";
     public static final String PARAM_MULTIPART = "multipart";
     public static final String PARAM_MULTIPART_LOCATION = "multipart_location";
     public static final String PARAM_MULTIPART_MAX_FILE = "multipart_max_file";
     public static final String PARAM_MULTIPART_MAX_REQUEST = "multipart_max_request";
     public static final String PARAM_MULTIPART_FILE_THRESHOLD = "multipart_file_threshold";
 
+    // --------------------------------------------------------------------
+    //               f i e l d s
+    // --------------------------------------------------------------------
+
+    private Connector[] _connectors;
 
     // --------------------------------------------------------------------
     //               c o n s t r u c t o r
@@ -73,7 +83,7 @@ public class WebServer extends AbstractHttpServer {
     }
 
     @Override
-    public void start() throws Exception {
+    public void start(final boolean join) {
         try {
             final String jettyHome = super.getRoot(); // absolute path
             final String sslRoot = super.getSslRootPath();
@@ -81,9 +91,9 @@ public class WebServer extends AbstractHttpServer {
 
 
             //-- init connectors --//
-            final Connector[] connectors = initConnectors(super.getJetty(), sslRoot, configuration);
+            _connectors = initConnectors(super.getJetty(), sslRoot, configuration);
 
-            super.getJetty().setConnectors(connectors);
+            super.getJetty().setConnectors(_connectors);
 
             //-- init handlers --//
             final Handler handler = initHandlers(this, configuration);
@@ -96,26 +106,24 @@ public class WebServer extends AbstractHttpServer {
 
             if (!Smartly.isTestUnitMode()) {
                 //-- start jetty --//
-                super.getJetty().start();
-                super.getJetty().join();
+                super.start(join);
             }
         } catch (Throwable t) {
-            super.error(t);
+            super.triggerOnError("Error starting server", t);
+            // try stop server
+            try {
+                super.stop();
+            } catch (Throwable t2) {
+                super.triggerOnError("Error stopping server", t2);
+            }
         }
     }
 
-    /**
-     * May handle externally a request
-     *
-     * @param sender   Servlet or Filter
-     * @param request  Servlet Request
-     * @param response Servlet Response
-     * @return False if request has not been handled
-     */
-    public boolean handleRequest(final Object sender,
-                                 final ServletRequest request,
-                                 final ServletResponse response) throws Exception{
-        return super.handleRequest(sender, request, response);
+    @Override
+    public String toString(){
+        final StringBuilder result = new StringBuilder();
+        result.append(super.getJetty().toString());
+        return result.toString();
     }
 
     // --------------------------------------------------------------------
@@ -225,7 +233,7 @@ public class WebServer extends AbstractHttpServer {
             final HandlerList main = initChainHandlers(server, JsonWrapper.getJSON(handlers, PARAM_CHAIN));
 
             //-- shutdown handler --//
-            main.addHandler(new SmartlyShutdownHandler(server.getJetty(), shutdownToken));
+            main.addHandler(new SmartlyShutdownHandler(server, shutdownToken));
 
             //-- add endpoints (servlets and rest) --//
             final ContextHandlerCollection endpoints = initContextHandlers(server, JsonWrapper.getJSON(handlers, PARAM_ENDPOINTS));
@@ -451,6 +459,36 @@ public class WebServer extends AbstractHttpServer {
             } catch (Throwable t) {
                 staticLogger().log(Level.SEVERE, null, t);
             }
+        }
+        return null;
+    }
+
+    // --------------------------------------------------------------------
+    //               L A U N C H E R
+    // --------------------------------------------------------------------
+
+    public static boolean isEnabled(){
+        return Smartly.getConfiguration().getBoolean("http.webserver.enabled");
+    }
+
+    public static WebServer create() throws IOException {
+        final JSONObject configuration = Smartly.getConfiguration().getJSONObject("http.webserver");
+        final String docRoot = JsonWrapper.getString(configuration, "root");
+        final String absoluteDocRoot = Smartly.getAbsolutePath(docRoot);
+
+        // ensure resource base exists
+        FileUtils.mkdirs(absoluteDocRoot);
+
+        //-- start the web server --//
+        return new WebServer(absoluteDocRoot, configuration);
+    }
+
+    public static WebServer launch(final boolean join) throws IOException {
+        if (isEnabled()) {
+            //-- start the web server --//
+            final WebServer server = create();
+            server.start(join);
+            return server;
         }
         return null;
     }
