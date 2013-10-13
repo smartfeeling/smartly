@@ -25,7 +25,6 @@ import java.io.*;
  * Servlet for file upload.
  * Works with Jquery-Upload plugin:
  * https://github.com/blueimp/jQuery-File-Upload/wiki
- *
  */
 @MultipartConfig
 public class SmartlyUploadServlet
@@ -72,7 +71,7 @@ public class SmartlyUploadServlet
                 ? request.getParameter("delfile") : "";
         final String get_thumb = request.getParameter("getthumb") != null
                 ? request.getParameter("getthumb") : "";
-        if (!StringUtils.hasText(get_file)) {
+        if (StringUtils.hasText(get_file)) {
             final String tempName = getTempFullName(get_file);
             File file = new File(tempName);
             if (file.exists()) {
@@ -94,13 +93,13 @@ public class SmartlyUploadServlet
                 op.flush();
                 op.close();
             }
-        } else if (!StringUtils.hasText(del_file)) {
+        } else if (StringUtils.hasText(del_file)) {
             final String tempName = getTempFullName(del_file);
             File file = new File(tempName);
             if (file.exists()) {
                 file.delete(); // TODO:check and report success
             }
-        } else if (!StringUtils.hasText(get_thumb)) {
+        } else if (StringUtils.hasText(get_thumb)) {
             final String tempName = getTempFullName(get_file);
             File file = new File(tempName);
             if (file.exists()) {
@@ -194,7 +193,7 @@ public class SmartlyUploadServlet
         }
 
         // prepare json output
-        final byte[] output = files.toString().getBytes();
+        final byte[] output = this.getResponse(parameters, files);
         // write body
         ServletUtils.writeResponse(response, DateUtils.now().getTime(), MIME_JSON, output);
 
@@ -260,4 +259,13 @@ public class SmartlyUploadServlet
         return suffix;
     }
 
+    private byte[] getResponse(final JSONObject parameters,
+                               final FileMetaArray files) {
+        final String response = JsonWrapper.getString(parameters, "response");
+        if (StringUtils.hasText(response)) {
+            return response.getBytes();
+        } else {
+            return files.toString().getBytes();
+        }
+    }
 }
