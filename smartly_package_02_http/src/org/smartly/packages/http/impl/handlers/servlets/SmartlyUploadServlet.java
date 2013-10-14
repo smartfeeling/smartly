@@ -6,6 +6,7 @@ import org.smartly.commons.cryptograph.GUID;
 import org.smartly.commons.image.resize.Resize;
 import org.smartly.commons.io.FileMeta;
 import org.smartly.commons.io.FileMetaArray;
+import org.smartly.commons.io.FileWrapper;
 import org.smartly.commons.util.*;
 import org.smartly.packages.http.impl.AbstractHttpServer;
 import org.smartly.packages.http.impl.WebServer;
@@ -156,6 +157,7 @@ public class SmartlyUploadServlet
 
         OutputStream os = null;
         InputStream is = null;
+        File temp_file = null;
         for (final FileMeta file : files) {
             os = null;
             is = file.getContent();
@@ -164,13 +166,17 @@ public class SmartlyUploadServlet
                 final String tempName = GUID.create() + PathUtils.getFilenameExtension(fileName, true);
                 final String tempFullName = getTempFullName(tempName);
                 try {
+                    temp_file = new File(tempFullName);
                     os = new FileOutputStream(new File(tempFullName));
                     int read = 0;
                     final byte[] buffer = new byte[1024];
                     while ((read = is.read(buffer)) != -1) {
                         os.write(buffer, 0, read);
                     }
+                    file.put("file_wrapper",
+                            new FileWrapper(temp_file).setName(fileName));
                     file.put("temp_url", tempFullName);
+                    // jquery-Upload response fields
                     file.put("url", getServletUrl() + "?getfile=" + tempName);
                     file.put("thumbnailUrl", getServletUrl() + "?getthumb=" + tempName);
                     file.put("deleteUrl", getServletUrl() + "?delfile=" + tempName);

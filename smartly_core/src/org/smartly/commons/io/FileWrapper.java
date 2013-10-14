@@ -52,64 +52,77 @@ public final class FileWrapper
         return JsonWrapper.getString(this, HASH);
     }
 
-    public void setHash(final String value) {
+    public FileWrapper setHash(final String value) {
         JsonWrapper.put(this, HASH, value);
+        return this;
     }
 
     public String getAbsolutePath() {
         return JsonWrapper.getString(this, ABSOLUTE_PATH);
     }
 
-    public void setAbsolutePath(final String value) {
+    public FileWrapper setAbsolutePath(final String value) {
         JsonWrapper.put(this, ABSOLUTE_PATH, value);
+        return this;
     }
 
     public String getType() {
         return JsonWrapper.getString(this, TYPE);
     }
 
-    public void setType(final String value) {
+    public FileWrapper setType(final String value) {
         JsonWrapper.put(this, TYPE, value);
+        return this;
     }
 
     public String getName() {
         return JsonWrapper.getString(this, NAME);
     }
 
-    public void setName(final String value) {
-        JsonWrapper.put(this, NAME, value);
+    public FileWrapper setName(final String value) {
+        if(StringUtils.hasText(PathUtils.getFilenameExtension(value))){
+            JsonWrapper.put(this, NAME, PathUtils.getFilename(value, false));
+            this.setExt(PathUtils.getFilenameExtension(value, true));
+        } else {
+            JsonWrapper.put(this, NAME, value);
+        }
+        return this;
     }
 
     public String getDescription() {
         return JsonWrapper.getString(this, DESCRIPTION);
     }
 
-    public void setDescription(final String value) {
+    public FileWrapper setDescription(final String value) {
         JsonWrapper.put(this, DESCRIPTION, value);
+        return this;
     }
 
     public String getExt() {
         return JsonWrapper.getString(this, EXT);
     }
 
-    public void setExt(final String value) {
+    public FileWrapper setExt(final String value) {
         JsonWrapper.put(this, EXT, value);
+        return this;
     }
 
     public long getLength() {
         return JsonWrapper.getLong(this, LENGTH);
     }
 
-    public void setLength(final long value) {
+    public FileWrapper setLength(final long value) {
         JsonWrapper.put(this, LENGTH, value);
+        return this;
     }
 
     public long getCRC() {
         return JsonWrapper.getLong(this, CRC);
     }
 
-    public void setCRC(final long value) {
+    public FileWrapper setCRC(final long value) {
         JsonWrapper.put(this, CRC, value);
+        return this;
     }
 
     public JSONArray getChildren() {

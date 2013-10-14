@@ -3,6 +3,8 @@
  */
 package org.smartly.commons.util;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.lang.reflect.Array;
 
@@ -19,6 +21,19 @@ public class ByteUtils {
             }
         }
         return false;
+    }
+
+    public static byte[] getBytes(final BufferedImage image) throws IOException {
+        return getBytes(image, "jpg");
+    }
+
+    public static byte[] getBytes(final BufferedImage image, final String format) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(image, null!=format?format:"jpg", baos);
+        baos.flush();
+        byte[] imageInByte = baos.toByteArray();
+        baos.close();
+        return imageInByte;
     }
 
     public static byte[] getBytes(final InputStream is) throws IOException {
