@@ -43,8 +43,9 @@ public class WebServer
     //               c o n s t a n t s
     // --------------------------------------------------------------------
 
-    private static final String KEYSTORE = "/keystore";
+    private static final String DEF_KEYSTORE = "/keystore";
 
+    public static final String PARAM_KEYSTORE = "keystore";
     public static final String PARAM_REQUEST_BUFFER = "request_buffer";
     public static final String PARAM_RESPONSE_BUFFER = "response_buffer";
     public static final String PARAM_SECURE_PORT = "secure_port";
@@ -153,6 +154,7 @@ public class WebServer
     private static Connector[] initConnectors(final Server server,
                                               final String sslRoot,
                                               final JSONObject configuration) {
+        // configuration params
         final int request_buffer = JsonWrapper.getInt(configuration, PARAM_REQUEST_BUFFER, 8112);
         final int response_buffer = JsonWrapper.getInt(configuration, PARAM_RESPONSE_BUFFER, 32768);
         final int secure_port = JsonWrapper.getInt(configuration, PARAM_SECURE_PORT, 8443);
@@ -184,8 +186,9 @@ public class WebServer
                 final JSONObject connector = JsonWrapper.getJSON(connectors, key);
                 if (null != connector && JsonWrapper.getBoolean(connector, PARAM_ENABLED)) {
 
+                    final String key_store = JsonWrapper.getString(connector, PARAM_KEYSTORE, DEF_KEYSTORE);
                     mkdirs(sslRoot);
-                    final String keySorePath = PathUtils.join(sslRoot, KEYSTORE);
+                    final String keySorePath = PathUtils.join(sslRoot, key_store);
 
                     // SSL Context Factory for HTTPS and SPDY
                     SslContextFactory sslContextFactory = new SslContextFactory();

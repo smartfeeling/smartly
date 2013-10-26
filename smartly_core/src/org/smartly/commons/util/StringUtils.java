@@ -87,13 +87,29 @@ public final class StringUtils {
      */
     public static String[] split(final String str,
                                  final String[] delimiters) {
-        final List<String> result = new LinkedList<String>();
+        return split(str, delimiters, true, true, true);
+    }
+
+    public static String[] split(final String str,
+                                 final String[] delimiters,
+                                 final boolean trimTokens,
+                                 final boolean ignoreEmptyTokens,
+                                 final boolean unique) {
+        final Collection<String> result = unique ? new LinkedHashSet<String>() : new LinkedList<String>();
         if (null != delimiters && delimiters.length > 0) {
             for (final String delimiter : delimiters) {
                 String[] tokens = StringUtils.split(str, delimiter);
                 if (null != tokens && tokens.length > 0) {
                     for (final String token : tokens) {
-                        result.add(token);
+                        final String value = trimTokens ? trim(token) : token;
+                        if (ignoreEmptyTokens) {
+                            if (StringUtils.hasText(value)) {
+                                result.add(value);
+                            }
+                            result.add(value);
+                        } else {
+                            result.add(value);
+                        }
                     }
                 }
             }
@@ -125,7 +141,7 @@ public final class StringUtils {
     public static String[] split(final String str,
                                  final String delimiters,
                                  final boolean trimTokens,
-                                 boolean ignoreEmptyTokens) {
+                                 final boolean ignoreEmptyTokens) {
 
         final StringTokenizer st = new StringTokenizer(str, delimiters);
         List<String> tokens = new ArrayList<String>();
