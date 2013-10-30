@@ -95,21 +95,24 @@ public final class StringUtils {
                                  final boolean trimTokens,
                                  final boolean ignoreEmptyTokens,
                                  final boolean unique) {
+        final String placeholder = "___DELIM___";
         final Collection<String> result = unique ? new LinkedHashSet<String>() : new LinkedList<String>();
         if (null != delimiters && delimiters.length > 0) {
+            String s_tokens = str;
             for (final String delimiter : delimiters) {
-                String[] tokens = StringUtils.split(str, delimiter);
-                if (null != tokens && tokens.length > 0) {
-                    for (final String token : tokens) {
-                        final String value = trimTokens ? trim(token) : token;
-                        if (ignoreEmptyTokens) {
-                            if (StringUtils.hasText(value)) {
-                                result.add(value);
-                            }
-                            result.add(value);
-                        } else {
+                s_tokens = StringUtils.replace(s_tokens, delimiter, placeholder);
+            }
+            String[] tokens = StringUtils.split(s_tokens, placeholder);
+            if (null != tokens && tokens.length > 0) {
+                for (final String token : tokens) {
+                    final String value = trimTokens ? trim(token) : token;
+                    if (ignoreEmptyTokens) {
+                        if (StringUtils.hasText(value)) {
                             result.add(value);
                         }
+                        result.add(value);
+                    } else {
+                        result.add(value);
                     }
                 }
             }

@@ -668,13 +668,18 @@ public abstract class PathUtils
      * @return true, if path has a protocol or start with relative path.
      */
     public static boolean isURI(final String path) {
-        if (!StringUtils.hasText(path)) {
-            return false;
+        try {
+            if (!StringUtils.hasText(path)) {
+                return false;
+            }
+            return hasProtocol(path)
+                    || path.startsWith(".")
+                    || path.startsWith("/")
+                    || path.startsWith("\\");
+        } catch (Throwable ignored) {
+
         }
-        return hasProtocol(path)
-                || path.startsWith(".")
-                || path.startsWith("/")
-                || path.startsWith("\\");
+        return false;
     }
 
     public static boolean hasProtocol(final String path) {
@@ -758,9 +763,9 @@ public abstract class PathUtils
                     result.append(tokens[0]);
                     final Map<String, Object> existing_params = CollectionUtils.stringToMap(tokens[1], "&");
                     final Set<String> keys = existing_params.keySet();
-                    for(final String key:keys){
+                    for (final String key : keys) {
                         // add existing to passed params
-                        if(!params.containsKey(key)){
+                        if (!params.containsKey(key)) {
                             params.put(key, existing_params.get(key));
                         }
                     }

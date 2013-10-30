@@ -345,6 +345,10 @@ public class MongoUtils
                 if (null != result) {
                     if (result instanceof List) {
                         return (List) result;
+                    } else if (result instanceof Collection) {
+                        return new LinkedList((Collection) result);
+                    } else if (result.getClass().isArray()) {
+                        return (List) CollectionUtils.addAll(new LinkedList<Object>(), (Object[]) result);
                     } else {
                         final List<Object> list = new ArrayList<Object>();
                         list.add(result);
