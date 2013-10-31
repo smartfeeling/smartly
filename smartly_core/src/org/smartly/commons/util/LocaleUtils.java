@@ -146,7 +146,7 @@ public class LocaleUtils {
     }
 
     public static String getLanguage(final String slocale) {
-        final String[] tokens = StringUtils.split(slocale, "_");
+        final String[] tokens = StringUtils.split(slocale, new String[]{"_", "-"});
         if (tokens.length > 0) {
             return tokens[0];
         } else {
