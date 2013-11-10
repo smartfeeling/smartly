@@ -676,9 +676,9 @@ public class MongoUtils
             condition.put(OP_IN, new Object[]{null});
             condition.put(OP_EXISTS, true);
             query.put(field, condition);
-        } else if (value instanceof List) {
+        } else if (value instanceof Collection) {
             // { x : { $in : [ a, b ] } }
-            final List lvalue = (List) value;
+            final Collection lvalue = (Collection) value;
             final DBObject condition = new BasicDBObject();
             condition.put(OP_IN, lvalue.toArray(new Object[lvalue.size()]));
             //condition.put(OP_EXISTS, true);

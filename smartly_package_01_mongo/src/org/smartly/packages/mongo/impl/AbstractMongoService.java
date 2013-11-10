@@ -12,6 +12,7 @@ import org.smartly.packages.mongo.impl.i18n.MongoTranslationManager;
 import org.smartly.packages.mongo.impl.util.MongoUtils;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -380,12 +381,12 @@ public abstract class AbstractMongoService {
                 : _coll.findOne(filter);
     }
 
-    public List<DBObject> findByIds(final List ids) {
+    public List<DBObject> findByIds(final Collection ids) {
         final DBObject query = MongoUtils.queryEquals(_ID, ids);
         return this.find(query, null, null, null);
     }
 
-    public List<DBObject> findByIds(final List ids, final String[] fieldNames) {
+    public List<DBObject> findByIds(final Collection ids, final String[] fieldNames) {
         final DBObject query = MongoUtils.queryEquals(_ID, ids);
         return this.find(query, fieldNames, null, null);
     }

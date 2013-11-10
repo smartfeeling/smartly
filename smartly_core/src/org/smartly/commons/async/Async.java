@@ -12,7 +12,7 @@ import java.util.Set;
 public abstract class Async {
 
 
-    public static void Action(final Delegates.Action handler, final Object... args) {
+    public static Thread Action(final Delegates.Action handler, final Object... args) {
         if (null != handler) {
             final Thread t = new Thread(new Runnable() {
                 @Override
@@ -23,7 +23,9 @@ public abstract class Async {
             t.setDaemon(true);
             t.setPriority(Thread.NORM_PRIORITY);
             t.start();
+            return t;
         }
+        return null;
     }
 
     public static void Delay(final Delegates.Action handler, final int delay, final Object... args) {
