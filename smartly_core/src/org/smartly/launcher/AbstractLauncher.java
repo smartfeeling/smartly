@@ -3,7 +3,7 @@ package org.smartly.launcher;
 
 import org.smartly.IConstants;
 import org.smartly.Smartly;
-import org.smartly.commons.cmdline.CmdLineParser;
+import org.smartly.commons.cmdline.cmdparser.CmdLineParser;
 import org.smartly.commons.lang.CharEncoding;
 import org.smartly.commons.logging.LoggingRepository;
 import org.smartly.commons.util.BeanUtils;
@@ -143,6 +143,7 @@ abstract class AbstractLauncher {
             final CmdLineParser.Option workspaceOpt = parser.addStringOption('w', "workspace");
             final CmdLineParser.Option charsetOpt = parser.addStringOption('c', "charset");
             final CmdLineParser.Option testOpt = parser.addBooleanOption('t', "test"); // test mode (only for test unit)
+            final CmdLineParser.Option adminOpt = parser.addBooleanOption('a', "admin"); // admin mode (only for administration mode)
             final CmdLineParser.Option proxyOpt = parser.addBooleanOption('p', "proxy"); // proxy (-p true, -p false) if true uses system proxy
 
             parser.parse(args);
@@ -166,6 +167,9 @@ abstract class AbstractLauncher {
 
             final boolean test = (Boolean) parser.getOptionValue(testOpt, false);
             _argsMap.put("t", test);
+
+            final boolean admin = (Boolean) parser.getOptionValue(adminOpt, false);
+            _argsMap.put("a", admin);
 
             // set default proxy for outgoing communications
             final boolean use_proxy = (Boolean) parser.getOptionValue(proxyOpt, false);

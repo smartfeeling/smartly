@@ -40,8 +40,9 @@ public abstract class FileDeployer {
     private final FileDeployerSettings _settings;
     private final String _startFolder;
     private final String _targetFolder;
-    private boolean _overwriteAll;
-    private String[] _overwriteItems;
+    private boolean _overwrite;
+    private String[] _always_overwrite_items;
+    private String[] _never_overwrite_items;
     private final boolean _silent;  // completly silent
     private final boolean _verbose; // log details
     private final boolean _debugApp;
@@ -71,8 +72,9 @@ public abstract class FileDeployer {
         _settings = new FileDeployerSettings(_globalSettings);
         _startFolder = startFolder;
         _targetFolder = targetFolder;
-        _overwriteAll = false;
-        _overwriteItems = new String[0];
+        _overwrite = false;
+        _always_overwrite_items = new String[0];
+        _never_overwrite_items = new String[0];
         _silent = silent;
         _verbose = verbose;
         _debugApp = debugApp;
@@ -98,19 +100,27 @@ public abstract class FileDeployer {
     }
 
     public boolean isOverwrite() {
-        return _overwriteAll;
+        return _overwrite;
     }
 
     public void setOverwrite(boolean overwrite) {
-        _overwriteAll = overwrite;
+        _overwrite = overwrite;
     }
 
-    public String[] getOverwriteItems() {
-        return _overwriteItems;
+    public String[] getAlwaysOverwriteItems() {
+        return _always_overwrite_items;
     }
 
-    public void setOverwriteItems(final String[] value) {
-        _overwriteItems = value;
+    public void setAlwaysOverwriteItems(final String[] value) {
+        _always_overwrite_items = value;
+    }
+
+    public String[] getNeverOverwriteItems() {
+        return _never_overwrite_items;
+    }
+
+    public void setNeverOverwriteItems(final String[] value) {
+        _never_overwrite_items = value;
     }
 
     public void deployChildren() {
@@ -165,7 +175,7 @@ public abstract class FileDeployer {
                             "\t Target Path: {1}, \n" +
                             "\t Overwrite Target: {2}",
                     this.getClass().getName(),
-                    _targetFolder, _overwriteAll));
+                    _targetFolder, _overwrite));
         }
     }
 
@@ -291,10 +301,10 @@ public abstract class FileDeployer {
     }
 
     private boolean isOverwritable(final String item) {
-        if (!_overwriteAll) {
-            if (!CollectionUtils.isEmpty(_overwriteItems)) {
+        if (!_overwrite) {
+            if (!CollectionUtils.isEmpty(_always_overwrite_items)) {
                 final String name = PathUtils.getFilename(item, true);
-                for (final String pattern : _overwriteItems) {
+                for (final String pattern : _always_overwrite_items) {
                     final String regex = pattern.replaceAll("\\*", ".*");
                     if (this.match(name, regex)) {
                         return true;
@@ -302,9 +312,20 @@ public abstract class FileDeployer {
                 }
             }
         }
-        return _overwriteAll;
-    }
 
+        //-- never overwrite this items --//
+        if (!CollectionUtils.isEmpty(_never_overwrite_items)) {
+            final String name = PathUtils.getFilename(item, true);
+            for (final String pattern : _never_overwrite_items) {
+                final String regex = pattern.replaceAll("\\*", ".*");
+                if (this.match(name, regex)) {
+                    return false;
+                }
+            }
+        }
+
+        return _overwrite;
+    }
 
     private InputStream read(final String packagename) throws FileNotFoundException {
         return ClassLoaderUtils.getResourceAsStream(packagename);

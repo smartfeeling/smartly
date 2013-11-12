@@ -138,6 +138,10 @@ public class Smartly {
         return getLauncherArgs().containsKey("t") && (Boolean) getLauncherArgs().get("t");
     }
 
+    public static boolean isAdminMode() {
+        return getLauncherArgs().containsKey("a") && (Boolean) getLauncherArgs().get("a");
+    }
+
     public static String getAppId() {
         return getConfiguration().getString(SMARTLY_APP_ID);
     }

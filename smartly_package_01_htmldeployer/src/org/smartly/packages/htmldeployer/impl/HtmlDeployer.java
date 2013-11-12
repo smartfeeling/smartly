@@ -4,17 +4,12 @@ package org.smartly.packages.htmldeployer.impl;
 import org.smartly.Smartly;
 import org.smartly.commons.io.jsonrepository.JsonRepository;
 import org.smartly.commons.io.repository.deploy.FileDeployer;
-import org.smartly.commons.logging.Level;
-import org.smartly.commons.util.ConversionUtils;
-import org.smartly.commons.util.FormatUtils;
-import org.smartly.commons.util.PathUtils;
-import org.smartly.commons.util.StringUtils;
 import org.smartly.commons.lang.compilers.CompilerRegistry;
 import org.smartly.commons.lang.compilers.ICompiler;
+import org.smartly.commons.logging.Level;
+import org.smartly.commons.util.*;
 import org.smartly.packages.htmldeployer.impl.compilers.CompilerLess;
 import org.smartly.packages.htmldeployer.impl.compressor.Compressor;
-
-import java.util.Map;
 
 public class HtmlDeployer extends FileDeployer {
 
@@ -45,7 +40,7 @@ public class HtmlDeployer extends FileDeployer {
         try {
             final String ext = PathUtils.getFilenameExtension(filename, true);
             final ICompiler compiler = CompilerRegistry.get(ext);
-            if(null!=compiler){
+            if (null != compiler) {
                 return compiler.compile(data);
             } else {
                 super.getLogger().log(Level.WARNING,
@@ -75,6 +70,10 @@ public class HtmlDeployer extends FileDeployer {
     // ------------------------------------------------------------------------
 
     private void init() {
+        // set further overwrite options
+        super.setAlwaysOverwriteItems(alwaysOverwrite());
+        super.setNeverOverwriteItems(neverOverwrite());
+
         // pre-process
         this.getSettings().getPreProcessorFiles().add(".less");
         this.getSettings().getPreProcessorFiles().add(".js");
@@ -124,6 +123,30 @@ public class HtmlDeployer extends FileDeployer {
             return ConversionUtils.toBoolean(config.get("htmldeployer.debugJs"));
         }
         return false;
+    }
+
+    private static String[] neverOverwrite() {
+        try {
+            final JsonRepository config = getConfiguration();
+            if (null != config) {
+                return JsonWrapper.toArrayOfString(config.getJSONArray("htmldeployer.never_overwrite"));
+            }
+        } catch (Throwable ignored) {
+
+        }
+        return new String[0];
+    }
+
+    private static String[] alwaysOverwrite() {
+        try {
+            final JsonRepository config = getConfiguration();
+            if (null != config) {
+                return JsonWrapper.toArrayOfString(config.getJSONArray("htmldeployer.always_overwrite"));
+            }
+        } catch (Throwable ignored) {
+
+        }
+        return new String[0];
     }
 
     public static String docRoot() {

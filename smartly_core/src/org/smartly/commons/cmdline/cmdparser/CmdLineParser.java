@@ -1,4 +1,4 @@
-package org.smartly.commons.cmdline;
+package org.smartly.commons.cmdline.cmdparser;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
