@@ -37,7 +37,7 @@ public final class ConsoleAppPages {
     @Override
     public String toString() {
         if (count() == 1) {
-            return getPage().toString();
+            return getDefault().toString();
         } else {
             // enum all pages
             final StringBuilder sb = new StringBuilder();
@@ -58,7 +58,7 @@ public final class ConsoleAppPages {
         return _pages.size();
     }
 
-    public ConsoleAppPage getPage() {
+    public ConsoleAppPage getDefault() {
         return _pages.get(DEFAULT_PAGE);
     }
 
