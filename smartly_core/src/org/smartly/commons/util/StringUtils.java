@@ -60,66 +60,39 @@ public final class StringUtils {
         return split(str, delim, true);
     }
 
+
+
     /**
      * Split a string into an array of strings.
      *
      * @param str   the string to split
-     * @param delim the delimiter to split the string at
+     * @param delimiters        the delimiter characters, assembled as String (each of
+     *                          those characters is individually considered as delimiter)
+     * @param trimTokens        trim the tokens via String's
      * @return the string split into a string array
      */
-    public static String[] split(final String str, final String delim, final boolean trim) {
+    public static String[] split(final String str,
+                                 final String delimiters,
+                                 final boolean trimTokens) {
         if (str == null) {
             return new String[0];
         }
-        final String[] result = RegExUtils.split(str, delim);
+
+        final StringTokenizer st = new StringTokenizer(str, delimiters);
+        final String[] s = new String[st.countTokens()];
+        for (int i = 0; i < s.length; i++) {
+            s[i] = trimTokens ? st.nextToken().trim() : st.nextToken();
+
+        }
+        return s;
+        /*
+        final String[] result = RegExUtils.split(trim ? str.trim() : str, delim);
         if (trim) {
             for (int i = 0; i < result.length; i++) {
                 result[i] = result[i].trim();
             }
         }
-        return result;
-    }
-
-    /**
-     * @param str
-     * @param delimiters Array of valid delimiters. i.e. {". ", "; "} (both
-     *                   delimiters are valid)
-     * @return
-     */
-    public static String[] split(final String str,
-                                 final String[] delimiters) {
-        return split(str, delimiters, true, true, true);
-    }
-
-    public static String[] split(final String str,
-                                 final String[] delimiters,
-                                 final boolean trimTokens,
-                                 final boolean ignoreEmptyTokens,
-                                 final boolean unique) {
-        final String placeholder = "___DELIM___";
-        final Collection<String> result = unique ? new LinkedHashSet<String>() : new LinkedList<String>();
-        if (null != delimiters && delimiters.length > 0) {
-            String s_tokens = str;
-            for (final String delimiter : delimiters) {
-                s_tokens = StringUtils.replace(s_tokens, delimiter, placeholder);
-            }
-            String[] tokens = StringUtils.split(s_tokens, placeholder);
-            if (null != tokens && tokens.length > 0) {
-                for (final String token : tokens) {
-                    final String value = trimTokens ? trim(token) : token;
-                    if (ignoreEmptyTokens) {
-                        if (StringUtils.hasText(value)) {
-                            result.add(value);
-                        }
-                        result.add(value);
-                    } else {
-                        result.add(value);
-                    }
-                }
-            }
-        }
-
-        return result.toArray(new String[result.size()]);
+        return result;*/
     }
 
     /**
@@ -148,7 +121,7 @@ public final class StringUtils {
                                  final boolean ignoreEmptyTokens) {
 
         final StringTokenizer st = new StringTokenizer(str, delimiters);
-        List<String> tokens = new ArrayList<String>();
+        final List<String> tokens = new ArrayList<String>();
         while (st.hasMoreTokens()) {
             String token = st.nextToken();
             if (trimTokens) {
@@ -161,8 +134,55 @@ public final class StringUtils {
         return tokens.toArray(new String[tokens.size()]);
     }
 
+    /**
+     * @param str
+     * @param delimiters Array of valid delimiters. i.e. {". ", "; "} (both
+     *                   delimiters are valid)
+     * @return
+     */
+    public static String[] split(final String str,
+                                 final String[] delimiters) {
+        return split(str, delimiters, true, true, false);
+    }
+
+    public static String[] splitUnique(final String str,
+                                 final String[] delimiters) {
+        return split(str, delimiters, true, true, true);
+    }
+
+    public static String[] split(final String str,
+                                 final String[] delimiters,
+                                 final boolean trimTokens,
+                                 final boolean ignoreEmptyTokens,
+                                 final boolean unique) {
+        final String placeholder = "___DELIM___";
+        final Collection<String> result = unique ? new LinkedHashSet<String>() : new LinkedList<String>();
+        if (null != delimiters && delimiters.length > 0) {
+            String s_tokens = str;
+            for (final String delimiter : delimiters) {
+                s_tokens = StringUtils.replace(s_tokens, delimiter, placeholder);
+            }
+            String[] tokens = RegExUtils.split(s_tokens, placeholder);
+            if (null != tokens && tokens.length > 0) {
+                for (final String token : tokens) {
+                    final String value = trimTokens ? trim(token) : token;
+                    if (ignoreEmptyTokens) {
+                        if (StringUtils.hasText(value)) {
+                            result.add(value);
+                        }
+                    } else {
+                        result.add(value);
+                    }
+                }
+            }
+        }
+
+        return result.toArray(new String[result.size()]);
+    }
+
     public static String[] split(final String text,
-                                 final String[] delims, final boolean trim,
+                                 final String[] delims,
+                                 final boolean trim,
                                  final boolean removeDuplicates,
                                  final int minLenght) {
         return split(text, delims, trim, removeDuplicates, minLenght, null);
@@ -183,7 +203,8 @@ public final class StringUtils {
      * @return an array of the tokens in the list
      */
     public static String[] split(final String str,
-                                 final String delim, final boolean trim,
+                                 final String delim,
+                                 final boolean trim,
                                  final boolean removeDuplicates,
                                  final int minLenght) {
         return split(str, new String[]{delim}, trim, removeDuplicates, minLenght);

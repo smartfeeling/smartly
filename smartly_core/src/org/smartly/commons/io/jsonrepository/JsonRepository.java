@@ -146,7 +146,7 @@ public class JsonRepository {
     private void load(final File file) {
         if (null != file) {
             final String path = PathUtils.subtract(_root, PathUtils.validateFolderSeparator(file.getAbsolutePath()));
-            final String[] tokens = StringUtils.split(path, "/");
+            final String[] tokens = StringUtils.split(path, new String[]{"/"}, true, true, false);
             JSONObject parent = _indexes;
             for (final String token : tokens) {
                 parent = this.load(parent, token, file);

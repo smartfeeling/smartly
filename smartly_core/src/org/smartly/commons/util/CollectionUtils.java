@@ -1291,8 +1291,7 @@ public abstract class CollectionUtils {
                                   final int index,
                                   final String defaultValue) {
         final String[] array = StringUtils.split(delimitedString,
-                separator,
-                true);
+                separator);
         final String result = get(array, index);
         return null != result ? result : defaultValue;
     }
