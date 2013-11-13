@@ -86,26 +86,29 @@ public class WebServer
     @Override
     public void start(final boolean join) {
         try {
-            final String jettyHome = super.getRoot(); // absolute path
-            final String sslRoot = super.getSslRootPath();
-            final JSONObject configuration = super.getConfiguration();
+            // start only if not launched from test-unit or admin mode
+            if (!Smartly.isTestUnitMode() && !Smartly.isAdminMode()) {
+
+                final String jettyHome = super.getRoot(); // absolute path
+                final String sslRoot = super.getSslRootPath();
+                final JSONObject configuration = super.getConfiguration();
 
 
-            //-- init connectors --//
-            _connectors = initConnectors(super.getJetty(), sslRoot, configuration);
+                //-- init connectors --//
+                _connectors = initConnectors(super.getJetty(), sslRoot, configuration);
 
-            super.getJetty().setConnectors(_connectors);
+                super.getJetty().setConnectors(_connectors);
 
-            //-- init handlers --//
-            final Handler handler = initHandlers(this, configuration);
-            if (null != handler) {
-                super.getJetty().setHandler(handler);
-            }
+                //-- init handlers --//
+                final Handler handler = initHandlers(this, configuration);
+                if (null != handler) {
+                    super.getJetty().setHandler(handler);
+                }
 
-            // init velocity engine
-            initVelocity(jettyHome);
+                // init velocity engine
+                initVelocity(jettyHome);
 
-            if (!Smartly.isTestUnitMode()) {
+
                 //-- start jetty --//
                 super.start(join);
             }
@@ -121,7 +124,7 @@ public class WebServer
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         final StringBuilder result = new StringBuilder();
         result.append(super.getJetty().toString());
         return result.toString();
@@ -470,7 +473,7 @@ public class WebServer
     //               L A U N C H E R
     // --------------------------------------------------------------------
 
-    public static boolean isEnabled(){
+    public static boolean isEnabled() {
         return Smartly.getConfiguration().getBoolean("http.webserver.enabled");
     }
 

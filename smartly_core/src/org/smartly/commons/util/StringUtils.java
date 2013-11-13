@@ -71,12 +71,13 @@ public final class StringUtils {
         if (str == null) {
             return new String[0];
         }
-        final StringTokenizer st = new StringTokenizer(str, delim);
-        final String[] s = new String[st.countTokens()];
-        for (int i = 0; i < s.length; i++) {
-            s[i] = trim ? st.nextToken().trim() : st.nextToken();
+        final String[] result = RegExUtils.split(str, delim);
+        if (trim) {
+            for (int i = 0; i < result.length; i++) {
+                result[i] = result[i].trim();
+            }
         }
-        return s;
+        return result;
     }
 
     /**
