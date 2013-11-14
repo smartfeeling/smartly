@@ -99,13 +99,15 @@ public final class MailUtils {
 
     private static String[] parseAddresses(final String addresses) {
         if (StringUtils.hasText(addresses)) {
+            /*
             if (addresses.contains(";")) {
                 return StringUtils.split(addresses, ";", true, true);
             } else if (addresses.contains(",")) {
                 return StringUtils.split(addresses, ",", true, true);
             } else {
                 return new String[]{addresses};
-            }
+            }*/
+            return StringUtils.split(addresses, ";,", true, true, true);
         }
         return null;
     }

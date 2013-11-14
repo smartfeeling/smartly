@@ -95,6 +95,12 @@ public final class StringUtils {
         return result;*/
     }
 
+    public static String[] split(final String str,
+                                 final String delimiters,
+                                 final boolean trimTokens,
+                                 final boolean ignoreEmptyTokens) {
+       return split(str, delimiters, trimTokens, ignoreEmptyTokens, false);
+    }
     /**
      * Tokenize the given String into a String array via a StringTokenizer.
      * <p>The given delimiters string is supposed to consist of any number of
@@ -118,20 +124,21 @@ public final class StringUtils {
     public static String[] split(final String str,
                                  final String delimiters,
                                  final boolean trimTokens,
-                                 final boolean ignoreEmptyTokens) {
+                                 final boolean ignoreEmptyTokens,
+                                 final boolean unique) {
 
         final StringTokenizer st = new StringTokenizer(str, delimiters);
-        final List<String> tokens = new ArrayList<String>();
+        final Collection<String> result = unique ? new LinkedHashSet<String>() :new LinkedList<String>();
         while (st.hasMoreTokens()) {
             String token = st.nextToken();
             if (trimTokens) {
                 token = token.trim();
             }
             if (!ignoreEmptyTokens || token.length() > 0) {
-                tokens.add(token);
+                result.add(token);
             }
         }
-        return tokens.toArray(new String[tokens.size()]);
+        return result.toArray(new String[result.size()]);
     }
 
     /**
@@ -281,9 +288,11 @@ public final class StringUtils {
      * @return
      */
     public static String[] split(final String str,
-                                 final String delimiter, final boolean trim,
+                                 final String delimiter,
+                                 final boolean trim,
                                  final boolean removeDuplicates,
-                                 final int minLenght, final int maxSize) {
+                                 final int minLenght,
+                                 final int maxSize) {
         final String[] tokens = split(str, delimiter, trim, removeDuplicates, minLenght);
         if (maxSize > 0 && tokens.length > maxSize) {
             return CollectionUtils.resizeArray(tokens, maxSize);
@@ -322,20 +331,6 @@ public final class StringUtils {
         return null != result ? result : new String[]{toSplit};
     }
 
-
-    public static String concatPaths(final String path1, final String path2) {
-        if (StringUtils.hasText(path1)) {
-            if (!path1.endsWith(IConstants.FOLDER_SEPARATOR)
-                    && !path2.startsWith(IConstants.FOLDER_SEPARATOR)) {
-                return path1.concat(IConstants.FOLDER_SEPARATOR).concat(path2);
-            } else {
-                return path1.concat(path2);
-            }
-        } else {
-            return path2;
-        }
-    }
-
     /**
      * Split a String at the "count" occurrence of the delimiter. Does not
      * include the delimiter in the result.<br> i.e. : "hello.world.wide" ('.'
@@ -367,7 +362,7 @@ public final class StringUtils {
     }
 
     public static String concatArgs(final Object... args) {
-        final StringBuffer result = new StringBuffer();
+        final StringBuilder result = new StringBuilder();
         if (null != args && args.length > 0) {
             for (final Object arg : args) {
                 if (!isNULL(arg)) {
@@ -380,7 +375,7 @@ public final class StringUtils {
 
     public static String concatArgsEx(final String separator,
                                       final Object... args) {
-        final StringBuffer result = new StringBuffer();
+        final StringBuilder result = new StringBuilder();
         if (null != args && args.length > 0) {
             for (final Object arg : args) {
                 if (!isNULL(arg)) {
@@ -400,6 +395,19 @@ public final class StringUtils {
 
     public static String concatUnderscore(final Object... args) {
         return concatArgsEx("_", args);
+    }
+
+    public static String concatPaths(final String path1, final String path2) {
+        if (StringUtils.hasText(path1)) {
+            if (!path1.endsWith(IConstants.FOLDER_SEPARATOR)
+                    && !path2.startsWith(IConstants.FOLDER_SEPARATOR)) {
+                return path1.concat(IConstants.FOLDER_SEPARATOR).concat(path2);
+            } else {
+                return path1.concat(path2);
+            }
+        } else {
+            return path2;
+        }
     }
 
     /**

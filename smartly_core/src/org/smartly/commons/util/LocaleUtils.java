@@ -216,7 +216,7 @@ public class LocaleUtils {
      */
     public static Locale parseLocaleString(final String localeString) {
         if (StringUtils.hasText(localeString)) {
-            final String[] parts = StringUtils.split(localeString, "_ -:", false, false);
+            final String[] parts = StringUtils.split(localeString, "_ -:", true, true);
             final String language = (parts.length > 0 ? parts[0] : "");
             final String country = (parts.length > 1 ? parts[1] : "");
             final String variant = (parts.length > 2 ? parts[2] : "");
