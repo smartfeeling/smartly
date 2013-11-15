@@ -382,11 +382,19 @@ public abstract class AbstractMongoService {
     }
 
     public List<DBObject> findByIds(final Collection ids) {
-        final DBObject query = MongoUtils.queryEquals(_ID, ids);
-        return this.find(query, null, null, null);
+        return this.findByIds(ids, null);
     }
 
     public List<DBObject> findByIds(final Collection ids, final String[] fieldNames) {
+        final DBObject query = MongoUtils.queryEquals(_ID, ids);
+        return this.find(query, fieldNames, null, null);
+    }
+
+    public List<DBObject> findByIds(final Object[] ids) {
+        return this.findByIds(ids, null);
+    }
+
+    public List<DBObject> findByIds(final Object[] ids, final String[] fieldNames) {
         final DBObject query = MongoUtils.queryEquals(_ID, ids);
         return this.find(query, fieldNames, null, null);
     }

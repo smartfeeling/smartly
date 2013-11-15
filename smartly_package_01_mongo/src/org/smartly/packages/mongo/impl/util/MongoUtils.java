@@ -683,6 +683,13 @@ public class MongoUtils
             condition.put(OP_IN, lvalue.toArray(new Object[lvalue.size()]));
             //condition.put(OP_EXISTS, true);
             query.put(field, condition);
+        } else if (value.getClass().isArray()) {
+            // { x : { $in : [ a, b ] } }
+            final Object[] lvalue = (Object[]) value;
+            final DBObject condition = new BasicDBObject();
+            condition.put(OP_IN, lvalue);
+            //condition.put(OP_EXISTS, true);
+            query.put(field, condition);
         } else {
             final Pattern pattern = patternEquals(value.toString(), flags);
             query.put(field, pattern);
