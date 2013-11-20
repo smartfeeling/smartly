@@ -743,10 +743,24 @@ public class MongoUtils
         return queryStartWith(field, value, CASE_INSENSITIVE);
     }
 
+    public static DBObject queryStartWith(final DBObject query,
+                                          final String field,
+                                          final String value) {
+        return queryStartWith(query, field, value, CASE_INSENSITIVE);
+    }
+
     public static DBObject queryStartWith(final String field,
-                                          final String value, final Integer flags) {
+                                          final String value,
+                                          final Integer flags) {
+        return queryStartWith(new BasicDBObject(), field, value, flags);
+    }
+
+    public static DBObject queryStartWith(final DBObject query,
+                                          final String field,
+                                          final String value,
+                                          final Integer flags) {
         final Pattern pattern = patternStartWith(value, flags);
-        final DBObject query = new BasicDBObject(field, pattern);
+        query.put(field, pattern);
         return query;
     }
 

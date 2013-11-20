@@ -3,7 +3,7 @@ package org.smartly.commons.cmdline;
 import org.smartly.commons.Delegates;
 import org.smartly.commons.util.StringUtils;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -25,7 +25,7 @@ public final class ConsoleAppPage {
     // --------------------------------------------------------------------
 
     public ConsoleAppPage() {
-        _commands = new HashMap<String, Command>();
+        _commands = new LinkedHashMap<String, Command>();
     }
 
     @Override

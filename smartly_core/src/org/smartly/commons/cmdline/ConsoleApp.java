@@ -15,6 +15,9 @@ public abstract class ConsoleApp {
     //               c o n s t a n t s
     // --------------------------------------------------------------------
 
+    public static final String CMD_EXIT = "quit";
+    public static final String CMD_BACK = "back";
+
     private static final String WELCOME = "**********************************************************\n" +
             "\t\t\t STARTED {0} CONSOLE\n" +
             "**********************************************************";
@@ -22,9 +25,6 @@ public abstract class ConsoleApp {
     private static final String PAGE = "\t\t\t PAGE '{0}'\n" +
             "**********************************************************";
 
-
-    private static final String CMD_EXIT = "quit";
-    private static final String CMD_BACK = "back";
 
     private static final String PRESS_ANY_KEY = "PRESS ANY KEY TO CONTINUE... ";
     private static final String CHOOSE_PAGE = "WRITE '" + CMD_BACK + "' TO GO BACK, '" + CMD_EXIT + "' TO EXIT OR CHOOSE A PAGE.\n" +
