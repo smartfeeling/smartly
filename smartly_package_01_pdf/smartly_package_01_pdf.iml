@@ -7,6 +7,9 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="smartly_core" />
+    <orderEntry type="library" name="junit:junit:4.9" level="application" />
+    <orderEntry type="library" exported="" name="org.apache.pdfbox:pdfbox:1.8.2" level="application" />
   </component>
 </module>
 

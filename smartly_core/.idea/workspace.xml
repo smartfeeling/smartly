@@ -7,13 +7,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a9fd6748-740e-4fa9-926d-635bdfb5ea5e" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/../smartly_package_01_pdf/src/org/smartly/packages/pdf/SmartlyPDF.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../smartly_package_01_pdf/src/org/smartly/packages/pdf/SmartlyPDF.java" afterPath="$PROJECT_DIR$/../smartly_package_01_pdf/src/org/smartly/packages/pdf/SmartlyPDF.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../smartly_package_01_pdf/smartly_package_01_pdf.iml" afterPath="$PROJECT_DIR$/../smartly_package_01_pdf/smartly_package_01_pdf.iml" />
     </list>
     <ignored path="smartly.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="a9fd6748-740e-4fa9-926d-635bdfb5ea5e" time="1385457796407" ignored="false" />
+    <file path="/Dummy.txt" changelist="a9fd6748-740e-4fa9-926d-635bdfb5ea5e" time="1385458792053" ignored="false" />
     <file path="/SmartlyResourceHandler.java" changelist="a9fd6748-740e-4fa9-926d-635bdfb5ea5e" time="1361716976057" ignored="false" />
     <file path="/MathTool.java" changelist="a9fd6748-740e-4fa9-926d-635bdfb5ea5e" time="1361805952083" ignored="false" />
+    <file path="/SmartlyPDF.java" changelist="a9fd6748-740e-4fa9-926d-635bdfb5ea5e" time="1385458717175" ignored="false" />
+    <file path="/fragment.java" changelist="a9fd6748-740e-4fa9-926d-635bdfb5ea5e" time="1385458564105" ignored="false" />
+    <file path="/Main.java" changelist="a9fd6748-740e-4fa9-926d-635bdfb5ea5e" time="1385458386255" ignored="false" />
+    <file path="/pdf.json" changelist="a9fd6748-740e-4fa9-926d-635bdfb5ea5e" time="1385458635406" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,7 +117,18 @@
       <file leaf-file-name="SmartlyPDF.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../smartly_package_01_pdf/src/org/smartly/packages/pdf/SmartlyPDF.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="8" column="4" selection-start="196" selection-end="196" vertical-scroll-proportion="0.19138756">
+            <state line="58" column="34" selection-start="1719" selection-end="1719" vertical-scroll-proportion="1.3875598">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SmartlyMail.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../smartly_package_01_mail/src/org/smartly/packages/mail/SmartlyMail.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="87" column="0" selection-start="464" selection-end="2724" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -121,7 +137,7 @@
       <file leaf-file-name="MathTool.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../smartly_package_01_velocity/src/org/smartly/packages/velocity/impl/vtools/MathTool.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="92" column="39" selection-start="2476" selection-end="2476" vertical-scroll-proportion="0.0">
+            <state line="92" column="0" selection-start="2476" selection-end="2476" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -145,10 +161,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/../smartly_package_02_http/src/org/smartly/packages/http/impl/handlers/rest/impl/annotations/QueryParam.java" />
-        <option value="$PROJECT_DIR$/../smartly_package_02_http/src/org/smartly/packages/http/impl/handlers/rest/impl/ServiceImpl.java" />
-        <option value="$PROJECT_DIR$/../smartly_package_02_http/src/org/smartly/packages/http/impl/handlers/rest/impl/wrapper/MethodWrapper.java" />
-        <option value="$PROJECT_DIR$/../smartly_package_02_http/src/org/smartly/packages/http/config/http/webserver.json" />
         <option value="$PROJECT_DIR$/../smartly_package_01_htmlasset/src/org/smartly/packages/htmlasset/config/Deployer.java" />
         <option value="$PROJECT_DIR$/../smartly_package_01_htmlasset/src/org/smartly/packages/htmlasset/SmartlyHtmlAsset.java" />
         <option value="$PROJECT_DIR$/../smartly_package_01_htmlparser/src/org/smartly/packages/htmlparser/impl/vtools/Html.java" />
@@ -161,6 +173,10 @@
         <option value="$PROJECT_DIR$/../smartly_package_01_htmlasset/src/org/smartly/packages/htmlasset/impl/htdoc/assets/lib/ly.js" />
         <option value="$PROJECT_DIR$/../smartly_package_01_velocity/src/org/smartly/packages/velocity/impl/vtools/MathTool.java" />
         <option value="$PROJECT_DIR$/../smartly_package_02_http/src/org/smartly/packages/http/impl/handlers/SmartlyResourceHandler.java" />
+        <option value="$PROJECT_DIR$/../smartly_package_01_pdf/src/org/smartly/packages/pdf/launcher/Main.java" />
+        <option value="$PROJECT_DIR$/../smartly_package_01_pdf/src/org/smartly/packages/pdf/config/Deployer.java" />
+        <option value="$PROJECT_DIR$/../smartly_package_01_pdf/src/org/smartly/packages/pdf/config/pdf/pdf.json" />
+        <option value="$PROJECT_DIR$/../smartly_package_01_pdf/src/org/smartly/packages/pdf/SmartlyPDF.java" />
       </list>
     </option>
   </component>
@@ -233,6 +249,16 @@
               <option name="myItemId" value="smartly_package_01_pdf" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smartly" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smartly_package_01_pdf" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
@@ -247,6 +273,112 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="packages" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pdf" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smartly" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smartly_package_01_pdf" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="org" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smartly" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="packages" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pdf" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="launcher" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smartly" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smartly_package_01_pdf" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="org" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smartly" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="packages" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pdf" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="config" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smartly" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smartly_package_01_pdf" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="org" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smartly" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="packages" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pdf" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="config" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -291,6 +423,40 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="mail" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smartly" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smartly_package_01_mail" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="org" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="smartly" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="packages" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mail" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="launcher" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -414,7 +580,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="GenerateAntBuildDialog.generateIdeaHomeProperty" value="false" />
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
     <property name="OverrideImplement.combined" value="true" />
     <property name="project.structure.proportion" value="0.15" />
@@ -456,27 +622,27 @@
       <recent name="org.smartly.packages.http" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.smartly.packages.pdf.config" />
+      <recent name="org.smartly.packages.pdf.launcher" />
       <recent name="org.smartly.packages.htmlasset.config" />
       <recent name="org.smartly.packages.http.impl.handlers.rest" />
       <recent name="org.smartly.packages.rest.impl.handlers" />
-      <recent name="org.smartly.packages.rest.impl.annotations" />
-      <recent name="org.smartly.packages.rest.config" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/../smartly_package_01_pdf/src/org/smartly/packages/pdf/config/pdf" />
       <recent name="Z:\ARCHIVIO\Smartly\main\smartly_package_01_htmlasset\src\org\smartly\packages\htmlasset\config" />
       <recent name="Z:\ARCHIVIO\Smartly\main\smartly_package_01_rest\src\org.smartly.packages\rest\config" />
       <recent name="Z:\ARCHIVIO\Smartly\main\smartly_package_01_rest\src" />
       <recent name="Z:\ARCHIVIO\Smartly\main\smartly_package_01_httpcms\src\org\smartly\packages\cms\impl" />
-      <recent name="Z:\ARCHIVIO\Smartly\main\smartly_core\src\org\smartly\commons\util" />
-    </key>
-    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="org.smartly.commons.util" />
-      <recent name="" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="Z:\ARCHIVIO\Smartly\main\smartly_package_01_remoting\src\org\smartly\packages\remoting\config\remoting" />
       <recent name="Z:\ARCHIVIO\Smartly\main\smartly_core\src\org\smartly\commons\network" />
       <recent name="Z:\ARCHIVIO\Smartly\main\smartly_core\src\org\smartly\commons" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="org.smartly.commons.util" />
+      <recent name="" />
     </key>
   </component>
   <component name="RunManager" selected="Application.Smartly">
@@ -1014,7 +1180,7 @@
     <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" />
+    <option name="LAST_COMMIT_MESSAGE" value="" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -1037,31 +1203,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/../smartly_package_01_htmldeployer/src/org/smartly/packages/htmldeployer/impl/HtmlDeployer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="67" column="41" selection-start="2314" selection-end="2334" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/org/smartly/commons/io/repository/deploy/FileDeployer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="139" column="32" selection-start="4789" selection-end="4789" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/impl/SiteBuilder.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="0" selection-start="1511" selection-end="1511" vertical-scroll-proportion="0.076358296" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../smartly_package_01_sitebuilder/src/org/smartly/packages/sitebuilder/impl/engine/SiteBuilderEngine.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="98" column="56" selection-start="3748" selection-end="3748" vertical-scroll-proportion="0.02496329" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../smartly_package_01_htmlparser/src/org/smartly/packages/htmlparser/impl/HtmlParser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="16" selection-start="64" selection-end="64" vertical-scroll-proportion="0.021766966" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/org/smartly/commons/util/JsonWrapper.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="14" column="19" selection-start="357" selection-end="357" vertical-scroll-proportion="0.021766966" />
@@ -1096,7 +1237,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../smartly_package_01_velocity/src/org/smartly/packages/velocity/impl/vtools/MathTool.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="92" column="39" selection-start="2476" selection-end="2476" vertical-scroll-proportion="0.0">
+        <state line="92" column="0" selection-start="2476" selection-end="2476" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -1108,13 +1249,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../smartly_package_01_mail/src/org/smartly/packages/mail/SmartlyMail.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="13" column="13" selection-start="380" selection-end="380" vertical-scroll-proportion="0.215311">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../smartly_package_02_http/src/org/smartly/packages/http/impl/handlers/SmartlyResourceHandler.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="487" column="19" selection-start="16272" selection-end="16272" vertical-scroll-proportion="0.0">
@@ -1122,10 +1256,54 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/org/smartly/packages/ISmartlySystemPackage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="17" selection-start="49" selection-end="49" vertical-scroll-proportion="0.07177033">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../smartly_package_02_http/src/org/smartly/packages/http/SmartlyHttp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="27" column="13" selection-start="966" selection-end="966" vertical-scroll-proportion="0.215311">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../smartly_package_01_pdf/src/org/smartly/packages/pdf/launcher/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="28" selection-start="258" selection-end="258" vertical-scroll-proportion="0.16586922">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../smartly_package_01_mail/src/org/smartly/packages/mail/SmartlyMail.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="87" column="0" selection-start="464" selection-end="2724" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../smartly_package_01_pdf/src/org/smartly/packages/pdf/config/Deployer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="13" selection-start="119" selection-end="119" vertical-scroll-proportion="0.119617224">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../smartly_package_01_pdf/src/org/smartly/packages/pdf/config/pdf/pdf.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="3" column="20" selection-start="28" selection-end="28" vertical-scroll-proportion="0.07462686">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/../smartly_package_01_pdf/src/org/smartly/packages/pdf/SmartlyPDF.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="4" selection-start="196" selection-end="196" vertical-scroll-proportion="0.19138756">
-          <folding />
+        <state line="58" column="34" selection-start="1719" selection-end="1719" vertical-scroll-proportion="1.3875598">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1160,7 +1338,7 @@
       </state>
       <state key="GlobalLibrariesConfigurable.UI">
         <settings>
-          <last-edited>org.eclipse.jetty.aggregate:jetty-all:9.0.0.v20130308</last-edited>
+          <last-edited>com.google.zxing:core:2.0</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
@@ -1184,7 +1362,7 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>smartly_core</last-edited>
+          <last-edited>smartly_package_01_pdf</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>
