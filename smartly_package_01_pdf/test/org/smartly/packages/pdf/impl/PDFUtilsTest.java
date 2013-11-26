@@ -18,7 +18,7 @@ public class PDFUtilsTest {
     public void testToImage() throws Exception {
 
         File file = new File(pdfFile);
-        PDFUtils.toImage(file, output, false, BufferedImage.TYPE_INT_RGB, 96);
+        PDFUtils.toImage(file, output, false, BufferedImage.TYPE_INT_RGB, 96, 0, 0);
 
     }
 

@@ -12,8 +12,8 @@
     <orderEntry type="library" name="junit:junit:4.9" level="application" />
     <orderEntry type="library" exported="" name="org.apache.pdfbox:pdfbox:1.8.2" level="application" />
     <orderEntry type="library" exported="" name="bouncycastle:bcprov-jdk15:140" level="application" />
-    <orderEntry type="library" name="bouncycastle:bcmail-jdk15:140" level="application" />
-    <orderEntry type="library" name="com.ibm.icu:icu4j:52.1" level="application" />
+    <orderEntry type="library" exported="" name="bouncycastle:bcmail-jdk15:140" level="application" />
+    <orderEntry type="library" exported="" name="com.ibm.icu:icu4j:52.1" level="application" />
   </component>
 </module>
 
