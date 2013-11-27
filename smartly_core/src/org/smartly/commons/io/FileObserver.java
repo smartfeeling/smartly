@@ -243,6 +243,10 @@ public class FileObserver {
         }
     }
 
+    // --------------------------------------------------------------------
+    //               E M B E D D E D
+    // --------------------------------------------------------------------
+
     private static class ObserverThread extends Thread {
         private final WatchService _watcher;
         private final Map<WatchKey, Path> _keys;
