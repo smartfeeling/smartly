@@ -92,6 +92,18 @@ public class ImageIOUtils {
         return image;
     }
 
+    public static ImageSize getImageSize(final File file) {
+        final ImageSize size = new ImageSize();
+        try {
+            final BufferedImage image = readExt(file);
+            if (null != image) {
+                size.setWidth(image.getWidth());
+                size.setHeight(image.getHeight());
+            }
+        } catch (Throwable ignored) {
+        }
+        return size;
+    }
 
     public static void metadataExample(final File file) throws ImageReadException,
             IOException {
@@ -448,5 +460,6 @@ public class ImageIOUtils {
             return getColorBufferedImage(width, height, hasAlpha);
         }
     }
+
 
 }
