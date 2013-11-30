@@ -21,6 +21,9 @@ import org.apache.commons.imaging.formats.tiff.constants.GpsTagConstants;
 import org.apache.commons.imaging.formats.tiff.constants.TiffTagConstants;
 import org.apache.commons.imaging.formats.tiff.taginfos.TagInfo;
 import org.apache.commons.imaging.formats.tiff.write.TiffOutputSet;
+import org.smartly.commons.lang.Base64;
+import org.smartly.commons.util.ByteUtils;
+import org.smartly.commons.util.PathUtils;
 
 import javax.imageio.IIOException;
 import javax.imageio.ImageIO;
@@ -90,6 +93,16 @@ public class ImageIOUtils {
         final BufferedImage image = Imaging.getBufferedImage(file, params);
 
         return image;
+    }
+
+    public static String readBase64(final File file) throws IOException, ImageReadException {
+        final BufferedImage image = readExt(file);
+        final String format = PathUtils.getFilenameExtension(file.getAbsolutePath(), false);
+        return readBase64(image, format);
+    }
+
+    public static String readBase64(final BufferedImage image, final String format) throws IOException {
+        return Base64.encodeBytes(ByteUtils.getBytes(image, format));
     }
 
     public static ImageSize getImageSize(final File file) {

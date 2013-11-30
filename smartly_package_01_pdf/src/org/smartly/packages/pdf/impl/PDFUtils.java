@@ -92,8 +92,9 @@ public final class PDFUtils {
                         ImageIOUtil.writeImage(image, EXT_IMAGE, image_name, imageType, resolution); // save image and add extension
 
                         pages.add(image_path);
-                        return true;
+
                     }
+                    return true;
                 } catch (Throwable t) {
                     getLogger().log(Level.SEVERE, null, t);
                 }
@@ -125,8 +126,9 @@ public final class PDFUtils {
                         final String image_name = PathUtils.concat(outputRoot,
                                 name.concat(SUFFIX_PAGE).concat(index + ".").concat(EXT_IMAGE));
                         pages.put(image_name, page);
-                        return true;
+
                     }
+                    return true;
                 } catch (Throwable t) {
                     getLogger().log(Level.SEVERE, null, t);
                 }
@@ -178,8 +180,9 @@ public final class PDFUtils {
                     if (isInRange(index, fromPage, toPage)) {
                         final BufferedImage image = page.convertToImage(imageType, resolution);
                         pages.add(image);
-                        return true;
+
                     }
+                    return true;
                 } catch (Throwable t) {
                     getLogger().log(Level.SEVERE, null, t);
                 }
