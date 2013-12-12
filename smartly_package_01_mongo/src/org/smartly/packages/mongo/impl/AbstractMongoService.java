@@ -486,6 +486,21 @@ public abstract class AbstractMongoService {
         return result;
     }
 
+    public Iterable<DBObject> aggregate(final DBObject firstOp,
+                                        final DBObject... additionslOps) throws Exception {
+        if (null != _coll) {
+            final AggregationOutput output = _coll.aggregate(firstOp, additionslOps);
+            if (null != output) {
+                final String error = output.getCommandResult().getErrorMessage();
+                if (StringUtils.hasText(error)) {
+                    throw new Exception(error);
+                }
+                return output.results();
+            }
+        }
+        return null;
+    }
+
     public List<DBObject> geoNear(final Double[] coord,
                                   final int maxDistance) {
         final double[] dc = new double[]{coord[0], coord[1]};

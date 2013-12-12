@@ -55,6 +55,35 @@ public abstract class DateUtils {
     private static final int[] highDays = {Calendar.SUNDAY, Calendar.SATURDAY};
 
     /**
+     * Return number of milliseconds in measure unit and multiplied for passed value.
+     * Useful to get, for example, 35 minutes in milliseconds: milliseconds (35, DateUtils.MINUTES);
+     * @param value number of measure unit
+     * @param measureUnit MILLISECOND, SECOND, MINUTE, HOUR, DAY
+     * @return
+     */
+    public static long milliseconds(final int value, int measureUnit) {
+        long result = value;
+        switch (measureUnit) {
+            case MILLISECOND:
+                result = value;
+                break;
+            case SECOND:
+                result = value * 1000;
+                break;
+            case MINUTE:
+                result = value * 1000 * 60;
+                break;
+            case HOUR:
+                result = value * 1000 * 60 * 60;
+                break;
+            case DAY:
+                result = value * 1000 * 60 * 60 *24;
+                break;
+        }
+        return result;
+    }
+
+    /**
      * Return a date.
      *
      * @param year    Year

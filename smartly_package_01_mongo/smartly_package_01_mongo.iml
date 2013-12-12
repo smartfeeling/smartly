@@ -8,7 +8,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" exported="" name="org.mongodb:mongo-java-driver:2.9.3" level="application" />
+    <orderEntry type="library" exported="" name="org.mongodb:mongo-java-driver:2.11.3" level="application" />
     <orderEntry type="module" module-name="smartly_core" />
     <orderEntry type="library" name="junit:junit:4.9" level="application" />
   </component>
