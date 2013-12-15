@@ -173,8 +173,7 @@ public class SmartlyUploadServlet
                     while ((read = is.read(buffer)) != -1) {
                         os.write(buffer, 0, read);
                     }
-                    file.put("file_wrapper",
-                            new FileWrapper(temp_file).setName(fileName));
+                    file.put("file_wrapper", new FileWrapper(temp_file).setName(fileName));
                     file.put("temp_url", tempFullName);
                     // jquery-Upload response fields
                     file.put("url", getServletUrl() + "?getfile=" + tempName);

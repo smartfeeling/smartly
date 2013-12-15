@@ -346,6 +346,11 @@ public class FormatUtils {
         return formatDate(date, locale);
     }
 
+    public static String formatDate(final long dateToFormat, final String template) {
+        final Date date = new Date(dateToFormat);
+        return formatDate(date, template);
+    }
+
     public static String formatDate(final long dateToFormat, int style, Locale locale) {
         return formatDate(new Date(dateToFormat), style, locale, false);
     }
