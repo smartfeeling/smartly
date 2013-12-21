@@ -232,12 +232,31 @@ public class MongoUtils
     }
 
     public static Object get(final DBObject object,
-                             final String fieldName, final Object defaultValue) {
+                             final String fieldName,
+                             final Object defaultValue) {
         Object result = null;
         if (null != object && object.containsField(fieldName)) {
             result = object.get(fieldName);
         }
         return null != result ? result : defaultValue;
+    }
+
+    public static String getOneString(final DBObject object,
+                                final String[] fieldNames) {
+        return getOneString(object, fieldNames, "");
+    }
+
+    public static String getOneString(final DBObject object,
+                                final String[] fieldNames,
+                                final String defaultValue) {
+        if (null != object) {
+            for (final String fieldName : fieldNames) {
+                if (object.containsField(fieldName)) {
+                    return StringUtils.toString(object.get(fieldName), defaultValue);
+                }
+            }
+        }
+        return defaultValue;
     }
 
     public static String getString(final DBObject object,
@@ -246,7 +265,8 @@ public class MongoUtils
     }
 
     public static String getString(final DBObject object,
-                                   final String fieldName, final String defaultValue) {
+                                   final String fieldName,
+                                   final String defaultValue) {
         if (null != object && object.containsField(fieldName)) {
             return StringUtils.toString(object.get(fieldName), defaultValue);
         }
@@ -936,7 +956,7 @@ public class MongoUtils
      * @param names     Condition field names
      * @param values    Condition field values
      * @return { $pull : { field : {fieldName: value} } }
-     *         i.e. removes array elements with fieldName matching value
+     * i.e. removes array elements with fieldName matching value
      */
     public static DBObject modifierPull(final String fieldName,
                                         final String[] names, final Object[] values) {
@@ -1069,7 +1089,7 @@ public class MongoUtils
      * @param fieldNames
      * @param ascending
      * @return i.e. "{name : 1, age : 1}" 'name' and 'age'ascending<br/>
-     *         i.e. "{name : -1, age : -1}" 'name' and 'age'descending
+     * i.e. "{name : -1, age : -1}" 'name' and 'age'descending
      */
     public static DBObject getSortFields(final String[] fieldNames,
                                          final boolean ascending) {
@@ -1087,7 +1107,7 @@ public class MongoUtils
      * @param asc
      * @param desc
      * @return i.e. "{name : 1, age : 1}" 'name' and 'age'ascending<br/>
-     *         i.e. "{name : -1, age : -1}" 'name' and 'age'descending
+     * i.e. "{name : -1, age : -1}" 'name' and 'age'descending
      */
     public static DBObject getSortFields(final String[] asc,
                                          final String[] desc) {

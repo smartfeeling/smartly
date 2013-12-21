@@ -22,4 +22,17 @@ public class AvatarUtilsTest {
         System.out.println(base64);
         assertNotNull(url);
     }
+
+    @Test
+    public void testGetGravatarAvatarByEmail() throws Exception {
+        final String email = "angelo.geminiani@gmail.com";
+
+        final String url = AvatarUtils.getGraAvatarUrl(email, false, 50, 0);
+        System.out.println(url);
+        assertNotNull(url);
+
+        // 404
+        final byte[] bytes = AvatarUtils.getGravatar("foo", false, 200, 0);
+        assertTrue(bytes.length==0);
+    }
 }
