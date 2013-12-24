@@ -16,7 +16,6 @@ import java.util.Map;
 
 /**
  * Utility for Avatar Image.
- *
  */
 public class AvatarUtils {
 
@@ -48,6 +47,7 @@ public class AvatarUtils {
     private static final String OPT_IMG_SET3 = "set=set3";
     private static final String OPT_SIZE = "size={h}x{w}";
 
+    private static final String DATA_URL_PREFIX = "data:image/png;base64,";
 
     // ------------------------------------------------------------------------
     //                      MACRO
@@ -58,12 +58,16 @@ public class AvatarUtils {
 
         // try with gravatar
         bytes = getGravatar(email, false, size, 0);
-        if(bytes.length==0){
-           bytes = getAvatar(email, 0, 0, size, size);
+        if (bytes.length == 0) {
+            bytes = getAvatar(email, 0, 0, size, size);
         }
         return Base64.encodeBytes(bytes);
     }
 
+    public static String getDataUrl(final String email, final int size) {
+        final String base64 = getBase64(email, size);
+        return StringUtils.hasText(base64) ? DATA_URL_PREFIX.concat(base64) : "";
+    }
 
     // ------------------------------------------------------------------------
     //                      LOW LEVEL
