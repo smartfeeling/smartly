@@ -277,11 +277,14 @@ public class MongoDB {
         if (null != __mongo) {
             return __mongo;
         }
+
         //-- creates new mongo --//
-        final MongoOptions options = new MongoOptions();
-        options.setSafe(_safe);
+        final MongoClientOptions options = MongoClientOptions.builder()
+                .writeConcern(WriteConcern.SAFE)
+                .build();
+        //options.setSafe(_safe);
         final ServerAddress address = new ServerAddress(_host, _port);
-        __mongo = new com.mongodb.Mongo(address, options);
+        __mongo = new com.mongodb.MongoClient(address, options);
         return __mongo;
     }
 }
