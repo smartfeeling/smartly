@@ -29,6 +29,10 @@ public class Req implements IVLCTool {
     private String _langCode;
     private String _userAgent;
 
+    // --------------------------------------------------------------------
+    //               c o n s t r u c t o r
+    // --------------------------------------------------------------------
+
     public Req(final String resourcePath,
                final HttpServletRequest httprequest,
                final HttpServletResponse httpresponse) {
@@ -118,6 +122,10 @@ public class Req implements IVLCTool {
         return null != _request ? _request.getQueryString() : "";
     }
 
+    /**
+     * Returns file (resource) path complete of QueryString
+     * @return
+     */
     public String getPath() {
         final StringBuilder result = new StringBuilder();
         result.append(this.getFilePath());
@@ -139,6 +147,30 @@ public class Req implements IVLCTool {
         return uri;
     }
 
+    /**
+     * Returns request URI complete of QueryString
+     * @return
+     */
+    public String getURI() {
+        final StringBuilder result = new StringBuilder();
+        result.append(this.getRequestURI());
+        final String query = this.getQueryString();
+        if (StringUtils.hasText(query)) {
+            result.append("?").append(query);
+        }
+        return result.toString();
+    }
+
+    public String getURI(final Object params) {
+        final String uri = this.getURI();
+        try {
+            if (null != params) {
+                return PathUtils.addURIParameters(uri, params, true);
+            }
+        } catch (Throwable ignored) {
+        }
+        return uri;
+    }
 
     /**
      * Return request parameter or empty String
