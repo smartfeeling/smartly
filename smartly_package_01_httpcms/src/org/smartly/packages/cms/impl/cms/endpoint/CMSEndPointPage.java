@@ -22,11 +22,12 @@ public class CMSEndPointPage {
     private final VelocityEngine _vengine;
     private final VelocityContext _vcontext;
     private JSONObject _localizations;
-    private String _head;
-    private String _header;
-    private String _content;
-    private String _footer;
-    private String _script;
+    private String _runtime_on_create; // vhtml/template script to run on context page creation
+    private String _head; // head bottom
+    private String _header; // content header
+    private String _content;// content
+    private String _footer; // content footer
+    private String _script; // custom scripts
 
     public CMSEndPointPage(final CMSEndPointPage page,
                            final VelocityEngine engine,
@@ -35,11 +36,15 @@ public class CMSEndPointPage {
         _vengine = engine;
         _url = page._url;
         _localizations = page._localizations;
+        _runtime_on_create = page._runtime_on_create;
         _head = page._head;
         _header = page._header;
         _content = page._content;
         _footer = page._footer;
         _script = page._script;
+
+        //-- execute scripts to prepare or modify page context --//
+        execScript(_url, _runtime_on_create, _vengine, _vcontext);
     }
 
     public CMSEndPointPage(final String url) {
@@ -107,6 +112,10 @@ public class CMSEndPointPage {
         this._header = _header;
     }
 
+    public void setScriptOnCreate(final String value) {
+        _runtime_on_create = value;
+    }
+
     public JSONObject getLocalizations() {
         return _localizations;
     }
@@ -117,6 +126,12 @@ public class CMSEndPointPage {
 
     public String label(final String lang, final String key) {
         return JsonWrapper.getString(_localizations, lang.concat(".").concat(key), "");
+    }
+
+    public void label(final String lang, final String key, final Object value) {
+        final String deep_key = lang.concat(".").concat(key);
+        // set label and autocreate if any
+        JsonWrapper.put(_localizations, deep_key, null != value ? value.toString() : "", true);
     }
 
     // ------------------------------------------------------------------------
@@ -146,5 +161,18 @@ public class CMSEndPointPage {
         } catch (Throwable ignored) {
         }
         return text;
+    }
+
+    private static void execScript(final String templateName,
+                                   final String script,
+                                   final VelocityEngine engine,
+                                   final VelocityContext context) {
+        final boolean can_run = null != script && null != context && null != engine;
+        if (can_run) {
+            try {
+                final String response = VLCManager.getInstance().evaluateText(engine, templateName, script, context);
+            } catch (Throwable ignored) {
+            }
+        }
     }
 }

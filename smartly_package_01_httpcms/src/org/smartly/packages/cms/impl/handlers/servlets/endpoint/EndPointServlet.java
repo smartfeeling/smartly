@@ -15,6 +15,7 @@ import org.smartly.packages.http.impl.util.ServletUtils;
 import org.smartly.packages.http.impl.util.vtool.Cookies;
 import org.smartly.packages.http.impl.util.vtool.Req;
 import org.smartly.packages.velocity.impl.VLCManager;
+import org.smartly.packages.velocity.impl.vtools.EngineTool;
 import org.smartly.packages.velocity.impl.vtools.toolbox.VLCToolbox;
 
 import javax.servlet.ServletException;
@@ -170,7 +171,8 @@ public class EndPointServlet
             // creates new context page
             final CMSEndPointPage ctxPage = new CMSEndPointPage(page, engine, context);
 
-            context.put(CMSEndPointPage.NAME, ctxPage);
+            context.put(CMSEndPointPage.NAME, ctxPage); // $page
+            context.put(EngineTool.NAME, new EngineTool(ctxPage.getUrl(), engine, context)); // $engine
 
             //-- eval velocity template --//
             final String result;

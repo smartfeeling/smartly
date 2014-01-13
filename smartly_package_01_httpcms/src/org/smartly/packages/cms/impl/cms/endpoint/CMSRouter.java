@@ -32,6 +32,7 @@ public class CMSRouter {
 
     public static final String CHARSET = CharEncoding.getDefault();
 
+    private static final String FILE_ON_CREATE = "on_create.script";
     private static final String FILE_HEAD = "hhead.ly";
     private static final String FILE_HEADER = "hheader.ly";
     private static final String FILE_CONTENT = "hcontent.ly";
@@ -98,13 +99,13 @@ public class CMSRouter {
         return "";
     }
 
-    public Map<String, String> getRestParams(final String path){
-       if(!_restful){
-          return null;
-       } else {
-           final CMSUrl url = this.getUrl(path);
-           return null!=url?url.getParams(path):null;
-       }
+    public Map<String, String> getRestParams(final String path) {
+        if (!_restful) {
+            return null;
+        } else {
+            final CMSUrl url = this.getUrl(path);
+            return null != url ? url.getParams(path) : null;
+        }
     }
 
     // ------------------------------------------------------------------------
@@ -156,8 +157,8 @@ public class CMSRouter {
             if (!_urls.contains(url)) {
                 _urls.add(url);
             }
-            if(url.hasParams()){
-                _restful=true;
+            if (url.hasParams()) {
+                _restful = true;
             }
             _sitemap.put(path, smPage);
             _pages.put(path, epPage);
@@ -178,6 +179,7 @@ public class CMSRouter {
     }
 
     private CMSEndPointPage createPage(final String path) throws Exception {
+        final String on_create = _repo.getString(PathUtils.concat(path, FILE_ON_CREATE));
         final String hhead = _repo.getString(PathUtils.concat(path, FILE_HEAD));
         final String hheader = _repo.getString(PathUtils.concat(path, FILE_HEADER));
         final String hcontent = _repo.getString(PathUtils.concat(path, FILE_CONTENT));
@@ -187,10 +189,11 @@ public class CMSRouter {
         final JSONObject labels = _repo.getJSONObject(PathUtils.concat(path, FILE_LABELS));
 
         final CMSEndPointPage result = new CMSEndPointPage(path);
-        result.setContent(hcontent);
-        result.setFooter(hfooter);
+        result.setScriptOnCreate(on_create);
         result.setHead(hhead);
         result.setHeader(hheader);
+        result.setContent(hcontent);
+        result.setFooter(hfooter);
         result.setScript(isDebug() ? (StringUtils.hasText(hscriptdbg) ? hscriptdbg : hscript) : hscript);
         result.setLocalizations(labels);
 

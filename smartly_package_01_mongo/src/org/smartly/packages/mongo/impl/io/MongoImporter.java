@@ -73,7 +73,7 @@ public class MongoImporter {
             if (value instanceof String && value.toString().startsWith(IConstants.FOLDER_SEPARATOR)) {
                 final String file = PathUtils.concat(root, value.toString());
                 final String text = ClassLoaderUtils.getResourceAsString(file);
-                if(StringUtils.hasText(text)){
+                if (StringUtils.hasText(text)) {
                     if (StringUtils.isJSON(text)) {
                         item.put(key, MongoUtils.parseObject(text));
                     } else {
@@ -147,10 +147,20 @@ public class MongoImporter {
 
         if (isCSVFile(resourceName)) {
             final List<Map<String, String>> data = readCSV(resourceName);
-            result = this.doImport(data, iterator);
+            if (null != data) {
+                result = this.doImport(data, iterator);
+            } else {
+                throw new Exception(
+                        FormatUtils.format("Resource is Empty. Please, check {0} for syntax errors", resourceName));
+            }
         } else if (isJSONFile(resourceName)) {
             final JSONArray data = readJSONArray(resourceName);
-            result = this.doImport(data, iterator);
+            if (null != data) {
+                result = this.doImport(data, iterator);
+            } else {
+                throw new Exception(
+                        FormatUtils.format("Resource is Empty. Please, check {0} for syntax errors", resourceName));
+            }
         }
 
         return null != result ? result : new ArrayList<DBObject>();
@@ -213,7 +223,8 @@ public class MongoImporter {
      * Import all translations contained in a field named "localizations".
      * This method will import all translations into localized collections (ex: "mycoll_it").
      * Returns a list of String containig all languages inported (i.e. "['base', 'it', 'en']")
-     * @param item Item to localize
+     *
+     * @param item          Item to localize
      * @param localizations List of DBObject. "[{'lang':'it', 'name':'Ciao'}, {'lang':'en', 'name':'Hello'}]"
      * @return Returns a list of String containig all languages inported (i.e. "['base', 'it', 'en']")
      */
@@ -232,13 +243,13 @@ public class MongoImporter {
                             if (null != value) {
                                 if (StringUtils.hasText(lang)) {
                                     _srvc.addLocalization(id, lang, key, value);
-                                    if(!languages.contains(lang)){
+                                    if (!languages.contains(lang)) {
                                         languages.add(lang);
                                     }
                                 } else {
                                     // default language
                                     item.put(key, value);
-                                    if(!languages.contains(LANG_BASE)){
+                                    if (!languages.contains(LANG_BASE)) {
                                         languages.add(LANG_BASE);
                                     }
                                 }
@@ -248,7 +259,7 @@ public class MongoImporter {
 
                 }
             }
-        } else if(CollectionUtils.isListOf(localizations, String.class)) {
+        } else if (CollectionUtils.isListOf(localizations, String.class)) {
             return localizations;
         }
         return languages;
