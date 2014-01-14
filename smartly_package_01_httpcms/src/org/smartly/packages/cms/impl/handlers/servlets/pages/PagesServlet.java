@@ -159,12 +159,12 @@ public class PagesServlet
             // execution context
             final VelocityContext context = new VelocityContext(sessionContext, this.createInnerContext(
                     url, request, response));
+            context.put(EngineTool.NAME, new EngineTool(url, engine, context)); // $engine
 
             // creates new context page
             final org.smartly.packages.cms.impl.cms.page.CMSPage ctxPage = new org.smartly.packages.cms.impl.cms.page.CMSPage(lang, page);
-
             context.put("page", ctxPage);
-            context.put(EngineTool.NAME, new EngineTool(url, engine, context)); // $engine
+
 
             //-- eval velocity template --//
             final String result;
@@ -226,7 +226,7 @@ public class PagesServlet
         final VelocityContext result = new VelocityContext(VLCToolbox.getInstance().getToolsContext());
 
         //-- "$req" tool --//
-        result.put(Req.NAME, new Req(url, request, response));
+        result.put(Req.NAME, new Req(url, request));
 
         //-- "$cookies" tool --//
         result.put(Cookies.NAME, new Cookies(request, response));

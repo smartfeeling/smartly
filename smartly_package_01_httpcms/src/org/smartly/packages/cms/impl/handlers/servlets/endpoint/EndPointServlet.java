@@ -159,27 +159,27 @@ public class EndPointServlet
                 session.removeAttribute(SP_URL_PARAMS);
             }
 
-
             // retrieve data from session
             final Map<String, Object> sessionContext = (Map<String, Object>) session.getAttribute(SP_VELOCITY_CONTEXT);
             final VelocityEngine engine = getEngine();
 
+            final String url = page.getUrl();
+
             // execution context
             final VelocityContext context = new VelocityContext(sessionContext, this.createInnerContext(
-                    page.getUrl(), urlParams, request, response));
+                    url, urlParams, request, response));
+            context.put(EngineTool.NAME, new EngineTool(url, engine, context)); // $engine
 
             // creates new context page
             final CMSEndPointPage ctxPage = new CMSEndPointPage(page, engine, context);
-
             context.put(CMSEndPointPage.NAME, ctxPage); // $page
-            context.put(EngineTool.NAME, new EngineTool(ctxPage.getUrl(), engine, context)); // $engine
 
             //-- eval velocity template --//
             final String result;
             if (null != engine) {
-                result = VLCManager.getInstance().evaluateText(engine, ctxPage.getUrl(), templateText, context);
+                result = VLCManager.getInstance().evaluateText(engine, url, templateText, context);
             } else {
-                result = VLCManager.getInstance().evaluateText(ctxPage.getUrl(), templateText, context);
+                result = VLCManager.getInstance().evaluateText(url, templateText, context);
             }
             if (StringUtils.hasText(result)) {
                 return result.getBytes();
@@ -237,7 +237,7 @@ public class EndPointServlet
         final VelocityContext result = new VelocityContext(VLCToolbox.getInstance().getToolsContext());
 
         //-- "$req" tool --//
-        result.put(Req.NAME, new Req(url, restParams, request, response));
+        result.put(Req.NAME, new Req(url, restParams, request));
 
         //-- "$cookies" tool --//
         result.put(Cookies.NAME, new Cookies(request, response));

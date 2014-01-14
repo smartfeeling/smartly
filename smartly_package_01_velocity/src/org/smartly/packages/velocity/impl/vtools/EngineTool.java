@@ -40,7 +40,7 @@ public class EngineTool {
     //                      p u b l i c
     // ------------------------------------------------------------------------
 
-    public Object eval(final Object text) {
+    public String eval(final Object text) {
         try {
             final String stext = null != text ? text.toString() : "";
             final String result;

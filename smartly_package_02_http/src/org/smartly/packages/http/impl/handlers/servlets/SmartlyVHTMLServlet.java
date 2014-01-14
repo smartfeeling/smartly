@@ -131,7 +131,7 @@ public class SmartlyVHTMLServlet
         final VelocityContext result = new VelocityContext(VLCToolbox.getInstance().getToolsContext());
 
         //-- "$req" tool --//
-        result.put(Req.NAME, new Req(resource.getName(), request, response));
+        result.put(Req.NAME, new Req(resource.getName(), request));
 
         //-- "$cookies" tool --//
         result.put(Cookies.NAME, new Cookies(request, response));

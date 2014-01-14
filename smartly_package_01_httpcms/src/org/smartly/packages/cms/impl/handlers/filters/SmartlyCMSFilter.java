@@ -164,7 +164,7 @@ public class SmartlyCMSFilter
         final VelocityContext result = new VelocityContext(VLCToolbox.getInstance().getToolsContext());
 
         //-- "$req" tool --//
-        result.put(Req.NAME, new Req(url, request, response));
+        result.put(Req.NAME, new Req(url, request));
 
         //-- "$cookies" tool --//
         result.put(Cookies.NAME, new Cookies(request, response));

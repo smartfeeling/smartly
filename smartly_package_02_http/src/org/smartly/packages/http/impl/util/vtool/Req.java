@@ -23,7 +23,6 @@ public class Req implements IVLCTool {
 
     private final String _resourcePath;
     private final HttpServletRequest _request;
-    private final HttpServletResponse _response;
     private final Map<String, String> _externalParams;
 
     private String _langCode;
@@ -34,21 +33,17 @@ public class Req implements IVLCTool {
     // --------------------------------------------------------------------
 
     public Req(final String resourcePath,
-               final HttpServletRequest httprequest,
-               final HttpServletResponse httpresponse) {
+               final HttpServletRequest httprequest) {
         _resourcePath = resourcePath;
         _request = httprequest;
-        _response = httpresponse;
         _externalParams = null;
     }
 
     public Req(final String resourcePath,
                final Map<String, String> externalParams,
-               final HttpServletRequest httprequest,
-               final HttpServletResponse httpresponse) {
+               final HttpServletRequest httprequest) {
         _resourcePath = resourcePath;
         _request = httprequest;
-        _response = httpresponse;
         _externalParams = externalParams;
     }
 
