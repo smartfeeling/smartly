@@ -12,6 +12,7 @@ import org.smartly.commons.logging.Logger;
 import org.smartly.commons.logging.util.LoggingUtils;
 import org.smartly.commons.network.URLUtils;
 import org.smartly.commons.util.*;
+import org.smartly.packages.velocity.impl.vtools.lang.VLCI18n;
 import org.smartly.packages.velocity.impl.vtools.lang.VLCObject;
 
 import java.util.*;
@@ -691,6 +692,18 @@ public class SysTool
      */
     public VLCObject newObject(final Object args) {
         return new VLCObject(args);
+    }
+
+    public VLCI18n newI18n() {
+        return new VLCI18n();
+    }
+
+    public VLCI18n newI18n(final String lang) {
+        return new VLCI18n(lang);
+    }
+
+    public VLCI18n newI18n(final String lang, final String defaultLang) {
+        return new VLCI18n(lang, defaultLang);
     }
 
     public Counter newCounter() {

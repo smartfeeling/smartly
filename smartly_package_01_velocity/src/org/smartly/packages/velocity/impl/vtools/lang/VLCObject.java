@@ -103,6 +103,14 @@ public class VLCObject implements Map<String, Object> {
         return ConversionUtils.toInteger(this.get(key), defaultValue);
     }
 
+    public final boolean getBoolean(final String key) {
+        return this.getBoolean(key, false);
+    }
+
+    public final boolean getBoolean(final String key, final boolean defaultValue) {
+        return ConversionUtils.toBoolean(this.get(key), defaultValue);
+    }
+
     public final double getDouble(final String key) {
         return this.getDouble(key, 0.0);
     }
