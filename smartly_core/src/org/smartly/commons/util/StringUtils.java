@@ -454,6 +454,15 @@ public final class StringUtils {
         return null == str1 && null == str2;
     }
 
+    public static boolean equalsTrim(final Object str1, final Object str2) {
+        if (null != str1 && null != str2) {
+            return str1.toString().trim().equalsIgnoreCase(str2.toString().trim());
+        }
+
+        return null == str1 && null == str2;
+    }
+
+
     public static boolean equals(final Object str1, final Object str2) {
         if (null != str1 && null != str2) {
             return str1.toString().equals(str2.toString());

@@ -2,6 +2,7 @@ package org.smartly.packages.velocity.impl.vtools;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
+import org.smartly.commons.util.StringUtils;
 import org.smartly.packages.velocity.impl.VLCManager;
 
 /**
@@ -42,14 +43,22 @@ public class EngineTool {
 
     public String eval(final Object text) {
         try {
-            final String stext = null != text ? text.toString() : "";
-            final String result;
-            if (null != _engine) {
-                result = VLCManager.getInstance().evaluateText(_engine, _name, stext, _context);
-            } else {
-                result = VLCManager.getInstance().evaluateText(_name, stext, _context);
+            String original = null != text ? text.toString() : "";
+            if (StringUtils.hasText(original)) {
+                final String parsed;
+                if (null != _engine) {
+                    parsed = VLCManager.getInstance().evaluateText(_engine, _name, original, _context);
+                } else {
+                    parsed = VLCManager.getInstance().evaluateText(_name, original, _context);
+                }
+                if(!StringUtils.equalsTrim(original, parsed)){
+                    // need another evaluation
+                    return eval(parsed);
+                } else {
+                    return parsed;
+                }
             }
-            return result;
+            return original;
         } catch (Throwable t) {
             return t.toString();
         }
