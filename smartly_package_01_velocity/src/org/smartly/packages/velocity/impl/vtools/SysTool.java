@@ -433,7 +433,7 @@ public class SysTool
                             final String fieldName,
                             final String defaultValue) {
         final Object value = this.get(object, fieldName);
-        if (null != value) {
+        if (!StringUtils.isNULL(value)) {
             return value.toString();
         }
         return defaultValue;
