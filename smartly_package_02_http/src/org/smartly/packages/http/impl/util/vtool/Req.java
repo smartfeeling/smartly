@@ -6,7 +6,6 @@ import org.smartly.commons.util.*;
 import org.smartly.packages.velocity.impl.vtools.IVLCTool;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 import java.net.URLDecoder;
 import java.util.LinkedHashMap;
@@ -56,6 +55,10 @@ public class Req implements IVLCTool {
     //                      p u b l i c
     // ------------------------------------------------------------------------
 
+    public HttpServletRequest getNative() {
+        return _request;
+    }
+
     /**
      * Return requested file path. i.e. "/pages/index.html"
      *
@@ -81,8 +84,8 @@ public class Req implements IVLCTool {
      * </table>
      *
      * @return a <code>String</code> containing
-     *         the part of the URL from the
-     *         protocol name up to the query string
+     * the part of the URL from the
+     * protocol name up to the query string
      */
     public String getRequestURI() {
         return _request.getRequestURI();
@@ -102,12 +105,12 @@ public class Req implements IVLCTool {
      * <p>Same as the value of the CGI variable PATH_INFO.
      *
      * @return a <code>String</code>, decoded by the
-     *         web container, specifying
-     *         extra path information that comes
-     *         after the servlet path but before
-     *         the query string in the request URL;
-     *         or <code>null</code> if the URL does not have
-     *         any extra path information
+     * web container, specifying
+     * extra path information that comes
+     * after the servlet path but before
+     * the query string in the request URL;
+     * or <code>null</code> if the URL does not have
+     * any extra path information
      */
     public String getPathInfo() {
         return _request.getPathInfo();
@@ -119,6 +122,7 @@ public class Req implements IVLCTool {
 
     /**
      * Returns file (resource) path complete of QueryString
+     *
      * @return
      */
     public String getPath() {
@@ -144,6 +148,7 @@ public class Req implements IVLCTool {
 
     /**
      * Returns request URI complete of QueryString
+     *
      * @return
      */
     public String getURI() {
