@@ -150,6 +150,11 @@ public abstract class DateUtils {
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
 
+        return postpone(calendar, measureUnit, amount);
+    }
+
+    public static Date postpone(final Calendar calendar, final int measureUnit, final int amount) {
+
         switch (measureUnit) {
             case MILLISECOND:
                 calendar.add(MILLISECOND, amount);
@@ -191,6 +196,20 @@ public abstract class DateUtils {
         return result;
     }
 
+    public static Date postponeWorkingDay(final Calendar calendar,
+                                          final int measureUnit,
+                                          final int amount,
+                                          final Long[] holidays) {
+        Date result = calendar.getTime();
+        for (int i = 0; i < amount; i++) {
+            postpone(calendar, measureUnit, 1);
+            if (!isWorkingDay(calendar, holidays)) {
+                nextWorkingDay(calendar, holidays);
+            }
+        }
+        return calendar.getTime();
+    }
+
     public static Date anticipateWorkingDay(final Date date,
                                             final int measureUnit,
                                             final int amount,
@@ -226,6 +245,11 @@ public abstract class DateUtils {
     public static boolean isWorkingDay(final long time, final Long[] holidays) {
         final Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(time);
+
+        return isWorkingDay(calendar, holidays);
+    }
+
+    public static boolean isWorkingDay(final Calendar calendar, final Long[] holidays) {
 
         // check if in holiday
         if (null != holidays) {
@@ -267,14 +291,8 @@ public abstract class DateUtils {
                                           final Long[] holidays) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(time);
-        // move forward calendar of one day
-        calendar.add(DAY, 1);
-        while (!isWorkingDay(calendar.getTimeInMillis(), holidays)) {
-            calendar.add(DAY, 1);
-        }
-        return calendar;
+        return nextWorkingDay(calendar, holidays);
     }
-
 
     /**
      * @param calendar
@@ -285,7 +303,7 @@ public abstract class DateUtils {
                                           final Long[] holidays) {
         // move forward calendar of one day
         calendar.add(DAY, 1);
-        while (!isWorkingDay(calendar.getTimeInMillis(), holidays)) {
+        while (!isWorkingDay(calendar, holidays)) {
             calendar.add(DAY, 1);
         }
         return calendar;
